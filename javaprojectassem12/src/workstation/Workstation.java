@@ -1,6 +1,9 @@
-package logic;
+package workstation;
 
 import java.util.List;
+
+import car.CarPartType;
+
 
 public abstract class Workstation {
 	

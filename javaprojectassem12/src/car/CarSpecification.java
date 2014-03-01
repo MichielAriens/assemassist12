@@ -1,4 +1,4 @@
-package logic;
+package car;
 
 public class CarSpecification {
 

@@ -1,8 +1,11 @@
-package logic;
+package workstation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import car.CarPartType;
+
 
 public class AccessoriesPost extends Workstation {
 	

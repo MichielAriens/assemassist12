@@ -1,4 +1,5 @@
-package logic;
+package car;
+
 
 public enum CarPart {
 	BODY_SEDAN 			(CarPartType.Body, 		"Sedan"),

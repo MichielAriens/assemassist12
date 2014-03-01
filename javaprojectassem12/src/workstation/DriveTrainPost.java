@@ -1,14 +1,18 @@
-package logic;
+package workstation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CarBodyPost extends Workstation {
+import car.CarPartType;
 
+
+
+public class DriveTrainPost extends Workstation {
+	
 	private static ArrayList<CarPartType> compatibleTasks;
 	{
-		CarPartType[] array= {CarPartType.Body, CarPartType.Colour};
+		CarPartType[] array= {CarPartType.Engine, CarPartType.Gearbox};
 		compatibleTasks = (ArrayList<CarPartType>) Arrays.asList(array);
 	}
 
@@ -17,6 +21,7 @@ public class CarBodyPost extends Workstation {
 	
 	@Override
 	List<CarPartType> getDoableTasks() {
-		return CarBodyPost.compatibleTasks;
+		return DriveTrainPost.compatibleTasks;
 	}
+
 }
