@@ -1,4 +1,4 @@
-package logic;
+package users;
 
 public class Manager {
 

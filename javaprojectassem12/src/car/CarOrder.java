@@ -4,7 +4,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import logic.GarageHolder;
+import users.GarageHolder;
+
 
 public class CarOrder {
 	

@@ -1,4 +1,4 @@
-package logic;
+package assemblyline;
 
 public class AssemblyLine {
 

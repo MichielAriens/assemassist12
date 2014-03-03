@@ -22,4 +22,12 @@ public class AccessoriesPost extends Workstation {
 		return AccessoriesPost.compatibleTasks;
 	}
 
+
+
+	@Override
+	List<CarPartType> getCapabilities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

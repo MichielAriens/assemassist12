@@ -1,13 +1,10 @@
-package logic;
+package workstation;
 
 import java.sql.Time;
 
 public class Shift {
 	private final Time normalStart;
 	private final Time normalEnd;
-	
-	
-	private 
 	
 	
 	public Shift(Time start, Time end){

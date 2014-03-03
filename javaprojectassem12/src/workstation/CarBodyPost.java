@@ -22,4 +22,13 @@ public class CarBodyPost extends Workstation {
 	List<CarPartType> getDoableTasks() {
 		return CarBodyPost.compatibleTasks;
 	}
+
+
+
+
+	@Override
+	List<CarPartType> getCapabilities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

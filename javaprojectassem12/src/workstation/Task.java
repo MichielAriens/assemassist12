@@ -1,4 +1,7 @@
-package logic;
+package workstation;
+
+import users.Mechanic;
+import car.CarPart;
 
 /**
  * 
@@ -29,6 +32,7 @@ public class Task {
 	public float work(float minutes, Mechanic mechanic){
 		float actualWork = this.work(minutes);
 		mechanic.work(actualWork);
+		return 5;
 	}
 	
 	

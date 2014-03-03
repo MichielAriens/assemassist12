@@ -24,4 +24,13 @@ public class DriveTrainPost extends Workstation {
 		return DriveTrainPost.compatibleTasks;
 	}
 
+
+
+
+	@Override
+	List<CarPartType> getCapabilities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
