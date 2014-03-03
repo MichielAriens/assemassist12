@@ -5,7 +5,8 @@ import java.util.List;
 
 
 
-import logic.workstation.Shift;
+
+import logic.assemblyline.Shift;
 import logic.workstation.Workstation;
 
 public class Mechanic {
