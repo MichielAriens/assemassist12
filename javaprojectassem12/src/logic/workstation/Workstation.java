@@ -12,17 +12,24 @@ import logic.users.Mechanic;
 
 
 public abstract class Workstation {
-	
+	/**
+	 * The current order this workstation is working on.
+	 */
 	private CarOrder currentOrder;
-	private AssemblyLine assemblyLine;
+	/**
+	 * A list of tasks this workstation can fulfill.
+	 */
 	private List<Task> tasks = new ArrayList<Task>();
+	/**
+	 * Constructs a workstation and initializes the currentorder to null.
+	 */
 	public Workstation(){
 		currentOrder = null;
 	}
 	
 	/**
 	 * Returns the order currently being serviced by this workstation.
-	 * @return
+	 * @return the currentorder, null if there is none.
 	 */
 	public CarOrder getCurrentOrder(){
 		return currentOrder;
@@ -30,7 +37,7 @@ public abstract class Workstation {
 	
 	/**
 	 * Checks whether all tasks on this workspace have been completed.
-	 * @return
+	 * @return True if all the tasks have been completed
 	 */
 	public boolean done(){
 		boolean retVal = true;
@@ -85,7 +92,8 @@ public abstract class Workstation {
 		if(null == task || null == mechanic || null == endTime){
 			return;
 		}
-		task.perform(endTime, mechanic);
+		if(this.isCompatibleTask(task))
+			task.perform(endTime, mechanic);
 	}
 
 
