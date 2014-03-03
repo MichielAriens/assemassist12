@@ -1,6 +1,9 @@
 package logic.assemblyline;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e9618652ba060ffa50f392f6f5a7df9c054a7cc3
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +17,10 @@ import logic.workstation.Workstation;
 /**
  * Class handeling an assembly line of a car manufacturing company.
  */
+<<<<<<< HEAD
 
+=======
+>>>>>>> e9618652ba060ffa50f392f6f5a7df9c054a7cc3
 public class AssemblyLine {
 	
 	/**

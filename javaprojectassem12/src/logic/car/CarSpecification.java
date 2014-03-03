@@ -2,6 +2,7 @@ package logic.car;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CarSpecification {
 		private CarModel model;
@@ -14,6 +15,12 @@ public class CarSpecification {
 				throw new InvalidParameterException();
 		}
 
+
+
+		
+		
+		
+		
 		
 		private boolean isValidSpecification(){
 			if(this.model == null)
@@ -41,6 +48,13 @@ public class CarSpecification {
 		}
 
 
+
+		
+		
+		
+		
+		
+		
 		public List<CarPart> getParts(){
 			return parts;
 		}
