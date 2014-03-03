@@ -15,19 +15,10 @@ public class AccessoriesPost extends Workstation {
 		compatibleTasks = (ArrayList<CarPartType>) Arrays.asList(array);
 	}
 
-	
-
-	@Override
-	List<CarPartType> getDoableTasks() {
-		return AccessoriesPost.compatibleTasks;
-	}
-
-
 
 	@Override
 	List<CarPartType> getCapabilities() {
-		// TODO Auto-generated method stub
-		return null;
+		return AccessoriesPost.compatibleTasks;
 	}
 
 }

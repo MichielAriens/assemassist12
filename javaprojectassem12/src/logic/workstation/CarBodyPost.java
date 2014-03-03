@@ -15,20 +15,9 @@ public class CarBodyPost extends Workstation {
 		compatibleTasks = (ArrayList<CarPartType>) Arrays.asList(array);
 	}
 
-	
-	
-	
 	@Override
-	List<CarPartType> getDoableTasks() {
+	List<CarPartType> getCapabilities(){
 		return CarBodyPost.compatibleTasks;
 	}
 
-
-
-
-	@Override
-	List<CarPartType> getCapabilities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
