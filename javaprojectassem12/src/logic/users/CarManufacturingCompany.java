@@ -16,7 +16,7 @@ public class CarManufacturingCompany {
 	}
 
 	public void addOrder(CarOrder order) {
-		this.assemblyLine.addOrder(order);
+		this.assemblyLine.addCarOrder(order);
 	}
 	
 	
