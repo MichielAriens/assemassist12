@@ -18,7 +18,7 @@ public class GarageHolder {
 	}
 	
 	public void alertCompleted(CarOrder order){
-		if(order == null || !order.isDone())
+		if(order == null || !order.done())
 			return;
 		if(pendingOrders.contains(order))
 			pendingOrders.remove(order);
