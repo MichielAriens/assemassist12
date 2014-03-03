@@ -56,17 +56,48 @@ public class AssemblyLine {
 		}
 		
 		for(int i = numberOfWorkStations - 1; i > 0; i--){
-			workStations[i].setCurrentCarOrder(workStations[i-1].getCurrentCarOrder());
+			workStations[i].setOrder(workStations[i-1].getCurrentOrder());
 			
 		}
-		workStations[0].setCurrentCarOrder(eerst volgende car order terug geven)
+		workStations[0].setOrder(schedule.getNextOrder());
 		
 		return true;
 	}
+	
+	public void addCarOrder(CarOrder order){
+		carOrders.add(order);
+	}
 
-	public class Schedule {
-		public void getEstimatedCompletionTime(CarOrder order){
-			order.getEstimatedEndTime();
+	public class Schedule {	
+		/**
+		 * 
+		 */
+		private String standardBeginTime;
+		
+		/**
+		 * 
+		 */
+		private String standardEndTime;
+		
+		/**
+		 * 
+		 * @param order
+		 * @return
+		 */
+		public String getEstimatedCompletionTime(CarOrder order){
+			return order.getEstimatedEndTime();
+		}
+
+		/**
+		 * Returns the next order to come on the assembly line if the assembly line is moved.
+		 */
+		public CarOrder getNextOrder() {
+			return carOrders.get(numberOfWorkStations);
+		}
+		
+		public String calculateEstimatedEndTime(CarOrder carOrder){
+			if(carOrders.get(carOrders.indexOf(carOrder) - 1).getEstimatedEndTime() != null);
+			return "8008";
 		}
 	}
 }
