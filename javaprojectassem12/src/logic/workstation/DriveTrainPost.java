@@ -20,6 +20,7 @@ public class DriveTrainPost extends Workstation {
 	
 	
 	@Override
+	public
 	List<CarPartType> getCapabilities() {
 		return DriveTrainPost.compatibleTasks;
 	}
