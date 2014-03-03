@@ -1,6 +1,7 @@
 package logic.car;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CarSpecification {
 		private CarModel model;
@@ -10,4 +11,9 @@ public class CarSpecification {
 			this.model = model;
 			this.parts = parts;
 		}
+
+		public List<CarPart> getParts(){
+			return parts;
+		}
+		
 }
