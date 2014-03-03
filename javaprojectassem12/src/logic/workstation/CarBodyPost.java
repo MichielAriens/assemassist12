@@ -16,6 +16,7 @@ public class CarBodyPost extends Workstation {
 	}
 
 	@Override
+	public
 	List<CarPartType> getCapabilities(){
 		return CarBodyPost.compatibleTasks;
 	}
