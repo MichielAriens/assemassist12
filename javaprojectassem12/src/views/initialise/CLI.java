@@ -1,4 +1,4 @@
-package initialise;
+package views.initialise;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

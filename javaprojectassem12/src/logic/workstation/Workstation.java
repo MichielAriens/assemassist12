@@ -1,13 +1,15 @@
-package workstation;
+package logic.workstation;
 
 import java.util.List;
 
 
-import users.Mechanic;
 
 
-import car.CarOrder;
-import car.CarPartType;
+import logic.car.CarOrder;
+import logic.car.CarPartType;
+import logic.users.Mechanic;
+
+
 
 
 public abstract class Workstation {

@@ -1,4 +1,4 @@
-package workstation;
+package logic.workstation;
 
 import java.sql.Time;
 

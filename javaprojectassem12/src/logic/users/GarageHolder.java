@@ -1,8 +1,8 @@
-package users;
+package logic.users;
 
-import assemblyline.OrderRegistrator;
-import car.CarOrder;
-import car.CarSpecification;
+import logic.assemblyline.OrderRegistrator;
+import logic.car.CarOrder;
+import logic.car.CarSpecification;
 
 public class GarageHolder {
 	private OrderRegistrator orderRegistrator;

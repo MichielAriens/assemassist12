@@ -1,11 +1,12 @@
-package users;
+package logic.users;
 
 import java.util.List;
 
 
 
-import workstation.Shift;
-import workstation.Workstation;
+
+import logic.workstation.Shift;
+import logic.workstation.Workstation;
 
 public class Mechanic {
 	private Workstation activeStation = null;

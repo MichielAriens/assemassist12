@@ -1,10 +1,10 @@
-package car;
+package logic.car;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import users.GarageHolder;
+import logic.users.GarageHolder;
 
 
 public class CarOrder {

@@ -1,4 +1,4 @@
-package users;
+package logic.users;
 
 public class Manager {
 

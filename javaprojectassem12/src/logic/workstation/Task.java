@@ -1,7 +1,7 @@
-package workstation;
+package logic.workstation;
 
-import users.Mechanic;
-import car.CarPart;
+import logic.car.CarPart;
+import logic.users.Mechanic;
 
 /**
  * 

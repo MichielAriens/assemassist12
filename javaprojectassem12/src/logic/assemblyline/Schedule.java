@@ -1,4 +1,4 @@
-package assemblyline;
+package logic.assemblyline;
 
 public class Schedule {
 

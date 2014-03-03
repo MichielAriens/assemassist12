@@ -1,4 +1,4 @@
-package assemblyline;
+package logic.assemblyline;
 
 public class OrderRegistrator {
 		private static OrderRegistrator orderRegistrator= new OrderRegistrator();
