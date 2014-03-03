@@ -1,9 +1,6 @@
 package logic.assemblyline;
 
-<<<<<<< HEAD
-import logic.car.CarOrder;
 
-=======
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +14,7 @@ import logic.workstation.Workstation;
 /**
  * Class handeling an assembly line of a car manufacturing company.
  */
->>>>>>> e9618652ba060ffa50f392f6f5a7df9c054a7cc3
+
 public class AssemblyLine {
 	
 	/**
@@ -93,12 +90,6 @@ public class AssemblyLine {
 			return order.getEstimatedEndTime();
 		}
 
-<<<<<<< HEAD
-	public void addOrder(CarOrder order) {
-		
-	}
-
-=======
 		/**
 		 * Returns the next order to come on the assembly line if the assembly line is moved.
 		 */
@@ -111,5 +102,4 @@ public class AssemblyLine {
 			return "8008";
 		}
 	}
->>>>>>> e9618652ba060ffa50f392f6f5a7df9c054a7cc3
 }
