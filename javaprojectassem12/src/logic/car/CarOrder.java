@@ -2,9 +2,12 @@ package logic.car;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import logic.users.GarageHolder;
+import logic.workstation.Task;
 
 
 public class CarOrder {
@@ -17,6 +20,7 @@ public class CarOrder {
 		private GarageHolder garageHolder;
 		private DateFormat dateFormat;
 		private CarSpecification carSpecification;
+		private List<Task> tasks = new ArrayList<Task>();
 		
 		public CarOrder(GarageHolder garageHolder, CarSpecification carSpecification){
 			this.carSpecification=carSpecification;
@@ -25,6 +29,22 @@ public class CarOrder {
 			this.done = false;
 			this.dateFormat= new SimpleDateFormat(DATE_FORMAT);
 		}
+		
+		
+		/**
+		 * Build a list of tasks to be done. For use on the production line.
+		 */
+		private void buildTasks() {
+			for(CarPart part : this.getCarSpecification().getParts()){
+				this.tasks.add(new Task(part));
+			}
+		}
+
+		
+		public List<Task> getTasks(){
+			return this.tasks;
+		}
+
 		
 		public boolean isDone() {
 			return done;
