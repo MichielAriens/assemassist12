@@ -18,6 +18,7 @@ import logic.users.Mechanic;
 import logic.workstation.AccessoriesPost;
 import logic.workstation.CarBodyPost;
 import logic.workstation.DriveTrainPost;
+import logic.workstation.Task;
 import logic.workstation.Workstation;
 
 import org.junit.Before;
@@ -51,8 +52,8 @@ public class WorkStationTests {
 				CarPart.WHEELS_COMFORT
 			};
 		
-		ArrayList<CarPart> parts = (ArrayList<CarPart>) Arrays.asList(partsArray);
-		carSpecification = new CarSpecification(CarModel.MODEL1,parts);
+		List<CarPart> parts = (List<CarPart>) Arrays.asList(partsArray);
+		carSpecification = new CarSpecification(CarModel.MODEL1,new ArrayList<CarPart>(parts));
 		carOrder = new CarOrder(garageHolder, carSpecification);
 		
 		universalPost = new Workstation() {
@@ -70,9 +71,17 @@ public class WorkStationTests {
 
 	@Test
 	public void test() {
-		carBodyPost.setOrder(carOrder);
+		universalPost.setOrder(carOrder);
 		assertFalse(carOrder.done());		
-		carBodyPost.doTask(carOrder.getTasks().get(0), new Time(0), new Mechanic());
+		universalPost.doTask(carOrder.getTasks().get(0), new Time(0), new Mechanic());
+		assertFalse(carOrder.done());
+		assertFalse(universalPost.done());
+		
+		for(Task task : universalPost.getRequiredTasks()){
+			universalPost.doTask(task, new Time(0), new Mechanic());
+		}
+		assertTrue(carOrder.done());
+		assertTrue(universalPost.done());
 	}
 
 }
