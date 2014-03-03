@@ -2,7 +2,11 @@ package logic.car;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.EnumMap;
+=======
+import java.util.List;
+>>>>>>> e9618652ba060ffa50f392f6f5a7df9c054a7cc3
 
 public class CarSpecification {
 		private CarModel model;
@@ -39,4 +43,9 @@ public class CarSpecification {
 			}
 			return true;
 		}
+
+		public List<CarPart> getParts(){
+			return parts;
+		}
+		
 }

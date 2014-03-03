@@ -22,12 +22,13 @@ public class Mechanic {
 		return this.activeStation;
 	}
 	
-	public boolean isWorking(){
-		return activeStation != null;
+	public boolean isPosted(){
+		return this.getActiveWorkstation() != null;
 	}
 
 	public void work(float actualWork) {
-		// TODO Auto-generated method stub
+		//Boekhouding
+		
 		
 	}
 

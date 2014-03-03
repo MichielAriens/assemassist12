@@ -5,6 +5,8 @@ import java.util.List;
 
 
 
+
+import logic.assemblyline.AssemblyLine;
 import logic.car.CarOrder;
 import logic.car.CarPartType;
 import logic.users.Mechanic;
@@ -15,9 +17,23 @@ import logic.users.Mechanic;
 public abstract class Workstation {
 	
 	private CarOrder currentOrder;
+	private AssemblyLine assemblyLine;
+	private List<Task> tasks;
 	
 	public Workstation(){
 		currentOrder = null;
+	}
+	
+	public CarOrder getCurrentOrder(){
+		return currentOrder;
+	}
+	
+	public boolean done(){
+		return false;
+	}
+	
+	public void setOrder(CarOrder order){
+		
 	}
 	
 	
@@ -28,16 +44,17 @@ public abstract class Workstation {
 	abstract List<CarPartType> getCapabilities();
 	
 	
-	
-	
-	public void doTask(Task task, Mechanic mechanic){
-		
+	public void doTask(Task task, Time endTime, Mechanic mechanic){
+		if(null == task || null == mechanic || null == endTime){
+			return;
+		}
+		task.perform(endTime, mechanic);
 	}
 
 
-	List<CarPartType> getDoableTasks() {
+	public List<CarPartType> getRequiredTasks() {
 		
-		return null;
+		for this.currentOrder.getTasks();
 	}
 
 }
