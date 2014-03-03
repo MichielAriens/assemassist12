@@ -13,7 +13,6 @@ import logic.workstation.Task;
 public class CarOrder {
 	
 	private final String DATE_FORMAT = "HH:mm dd/MM/yyyy";
-		private boolean done;
 		private String startTime;
 		private String endTime;
 		private String estimatedEndTime;
@@ -26,7 +25,6 @@ public class CarOrder {
 			this.carSpecification=carSpecification;
 			this.garageHolder=garageHolder;
 			startTime = this.getTime();
-			this.done = false;
 			this.dateFormat= new SimpleDateFormat(DATE_FORMAT);
 		}
 		
@@ -46,9 +44,21 @@ public class CarOrder {
 		}
 
 		
-		public boolean isDone() {
-			return done;
+		/**
+		 * 
+		 * @return
+		 */
+		public boolean done(){
+			boolean retVal = true;
+			for(Task task : this.tasks){
+				if(!task.isComplete()){
+					retVal = false;
+					break;
+				}
+			}
+			return retVal;
 		}
+		
 
 		public String getStartTime() {
 			return startTime;
@@ -71,13 +81,6 @@ public class CarOrder {
 			return dateFormat.format(cal.getTime());
 		}
 		
-		public void finished(){
-			this.done = true;
-			endTime=this.getTime();
-			garageHolder.alertCompleted(this);
-			
-		}
-		
 		public boolean setEstimatedEndTime(String time){
 			if(this.isValidTime(time)){
 				this.estimatedEndTime=time;
@@ -95,3 +98,4 @@ public class CarOrder {
 			}
 		}
 }
+

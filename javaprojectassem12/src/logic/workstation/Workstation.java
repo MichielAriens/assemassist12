@@ -85,7 +85,7 @@ public abstract class Workstation {
 	 * Get the types of tasks this workstation can perform. 
 	 * @return
 	 */
-	abstract List<CarPartType> getCapabilities();
+	public abstract List<CarPartType> getCapabilities();
 	
 	
 	public void doTask(Task task, Time endTime, Mechanic mechanic){
