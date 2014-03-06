@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import logic.car.CarModel;
@@ -54,7 +55,7 @@ public class WorkStationTests {
 		
 		List<CarPart> parts = (List<CarPart>) Arrays.asList(partsArray);
 		carSpecification = new CarSpecification(CarModel.MODEL1,new ArrayList<CarPart>(parts));
-		carOrder = new CarOrder(garageHolder, carSpecification);
+		carOrder = new CarOrder(carSpecification, Calendar.getInstance());
 		
 		universalPost = new Workstation() {
 			@Override
@@ -69,19 +70,63 @@ public class WorkStationTests {
 		
 	}
 
+	/**
+	 * We define a universal post that can do any task. This tests the core logic involved.
+	 */
 	@Test
-	public void test() {
+	public void testUniversalPost() {
 		universalPost.setOrder(carOrder);
 		assertFalse(carOrder.done());		
-		universalPost.doTask(carOrder.getTasks().get(0), new Time(0), new Mechanic());
+		universalPost.doTask(carOrder.getTasks().get(0), Calendar.getInstance(), new Mechanic());
 		assertFalse(carOrder.done());
 		assertFalse(universalPost.done());
 		
 		for(Task task : universalPost.getRequiredTasks()){
-			universalPost.doTask(task, new Time(0), new Mechanic());
+			universalPost.doTask(task, Calendar.getInstance(), new Mechanic());
 		}
 		assertTrue(carOrder.done());
 		assertTrue(universalPost.done());
 	}
+	
+	/**
+	 * Tests to simulate the workflow on the assembly line (without Assemblyline) With repetitions. (edge conditions)
+	 */
+	@Test
+	public void testSpecificPosts(){
+		carBodyPost.setOrder(carOrder);
+		driveTrainPost.setOrder(carOrder);
+		accessoriesPost.setOrder(carOrder);
+		assertFalse(carBodyPost.done());
+		assertFalse(carOrder.done());
+		for(Task task : carOrder.getTasks()){
+			carBodyPost.doTask(task, Calendar.getInstance(), new Mechanic());
+		}
+		assertTrue(carBodyPost.done());
+		assertFalse(carOrder.done());
+		assertFalse(driveTrainPost.done());
+		assertFalse(accessoriesPost.done());
+		for(Task task : carOrder.getTasks()){
+			carBodyPost.doTask(task, Calendar.getInstance(), new Mechanic());
+		}
+		assertTrue(carBodyPost.done());
+		assertFalse(carOrder.done());
+		assertFalse(driveTrainPost.done());
+		assertFalse(accessoriesPost.done());
+		for(Task task : carOrder.getTasks()){
+			driveTrainPost.doTask(task, Calendar.getInstance(), new Mechanic());
+		}
+		assertTrue(carBodyPost.done());
+		assertTrue(driveTrainPost.done());
+		assertFalse(accessoriesPost.done());
+		assertFalse(carOrder.done());
+		for(Task task : carOrder.getTasks()){
+			accessoriesPost.doTask(task, Calendar.getInstance(), new Mechanic());
+		}
+		assertTrue(carBodyPost.done());
+		assertTrue(driveTrainPost.done());
+		assertTrue(accessoriesPost.done());
+		assertTrue(carOrder.done());
+	}
+	
 
 }

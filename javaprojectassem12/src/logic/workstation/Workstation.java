@@ -1,8 +1,10 @@
 package logic.workstation;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.sql.Time;
+
 import logic.assemblyline.AssemblyLine;
 import logic.car.CarOrder;
 import logic.car.CarPartType;
@@ -88,7 +90,7 @@ public abstract class Workstation {
 	public abstract List<CarPartType> getCapabilities();
 	
 	
-	public void doTask(Task task, Time endTime, Mechanic mechanic){
+	public void doTask(Task task, Calendar endTime, Mechanic mechanic){
 		if(null == task || null == mechanic || null == endTime){
 			return;
 		}

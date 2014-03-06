@@ -1,6 +1,7 @@
 package logic.workstation;
 
 import java.sql.Time;
+import java.util.Calendar;
 
 import logic.car.CarPart;
 import logic.users.Mechanic;
@@ -10,7 +11,7 @@ import logic.users.Mechanic;
  * @author Team 12
  */
 public class Task {
-	private Time endTime = null;
+	private Calendar endTime = null;
 	private Mechanic mechanic = null;
 	private final CarPart part;
 	
@@ -25,10 +26,10 @@ public class Task {
 	
 	/**
 	 * Perform this task.
-	 * @param endTime
+	 * @param endTime2
 	 * @param mechanic
 	 */
-	public void perform(Time endTime, Mechanic mechanic){
+	public void perform(Calendar endTime, Mechanic mechanic){
 		if(endTime == null || mechanic == null){
 			return;
 		}
