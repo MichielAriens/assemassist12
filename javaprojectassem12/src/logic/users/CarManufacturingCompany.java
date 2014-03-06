@@ -35,8 +35,9 @@ public class CarManufacturingCompany {
 
 	public boolean logIn(String userName){
 		if(garageHolders.containsKey(userName)){
-			
+			return true;
 		}
+		return true;
 	}
 	public void addOrder(CarOrder order) {
 		this.assemblyLine.addCarOrder(order);
