@@ -34,7 +34,9 @@ public class AssemblyLine {
 	 */
 	private Schedule schedule;
 	
-	
+	/**
+	 * 
+	 */
 	public AssemblyLine(){
 		schedule = new Schedule();
 		workStations[0] = new CarBodyPost();
@@ -56,17 +58,34 @@ public class AssemblyLine {
 		
 		for(int i = numberOfWorkStations - 1; i > 0; i--){
 			workStations[i].setOrder(workStations[i-1].getCurrentOrder());
-			
 		}
+		
 		workStations[0].setOrder(schedule.getNextOrder());
 		
 		return true;
 	}
 	
+	/**
+	 * 
+	 * @param order
+	 * @return
+	 */
+	public Calendar calculateEstimatedEndTimeForNewOrder(){
+		return schedule.calculateEstimatedEndTimeForNewOrder();
+	}
+	
+	/**
+	 * 
+	 * @param order
+	 */
 	public void addCarOrder(CarOrder order){
 		carOrders.add(order);
 	}
 
+	/**
+	 * 
+	 *
+	 */
 	public class Schedule {
 		// TODO: Misschien variabelen maken voor de begintijd en eindtijd van een werk dag 
 		
@@ -81,14 +100,28 @@ public class AssemblyLine {
 
 		/**
 		 * Returns the next order to come on the assembly line if the assembly line is moved.
+		 * If there is no next order it will return null.
 		 */
 		public CarOrder getNextOrder() {
-			return carOrders.get(numberOfWorkStations);
+			int numberOfOrdersOnTheLine = 0;
+			for(int i = 0; i < workStations.length; i++){
+				
+			}
+			if(carOrders.size() < 4){
+				return carOrders.get(numberOfWorkStations);
+			}
+			else{
+				return null;
+			}
 		}
 		
-		public Calendar calculateEstimatedEndTime(CarOrder carOrder){
+		/**
+		 * 
+		 * @return
+		 */
+		public Calendar calculateEstimatedEndTimeForNewOrder(){
 			if(carOrders.size() > 1){ 
-				Calendar endTimePreviousOrder = carOrders.get(carOrders.indexOf(carOrder) - 1).getEstimatedEndTime(); 
+				Calendar endTimePreviousOrder = carOrders.get(carOrders.size()-1).getEstimatedEndTime(); 
 
 				Calendar endTimeNextOrder = Calendar.getInstance(); 
 				endTimeNextOrder = Calendar.getInstance();

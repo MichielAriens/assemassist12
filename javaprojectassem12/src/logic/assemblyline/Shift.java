@@ -1,17 +1,22 @@
 package logic.assemblyline;
 
 import java.sql.Time;
+import java.util.Calendar;
 
 public class Shift {
-	private final Time normalStart;
-	private final Time normalEnd;
+	private final Calendar normalStart;
+	private final Calendar normalEnd;
 	
-	private int overtime;
+	private long overtime;
 	
 	
-	public Shift(Time start, Time end){
+	public Shift(Calendar start, Calendar end){
 		this.normalStart = start;
 		this.normalEnd = end;
+	}
+	
+	public Calendar getAdjustedEnd(){
+		return null;
 	}
 	
 	

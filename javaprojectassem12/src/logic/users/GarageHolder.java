@@ -1,6 +1,7 @@
 package logic.users;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import logic.car.CarOrder;
 import logic.car.CarSpecification;
@@ -37,7 +38,7 @@ public class GarageHolder extends User{
 	public void placeOrder(CarSpecification specification){
 		if(specification == null)
 			return;
-		CarOrder order = new CarOrder(this,specification);
+		CarOrder order = new CarOrder(specification, Calendar.getInstance()) ;
 		company.addOrder(order);
 		this.pendingOrders.add(order);
 	}
