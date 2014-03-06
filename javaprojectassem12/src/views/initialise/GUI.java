@@ -6,11 +6,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-public class CLI {
-
+public class GUI {
+	private AssemAssistController controller;
 	private BufferedReader reader;
 	private BufferedWriter writer;
-	public CLI(){
+	public GUI(AssemAssistController controller){
+		this.controller = controller;
+		this.controller.setGUI(this);
 		this.reader= new BufferedReader(new InputStreamReader(System.in));
 		this.writer= new BufferedWriter(new OutputStreamWriter(System.out));
 		this.run();
@@ -36,6 +38,11 @@ public class CLI {
 		public String readInput() throws IOException{
 			return reader.readLine();
 		}
+	}
+
+	public AssemAssistController getController() {
+		
+		return this.controller;
 	}
 
 }

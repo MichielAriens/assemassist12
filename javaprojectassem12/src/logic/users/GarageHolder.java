@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import logic.car.CarOrder;
 import logic.car.CarSpecification;
 
-public class GarageHolder {
+public class GarageHolder extends User{
 	
 	private CarManufacturingCompany company;
 	private ArrayList<CarOrder> pendingOrders;
 	private ArrayList<CarOrder> completedOrders;
 	
-	public GarageHolder(CarManufacturingCompany comp){
+	public GarageHolder(CarManufacturingCompany comp, String userName){
+		super(userName);
 		this.company = comp;
 		this.pendingOrders = new ArrayList<CarOrder>();
 		this.completedOrders = new ArrayList<CarOrder>();

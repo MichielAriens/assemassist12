@@ -4,10 +4,16 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import logic.users.CarManufacturingCompany;
+
 public class Main {
 	public static void main(String[] args) {
-		//CLI cli = new CLI();
-		System.out.println(getTime());
+		CarManufacturingCompany company = new CarManufacturingCompany();
+		AssemAssistController controller = new AssemAssistController(company);
+		GUI gui = new GUI(controller);
+		
+		
+		
 	}
     public static String getTime(){
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");

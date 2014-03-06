@@ -7,11 +7,7 @@ import logic.assemblyline.AssemblyLine;
 import logic.car.CarOrder;
 
 public class CarManufacturingCompany {
-	
-	private HashMap<String,GarageHolder> garageHolders;
-	private HashMap<String,Mechanic> mechanics;
-	private HashMap<String,Manager> managers;
-
+	private HashMap<String,User> users;
 	ArrayList<String> validNamesGarage = new ArrayList<String>();
 	ArrayList<String> validNamesManager = new ArrayList<String>();
 	ArrayList<String> validNamesMechanic = new ArrayList<String>();
@@ -20,9 +16,7 @@ public class CarManufacturingCompany {
 	
 	public CarManufacturingCompany(){
 		this.assemblyLine = new AssemblyLine();
-		this.garageHolders = new HashMap<String,GarageHolder>();
-		this.managers = new HashMap<String,Manager>();
-		this.mechanics= new HashMap<String,Mechanic>();
+		this.users = new HashMap<String,User>();
 		this.initialise();
 	}
 
@@ -33,11 +27,11 @@ public class CarManufacturingCompany {
 		validNamesGarage.add("Michiel");
 	}
 
-	public boolean logIn(String userName){
-		if(garageHolders.containsKey(userName)){
-			return true;
+	public User logIn(String userName){
+		if(users.containsKey(userName)){
+			return users.get(userName);
 		}
-		return true;
+		return null;
 	}
 	public void addOrder(CarOrder order) {
 		this.assemblyLine.addCarOrder(order);

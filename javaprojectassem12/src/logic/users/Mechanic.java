@@ -9,13 +9,13 @@ import java.util.List;
 import logic.assemblyline.Shift;
 import logic.workstation.Workstation;
 
-public class Mechanic {
+public class Mechanic extends User{
 	private Workstation activeStation = null;
 	
 	private List<Shift> shifts;
 	
-	public Mechanic(){
-		
+	public Mechanic(String userName){
+		super(userName);
 	}
 	
 	public Workstation getActiveWorkstation(){
