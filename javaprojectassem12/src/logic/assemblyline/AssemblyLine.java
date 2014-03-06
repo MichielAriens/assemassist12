@@ -62,6 +62,8 @@ public class AssemblyLine {
 		
 		workStations[0].setOrder(schedule.getNextOrder());
 		
+		
+		//Needs to return true at the end because the assembly line can be moved.
 		return true;
 	}
 	
@@ -80,6 +82,7 @@ public class AssemblyLine {
 	 */
 	public void addCarOrder(CarOrder order){
 		carOrders.add(order);
+		order.setEstimatedEndTime(schedule.calculateEstimatedEndTimeForNewOrder());;
 	}
 
 	/**
@@ -105,10 +108,13 @@ public class AssemblyLine {
 		public CarOrder getNextOrder() {
 			int numberOfOrdersOnTheLine = 0;
 			for(int i = 0; i < workStations.length; i++){
-				
+				if(workStations[i].getCurrentOrder() != null){
+					numberOfOrdersOnTheLine++;
+				}
 			}
-			if(carOrders.size() < 4){
-				return carOrders.get(numberOfWorkStations);
+			
+			if(carOrders.size() > numberOfOrdersOnTheLine){
+				return carOrders.get(numberOfOrdersOnTheLine);
 			}
 			else{
 				return null;
@@ -120,7 +126,19 @@ public class AssemblyLine {
 		 * @return
 		 */
 		public Calendar calculateEstimatedEndTimeForNewOrder(){
+			/* 
+			als op de eerste workstation een order staat -> eindtijd rekening houden
+			-> nakijken of het
+			
+			
+			als op de eerste workstation geen order staat -> huidige tijd nemen
+			-> nakijken of het tussen 6 en 22 (-3) is
+			
+			*/
+			
+			
 			if(carOrders.size() > 1){ 
+				
 				Calendar endTimePreviousOrder = carOrders.get(carOrders.size()-1).getEstimatedEndTime(); 
 
 				Calendar endTimeNextOrder = Calendar.getInstance(); 
@@ -150,26 +168,30 @@ public class AssemblyLine {
 			
 			//Als de gegeven carorder de enige carorder is moet naar het huidige uur gekeken worden
 			else{
-				//Current date
+				//Set endTimeNextOrder to current date and time
 				Calendar endTimeNextOrder = Calendar.getInstance();
 				endTimeNextOrder.getTime();
 				
+				//Current date at 06:00
 				Calendar checkTime0600 = Calendar.getInstance(); 
 				checkTime0600.setTime(endTimeNextOrder.getTime());
 				checkTime0600.set(Calendar.HOUR_OF_DAY, 6);
 				checkTime0600.set(Calendar.MINUTE, 0);
 				checkTime0600.set(Calendar.SECOND, 0);
 				
+				//Current date at 22:00 
 				Calendar checkTime2200 = Calendar.getInstance(); 
 				checkTime2200.setTime(endTimeNextOrder.getTime());
 				checkTime2200.set(Calendar.HOUR_OF_DAY, 22);
 				checkTime2200.set(Calendar.MINUTE, 0);
 				checkTime2200.set(Calendar.SECOND, 0);
 				
-				endTimeNextOrder.add(Calendar.HOUR_OF_DAY, 3); // 3 uur bijvoegen
+				//Add 3 hours to endTimeNextOrder
+				endTimeNextOrder.add(Calendar.HOUR_OF_DAY, 3);
 				
-				// nakijken of het tussen 6 en 8 is
+				//Check if endTimeNextOrder is after 06:00
 				if(endTimeNextOrder.after(checkTime0600)){
+					//Check if endTimeNextOrder is before 22:00
 					if(endTimeNextOrder.before(checkTime2200)){
 						return endTimeNextOrder;
 					}
