@@ -16,7 +16,7 @@ public class Shift {
 	}
 	
 	public Calendar getAdjustedEnd(){
-		return 
+		return null;
 	}
 	
 	
