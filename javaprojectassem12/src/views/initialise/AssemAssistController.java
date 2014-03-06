@@ -1,6 +1,7 @@
 package views.initialise;
 
 import logic.users.CarManufacturingCompany;
+import logic.users.User;
 
 public class AssemAssistController {
 	private GUI gui;
@@ -14,5 +15,9 @@ public class AssemAssistController {
 			this.gui = gui;
 		}
 		
+	}
+
+	public User logIn(String userName) {
+		return company.logIn(userName);
 	}
 }

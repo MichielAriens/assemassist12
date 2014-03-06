@@ -31,6 +31,21 @@ public class CarManufacturingCompany {
 		if(users.containsKey(userName)){
 			return users.get(userName);
 		}
+		if(validNamesManager.contains(userName)){
+			Manager user = new Manager(this, userName);
+			users.put(userName, user);
+			return user;
+		}
+		if(validNamesGarage.contains(userName)){
+			GarageHolder user = new GarageHolder(this, userName);
+			users.put(userName, user);
+			return user;
+		}
+		if(validNamesMechanic.contains(userName)){
+			Mechanic user = new Mechanic(this, userName);
+			users.put(userName, user);
+			return user;
+		}
 		return null;
 	}
 	public void addOrder(CarOrder order) {

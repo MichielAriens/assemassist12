@@ -10,12 +10,14 @@ import logic.assemblyline.Shift;
 import logic.workstation.Workstation;
 
 public class Mechanic extends User{
-	private Workstation activeStation = null;
 	
+	private Workstation activeStation = null;
+	private CarManufacturingCompany company;
 	private List<Shift> shifts;
 	
-	public Mechanic(String userName){
+	public Mechanic(CarManufacturingCompany comp, String userName){
 		super(userName);
+		this.company = comp;
 	}
 	
 	public Workstation getActiveWorkstation(){
