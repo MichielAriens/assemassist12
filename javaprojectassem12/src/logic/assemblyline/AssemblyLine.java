@@ -2,6 +2,8 @@ package logic.assemblyline;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import org.joda.time.DateTime;
+
 import logic.car.CarOrder;
 import logic.workstation.AccessoriesPost;
 import logic.workstation.CarBodyPost;
@@ -32,6 +34,11 @@ public class AssemblyLine {
 	/**
 	 * 
 	 */
+	private DateTime currentTime;
+	
+	/**
+	 * 
+	 */
 	private Schedule schedule;
 	
 	/**
@@ -42,51 +49,63 @@ public class AssemblyLine {
 		workStations[0] = new CarBodyPost();
 		workStations[1] = new DriveTrainPost();
 		workStations[2] = new AccessoriesPost();
+		this.currentTime = new DateTime(2014, 1, 1, 6, 0);
 	}
 	
 	/**
-	 * Moves the car orders on the assembly line if every work station is ready.
-	 * @return True if the assembly line can be moved.
-	 * @return False if the assembly line can not be moved.
-	 */
-	public boolean moveAssemblyLine(){
-		for(int i = 0; i < numberOfWorkStations; i++){
-			if(workStations[i].done()){
-				return false;
-			}
-		}
-		
-		for(int i = numberOfWorkStations - 1; i > 0; i--){
-			workStations[i].setOrder(workStations[i-1].getCurrentOrder());
-		}
-		
-		workStations[0].setOrder(schedule.getNextOrder());
-		
-		//Needs to return true at the end because the assembly line can be moved.
-		return true;
-	}
-	
-	/**
-	 * Moves the car orders on the assembly line if every work station is ready.
+	 * Moves the car orders on the assembly line if every work station is ready and 
+	 * sets the end time of the first order to the given end time.
 	 * @return True if the assembly line can be moved.
 	 * @return False if the assembly line can not be moved.
 	 */
 	public boolean moveAssemblyLine(Calendar endTime){
+		if(checkWorkStations()){
+			CarOrder firstOrder = workStations[numberOfWorkStations-1].getCurrentOrder();
+			firstOrder.setEndTime(endTime);
+			for(int i = numberOfWorkStations - 1; i > 0; i--){
+				workStations[i].setOrder(workStations[i-1].getCurrentOrder());
+			}
+
+			workStations[0].setOrder(schedule.getNextOrder());
+
+			//Needs to return true at the end because the assembly line can be moved.
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if all the work stations are done.
+	 * @return true if all work stations are done.
+	 * @return false if one or more work stations are not done.
+	 */
+	private boolean checkWorkStations() {
 		for(int i = 0; i < numberOfWorkStations; i++){
 			if(workStations[i].done()){
 				return false;
 			}
 		}
-		workStations[numberOfWorkStations-1].getCurrentOrder().setEndTime(endTime);
-		for(int i = numberOfWorkStations - 1; i > 0; i--){
-			workStations[i].setOrder(workStations[i-1].getCurrentOrder());
-		}
-		
-		workStations[0].setOrder(schedule.getNextOrder());
-		
-		//Needs to return true at the end because the assembly line can be moved.
 		return true;
 	}
+	
+	/**
+	 * Moves the car orders on the assembly line if every work station is ready and 
+	 * sets the end time of the first order to the given end time.
+	 * @return True if the assembly line can be moved.
+	 * @return False if the assembly line can not be moved.
+	 */
+//	public boolean moveAssemblyLine(Calendar endTime){
+//		checkWorkStations();
+//		workStations[numberOfWorkStations-1].getCurrentOrder().setEndTime(endTime);
+//		for(int i = numberOfWorkStations - 1; i > 0; i--){
+//			workStations[i].setOrder(workStations[i-1].getCurrentOrder());
+//		}
+//		
+//		workStations[0].setOrder(schedule.getNextOrder());
+//		
+//		//Needs to return true at the end because the assembly line can be moved.
+//		return true;
+//	}
 	
 	/**
 	 * 
@@ -98,12 +117,13 @@ public class AssemblyLine {
 	}
 	
 	/**
-	 * 
+	 * First
 	 * @param order
 	 */
 	public void addCarOrder(CarOrder order){
+		schedule.calculateEstimatedEndTimeForNewOrder();
+		order.setEstimatedEndTime(schedule.calculateEstimatedEndTimeForNewOrder());
 		carOrders.add(order);
-		order.setEstimatedEndTime(schedule.calculateEstimatedEndTimeForNewOrder());;
 	}
 
 	/**
@@ -156,8 +176,8 @@ public class AssemblyLine {
 		}
 		
 		/**
-		 * If there is an order on the first work station of the assembly line the 
-		 * estimated end time for the new order will be three hours later. If that time is passed
+		 * If the given order exists the estimated end time for the new order will be three hours
+		 * later than the end time of the given order. If that time is passed
 		 * 22:00 the estimated end time will be 09:00 the next day.
 		 * If there is no order on the first work station of the assembly line there are 
 		 * three options. First option is that the current time is before 06:00 so the estimated 
@@ -167,10 +187,10 @@ public class AssemblyLine {
 		 * next day.
 		 * @return
 		 */
-		public Calendar calculateEstimatedEndTimeForNewOrder(){			
+		public Calendar calculateEstimatedEndTimeForOrderAfterGivenOrder(CarOrder previousOrder){			
 			//If there is a current order on the first work station
-			if(workStations[0].getCurrentOrder() != null){
-				Calendar endTimePreviousOrder = workStations[0].getCurrentOrder().getEstimatedEndTime();
+			if(previousOrder != null){
+				Calendar endTimePreviousOrder = previousOrder.getEstimatedEndTime();
 				Calendar endTimeNextOrder = Calendar.getInstance(); 
 				endTimeNextOrder = Calendar.getInstance();
 				endTimeNextOrder.setTime(endTimePreviousOrder.getTime());
@@ -223,6 +243,24 @@ public class AssemblyLine {
 					return endTimeNextOrder;
 				}	
 			}	
+		}
+		
+		/**
+		 * If there is an order on the first work station of the assembly line the 
+		 * estimated end time for the new order will be three hours later. If that time is passed
+		 * 22:00 the estimated end time will be 09:00 the next day.
+		 * If there is no order on the first work station of the assembly line there are 
+		 * three options. First option is that the current time is before 06:00 so the estimated 
+		 * end time will be 09:00. Second option is that the current time is between 06:00 and 
+		 * 19:00 so the estimated end time will be three hours after the current time. Third option
+		 * is that the current time is past 19:00 so the estimated end time will be at 09:00 on the
+		 * next day.
+		 * @return
+		 */
+		public Calendar calculateEstimatedEndTimeForNewOrder(){	
+			int indexLastCarOrder = carOrders.size()-1;
+			CarOrder lastCarOrder = carOrders.get(indexLastCarOrder);
+			return calculateEstimatedEndTimeForOrderAfterGivenOrder(lastCarOrder);
 		}
 		
 		/**
