@@ -51,6 +51,10 @@ public class CarOrder {
 	public void setEstimatedEndTime(Calendar time){
 		this.estimatedEndTime = time;
 	}
+	
+	public void setEndTime(Calendar time){
+		this.endTime = time;
+	}
 
 	/**
 	 * 
@@ -69,7 +73,11 @@ public class CarOrder {
 	
 	@Override
 	public String toString(){
-		String str = estimatedEndTime.toString();
+		String str;
+		if(this.done())
+			str= endTime.toString();
+		else
+			str =estimatedEndTime.toString();
 		str += " : " + carSpecification.toString();
 		return str;
 	}
