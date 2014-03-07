@@ -17,7 +17,11 @@ public class DriveTrainPost extends Workstation {
 
 	
 	
-	
+	/**
+	 * Get the types of tasks this workstation can perform. This methods completely defines the capabilities of an implementing class.
+	 * @return		A List of CarPartType elements defining the capabilities of the implementation. 
+	 * 				({CarPartType.Engine, CarPartType.Gearbox})
+	 */
 	@Override
 	public
 	List<CarPartType> getCapabilities() {

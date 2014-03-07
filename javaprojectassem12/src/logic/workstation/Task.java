@@ -11,15 +11,21 @@ import logic.users.Mechanic;
  * @author Team 12
  */
 public class Task {
-	private Calendar endTime = null;
+	private boolean completed = false;
 	private Mechanic mechanic = null;
 	private final CarPart part;
 	
+	/**
+	 * Creates a task corresponding with the installation of the prt provided
+	 * @param part	The CarPart to install
+	 */
 	public Task(CarPart part){
 		this.part = part;
 	}
 	
-	
+	/**
+	 * The CarPart corresponding to this task
+	 */
 	public CarPart getCarPart(){
 		return part;
 	}
@@ -36,17 +42,16 @@ public class Task {
 		if(this.isComplete()){
 			return;
 		}
-		this.endTime = endTime;
+		this.completed = true;
 		this.mechanic = mechanic;
 	}
 	
 	
 	/**
 	 * Checks whether the task is completed.
-	 * @return
 	 */
 	public boolean isComplete(){
-		return endTime != null;
+		return completed;
 	}
 	
 }
