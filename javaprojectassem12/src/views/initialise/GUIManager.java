@@ -16,9 +16,9 @@ public class GUIManager {
 		this.writer = writer;
 	}
 	
-	public void run(Manager manager){
+	public void run(ManagerController maController){
 		try {
-			writer.write("Manager " + manager.getUserName()+ " has logged in.");
+			writer.write("Manager " + maController.getUserName()+ " has logged in.");
 			writer.flush();
 		} catch (IOException e) {
 			e.printStackTrace();

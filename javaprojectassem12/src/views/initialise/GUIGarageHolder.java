@@ -11,27 +11,47 @@ public class GUIGarageHolder {
 	
 	private BufferedReader reader;
 	private BufferedWriter writer;
-	private GarageHolderController controller;
-	
-	public GUIGarageHolder(BufferedReader reader, BufferedWriter writer, GarageHolderController controller) {
+	public GUIGarageHolder(BufferedReader reader, BufferedWriter writer) {
 		this.reader = reader;
 		this.writer = writer;
-		this.controller = controller;
 	}
 	
-	public void run(GarageHolder garageholder){
+	public void run(GarageHolderController ghController){
 		try {
-			writer.write("Garage holder " + garageholder.getUserName()+ " has logged in.\n\n");
+			writer.write("Garage holder " + ghController.getUserName()+ " has logged in.\n\n");
 			writer.flush();
-			printPendingOrders(garageholder.getPendingOrderStrings());
+			printOrders("Pending Orders: ", ghController.getPendingOrders());
+			printOrders("Completed Orders: ", ghController.getCompletedOrders());
+			if(!promptNewOrder())
+				return;
+			writer.write("new car order placed");
+			writer.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void printPendingOrders(ArrayList<String> orders){
+	private boolean promptNewOrder(){
+		try{
+			while(true){
+				writer.write("Do you want to place a new order? (y/n): ");
+				writer.flush();
+				String answer = reader.readLine();
+				if(answer.equals("y"))
+					return true;
+				if(answer.equals("n"))
+					return false;
+			}
+		}
+		catch(IOException e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	private void printOrders(String title, ArrayList<String> orders){
 		try {
-			writer.write("Pending orders:\n");
+			writer.write(title + "\n");
 			if(orders.size() == 0){
 				writer.write("None. \n");
 			}
@@ -40,10 +60,10 @@ public class GUIGarageHolder {
 					writer.write("- " + order + "; \n");
 				}
 			}
+			writer.write("\n");
 			writer.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
 }

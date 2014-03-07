@@ -28,27 +28,27 @@ public class GUI {
 	}
 	
 	private void run() {
-		User user;
+		UserController userCont;
 		while(true){
-			user = login();
-			if(user != null)
+			userCont = login();
+			if(userCont != null)
 				break;
 		}
-		if(user instanceof GarageHolder){
-			garageHolderGui.run((GarageHolder)user);
+		if(userCont instanceof GarageHolderController){
+			garageHolderGui.run((GarageHolderController)userCont);
 		}
-		else if(user instanceof Manager){
-			managerGui.run((Manager)user);
+		else if(userCont instanceof ManagerController){
+			managerGui.run((ManagerController)userCont);
 		}
-		else if(user instanceof Mechanic){
-			mechanicGui.run((Mechanic)user);
+		else if(userCont instanceof MechanicController){
+			mechanicGui.run((MechanicController)userCont);
 		}
 		
 	}
 	
-	private User login(){
+	private UserController login(){
 		try{
-			writer.write("====LOGIN====\n Enter username: ");
+			writer.write("====LOGIN====\nEnter username: ");
 			writer.flush();
 			String userName = reader.readLine();
 			return controller.logIn(userName);

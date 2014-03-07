@@ -16,9 +16,9 @@ public class GUIMechanic {
 		this.writer = writer;
 	}
 	
-	public void run(Mechanic mechanic){
+	public void run(MechanicController meController){
 		try {
-			writer.write("Mechanic " + mechanic.getUserName()+ " has logged in.");
+			writer.write("Mechanic " + meController.getUserName()+ " has logged in.");
 			writer.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
