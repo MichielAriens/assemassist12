@@ -28,6 +28,14 @@ public enum CarModel {
 			this.possibleParts = parts;
 		}
 		
+		public boolean validPart(CarPart part){
+			for(int i = 0; i < possibleParts.length; i++){
+				if(possibleParts[i] == part)
+					return true;
+			}
+			return false;
+		}
+		
 		@Override
 		public String toString(){
 			return this.name;

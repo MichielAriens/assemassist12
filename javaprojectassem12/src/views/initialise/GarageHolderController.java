@@ -2,9 +2,7 @@ package views.initialise;
 
 import java.util.ArrayList;
 
-import logic.car.CarModel;
-import logic.car.CarOrder;
-import logic.car.CarPartType;
+import logic.car.*;
 import logic.users.GarageHolder;
 
 public class GarageHolderController extends UserController{
@@ -46,8 +44,21 @@ public class GarageHolderController extends UserController{
 		return models;
 	}
 	
-	public ArrayList<String> getOptions(CarPartType type){
-		
+	public ArrayList<String> getOptions(CarPartType type, CarModel model){
+		ArrayList<String> options = new ArrayList<String>();
+		for(CarPart opt : CarPart.values()){
+			if(opt.type == type && model.validPart(opt))
+				options.add(opt.toString());
+		}
+		return options;
+	}
+	
+	public void placeOrder(CarModel model, ArrayList<String> parts){
+		System.out.println("Order placed: ");
+		System.out.println(model);
+		for(String s : parts){
+			System.out.println(s);
+		}
 	}
 	
 	

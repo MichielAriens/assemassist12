@@ -1,11 +1,22 @@
 package logic.car;
 
 public enum CarPartType {
-	Body,
-	Colour,
-	Engine,
-	Gearbox,
-	Seats,
-	Airco,
-	Wheels;
+	Body("Body"),
+	Colour("Colour"),
+	Engine("Engine"),
+	Gearbox("Gearbox"),
+	Seats("Seats"),
+	Airco("Airco"),
+	Wheels("Wheels");
+	
+	public String name;
+	CarPartType(String name){
+		this.name = name;
+	}
+	
+	@Override
+	public String toString(){
+		return this.name;
+	}
 }
+
