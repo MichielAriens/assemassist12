@@ -62,6 +62,27 @@ public class AssemblyLine {
 		
 		workStations[0].setOrder(schedule.getNextOrder());
 		
+		//Needs to return true at the end because the assembly line can be moved.
+		return true;
+	}
+	
+	/**
+	 * Moves the car orders on the assembly line if every work station is ready.
+	 * @return True if the assembly line can be moved.
+	 * @return False if the assembly line can not be moved.
+	 */
+	public boolean moveAssemblyLine(Calendar endTime){
+		for(int i = 0; i < numberOfWorkStations; i++){
+			if(workStations[i].done()){
+				return false;
+			}
+		}
+		workStations[numberOfWorkStations-1].getCurrentOrder().setEndTime(endTime);
+		for(int i = numberOfWorkStations - 1; i > 0; i--){
+			workStations[i].setOrder(workStations[i-1].getCurrentOrder());
+		}
+		
+		workStations[0].setOrder(schedule.getNextOrder());
 		
 		//Needs to return true at the end because the assembly line can be moved.
 		return true;
@@ -90,7 +111,20 @@ public class AssemblyLine {
 	 *
 	 */
 	public class Schedule {
-		// TODO: Misschien variabelen maken voor de begintijd en eindtijd van een werk dag 
+		/**
+		 * Hour start time of a sift in ideal circumstances.
+		 */
+		int shiftBeginHour = 6;
+		
+		/**
+		 * Hour end time of a sift in ideal circumstances.
+		 */
+		int shiftEndHour = 22;
+		
+		/**
+		 * Time in hours it takes to assemble a car in ideal circumstances.
+		 */
+		int assemblyTime = 3;
 		
 		/**
 		 * 
@@ -122,97 +156,78 @@ public class AssemblyLine {
 		}
 		
 		/**
-		 * 
+		 * If there is an order on the first work station of the assembly line the 
+		 * estimated end time for the new order will be three hours later. If that time is passed
+		 * 22:00 the estimated end time will be 09:00 the next day.
+		 * If there is no order on the first work station of the assembly line there are 
+		 * three options. First option is that the current time is before 06:00 so the estimated 
+		 * end time will be 09:00. Second option is that the current time is between 06:00 and 
+		 * 19:00 so the estimated end time will be three hours after the current time. Third option
+		 * is that the current time is past 19:00 so the estimated end time will be at 09:00 on the
+		 * next day.
 		 * @return
 		 */
-		public Calendar calculateEstimatedEndTimeForNewOrder(){
-			/* 
-			als op de eerste workstation een order staat -> eindtijd rekening houden
-			-> nakijken of het
-			
-			
-			als op de eerste workstation geen order staat -> huidige tijd nemen
-			-> nakijken of het tussen 6 en 22 (-3) is
-			
-			*/
-			
-			//If there is a current order on the first work station, 
-			//		keep in mind the endtime of that order.
+		public Calendar calculateEstimatedEndTimeForNewOrder(){			
+			//If there is a current order on the first work station
 			if(workStations[0].getCurrentOrder() != null){
-			//if(carOrders.size() > 1){ 
-				
-				//TODO: aanpassen
-				Calendar endTimePreviousOrder = carOrders.get(carOrders.size()-1).getEstimatedEndTime(); 
-
+				Calendar endTimePreviousOrder = workStations[0].getCurrentOrder().getEstimatedEndTime();
 				Calendar endTimeNextOrder = Calendar.getInstance(); 
 				endTimeNextOrder = Calendar.getInstance();
 				endTimeNextOrder.setTime(endTimePreviousOrder.getTime());
-				endTimeNextOrder.add(Calendar.HOUR_OF_DAY, 3); // 3 uur bijvoegen
+				endTimeNextOrder.add(Calendar.HOUR_OF_DAY, assemblyTime);
 
-				Calendar checkTime2200 = getGivenTimeOnGivenDay(endTimePreviousOrder, 22, 0, 0);
-				/*Calendar checkTime2200 = Calendar.getInstance(); 
-				checkTime2200.setTime(endTimePreviousOrder.getTime());
-				checkTime2200.set(Calendar.HOUR_OF_DAY, 22);
-				checkTime2200.set(Calendar.MINUTE, 0);
-				checkTime2200.set(Calendar.SECOND, 0);*/
-				if(endTimeNextOrder.before(checkTime2200)){
+				Calendar shiftEndTime = getGivenTimeOnGivenDay(endTimePreviousOrder, shiftEndHour, 0, 0);
+				if(endTimeNextOrder.before(shiftEndTime)){
 					return endTimeNextOrder;
 				}
 				else{
+					//Set time to endTimePreviousOrder because it could be the day has been changed
 					endTimeNextOrder.setTime(endTimePreviousOrder.getTime());
-					endTimeNextOrder.add(Calendar.DAY_OF_MONTH, 1); // add 1 day
-					
-					endTimeNextOrder.set(Calendar.HOUR_OF_DAY, 6);
-					endTimeNextOrder.set(Calendar.MINUTE, 0);
-					endTimeNextOrder.set(Calendar.SECOND, 0);
-					
-					endTimeNextOrder.add(Calendar.HOUR_OF_DAY, 3); // 3 uur bijvoegen
+					//Add 1 day
+					endTimeNextOrder.add(Calendar.DAY_OF_MONTH, 1);
+					//Set hour to shiftBeginHour + assemblyTime
+					endTimeNextOrder = getGivenTimeOnGivenDay(endTimeNextOrder, shiftBeginHour+assemblyTime, 0, 0);
 					return endTimeNextOrder;
 				}
 			}
 			
-			//Als de gegeven carorder de enige carorder is moet naar het huidige uur gekeken worden
+			//If there is no current order on the first work station
 			else{
 				//Set endTimeNextOrder to current date and time
 				Calendar endTimeNextOrder = Calendar.getInstance();
-				endTimeNextOrder.getTime();
 				
-				//Current date at 06:00
-				Calendar checkTime0600 = Calendar.getInstance(); 
-				checkTime0600.setTime(endTimeNextOrder.getTime());
-				checkTime0600.set(Calendar.HOUR_OF_DAY, 6);
-				checkTime0600.set(Calendar.MINUTE, 0);
-				checkTime0600.set(Calendar.SECOND, 0);
+				//Current date at shiftBeginTime
+				Calendar shiftBeginTime = getGivenTimeOnGivenDay(endTimeNextOrder, shiftBeginHour, 0, 0);
 				
-				//Current date at 22:00 
-				Calendar checkTime2200 = Calendar.getInstance(); 
-				checkTime2200.setTime(endTimeNextOrder.getTime());
-				checkTime2200.set(Calendar.HOUR_OF_DAY, 22);
-				checkTime2200.set(Calendar.MINUTE, 0);
-				checkTime2200.set(Calendar.SECOND, 0);
+				//Current date at shiftEndTime
+				Calendar shiftEndTime = getGivenTimeOnGivenDay(endTimeNextOrder, shiftEndHour, 0, 0);
 				
-				//Add 3 hours to endTimeNextOrder
-				endTimeNextOrder.add(Calendar.HOUR_OF_DAY, 3);
-				
-				//Check if endTimeNextOrder is after 06:00
-				if(endTimeNextOrder.after(checkTime0600)){
-					//Check if endTimeNextOrder is before 22:00
-					if(endTimeNextOrder.before(checkTime2200)){
+				//Check if endTimeNextOrder is after shiftBegintHour else it is at shigtBeginHour
+				if(endTimeNextOrder.after(shiftBeginTime)){
+					//Add assemblyTime hours to endTimeNextOrder
+					endTimeNextOrder.add(Calendar.HOUR_OF_DAY, assemblyTime);
+					//Check if endTimeNextOrder is before shiftEndTime else endTimeNextOrder is shiftBegintime + assemblyTime the next day
+					if(endTimeNextOrder.before(shiftEndTime)){
 						return endTimeNextOrder;
 					}
 					else{
-						endTimeNextOrder.setTime(checkTime0600.getTime());
-						endTimeNextOrder.add(Calendar.DAY_OF_MONTH, 1); // add 1 day
+						//Add 1 day
+						endTimeNextOrder.add(Calendar.DAY_OF_MONTH, 1); 
+						//Set time to shiftBeginHour assemblyTime
+						endTimeNextOrder = getGivenTimeOnGivenDay(endTimeNextOrder, shiftBeginHour + assemblyTime, 0, 0); 
 						return endTimeNextOrder;
 					}
 				}
 				else{
-					endTimeNextOrder.setTime(checkTime0600.getTime());
+					endTimeNextOrder = getGivenTimeOnGivenDay(endTimeNextOrder, shiftBeginHour + assemblyTime, 0, 0);
 					return endTimeNextOrder;
 				}	
 			}	
 		}
 		
+		/**
+		 * Returns a calendar object on the given day with the given time in hours, minutes and seconds.
+		 */
 		public Calendar getGivenTimeOnGivenDay(Calendar givenDay, int hour, int minute, int second){
 			Calendar givenTimeOnGivenDay = Calendar.getInstance(); 
 			givenTimeOnGivenDay.setTime(givenDay.getTime());
@@ -220,6 +235,24 @@ public class AssemblyLine {
 			givenTimeOnGivenDay.set(Calendar.MINUTE, minute);
 			givenTimeOnGivenDay.set(Calendar.SECOND, second);
 			return givenTimeOnGivenDay;
+		}
+		
+		/**
+		 * Returns an overview of the estimated end times for all the orders in the schedule.
+		 * Returns "No orders planned." if there are no orders.
+		 */
+		public String getScheduleOverview(){
+			String overview = "";
+			if(carOrders.size()<1){
+				overview = "No orders planned.";
+			}
+			else{
+				for(int i = 0; i < carOrders.size()-1; i++){
+					overview = overview +"Car order "+ (i+1)+": " + carOrders.get(i).toString()+"\n";
+				}
+				overview = overview +"Car order "+ carOrders.size() + carOrders.get(carOrders.size()-1).toString();
+			}
+			return overview;
 		}
 	}
 }
