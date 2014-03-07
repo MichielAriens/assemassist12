@@ -2,6 +2,8 @@ package logic.assemblyline;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import org.joda.time.DateTime;
+
 import logic.car.CarOrder;
 import logic.workstation.AccessoriesPost;
 import logic.workstation.CarBodyPost;
@@ -32,6 +34,11 @@ public class AssemblyLine {
 	/**
 	 * 
 	 */
+	private DateTime currentTime;
+	
+	/**
+	 * 
+	 */
 	private Schedule schedule;
 	
 	/**
@@ -42,6 +49,7 @@ public class AssemblyLine {
 		workStations[0] = new CarBodyPost();
 		workStations[1] = new DriveTrainPost();
 		workStations[2] = new AccessoriesPost();
+		this.currentTime = new DateTime(2014, 1, 1, 6, 0);
 	}
 	
 	/**
