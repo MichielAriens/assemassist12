@@ -1,6 +1,8 @@
 package logic.assemblyline;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 import org.joda.time.DateTime;
 
@@ -26,10 +28,9 @@ public class AssemblyLine {
 	 */
 	private int numberOfWorkStations = 3;
 	
-	/**
-	 * List containing the pending car orders.
-	 */
-	private ArrayList<CarOrder> carOrders = new ArrayList<CarOrder>();
+	
+	
+	private LinkedList<CarOrder> FIFOQueue;
 	
 	/**
 	 * 
@@ -45,6 +46,7 @@ public class AssemblyLine {
 	 * 
 	 */
 	public AssemblyLine(){
+		FIFOQueue= new LinkedList<CarOrder>();
 		schedule = new Schedule();
 		workStations[0] = new CarBodyPost();
 		workStations[1] = new DriveTrainPost();
@@ -58,10 +60,11 @@ public class AssemblyLine {
 	 * @return True if the assembly line can be moved.
 	 * @return False if the assembly line can not be moved.
 	 */
-	public boolean moveAssemblyLine(Calendar endTime){
+	public boolean moveAssemblyLine(int shiftDuration){
 		if(checkWorkStations()){
+			this.currentTime = currentTime.plusMinutes(shiftDuration);
 			CarOrder firstOrder = workStations[numberOfWorkStations-1].getCurrentOrder();
-			firstOrder.setEndTime(endTime);
+			firstOrder.setEndTime(currentTime);
 			for(int i = numberOfWorkStations - 1; i > 0; i--){
 				workStations[i].setOrder(workStations[i-1].getCurrentOrder());
 			}
@@ -112,7 +115,7 @@ public class AssemblyLine {
 	 * @param order
 	 * @return
 	 */
-	public Calendar calculateEstimatedEndTimeForNewOrder(){
+	public DateTime calculateEstimatedEndTimeForNewOrder(){
 		return schedule.calculateEstimatedEndTimeForNewOrder();
 	}
 	
@@ -130,7 +133,7 @@ public class AssemblyLine {
 	 * 
 	 *
 	 */
-	public class Schedule {
+	class Schedule {
 		/**
 		 * Hour start time of a sift in ideal circumstances.
 		 */
@@ -151,7 +154,7 @@ public class AssemblyLine {
 		 * @param order
 		 * @return
 		 */
-		public Calendar getEstimatedCompletionTime(CarOrder order){
+		public DateTime getEstimatedCompletionTime(CarOrder order){
 			return order.getEstimatedEndTime();
 		}
 
@@ -160,19 +163,17 @@ public class AssemblyLine {
 		 * If there is no next order it will return null.
 		 */
 		public CarOrder getNextOrder() {
-			int numberOfOrdersOnTheLine = 0;
-			for(int i = 0; i < workStations.length; i++){
-				if(workStations[i].getCurrentOrder() != null){
-					numberOfOrdersOnTheLine++;
-				}
-			}
-			
-			if(carOrders.size() > numberOfOrdersOnTheLine){
-				return carOrders.get(numberOfOrdersOnTheLine);
-			}
-			else{
+			try{
+				return FIFOQueue.getFirst();
+			}catch(NoSuchElementException e){
 				return null;
 			}
+			
+			
+		}
+		
+		public DateTime calculateNextEstimatedEndTime(CarOrder previous){
+			
 		}
 		
 		/**
@@ -187,7 +188,7 @@ public class AssemblyLine {
 		 * next day.
 		 * @return
 		 */
-		public Calendar calculateEstimatedEndTimeForOrderAfterGivenOrder(CarOrder previousOrder){			
+		public DateTime calculateEstimatedEndTimeForOrderAfterGivenOrder(CarOrder previousOrder){			
 			//If there is a current order on the first work station
 			if(previousOrder != null){
 				Calendar endTimePreviousOrder = previousOrder.getEstimatedEndTime();

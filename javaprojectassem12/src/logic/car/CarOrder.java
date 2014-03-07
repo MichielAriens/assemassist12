@@ -1,19 +1,21 @@
 package logic.car;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
+
+import org.joda.time.DateTime;
+
 import logic.workstation.Task;
 
 public class CarOrder {
 
-	private Calendar startTime;
-	private Calendar endTime;
-	private Calendar estimatedEndTime;
+	private DateTime startTime;
+	private DateTime endTime;
+	private DateTime estimatedEndTime;
 	private CarSpecification carSpecification;
 	private List<Task> tasks = new ArrayList<Task>();
 
-	public CarOrder(CarSpecification carSpecification, Calendar startTime){
+	public CarOrder(CarSpecification carSpecification, DateTime startTime){
 		this.carSpecification = carSpecification;
 		this.startTime = startTime;
 		buildTasks();
@@ -32,15 +34,15 @@ public class CarOrder {
 		return this.tasks;
 	}
 
-	public Calendar getStartTime() {
+	public DateTime getStartTime() {
 		return startTime;
 	}
 
-	public Calendar getEndTime() {
+	public DateTime getEndTime() {
 		return endTime;
 	}
 
-	public Calendar getEstimatedEndTime() {
+	public DateTime getEstimatedEndTime() {
 		return estimatedEndTime;
 	}
 
@@ -48,11 +50,11 @@ public class CarOrder {
 		return carSpecification;
 	}
 
-	public void setEstimatedEndTime(Calendar time){
+	public void setEstimatedEndTime(DateTime time){
 		this.estimatedEndTime = time;
 	}
 	
-	public void setEndTime(Calendar time){
+	public void setEndTime(DateTime time){
 		this.endTime = time;
 	}
 

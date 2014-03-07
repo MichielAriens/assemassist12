@@ -2,10 +2,6 @@ package logic.users;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-
 import logic.assemblyline.AssemblyLine;
 import logic.car.CarOrder;
 
