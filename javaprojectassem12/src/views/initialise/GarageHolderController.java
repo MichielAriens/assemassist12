@@ -38,25 +38,29 @@ public class GarageHolderController extends UserController{
 	
 	public ArrayList<String> getModels(){
 		ArrayList<String> models = new ArrayList<String>();
+		int count = 1;
 		for(CarModel mod : CarModel.values()){
-			models.add(mod.toString());
+			models.add(mod.toString() + ": " +  count);
+			count++;
 		}
 		return models;
 	}
 	
 	public ArrayList<String> getOptions(CarPartType type, CarModel model){
 		ArrayList<String> options = new ArrayList<String>();
+		int count = 1;
 		for(CarPart opt : CarPart.values()){
-			if(opt.type == type && model.validPart(opt))
-				options.add(opt.toString());
+			if(opt.type == type && model.validPart(opt)){
+				options.add(opt.toString() + ": " + count);
+				count++;
+			}
 		}
 		return options;
 	}
 	
-	public void placeOrder(CarModel model, ArrayList<String> parts){
+	public void placeOrder(ArrayList<String> spec){
 		System.out.println("Order placed: ");
-		System.out.println(model);
-		for(String s : parts){
+		for(String s : spec){
 			System.out.println(s);
 		}
 	}

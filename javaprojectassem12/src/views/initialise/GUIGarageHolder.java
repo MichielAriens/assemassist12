@@ -25,20 +25,25 @@ public class GUIGarageHolder {
 		try {
 			writer.write("Garage holder " + ghController.getUserName()+ " has logged in.\n\n");
 			writer.flush();
-			printOrders("Pending Orders: ", ghController.getPendingOrders());
-			printOrders("Completed Orders: ", ghController.getCompletedOrders());
-			if(!promptNewOrder())
-				return;
-			orderingForm();
+			while(true){
+				printOrders("Pending Orders: ", ghController.getPendingOrders());
+				printOrders("Completed Orders: ", ghController.getCompletedOrders());
+				if(!promptYesOrNo("Do you want to place a new order? (y/n): "))
+					return;
+				ArrayList<String> spec = orderingForm();
+				if(!promptYesOrNo("Do you want to submit this car order? (y/n): "))
+					return;
+				ghController.placeOrder(spec);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private boolean promptNewOrder(){
+	private boolean promptYesOrNo(String query){
 		try{
 			while(true){
-				writer.write("Do you want to place a new order? (y/n): ");
+				writer.write(query);
 				writer.flush();
 				String answer = reader.readLine();
 				if(answer.equals("y"))
@@ -53,35 +58,35 @@ public class GUIGarageHolder {
 		}
 	}
 
-	private void orderingForm(){
+	private ArrayList<String> orderingForm(){
+		ArrayList<String> spec = new ArrayList<String>();
 		try{
 			writer.write("Fill in the Car details:\n");
 			String models = "Available models: ";
-			for(CarModel mod : CarModel.values()){
+			for(String mod : ghController.getModels()){
 				models += mod.toString() + "; ";
 			}
 			writer.write(models + "\n");
 			writer.flush();
-			String modelName = checkInput("Type the name of the desired car model: ", ghController.getModels());
+			spec.add(checkInput("Type the number of the desired car model: ", ghController.getModels()));
 			CarModel  model = CarModel.MODEL1;
 			for(CarModel m : CarModel.values()){
-				if(m.toString().equals(modelName)){
+				if(m.toString().equals(spec.get(0))){
 					model = m;
 					break;
 				}
 			}
-			ArrayList<String> parts = new ArrayList<String>();
 			for(CarPartType partType : CarPartType.values()){
 				String typeString = "Select " + partType.toString() + "-type: ";
 				for(String part : ghController.getOptions(partType, model))
 					typeString += part + "; ";
 				writer.write(typeString+"\n");
-				parts.add(checkInput("Type the name of the desired car part: ", ghController.getOptions(partType, model))); 
+				spec.add(checkInput("Type the number of the desired car part: ", ghController.getOptions(partType, model))); 
 			}
-			ghController.placeOrder(model, parts);
 		} catch(IOException e){
 			e.printStackTrace();
 		}
+		return spec;
 	}
 	
 	private String checkInput(String query, ArrayList<String> answers){
@@ -90,8 +95,10 @@ public class GUIGarageHolder {
 				writer.write(query);
 				writer.flush();
 				String answer = reader.readLine();
-				if(answers.contains(answer))
-					return answer;
+				for(String s : answers){
+					if(s.endsWith(answer))
+						return s;
+				}
 				writer.write("Invalid input, try again.\n");
 			}
 		}
