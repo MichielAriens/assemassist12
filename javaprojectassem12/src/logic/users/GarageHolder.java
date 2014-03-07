@@ -31,6 +31,14 @@ public class GarageHolder extends User{
 		return this.pendingOrders;
 	}
 	
+	public ArrayList<String> getPendingOrderStrings(){
+		ArrayList<String> pendingOrderStrings = new ArrayList<String>();
+		for(CarOrder order : pendingOrders){
+			pendingOrderStrings.add(order.toString());
+		}
+		return pendingOrderStrings;
+	}
+	
 	public ArrayList<CarOrder> getCompletedOrders(){
 		return this.completedOrders;
 	}

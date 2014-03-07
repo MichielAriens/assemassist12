@@ -11,10 +11,8 @@ public class Main {
 		CarManufacturingCompany company = new CarManufacturingCompany();
 		AssemAssistController controller = new AssemAssistController(company);
 		GUI gui = new GUI(controller);
-		
-		
-		
 	}
+	
     public static String getTime(){
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
 		Calendar cal = Calendar.getInstance();

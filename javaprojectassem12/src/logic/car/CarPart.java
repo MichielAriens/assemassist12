@@ -29,5 +29,10 @@ public enum CarPart {
 		this.type = type;
 		this.fullName = fullName;
 	}
+	
+	@Override
+	public String toString(){
+		return this.fullName;
+	}
 
 }

@@ -98,4 +98,19 @@ public class CarSpecification {
 	public List<CarPart> getParts(){
 		return parts;
 	}	
+	
+	/**
+	 * Method to return a string that represents this specification.
+	 * @return Returns the string that represenets this specification.
+	 */
+	@Override
+	public String toString(){
+		String str = this.model.toString() + "; (";
+		for(CarPart part : parts){
+			str += part.toString() + ", ";
+		}
+		str = str.substring(0, str.length()-2);
+		str += ")";
+		return str;
+	}
 }

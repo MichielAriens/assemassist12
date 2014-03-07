@@ -66,5 +66,12 @@ public class CarOrder {
 		}
 		return retVal;
 	}
+	
+	@Override
+	public String toString(){
+		String str = estimatedEndTime.toString();
+		str += " : " + carSpecification.toString();
+		return str;
+	}
 }
 

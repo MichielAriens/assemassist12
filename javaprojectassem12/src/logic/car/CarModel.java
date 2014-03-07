@@ -27,4 +27,9 @@ public enum CarModel {
 			this.name = name;
 			this.possibleParts = parts;
 		}
+		
+		@Override
+		public String toString(){
+			return this.name;
+		}
 }
