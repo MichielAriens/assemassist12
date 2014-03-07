@@ -136,9 +136,12 @@ public class AssemblyLine {
 			
 			*/
 			
-			
-			if(carOrders.size() > 1){ 
+			//If there is a current order on the first work station, 
+			//		keep in mind the endtime of that order.
+			if(workStations[0].getCurrentOrder() != null){
+			//if(carOrders.size() > 1){ 
 				
+				//TODO: aanpassen
 				Calendar endTimePreviousOrder = carOrders.get(carOrders.size()-1).getEstimatedEndTime(); 
 
 				Calendar endTimeNextOrder = Calendar.getInstance(); 
@@ -146,16 +149,18 @@ public class AssemblyLine {
 				endTimeNextOrder.setTime(endTimePreviousOrder.getTime());
 				endTimeNextOrder.add(Calendar.HOUR_OF_DAY, 3); // 3 uur bijvoegen
 
-				Calendar checkDate = Calendar.getInstance(); 
-				checkDate.setTime(endTimePreviousOrder.getTime());
-				checkDate.set(Calendar.HOUR_OF_DAY, 22);
-				checkDate.set(Calendar.MINUTE, 0);
-				if(endTimeNextOrder.before(checkDate)){
+				Calendar checkTime2200 = getGivenTimeOnGivenDay(endTimePreviousOrder, 22, 0, 0);
+				/*Calendar checkTime2200 = Calendar.getInstance(); 
+				checkTime2200.setTime(endTimePreviousOrder.getTime());
+				checkTime2200.set(Calendar.HOUR_OF_DAY, 22);
+				checkTime2200.set(Calendar.MINUTE, 0);
+				checkTime2200.set(Calendar.SECOND, 0);*/
+				if(endTimeNextOrder.before(checkTime2200)){
 					return endTimeNextOrder;
 				}
 				else{
 					endTimeNextOrder.setTime(endTimePreviousOrder.getTime());
-					endTimeNextOrder.add(Calendar.DAY_OF_WEEK, 1); // add 1 day
+					endTimeNextOrder.add(Calendar.DAY_OF_MONTH, 1); // add 1 day
 					
 					endTimeNextOrder.set(Calendar.HOUR_OF_DAY, 6);
 					endTimeNextOrder.set(Calendar.MINUTE, 0);
@@ -197,7 +202,7 @@ public class AssemblyLine {
 					}
 					else{
 						endTimeNextOrder.setTime(checkTime0600.getTime());
-						endTimeNextOrder.add(Calendar.DAY_OF_WEEK, 1); // add 1 day
+						endTimeNextOrder.add(Calendar.DAY_OF_MONTH, 1); // add 1 day
 						return endTimeNextOrder;
 					}
 				}
@@ -206,6 +211,15 @@ public class AssemblyLine {
 					return endTimeNextOrder;
 				}	
 			}	
+		}
+		
+		public Calendar getGivenTimeOnGivenDay(Calendar givenDay, int hour, int minute, int second){
+			Calendar givenTimeOnGivenDay = Calendar.getInstance(); 
+			givenTimeOnGivenDay.setTime(givenDay.getTime());
+			givenTimeOnGivenDay.set(Calendar.HOUR_OF_DAY, hour);
+			givenTimeOnGivenDay.set(Calendar.MINUTE, minute);
+			givenTimeOnGivenDay.set(Calendar.SECOND, second);
+			return givenTimeOnGivenDay;
 		}
 	}
 }
