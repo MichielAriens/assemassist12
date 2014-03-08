@@ -32,7 +32,7 @@ public class GUIGarageHolder {
 					return;
 				ArrayList<String> spec = orderingForm();
 				if(!promptYesOrNo("Do you want to submit this car order? (y/n): "))
-					return;
+					continue;
 				ghController.placeOrder(spec);
 			}
 		} catch (IOException e) {
@@ -46,6 +46,8 @@ public class GUIGarageHolder {
 				writer.write(query);
 				writer.flush();
 				String answer = reader.readLine();
+				writer.write("\n");
+				writer.flush();
 				if(answer.equals("y"))
 					return true;
 				if(answer.equals("n"))
@@ -61,7 +63,7 @@ public class GUIGarageHolder {
 	private ArrayList<String> orderingForm(){
 		ArrayList<String> spec = new ArrayList<String>();
 		try{
-			writer.write("Fill in the Car details:\n");
+			writer.write("Fill in the Car details:\n\n");
 			String models = "Available models: ";
 			for(String mod : ghController.getModels()){
 				models += mod.toString() + "; ";
@@ -69,13 +71,8 @@ public class GUIGarageHolder {
 			writer.write(models + "\n");
 			writer.flush();
 			spec.add(checkInput("Type the number of the desired car model: ", ghController.getModels()));
-			CarModel  model = CarModel.MODEL1;
-			for(CarModel m : CarModel.values()){
-				if(m.toString().equals(spec.get(0))){
-					model = m;
-					break;
-				}
-			}
+			
+			CarModel  model = CarModel.getModelFromString(spec.get(0));
 			for(CarPartType partType : CarPartType.values()){
 				String typeString = "Select " + partType.toString() + "-type: ";
 				for(String part : ghController.getOptions(partType, model))
@@ -95,9 +92,11 @@ public class GUIGarageHolder {
 				writer.write(query);
 				writer.flush();
 				String answer = reader.readLine();
+				writer.write("\n");
+				writer.flush();
 				for(String s : answers){
 					if(s.endsWith(answer))
-						return s;
+						return s.substring(0, s.indexOf(":"));
 				}
 				writer.write("Invalid input, try again.\n");
 			}

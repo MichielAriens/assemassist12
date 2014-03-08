@@ -28,22 +28,29 @@ public class GUI {
 	}
 	
 	private void run() {
-		UserController userCont;
 		while(true){
-			userCont = login();
-			if(userCont != null)
-				break;
+			UserController userCont;
+			while(true){
+				userCont = login();
+				if(userCont != null)
+					break;
+			}
+			if(userCont instanceof GarageHolderController){
+				garageHolderGui.run((GarageHolderController)userCont);
+			}
+			else if(userCont instanceof ManagerController){
+				managerGui.run((ManagerController)userCont);
+			}
+			else if(userCont instanceof MechanicController){
+				mechanicGui.run((MechanicController)userCont);
+			}
+			try {
+				writer.write("\n\n");
+				writer.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		if(userCont instanceof GarageHolderController){
-			garageHolderGui.run((GarageHolderController)userCont);
-		}
-		else if(userCont instanceof ManagerController){
-			managerGui.run((ManagerController)userCont);
-		}
-		else if(userCont instanceof MechanicController){
-			mechanicGui.run((MechanicController)userCont);
-		}
-		
 	}
 	
 	private UserController login(){

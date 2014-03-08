@@ -40,4 +40,15 @@ public enum CarModel {
 		public String toString(){
 			return this.name;
 		}
+		
+		public static CarModel getModelFromString(String name){
+			CarModel model = null;
+			for(CarModel m : CarModel.values()){
+				if(m.toString().equals(name)){
+					model = m;
+					break;
+				}
+			}
+			return model;
+		}
 }

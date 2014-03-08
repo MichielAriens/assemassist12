@@ -59,10 +59,13 @@ public class GarageHolderController extends UserController{
 	}
 	
 	public void placeOrder(ArrayList<String> spec){
-		System.out.println("Order placed: ");
-		for(String s : spec){
-			System.out.println(s);
+		CarModel model = CarModel.getModelFromString(spec.get(0));
+		ArrayList<CarPart> parts = new ArrayList<CarPart>();
+		for(int i = 1; i < spec.size(); i++){
+			parts.add(CarPart.getPartfromString(spec.get(i)));
 		}
+		CarSpecification specification = new CarSpecification(model, parts);
+		this.garageHolder.placeOrder(specification);
 	}
 	
 	

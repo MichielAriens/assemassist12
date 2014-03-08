@@ -33,5 +33,16 @@ public enum CarPart {
 	public String toString(){
 		return this.fullName;
 	}
+	
+	public static CarPart getPartfromString(String name){
+		CarPart part = null;
+		for(CarPart p : CarPart.values()){
+			if(p.toString().equals(name)){
+				part = p;
+				break;
+			}
+		}
+		return part;
+	}
 
 }
