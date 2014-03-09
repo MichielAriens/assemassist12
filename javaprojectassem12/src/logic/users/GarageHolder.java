@@ -38,7 +38,7 @@ public class GarageHolder extends User{
 	public void placeOrder(CarSpecification specification){
 		if(specification == null)
 			return;
-		CarOrder order = new CarOrder(specification, Calendar.getInstance()) ;
+		CarOrder order = new CarOrder(specification) ;
 		company.addOrder(order);
 		this.pendingOrders.add(order);
 	}

@@ -15,9 +15,8 @@ public class CarOrder {
 	private CarSpecification carSpecification;
 	private List<Task> tasks = new ArrayList<Task>();
 
-	public CarOrder(CarSpecification carSpecification, DateTime startTime){
+	public CarOrder(CarSpecification carSpecification){
 		this.carSpecification = carSpecification;
-		this.startTime = startTime;
 		buildTasks();
 	}
 
@@ -56,6 +55,11 @@ public class CarOrder {
 	
 	public void setEndTime(DateTime time){
 		this.endTime = time;
+		this.estimatedEndTime = endTime;
+	}
+
+	public void setStartTime(DateTime startTime) {
+		this.startTime = startTime;
 	}
 
 	/**

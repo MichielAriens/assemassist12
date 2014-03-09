@@ -63,16 +63,17 @@ public abstract class Workstation {
 	 */
 	public void setOrder(CarOrder order){
 		if(null == order){
-			throw new RuntimeException();
-		}
-		this.currentOrder = order;
-		this.tasks = new ArrayList<Task>();
-		for(Task task : this.currentOrder.getTasks()){
-			if(this.isCompatibleTask(task)){
-				this.tasks.add(task);
+			this.currentOrder=null;
+			this.tasks.clear();
+		}else{
+			this.currentOrder = order;
+			this.tasks = new ArrayList<Task>();
+			for(Task task : this.currentOrder.getTasks()){
+				if(this.isCompatibleTask(task)){
+					this.tasks.add(task);
+				}
 			}
 		}
-		
 	}
 	
 	/**

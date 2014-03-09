@@ -51,7 +51,8 @@ public class CarManufacturingCompany {
 		return null;
 	}
 	public void addOrder(CarOrder order) {
-		this.assemblyLine.addCarOrder(order);
+		if(order != null)
+			this.assemblyLine.addCarOrder(order);
 	}
 	
 	public Workstation[] getWorkStations(){
