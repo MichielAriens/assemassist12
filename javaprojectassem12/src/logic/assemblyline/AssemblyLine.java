@@ -23,6 +23,10 @@ public class AssemblyLine {
 	 */
 	private Workstation[] workStations = new Workstation[3];
 	
+	public Workstation[] getWorkStations() {
+		return workStations;
+	}
+
 	/**
 	 * Integer holding the number of work stations.
 	 */
