@@ -2,11 +2,8 @@ package logic.users;
 
 import java.util.List;
 
-
-
-
-
 import logic.assemblyline.Shift;
+import logic.workstation.Task;
 import logic.workstation.Workstation;
 
 public class Mechanic extends User{
@@ -32,6 +29,12 @@ public class Mechanic extends User{
 		//Boekhouding
 		
 		
+	}
+	
+	public List<Task> getAvailableTasks(){
+		if(!isPosted())
+			return null;
+		return this.activeStation.getRequiredTasks();
 	}
 	
 	public Workstation[] getAvailableWorkstations(){

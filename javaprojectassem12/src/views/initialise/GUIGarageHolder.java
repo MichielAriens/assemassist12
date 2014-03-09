@@ -66,7 +66,7 @@ public class GUIGarageHolder {
 			writer.write("Fill in the Car details:\n\n");
 			String models = "Available models: ";
 			for(String mod : ghController.getModels()){
-				models += mod.toString() + "; ";
+				models += mod + "; ";
 			}
 			writer.write(models + "\n");
 			writer.flush();
