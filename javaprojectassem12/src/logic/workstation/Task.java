@@ -3,7 +3,7 @@ package logic.workstation;
 
 
 import logic.car.CarPart;
-import logic.users.Mechanic;
+
 
 /**
  * 
@@ -11,7 +11,7 @@ import logic.users.Mechanic;
  */
 public class Task {
 	private boolean completed = false;
-	private Mechanic mechanic = null;
+	
 	private final CarPart part;
 	
 	/**
@@ -34,15 +34,13 @@ public class Task {
 	 * @param endTime2
 	 * @param mechanic
 	 */
-	public void perform(Calendar endTime, Mechanic mechanic){
-		if(endTime == null || mechanic == null){
-			return;
-		}
+	public void perform(){
+		
 		if(this.isComplete()){
 			return;
 		}
 		this.completed = true;
-		this.mechanic = mechanic;
+		
 	}
 	
 	

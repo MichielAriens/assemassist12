@@ -1,14 +1,9 @@
 package logic.workstation;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.sql.Time;
-
-import logic.assemblyline.AssemblyLine;
 import logic.car.CarOrder;
 import logic.car.CarPartType;
-import logic.users.Mechanic;
 
 
 
@@ -109,12 +104,12 @@ public abstract class Workstation {
 	 * @param endTime	<-- will change
 	 * @param mechanic	The mechanic doing the task.
 	 */
-	public void doTask(Task task, Calendar endTime, Mechanic mechanic){
-		if(null == task || null == mechanic || null == endTime){
+	public void doTask(Task task){
+		if(null == task){
 			return;
 		}
 		if(this.isCompatibleTask(task))
-			task.perform(endTime, mechanic);
+			task.perform();
 	}
 
 	/**
