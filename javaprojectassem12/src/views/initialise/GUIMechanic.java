@@ -64,6 +64,11 @@ public class GUIMechanic {
 	
 	private void selectTask(){
 		try{
+			if(meController.getTasks().size() == 0){
+				writer.write("There are no available tasks at this workstation.\n\n");
+				writer.flush();
+				return;
+			}
 			String tasks = "Available tasks: ";
 			for(String t : meController.getTasks()){
 				tasks += t + "; ";

@@ -10,6 +10,7 @@ public class GUIManager {
 	
 	private BufferedReader reader;
 	private BufferedWriter writer;
+	private ManagerController maController;
 	
 	public GUIManager(BufferedReader reader, BufferedWriter writer) {
 		this.reader = reader;
@@ -17,9 +18,15 @@ public class GUIManager {
 	}
 	
 	public void run(ManagerController maController){
+		this.maController = maController;
 		try {
-			writer.write("Manager " + maController.getUserName()+ " has logged in.");
+			writer.write("Manager " + maController.getUserName()+ " has logged in.\n\n");
+			writer.write("Current status:\n\n");
+			for(String s : maController.getTasksPerWorkstation()){
+				writer.write(s + "\n");
+			}
 			writer.flush();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
