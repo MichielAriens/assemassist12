@@ -33,5 +33,13 @@ public class Mechanic extends User{
 		
 		
 	}
+	
+	public Workstation[] getAvailableWorkstations(){
+		return this.company.getWorkStations();
+	}
+	
+	public void setActiveWorkstation(Workstation station){
+		this.activeStation = station;
+	}
 
 }

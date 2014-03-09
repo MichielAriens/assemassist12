@@ -3,6 +3,7 @@ package views.initialise;
 import java.util.ArrayList;
 
 import logic.users.Mechanic;
+import logic.workstation.Workstation;
 
 public class MechanicController extends UserController{
 	
@@ -20,16 +21,23 @@ public class MechanicController extends UserController{
 	}
 	
 	public ArrayList<String> getWorkStations(){
-		//vraag mechanic class voor lijst van workstations, mechanic vraagt volledige lijst aan carManufacturingCompany
-		//zo kunnen we in de toekomst ook eenvoudig uitbreiden naar mechanics die niet aan alle workstations mogen werken
-		
-		//vorm deze lijst om naar strings en return
-		return null;
+		if(this.mechanic == null)
+			return null;
+		ArrayList<String> workstations = new ArrayList<String>();
+		Workstation[] stations = this.mechanic.getAvailableWorkstations();
+		for(Workstation w : stations){
+			workstations.add(w.toString());
+		}
+		return workstations;
 	}
 	
 	public void setWorkStation(String name){
-		//vraag mechanic om de lijst van workstations, kies workstation dat overeen komt met de naam en roep
-		//laat de mechanic zijn current
+		if(this.mechanic == null)
+			return;
+		for(Workstation workstation :this.mechanic.getAvailableWorkstations()){
+			if(workstation.toString().equals(name))
+				this.mechanic.setActiveWorkstation(workstation);
+		}
 	}
 
 }

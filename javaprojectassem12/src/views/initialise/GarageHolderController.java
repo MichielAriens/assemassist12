@@ -21,6 +21,8 @@ public class GarageHolderController extends UserController{
 	}
 	
 	public ArrayList<String> getPendingOrders(){
+		if(this.garageHolder == null)
+			return null;
 		ArrayList<String> pendingOrderStrings = new ArrayList<String>();
 		for(CarOrder order : this.garageHolder.getPendingOrders()){
 			pendingOrderStrings.add(order.toString());
@@ -29,6 +31,8 @@ public class GarageHolderController extends UserController{
 	}
 
 	public ArrayList<String> getCompletedOrders() {
+		if(this.garageHolder == null)
+			return null;
 		ArrayList<String> completedOrderStrings = new ArrayList<String>();
 		for(CarOrder order : this.garageHolder.getPendingOrders()){
 			completedOrderStrings.add(order.toString());
@@ -47,6 +51,8 @@ public class GarageHolderController extends UserController{
 	}
 	
 	public ArrayList<String> getOptions(CarPartType type, CarModel model){
+		if(type == null || model == null)
+			return null;
 		ArrayList<String> options = new ArrayList<String>();
 		int count = 1;
 		for(CarPart opt : CarPart.values()){
@@ -59,6 +65,8 @@ public class GarageHolderController extends UserController{
 	}
 	
 	public void placeOrder(ArrayList<String> spec){
+		if(spec == null)
+			return;
 		CarModel model = CarModel.getModelFromString(spec.get(0));
 		ArrayList<CarPart> parts = new ArrayList<CarPart>();
 		for(int i = 1; i < spec.size(); i++){

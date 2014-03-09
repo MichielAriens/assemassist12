@@ -2,8 +2,10 @@ package logic.users;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import logic.assemblyline.AssemblyLine;
 import logic.car.CarOrder;
+import logic.workstation.Workstation;
 
 public class CarManufacturingCompany {
 	private HashMap<String,User> users;
@@ -50,6 +52,10 @@ public class CarManufacturingCompany {
 	}
 	public void addOrder(CarOrder order) {
 		this.assemblyLine.addCarOrder(order);
+	}
+	
+	public Workstation[] getWorkStations(){
+		return this.assemblyLine.getWorkStations();
 	}
 	
 	
