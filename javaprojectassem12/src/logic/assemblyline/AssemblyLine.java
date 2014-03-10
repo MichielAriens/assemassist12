@@ -154,10 +154,10 @@ public class AssemblyLine {
 
 		private void setNextDay() {
 			if(currentTime.getHourOfDay()<shiftBeginHour)
-				currentTime = new DateTime(2014,currentTime.getMonthOfYear(),currentTime.getDayOfMonth(),shiftBeginHour,0);
+				currentTime = new DateTime(currentTime.getYear(),currentTime.getMonthOfYear(),currentTime.getDayOfMonth(),shiftBeginHour,0);
 			else{
 				currentTime = currentTime.plusDays(1);
-				currentTime = new DateTime(2014,currentTime.getMonthOfYear(),currentTime.getDayOfMonth(),shiftBeginHour,0);
+				currentTime = new DateTime(currentTime.getYear(),currentTime.getMonthOfYear(),currentTime.getDayOfMonth(),shiftBeginHour,0);
 			}
 			
 			
