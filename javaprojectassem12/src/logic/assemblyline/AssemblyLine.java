@@ -148,7 +148,7 @@ public class AssemblyLine {
 
 		private void calculateOverTime() {
 			if(currentTime.getHourOfDay()<shiftBeginHour){
-				overTime = 12-shiftEndHour+currentTime.getMinuteOfDay();
+				overTime = 24-shiftEndHour+currentTime.getMinuteOfDay();
 			}else{
 				setOverTime((currentTime.getMinuteOfDay()-(shiftEndHour*60)));
 			}
@@ -191,7 +191,7 @@ public class AssemblyLine {
 				DateTime estimatedEndTime = new DateTime(currentTime);
 				estimatedEndTime = estimatedEndTime.plusHours(4+i);
 				if(estimatedEndTime.getHourOfDay()>=shiftEndHour || estimatedEndTime.getHourOfDay()<shiftBeginHour)
-					estimatedEndTime = estimatedEndTime.plusHours(12-shiftEndHour+shiftBeginHour);
+					estimatedEndTime = estimatedEndTime.plusHours(24-shiftEndHour+shiftBeginHour);
 				FIFOQueue.get(i).setEstimatedEndTime(estimatedEndTime);
 			}
 		}
@@ -213,7 +213,7 @@ public class AssemblyLine {
 			DateTime estimatedEndTime = new DateTime(currentTime);
 			estimatedEndTime = estimatedEndTime.plusHours(3+FIFOQueue.size());
 			if(estimatedEndTime.getHourOfDay()>=shiftEndHour || estimatedEndTime.getHourOfDay()<shiftBeginHour)
-				estimatedEndTime = estimatedEndTime.plusHours(12-shiftEndHour+shiftBeginHour);
+				estimatedEndTime = estimatedEndTime.plusHours(24-shiftEndHour+shiftBeginHour);
 			order.setEstimatedEndTime( estimatedEndTime);
 			DateTime startTime = new DateTime(currentTime);
 			order.setStartTime(startTime);
