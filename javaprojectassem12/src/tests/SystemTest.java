@@ -104,6 +104,22 @@ public class SystemTest {
 		assertTrue(m.moveAssemblyLine(60));
 	}
 	
+	private void makeOrderAndAdvance(){
+		GarageHolder g = (GarageHolder) company.logIn("Michiel");
+		ArrayList<CarPart> carparts = new ArrayList<CarPart>();
+		carparts.add(CarPart.BODY_BREAK);
+		carparts.add(CarPart.COLOUR_BLACK);
+		carparts.add(CarPart.SEATS_LEATHER_BLACK);
+		carparts.add(CarPart.AIRCO_AUTO);
+		carparts.add(CarPart.WHEELS_COMFORT);
+		carparts.add(CarPart.ENGINE_4);
+		carparts.add(CarPart.GEARBOX_5AUTO);
+		CarSpecification spec = new CarSpecification(CarModel.MODEL1, carparts);
+		g.placeOrder(spec);
+		Manager m = (Manager) company.logIn("Wander");
+		m.moveAssemblyLine(60);
+	}
+	
 	@Test
 	public void mechanicTest(){
 		//login with mechanic account
@@ -112,7 +128,33 @@ public class SystemTest {
 		assertEquals("Joren", m.getUserName());
 		assertEquals(null, m.getActiveWorkstation());
 		assertFalse(m.isPosted());
-		
+		assertEquals(null, m.getAvailableTasks());
+		//set a workstation
+		m.setActiveWorkstation(m.getAvailableWorkstations()[0]);
+		assertTrue(m.isPosted());
+		//place a car order and advance the assembly line
+		makeOrderAndAdvance();
+		assertTrue(m.doTask(m.getAvailableTasks().get(0)));
+		assertFalse(m.doTask(new Task(CarPart.AIRCO_AUTO)));
+	}
+	
+	@Test
+	public void invalidUserTest(){
+		//login with invalid username
+		assertEquals(null, company.logIn("Jack"));
+	}
+	
+	@Test
+	public void nullOrderTest(){
+		//try to place a null order
+		company.addOrder(null);
+	}
+	
+	@Test
+	public void reloginTest(){
+		Manager m1 = (Manager) company.logIn("Wander");
+		Manager m2 = (Manager) company.logIn("Wander");
+		assertEquals(m1, m2);
 	}
 	
 	
