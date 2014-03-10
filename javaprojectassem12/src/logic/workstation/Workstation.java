@@ -5,21 +5,24 @@ import java.util.List;
 import logic.car.CarOrder;
 import logic.car.CarPartType;
 
-
-
-
+/**
+ * Class used to describe a work station of an assembly line.
+ */
 public abstract class Workstation {
+	
 	/**
 	 * The current order this workstation is working on.
 	 */
 	private CarOrder currentOrder;
+	
 	/**
-	 * A list of tasks this workstation can fulfil.
+	 * A list of tasks that can be performed at this workstation.
 	 */
 	private List<Task> tasks = new ArrayList<Task>();
+	
 	/**
-	 * Constructs a workstation and initializes the currentorder to null. This represents an idle Workstation
-	 * 
+	 * Constructs a workstation and initializes the current order to null. 
+	 * If the current order is null the workstation represents an idle workstation.
 	 */
 	public Workstation(){
 		currentOrder = null;
@@ -27,24 +30,28 @@ public abstract class Workstation {
 	
 	/**
 	 * Returns the order currently being serviced by this workstation.
-	 * @return the currentorder, null if there is none (the workstation is idle)
+	 * When the current order is null, the workstation is idle.
+	 * @return The current order.
 	 */
 	public CarOrder getCurrentOrder(){
 		return currentOrder;
 	}
 	
 	/**
-	 * Returns whether or not this workstation has been assigned an order to work on.
-	 * @return	currentorder == null
+	 * Returns whether or not this workstation has been assigned a car order to work on.
+	 * @return True if the current order is null.
+	 * @return False if the current order is not null.
 	 */
 	public boolean idle(){
 		return this.currentOrder == null;
 	}
 	
 	/**
-	 * Checks whether all tasks that the workspace can do on the current order have been completed.
-	 * @return 	True: 	if and only if there exists no task that this workspace can complete for the current order.
-	 * 			False:	otherwise
+	 * Checks whether all tasks, of the current order and that can be performed on this 
+	 * workstation, have been completed.
+	 * @return 	True if and only if there exists no task that this workspace can 
+	 * 			complete for the current order.
+	 * @return	False otherwise.
 	 */
 	public boolean done(){
 		boolean retVal = true;
@@ -58,8 +65,9 @@ public abstract class Workstation {
 	}
 	
 	/**
-	 * Sets an order as the active order. 
-	 * @param 	order: Any car order. Can be completed, semi-completed, or not started.
+	 * Sets the given order as the current order. The task list will be cleared and updated
+	 * with the compatible task of the new order.
+	 * @param order	Any car order. Can be completed, semi-completed, or not started.
 	 */
 	public void setOrder(CarOrder order){
 		if(null == order){
@@ -77,48 +85,41 @@ public abstract class Workstation {
 	}
 	
 	/**
-	 * Checks whether a task can be performed by this workstation
-	 * @param task		A task
-	 * @return			True:	If and only if 	the task can be performed by this workstation, as described by getCapablilities()
-	 * 											and the task is not already completed.
-	 * 					False:	Otherwise	
+	 * Checks whether the given task can be performed on this workstation.
+	 * @param task	The task that needs to be checked for compatibility.
+	 * @return	True if and only if the task can be performed on this workstation,
+	 * 			the task is not null and the task is not already completed.
+	 * @return	False otherwise.
 	 */
 	public boolean isCompatibleTask(Task task){
-		if(getCapabilities().contains(task.getCarPart().type) && !task.isComplete()){
+		if(getCapabilities().contains(task.getCarPart().type) && !task.isComplete() && task != null){
 			return true;
 		}
 		return false;
 	}
-	
-	
+
 	/**
-	 * Get the types of tasks this workstation can perform. This methods completely defines the capabilities of an implementing class.
-	 * @return		A List of CarPartType elements defining the capabilities of the implementation.
+	 * Get the types of tasks that can be performed on this workstation. This method completely 
+	 * defines the capabilities of an implementing class.
+	 * @return		A List of CarPartType elements defining the capabilities of 
+	 * 				the implementation.
 	 */
 	public abstract List<CarPartType> getCapabilities();
 	
 	/**
-	 * Execute a given task. 
-	 * 		Does nothing if any of the parameters are null or if this worktation is not compatible with the given task.
-	 * 		Otherwise the task will be performed.
-	 * @param task		The task which requires completetion. Can be a compatible or non compatible
-	 * @param endTime	<-- will change
-	 * @param mechanic	The mechanic doing the task.
+	 * Executes a given task if the task is compatible with this workstation.
+	 * @param task	The task which requires completion.
 	 */
 	public void doTask(Task task){
-		if(null == task){
-			return;
-		}
 		if(this.isCompatibleTask(task))
 			task.perform();
 	}
 
 	/**
-	 * Returns a list of tasks from the current order that can be completed by this workstation.
-	 * @return
+	 * Returns the list of tasks from the current order that can be performed on this workstation.
+	 * @return The list of tasks from the current order that can be performed on this workstation.
 	 */
 	public List<Task> getRequiredTasks() {
 		return tasks;
 	}
-
 }
