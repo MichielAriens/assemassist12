@@ -93,7 +93,7 @@ public class CarManufacturingCompany {
 	
 	/**
 	 * Adds the given order to the assembly line if the given order is not null.
-	 * @param order		The order which needs to be added to the assembly line.
+	 * @param order	The order which needs to be added to the assembly line.
 	 */
 	public void addOrder(CarOrder order) {
 		if(order != null)
@@ -103,7 +103,7 @@ public class CarManufacturingCompany {
 	/**
 	 * Method to return the list of workstations of the assembly line 
 	 * of this car manufacturing company.
-	 * @return	The workstations of the assembly line of this car manufacturing company.
+	 * @return	The workstations of the assembly line.
 	 */
 	public Workstation[] getWorkStations(){
 		return this.assemblyLine.getWorkStations();

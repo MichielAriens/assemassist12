@@ -1,7 +1,6 @@
 package logic.car;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.EnumMap;
 
@@ -101,7 +100,7 @@ public class CarSpecification {
 	
 	/**
 	 * Method to return a string that represents this specification.
-	 * @return Returns the string that represenets this specification.
+	 * @return Returns the string that represents this specification.
 	 */
 	@Override
 	public String toString(){
