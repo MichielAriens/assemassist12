@@ -1,7 +1,5 @@
 package logic.assemblyline;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.joda.time.DateTime;
@@ -10,7 +8,6 @@ import logic.car.CarOrder;
 import logic.workstation.AccessoriesPost;
 import logic.workstation.CarBodyPost;
 import logic.workstation.DriveTrainPost;
-import logic.workstation.Task;
 import logic.workstation.Workstation;
 
 /**
@@ -97,7 +94,7 @@ public class AssemblyLine {
 	 */
 	private boolean checkWorkStations() {
 		for(int i = 0; i < numberOfWorkStations; i++){
-			if(workStations[i].done()){
+			if(!workStations[i].done()){
 				return false;
 			}
 		}
@@ -218,31 +215,8 @@ public class AssemblyLine {
 			
 			
 		}
+	
 		
-		/**
-		 * Returns an overview of the estimated end times for all the orders in the schedule.
-		 * Returns "No orders planned." if there are no orders.
-		 */
-		public List<String> getScheduleOverview(){
-//			String overview = "";
-//			if(FIFOQueue.size()<1 && !hasOrder()){
-//				overview = "No orders planned.";
-//			}
-//			else{
-//				for(int i = 0; i < FIFOQueue.size()-1; i++){
-//					overview = overview +"Car order "+ (i+1)+": " + FIFOQueue.get(i).toString()+"\n";
-//				}
-//				overview = overview +"Car order "+FIFOQueue.size() + FIFOQueue.get(FIFOQueue.size()-1).toString();
-//			}
-//			return overview;
-			
-		}
-		private boolean hasOrder(){
-			for(Workstation workstation : workStations){
-				if(workstation.getCurrentOrder()!=null)
-					return true;
-			}return false;
-		}
 //
 //		/**
 //		 * If the given order exists the estimated end time for the new order will be three hours

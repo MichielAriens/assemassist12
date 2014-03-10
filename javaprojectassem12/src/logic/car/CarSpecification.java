@@ -18,7 +18,7 @@ public class CarSpecification {
 	/**
 	 * The list of parts of this car specification.
 	 */
-	private ArrayList<CarPart> parts;
+	private List<CarPart> parts;
 
 	/**
 	 * Make a new car specification with a given car model and a list of car parts.
@@ -31,7 +31,7 @@ public class CarSpecification {
 	 * 			 - the list of parts is incomplete, 
 	 * 			 - the list of parts contains more than one part of a certain type.
 	 */
-	public CarSpecification(CarModel model, ArrayList<CarPart> parts) throws InvalidParameterException{
+	public CarSpecification(CarModel model, List<CarPart> parts) throws InvalidParameterException{
 		if(!isValidSpecification(model, parts))
 			throw new InvalidParameterException();
 		this.model = model;
@@ -49,7 +49,7 @@ public class CarSpecification {
 	 * 			- the list of parts contains more than one part of a certain type. 
 	 * 			Returns true otherwise.
 	 */
-	private boolean isValidSpecification(CarModel model, ArrayList<CarPart> parts){
+	private boolean isValidSpecification(CarModel model, List<CarPart> parts){
 		if(model == null)
 			return false;
 		if(!containsEveryPartTypeOnce(parts)){
@@ -67,7 +67,7 @@ public class CarSpecification {
 	 * 			- the list of parts contains more than one part of a certain type. 
 	 * 			Returns true otherwise.
 	 */
-	private boolean containsEveryPartTypeOnce(ArrayList<CarPart> parts){
+	private boolean containsEveryPartTypeOnce(List<CarPart> parts){
 		if(parts == null || parts.size() > 7)
 			return false;
 		EnumMap<CarPartType, Boolean> flags = new EnumMap<CarPartType, Boolean>(CarPartType.class);

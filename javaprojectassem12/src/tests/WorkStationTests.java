@@ -57,7 +57,7 @@ public class WorkStationTests {
 		
 		List<CarPart> parts = (List<CarPart>) Arrays.asList(partsArray);
 		carSpecification = new CarSpecification(CarModel.MODEL1,new ArrayList<CarPart>(parts));
-		carOrder = new CarOrder(carSpecification, Calendar.getInstance());
+		carOrder = new CarOrder(carSpecification);
 		
 		universalPost = new Workstation() {
 			@Override
@@ -79,12 +79,12 @@ public class WorkStationTests {
 	public void testUniversalPost() {
 		universalPost.setOrder(carOrder);
 		assertFalse(carOrder.done());		
-		universalPost.doTask(carOrder.getTasks().get(0), Calendar.getInstance(), mechanic);
+		universalPost.doTask(carOrder.getTasks().get(0));
 		assertFalse(carOrder.done());
 		assertFalse(universalPost.done());
 		
 		for(Task task : universalPost.getRequiredTasks()){
-			universalPost.doTask(task, Calendar.getInstance(), mechanic);
+			universalPost.doTask(task);
 		}
 		assertTrue(carOrder.done());
 		assertTrue(universalPost.done());
@@ -101,28 +101,28 @@ public class WorkStationTests {
 		assertFalse(carBodyPost.done());
 		assertFalse(carOrder.done());
 		for(Task task : carOrder.getTasks()){
-			carBodyPost.doTask(task, Calendar.getInstance(), mechanic);
+			carBodyPost.doTask(task);
 		}
 		assertTrue(carBodyPost.done());
 		assertFalse(carOrder.done());
 		assertFalse(driveTrainPost.done());
 		assertFalse(accessoriesPost.done());
 		for(Task task : carOrder.getTasks()){
-			carBodyPost.doTask(task, Calendar.getInstance(), mechanic);
+			carBodyPost.doTask(task);
 		}
 		assertTrue(carBodyPost.done());
 		assertFalse(carOrder.done());
 		assertFalse(driveTrainPost.done());
 		assertFalse(accessoriesPost.done());
 		for(Task task : carOrder.getTasks()){
-			driveTrainPost.doTask(task, Calendar.getInstance(), mechanic);
+			driveTrainPost.doTask(task);
 		}
 		assertTrue(carBodyPost.done());
 		assertTrue(driveTrainPost.done());
 		assertFalse(accessoriesPost.done());
 		assertFalse(carOrder.done());
 		for(Task task : carOrder.getTasks()){
-			accessoriesPost.doTask(task, Calendar.getInstance(), mechanic);
+			accessoriesPost.doTask(task);
 		}
 		assertTrue(carBodyPost.done());
 		assertTrue(driveTrainPost.done());
