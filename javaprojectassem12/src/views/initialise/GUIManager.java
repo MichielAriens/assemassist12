@@ -25,10 +25,27 @@ public class GUIManager {
 			for(String s : maController.getTasksPerWorkstation()){
 				writer.write(s + "\n");
 			}
+			writer.write("\n");
 			writer.flush();
 			//TODO: future
 			int time = getTimeSpent();
-			
+			if(this.maController.moveAssemblyLine(time)){
+				writer.write("Assembly line moved forward successfully.\n");
+				for(String s : maController.getTasksPerWorkstation()){
+					writer.write(s + "\n");
+				}
+				writer.flush();
+				waitForCompletion("Press enter to finish. ");
+				return;
+			}
+			else{
+				writer.write("Assembly line could not be moved forward successfully.\n");
+				for(String s : maController.getUnfinishedTasks()){
+					writer.write(s + "\n");
+				}
+				writer.flush();
+				waitForCompletion("Press enter to finish. ");
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -57,6 +74,16 @@ public class GUIManager {
 		} catch(IOException e){
 			e.printStackTrace();
 			return 0;
+		}
+	}
+	
+	private void waitForCompletion(String query){
+		try{
+			writer.write(query);
+			writer.flush();
+			reader.readLine();
+		} catch(IOException e){
+			e.printStackTrace();
 		}
 	}
 

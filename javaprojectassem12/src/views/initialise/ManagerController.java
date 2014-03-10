@@ -29,17 +29,44 @@ public class ManagerController extends UserController{
 		ArrayList<String> tasks = new ArrayList<String>();
 		for(Workstation stat : workStations){
 			String temp = stat.toString() + ":\n";
-			for(Task task : stat.getRequiredTasks()){
-				String status = "Pending";
-				if(task.isComplete())
-					status = "Completed";
-				temp += "   -" + task.toString() + ": " + status + "\n";
+			if(stat.getRequiredTasks().size() == 0)
+				temp += "Inactive.";
+			else{
+				for(Task task : stat.getRequiredTasks()){
+					String status = "Pending";
+					if(task.isComplete())
+						status = "Completed";
+					temp += "   -" + task.toString() + ": " + status + "\n";
+				}
 			}
 			tasks.add(temp);
 		}
 		return tasks;
 	}
 	
-	public boolean 
+	public List<String> getUnfinishedTasks(){
+		if(this.manager == null)
+			return null;
+		Workstation[] workStations = this.manager.getWorkstations();
+		ArrayList<String> tasks = new ArrayList<String>();
+		for(Workstation stat : workStations){
+			if(stat.getRequiredTasks().size()>0){
+				String temp = stat.toString() + ":\n";
+				for(Task task : stat.getRequiredTasks()){
+					if(!task.isComplete()){
+						temp += "   -Unfinished taks: " + task.toString() + "\n";
+					}
+				}
+				tasks.add(temp);
+			}
+		}
+		return tasks;
+	}
+	
+	public boolean moveAssemblyLine(int shiftDuration){
+		if(this.manager == null)
+			return false;
+		return this.manager.moveAssemblyLine(shiftDuration);
+	}
 
 }
