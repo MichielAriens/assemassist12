@@ -84,7 +84,7 @@ public class AssemblyLine {
 				schedule.calculateOverTime();
 				schedule.setNextDay();
 			}
-			schedule.updateEstimatedTimes();
+			schedule.updateEstimatedTimes(shiftDuration);
 			//Needs to return true at the end because the assembly line can be moved.
 			return true;
 		}
@@ -185,8 +185,8 @@ public class AssemblyLine {
 			return currentTime.getMinuteOfDay()<(shiftEndHour*60-overTime-assemblyTime) && currentTime.getMinuteOfDay()>=shiftBeginHour*60;
 		}
 
-		private void updateEstimatedTimes() {
-			updateEstimatedTimeWorkStations();
+		private void updateEstimatedTimes(int shiftduration) {
+			updateEstimatedTimeWorkStations(shiftduration);
 			for(int i = 0;i<FIFOQueue.size();i++){
 				DateTime estimatedEndTime = new DateTime(currentTime);
 				estimatedEndTime = estimatedEndTime.plusHours(4+i);
@@ -196,11 +196,11 @@ public class AssemblyLine {
 			}
 		}
 
-		private void updateEstimatedTimeWorkStations() {
-			
+		private void updateEstimatedTimeWorkStations(int shiftduration) {
+			int time = shiftduration-60;
 			for(Workstation next: workStations){
 				if(next.getCurrentOrder()!= null)
-					next.getCurrentOrder().setEstimatedEndTime(next.getCurrentOrder().getEstimatedEndTime().plusHours(1));
+					next.getCurrentOrder().setEstimatedEndTime(next.getCurrentOrder().getEstimatedEndTime().plusMinutes(time));
 			}
 			
 		}
