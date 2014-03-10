@@ -5,7 +5,7 @@ import logic.car.CarOrder;
 import logic.car.CarSpecification;
 
 /**
- * Class used to describe a garage holder working for a car manufacturing company.
+ * Class used to describe a garage holder who can order cars from a car manufacturing company.
  */
 public class GarageHolder extends User{
 	
@@ -20,10 +20,10 @@ public class GarageHolder extends User{
 	private ArrayList<CarOrder> committedOrders;
 	
 	/**
-	 * Constructs a garage holder initializing the company and user name with the given 
+	 * Constructs a new garage holder initializing its company and user name with the given 
 	 * parameters and creating an empty list of committed orders.
-	 * @param company	The car manufacturing company this garage holder works for.
-	 * @param userName	The user name for this garage holder.
+	 * @param company	The car manufacturing company this new garage holder works for.
+	 * @param userName	The user name for this new garage holder.
 	 */
 	public GarageHolder(CarManufacturingCompany company, String userName){
 		super(userName);
@@ -69,5 +69,4 @@ public class GarageHolder extends User{
 		company.addOrder(order);
 		this.committedOrders.add(order);
 	}
-
 }
