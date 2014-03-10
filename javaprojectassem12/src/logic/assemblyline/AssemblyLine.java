@@ -23,26 +23,23 @@ public class AssemblyLine {
 	 */
 	private Workstation[] workStations = new Workstation[3];
 	
-	public Workstation[] getWorkStations() {
-		return workStations;
-	}
-
 	/**
 	 * Integer holding the number of work stations.
 	 */
-	private int numberOfWorkStations = 3;
+	private int numberOfWorkStations = workStations.length;
 	
-	
-	
+	/**
+	 * A list holding the pending orders not on the assemblyline.
+	 */
 	private LinkedList<CarOrder> FIFOQueue;
 	
 	/**
-	 * 
+	 * A dateTime object holding the current time of the system. 
 	 */
 	private DateTime currentTime;
 	
 	/**
-	 * 
+	 * A variable containing the schedule, which is used for scheduling orders.
 	 */
 	private Schedule schedule;
 	
@@ -104,6 +101,9 @@ public class AssemblyLine {
 	}
 	
 
+	public Workstation[] getWorkStations() {
+		return workStations;
+	}
 	
 	
 	/**
@@ -112,6 +112,10 @@ public class AssemblyLine {
 	 */
 	public void addCarOrder(CarOrder order){
 		schedule.scheduleCarOrder(order);
+	}
+	
+	public List<CarOrder> askFutureSchedule(){
+		return schedule.getFutureSchedule();
 	}
 	
 	/**
@@ -218,7 +222,7 @@ public class AssemblyLine {
 			
 		}
 	
-		public List<CarOrder> getFutureSchedule(){
+		private List<CarOrder> getFutureSchedule(){
 			ArrayList<CarOrder> returnList = new ArrayList<CarOrder>();
 			returnList.add(getNextOrder());
 			returnList.add(workStations[0].getCurrentOrder());
