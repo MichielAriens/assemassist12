@@ -1,12 +1,13 @@
 package tests;
 
+import static org.junit.Assert.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
 import logic.assemblyline.AssemblyLine;
-import logic.assemblyline.AssemblyLine.Schedule;
 import logic.car.CarModel;
 import logic.car.CarOrder;
 import logic.car.CarPart;
@@ -19,7 +20,7 @@ public class AssemblyLineTest {
 
 	private AssemblyLine assemblyLine;
 	private CarSpecification carSpecification;
-	private CarOrder carOrder1;
+	private List<CarOrder> orders = new ArrayList<CarOrder>();
 	
 	@Before
 	public void prequel(){
@@ -36,12 +37,42 @@ public class AssemblyLineTest {
 			};
 		
 		List<CarPart> parts = (List<CarPart>) Arrays.asList(partsArray);
-		carSpecification = new CarSpecification(CarModel.MODEL1,new ArrayList<CarPart>(parts));
-		Calendar carOrder1StartTime = Calendar.getInstance();
-		carOrder1 = new CarOrder(carSpecification, carOrder1StartTime);
+		carSpecification = new CarSpecification(CarModel.MODEL1,parts);
+		for(int i = 0; i < 10; i++){
+			orders.add(new CarOrder(carSpecification));
+		}
 	}
 	
 	@Test
-	public void scheduleCarOrderWithEmptyAssemblyLine(){
+	public void scheduleOneCarOrderWithEmptyAssemblyLine(){
+		assertFalse(orders.get(0).done());
+		assemblyLine.addCarOrder(orders.get(0));
+		assemblyLine.moveAssemblyLine(0);
+		assertFalse(orders.get(0).done());
+		assertFalse(assemblyLine.moveAssemblyLine(60));
+		assertTrue(assemblyLine.getWorkStations()[0].getCurrentOrder().equals(orders.get(0)));
+		assertNull(assemblyLine.getWorkStations()[1].getCurrentOrder());
 	}
+	
+	/**
+	@Test
+	public void scheduleTenCarOrderWithEmptyAssemblyLine(){
+		for(CarOrder order : orders){
+			assemblyLine.addCarOrder(order);
+			assertFalse(order.done());
+		}
+		for(int i = 0; i < 10; i++){
+			assemblyLine.moveAssemblyLine(60);
+		}
+		for(int i = 0; i < )
+		
+		
+		
+		
+	}
+	*/
+	
+	
+	
+	
 }
