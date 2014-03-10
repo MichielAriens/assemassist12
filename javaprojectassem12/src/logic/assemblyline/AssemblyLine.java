@@ -235,7 +235,11 @@ public class AssemblyLine {
 	
 		private List<CarOrder> getFutureSchedule(){
 			ArrayList<CarOrder> returnList = new ArrayList<CarOrder>();
-			returnList.add(getNextOrder());
+			try{
+				returnList.add(FIFOQueue.getFirst());
+			}catch(NoSuchElementException e){
+				returnList.add(null);
+			}
 			returnList.add(workStations[0].getCurrentOrder());
 			returnList.add(workStations[1].getCurrentOrder());
 			return returnList;
