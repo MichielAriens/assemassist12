@@ -2,9 +2,7 @@ package logic.car;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.joda.time.DateTime;
-
 import logic.workstation.Task;
 
 /**
@@ -75,8 +73,8 @@ public class CarOrder {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the time this car order was completed.
+	 * @return	The time this car order was completed.
 	 */
 	public DateTime getEndTime() {
 		return endTime;
@@ -92,7 +90,7 @@ public class CarOrder {
 	}
 
 	/**
-	 * An estimated time for when this car order will be finished.
+	 * Returns an estimated time for when this car order will be finished.
 	 * @return An estimated time for when this car order will be finished.
 	 */
 	public CarSpecification getCarSpecification() {
@@ -100,16 +98,16 @@ public class CarOrder {
 	}
 
 	/**
-	 * 
-	 * @param time	Time to set
+	 * Sets the estimated end time to the given time.
+	 * @param time	Time to set the estimated end time to.
 	 */
 	public void setEstimatedEndTime(DateTime time){
 		this.estimatedEndTime = time;
 	}
 	
 	/**
-	 * 
-	 * @param time
+	 * Sets the end time and estimated end time to the given time.
+	 * @param time	Time to set the end time to.
 	 */
 	public void setEndTime(DateTime time){
 		this.endTime = time;
@@ -117,8 +115,8 @@ public class CarOrder {
 	}
 
 	/**
-	 * 
-	 * @param startTime
+	 * Sets the start time to the given time.
+	 * @param startTime	Time to set the start time to.
 	 */
 	public void setStartTime(DateTime startTime) {
 		this.startTime = startTime;
@@ -126,7 +124,8 @@ public class CarOrder {
 
 	/**
 	 * Checks if this car order is completed by checking if all its tasks are completed.
-	 * @return 
+	 * @return True if this car order is completed.
+	 * @return False if this car order is not completed.
 	 */
 	public boolean done(){
 		boolean retVal = true;
@@ -140,15 +139,13 @@ public class CarOrder {
 	}
 	
 	/**
-	 * 
+	 * Returns a string representation of this car order.
+	 * @return	Returns the estimated end time followed by the car specification.
 	 */
 	@Override
 	public String toString(){
 		String str;
-		if(this.done())
-			str= endTime.toString();
-		else
-			str =estimatedEndTime.toString();
+		str = estimatedEndTime.toString();
 		str += " : " + carSpecification.toString();
 		return str;
 	}
