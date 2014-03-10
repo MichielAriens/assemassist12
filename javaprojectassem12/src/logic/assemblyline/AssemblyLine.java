@@ -154,12 +154,12 @@ public class AssemblyLine {
 
 		private void setNextDay() {
 			if(currentTime.getHourOfDay()<shiftBeginHour)
-				currentTime = new DateTime(2014,currentTime.getMonthOfYear(),currentTime.getDayOfMonth(),6,0);
+				currentTime = new DateTime(2014,currentTime.getMonthOfYear(),currentTime.getDayOfMonth(),shiftBeginHour,0);
 			else{
 				currentTime = currentTime.plusDays(1);
-			currentTime = new DateTime(2014,currentTime.getMonthOfYear(),currentTime.getDayOfMonth(),6,0);
+				currentTime = new DateTime(2014,currentTime.getMonthOfYear(),currentTime.getDayOfMonth(),shiftBeginHour,0);
 			}
-			this.scheduleCarOrder(getNextOrder());
+			
 			
 		}
 
@@ -215,7 +215,6 @@ public class AssemblyLine {
 				if(next.getCurrentOrder()!= null)
 					next.getCurrentOrder().setEstimatedEndTime(next.getCurrentOrder().getEstimatedEndTime().plusMinutes(time));
 			}
-			
 		}
 
 		private void scheduleCarOrder(CarOrder order) {
@@ -223,30 +222,22 @@ public class AssemblyLine {
 			if(workStations[0].getCurrentOrder() == null && currentTime.getMinuteOfDay()<shiftEndHour*60-overTime-assemblyTime*60 && currentTime.getHourOfDay()>=shiftBeginHour && FIFOQueue.isEmpty()){
 				workStations[0].setOrder(order);
 				estimatedEndTime = estimatedEndTime.plusHours(3);
-				order.setEstimatedEndTime(estimatedEndTime);
-				DateTime startTime = new DateTime(currentTime);
-				order.setStartTime(startTime);
-				return;
-			}
-			if(FIFOQueue.isEmpty()){
+			}else if(FIFOQueue.isEmpty()){
 				FIFOQueue.add(order);
 				estimatedEndTime = estimatedEndTime.plusHours(4);
-				estimatedEndTime = canBeScheduledToday(estimatedEndTime);
-				order.setEstimatedEndTime(estimatedEndTime);
-				DateTime startTime = new DateTime(currentTime);
-				order.setStartTime(startTime);
+				estimatedEndTime = getEstimatedTime(estimatedEndTime);
 			}else{
 				estimatedEndTime = new DateTime(FIFOQueue.getLast().getEstimatedEndTime());
 				FIFOQueue.add(order);
 				estimatedEndTime = estimatedEndTime.plusHours(1);
-				estimatedEndTime = canBeScheduledToday(estimatedEndTime);
-				order.setEstimatedEndTime(estimatedEndTime);
-				DateTime startTime = new DateTime(currentTime);
-				order.setStartTime(startTime);
+				estimatedEndTime = getEstimatedTime(estimatedEndTime);
 			}
+			order.setEstimatedEndTime(estimatedEndTime);
+			DateTime startTime = new DateTime(currentTime);
+			order.setStartTime(startTime);
 		}
 
-		private DateTime canBeScheduledToday(DateTime estimatedEndTime) {
+		private DateTime getEstimatedTime(DateTime estimatedEndTime) {
 			if(!timeForNewOrder(estimatedEndTime)){
 				if(estimatedEndTime.getHourOfDay()<=shiftBeginHour){
 					return new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour+assemblyTime,0);
@@ -255,26 +246,24 @@ public class AssemblyLine {
 					estimatedEndTime =  new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour+assemblyTime,0);
 					return estimatedEndTime.plusDays(1);
 				}
-				
-
 			}else{
 				return estimatedEndTime;
 			}
 		}
 
-		/**
-		 * Returns the next order to come on the assembly line if the assembly line is moved.
-		 * If there is no next order it will return null.
-		 */
-		private CarOrder getNextOrder() {
-			try{
-				return FIFOQueue.remove();
-			}catch(NoSuchElementException e){
-				return null;
-			}
-			
-			
-		}
+//		/**
+//		 * Returns the next order to come on the assembly line if the assembly line is moved.
+//		 * If there is no next order it will return null.
+//		 */
+//		private CarOrder getNextOrder() {
+//			try{
+//				return FIFOQueue.remove();
+//			}catch(NoSuchElementException e){
+//				return null;
+//			}
+//			
+//			
+//		}
 	
 		private List<CarOrder> getFutureSchedule(){
 			ArrayList<CarOrder> returnList = new ArrayList<CarOrder>();
