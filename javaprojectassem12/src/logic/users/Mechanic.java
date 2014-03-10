@@ -24,10 +24,16 @@ public class Mechanic extends User{
 	public boolean isPosted(){
 		return this.getActiveWorkstation() != null;
 	}
+	
+	public boolean doTask(Task task){
+		if (getActiveWorkstation().isCompatibleTask(task)){
+			task.perform();
+			return true;
+		}
+		return false;
+	}
 
 	public void work(float actualWork) {
-		//Boekhouding
-		
 		
 	}
 	

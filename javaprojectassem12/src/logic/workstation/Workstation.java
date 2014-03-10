@@ -83,7 +83,7 @@ public abstract class Workstation {
 	 * 											and the task is not already completed.
 	 * 					False:	Otherwise	
 	 */
-	private boolean isCompatibleTask(Task task){
+	public boolean isCompatibleTask(Task task){
 		if(getCapabilities().contains(task.getCarPart().type) && !task.isComplete()){
 			return true;
 		}
