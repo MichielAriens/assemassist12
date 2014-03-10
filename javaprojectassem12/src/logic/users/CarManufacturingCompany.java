@@ -10,7 +10,7 @@ import logic.workstation.Task;
 import logic.workstation.Workstation;
 
 /**
- * Class used to describe car manufacturing companies.
+ * Class used to describe a car manufacturing companie.
  */
 public class CarManufacturingCompany {
 	
