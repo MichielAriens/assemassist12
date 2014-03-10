@@ -2,7 +2,11 @@ package logic.car;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import logic.workstation.Task;
 
 /**
@@ -145,7 +149,8 @@ public class CarOrder {
 	@Override
 	public String toString(){
 		String str;
-		str = estimatedEndTime.toString();
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm");
+		str = fmt.print(estimatedEndTime);
 		str += " : " + carSpecification.toString();
 		return str;
 	}
