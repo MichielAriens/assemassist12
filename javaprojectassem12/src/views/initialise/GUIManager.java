@@ -26,6 +26,8 @@ public class GUIManager {
 				writer.write(s + "\n");
 			}
 			writer.flush();
+			//TODO: future
+			int time = getTimeSpent();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -34,7 +36,24 @@ public class GUIManager {
 	
 	private int getTimeSpent(){
 		try{
-			writer.write("");
+			writer.write("Enter the time (in minutes) spent during the current phase: ");
+			writer.flush();
+			while(true){
+				String answer = reader.readLine();
+				try{
+					int time = Integer.parseInt(answer);
+					if(time < 0 || time > 180){
+						writer.write("\nInvalid input, try again. ");
+						writer.flush();
+						continue;
+					}
+					return time;
+				} catch(NumberFormatException e){
+					writer.write("\nInvalid input, try again. ");
+					writer.flush();
+					continue;
+				}
+			}
 		} catch(IOException e){
 			e.printStackTrace();
 			return 0;
