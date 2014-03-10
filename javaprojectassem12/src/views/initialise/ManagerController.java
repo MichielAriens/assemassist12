@@ -1,6 +1,7 @@
 package views.initialise;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import logic.users.Manager;
 import logic.workstation.Task;
@@ -21,12 +22,12 @@ public class ManagerController extends UserController{
 		return null;
 	}
 	
-	public ArrayList<String> getTasksPerWorkstation(){
+	public List<String> getTasksPerWorkstation(){
 		if(this.manager == null)
 			return null;
-		Workstation[] stations = this.manager.getWorkstations();
+		Workstation[] workStations = this.manager.getWorkstations();
 		ArrayList<String> tasks = new ArrayList<String>();
-		for(Workstation stat : stations){
+		for(Workstation stat : workStations){
 			String temp = stat.toString() + ":\n";
 			for(Task task : stat.getRequiredTasks()){
 				String status = "Pending";

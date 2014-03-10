@@ -115,11 +115,6 @@ public class AssemblyLine {
 		schedule.scheduleCarOrder(order);
 	}
 	
-	//TODO: document
-	public List<String> getScheduleOverview(){
-		return schedule.getScheduleOverview();
-	}
-
 	/**
 	 * 
 	 *
@@ -228,20 +223,7 @@ public class AssemblyLine {
 		 * Returns an overview of the estimated end times for all the orders in the schedule.
 		 * Returns "No orders planned." if there are no orders.
 		 */
-		private List<String> getScheduleOverview(){ //TODO: fix documentation and shit
-			ArrayList<String> tasks = new ArrayList<String>();
-			for(Workstation stat : workStations){
-				String temp = stat.toString() + ":\n";
-				for(Task task : stat.getRequiredTasks()){
-					String status = "Pending";
-					if(task.isComplete())
-						status = "Completed";
-					temp += "   -" + task.toString() + ": " + status + "\n";
-				}
-				tasks.add(temp);
-			}
-			return tasks;
-			
+		public List<String> getScheduleOverview(){
 //			String overview = "";
 //			if(FIFOQueue.size()<1 && !hasOrder()){
 //				overview = "No orders planned.";
