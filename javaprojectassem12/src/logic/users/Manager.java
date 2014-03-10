@@ -12,4 +12,8 @@ public class Manager extends User{
 	public Workstation[] getWorkstations(){
 		return this.company.getWorkStations();
 	}
+	
+	public boolean moveAssemblyLine(int shiftDuration){
+		return this.company.moveAssemblyLine(shiftDuration);
+	}
 }

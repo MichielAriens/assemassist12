@@ -39,5 +39,7 @@ public class ManagerController extends UserController{
 		}
 		return tasks;
 	}
+	
+	public boolean 
 
 }
