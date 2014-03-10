@@ -9,7 +9,7 @@ import logic.car.CarOrder;
 import logic.workstation.Workstation;
 
 /**
- *
+ * Class used to describe car manufacturing companies.
  */
 public class CarManufacturingCompany {
 	
@@ -59,10 +59,13 @@ public class CarManufacturingCompany {
 	}
 
 	/**
-	 * Checks if the given user name is valid and returns the corresponding user 
+	 * Checks if the given user name is valid and returns the corresponding user.
+	 * If the given user name is valid and the user does not exist yet, the user is
+	 * added to the HashMap of users. If the given user name is not valid, 
+	 * this method returns null.
 	 * @param userName		The user name used to login.
 	 * @return	Returns the user corresponding to the given user name otherwise if:
-	 * 			- the list of users contains the given user name,
+	 * 			- the HashMap of users contains the given user name as a key,
 	 * 			- the list of valid manager names contains the given user name,
 	 * 			- the list of valid garage holders names contains the given user name or
 	 * 			- the list of valid mechanic names contains the given user name.
@@ -107,10 +110,4 @@ public class CarManufacturingCompany {
 	public Workstation[] getWorkStations(){
 		return this.assemblyLine.getWorkStations();
 	}
-	
-	public List<String> getScheduleOverview(){
-		return this.assemblyLine.getScheduleOverview();
-	}
-	
-	
 }
