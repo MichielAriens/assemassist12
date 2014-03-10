@@ -11,19 +11,26 @@ import logic.assemblyline.AssemblyLine;
 import logic.car.CarModel;
 import logic.car.CarOrder;
 import logic.car.CarPart;
+import logic.car.CarPartType;
 import logic.car.CarSpecification;
+import logic.users.CarManufacturingCompany;
+import logic.users.Mechanic;
+import logic.workstation.Task;
 
 import org.junit.Before;
 import org.junit.Test;
 
 public class AssemblyLineTest {
-
+	private CarManufacturingCompany cmcMotors;
 	private AssemblyLine assemblyLine;
 	private CarSpecification carSpecification;
 	private List<CarOrder> orders = new ArrayList<CarOrder>();
+	private Mechanic barry;
 	
 	@Before
 	public void prequel(){
+		cmcMotors = new CarManufacturingCompany();
+		barry = new Mechanic(cmcMotors, "Barry");
 		
 		assemblyLine = new AssemblyLine();
 		CarPart[] partsArray = {
@@ -52,6 +59,19 @@ public class AssemblyLineTest {
 		assertFalse(assemblyLine.moveAssemblyLine(60));
 		assertTrue(assemblyLine.getWorkStations()[0].getCurrentOrder().equals(orders.get(0)));
 		assertNull(assemblyLine.getWorkStations()[1].getCurrentOrder());
+		assertNull(assemblyLine.getWorkStations()[2].getCurrentOrder());
+		
+		/* Now we progress the line */
+		barry.setActiveWorkstation(assemblyLine.getWorkStations()[0]);
+		assertFalse(assemblyLine.getWorkStations()[0].done());
+		for(Task task : assemblyLine.getWorkStations()[0].getRequiredTasks()){
+			barry.doTask(task);
+		}
+		assertTrue(assemblyLine.getWorkStations()[0].done());
+		
+		assertTrue(assemblyLine.moveAssemblyLine(60));
+		assertNull(assemblyLine.getWorkStations()[0].getCurrentOrder());
+		
 	}
 	
 	/**
