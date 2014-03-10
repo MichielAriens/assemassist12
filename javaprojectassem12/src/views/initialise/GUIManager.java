@@ -31,5 +31,14 @@ public class GUIManager {
 			e.printStackTrace();
 		}
 	}
+	
+	private int getTimeSpent(){
+		try{
+			writer.write("");
+		} catch(IOException e){
+			e.printStackTrace();
+			return 0;
+		}
+	}
 
 }

@@ -34,7 +34,7 @@ public class GarageHolderController extends UserController{
 		if(this.garageHolder == null)
 			return null;
 		ArrayList<String> completedOrderStrings = new ArrayList<String>();
-		for(CarOrder order : this.garageHolder.getPendingOrders()){
+		for(CarOrder order : this.garageHolder.getCompletedOrders()){
 			completedOrderStrings.add(order.toString());
 		}
 		return completedOrderStrings;

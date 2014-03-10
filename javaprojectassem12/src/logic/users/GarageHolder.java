@@ -9,30 +9,30 @@ import logic.car.CarSpecification;
 public class GarageHolder extends User{
 	
 	private CarManufacturingCompany company;
-	private ArrayList<CarOrder> pendingOrders;
-	private ArrayList<CarOrder> completedOrders;
+	private ArrayList<CarOrder> committedOrders;
 	
 	public GarageHolder(CarManufacturingCompany comp, String userName){
 		super(userName);
 		this.company = comp;
-		this.pendingOrders = new ArrayList<CarOrder>();
-		this.completedOrders = new ArrayList<CarOrder>();
-	}
-	
-	public void alertCompleted(CarOrder order){
-		if(order == null || !order.done())
-			return;
-		if(pendingOrders.contains(order))
-			pendingOrders.remove(order);
-		completedOrders.add(order);
+		this.committedOrders = new ArrayList<CarOrder>();
 	}
 	
 	public ArrayList<CarOrder> getPendingOrders(){
-		return this.pendingOrders;
+		ArrayList<CarOrder> pendingOrders = new ArrayList<CarOrder>();
+		for(CarOrder o : this.committedOrders){
+			if(!o.done())
+				pendingOrders.add(o);
+		}
+		return pendingOrders;
 	}
 	
 	public ArrayList<CarOrder> getCompletedOrders(){
-		return this.completedOrders;
+		ArrayList<CarOrder> completedOrders = new ArrayList<CarOrder>();
+		for(CarOrder o : this.committedOrders){
+			if(o.done())
+				completedOrders.add(o);
+		}
+		return completedOrders;
 	}
 	
 	public void placeOrder(CarSpecification specification){
@@ -40,7 +40,7 @@ public class GarageHolder extends User{
 			return;
 		CarOrder order = new CarOrder(specification) ;
 		company.addOrder(order);
-		this.pendingOrders.add(order);
+		this.committedOrders.add(order);
 	}
 
 }
