@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 import logic.car.CarOrder;
 import logic.workstation.AccessoriesPost;
@@ -76,10 +77,7 @@ public class AssemblyLine {
 			for(int i = numberOfWorkStations - 1; i > 0; i--){
 				workStations[i].setOrder(workStations[i-1].getCurrentOrder());
 			}
-			if(schedule.timeForNewOrder())
-				workStations[0].setOrder(schedule.getNextOrder());
-			else
-				workStations[0].setOrder(null);
+			workStations[0].setOrder(null);
 			if(schedule.checkEndOfDay()){
 				schedule.calculateOverTime();
 				schedule.setNextDay();
@@ -145,7 +143,6 @@ public class AssemblyLine {
 		
 		int overTime = 0;
 		
-		int nextDayOrders=0;
 
 		private void calculateOverTime() {
 			if(currentTime.getHourOfDay()<shiftBeginHour){
@@ -162,7 +159,8 @@ public class AssemblyLine {
 				currentTime = currentTime.plusDays(1);
 			currentTime = new DateTime(2014,currentTime.getMonthOfYear(),currentTime.getDayOfMonth(),6,0);
 			}
-			nextDayOrders = 0;
+			this.scheduleCarOrder(getNextOrder());
+			
 		}
 
 		private void setOverTime(int i) {
@@ -183,29 +181,32 @@ public class AssemblyLine {
 			return false;
 		}
 
-		private boolean timeForNewOrder() {
-			return currentTime.getMinuteOfDay()<(shiftEndHour*60-overTime-assemblyTime) && currentTime.getMinuteOfDay()>=shiftBeginHour*60;
+		private boolean timeForNewOrder(DateTime time) {
+			if(Days.daysBetween(time, currentTime).getDays()==0){
+				return time.getMinuteOfDay()<(shiftEndHour*60-overTime) && time.getMinuteOfDay()>=shiftBeginHour*60;
+			}else{
+				return  time.getMinuteOfDay()<(shiftEndHour*60) && time.getMinuteOfDay()>=shiftBeginHour*60;
+			}
 		}
 
 		private void updateEstimatedTimes(int shiftduration) {
 			updateEstimatedTimeWorkStations(shiftduration);
-			nextDayOrders=0;
-			for(int i = 0;i<FIFOQueue.size();i++){
-				DateTime estimatedEndTime = new DateTime(currentTime);
-				estimatedEndTime = estimatedEndTime.plusHours(4+i);
-				if(estimatedEndTime.getHourOfDay()>=shiftEndHour){
-					DateTime estDate = new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth()+1,shiftBeginHour,0);
-					
-					FIFOQueue.get(i).setEstimatedEndTime(estDate.plusHours(3+nextDayOrders));
-
-					nextDayOrders++;
-				}else if(estimatedEndTime.getHourOfDay()<shiftBeginHour){
-					DateTime estDate = new DateTime(2014,1,estimatedEndTime.getDayOfMonth()+1,6,0); 
-					FIFOQueue.get(i).setEstimatedEndTime(estDate.plusHours(3+nextDayOrders));
-					nextDayOrders++;
-				}else
-					FIFOQueue.get(i).setEstimatedEndTime(estimatedEndTime);
+			LinkedList<CarOrder> copyOfQueue = makeCopyOfQueue();
+			FIFOQueue.clear();
+			if(!copyOfQueue.isEmpty()){
+				for(CarOrder next: copyOfQueue){
+					scheduleCarOrder(next);
+				}
 			}
+
+		}
+
+		private LinkedList<CarOrder> makeCopyOfQueue() {
+			LinkedList<CarOrder> returnList = new LinkedList<CarOrder>();
+			for(CarOrder next:FIFOQueue){
+				returnList.add(next);
+			}
+			return returnList;
 		}
 
 		private void updateEstimatedTimeWorkStations(int shiftduration) {
@@ -218,26 +219,47 @@ public class AssemblyLine {
 		}
 
 		private void scheduleCarOrder(CarOrder order) {
-			
-			FIFOQueue.add(order);
 			DateTime estimatedEndTime = new DateTime(currentTime);
-			estimatedEndTime = estimatedEndTime.plusHours(3+FIFOQueue.size());
-			if(estimatedEndTime.getHourOfDay()>=shiftEndHour){
-				DateTime estDate = new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth()+1,shiftBeginHour,0);
-				
-				
-				order.setEstimatedEndTime(estDate.plusHours(3+nextDayOrders));
-				nextDayOrders++;
-			}else if(estimatedEndTime.getHourOfDay()<shiftBeginHour){
-				DateTime estDate = new DateTime(2014,1,estimatedEndTime.getDayOfMonth()+1,6,0); 
-				
-				nextDayOrders++;
-				order.setEstimatedEndTime(estDate.plusHours(3+nextDayOrders));
-			}else
+			if(workStations[0].getCurrentOrder() == null && currentTime.getMinuteOfDay()<shiftEndHour*60-overTime-assemblyTime*60 && currentTime.getHourOfDay()>=shiftBeginHour && FIFOQueue.isEmpty()){
+				workStations[0].setOrder(order);
+				estimatedEndTime = estimatedEndTime.plusHours(3);
 				order.setEstimatedEndTime(estimatedEndTime);
-			
-			DateTime startTime = new DateTime(currentTime);
-			order.setStartTime(startTime);
+				DateTime startTime = new DateTime(currentTime);
+				order.setStartTime(startTime);
+				return;
+			}
+			if(FIFOQueue.isEmpty()){
+				FIFOQueue.add(order);
+				estimatedEndTime = estimatedEndTime.plusHours(4);
+				estimatedEndTime = canBeScheduledToday(estimatedEndTime);
+				order.setEstimatedEndTime(estimatedEndTime);
+				DateTime startTime = new DateTime(currentTime);
+				order.setStartTime(startTime);
+			}else{
+				estimatedEndTime = new DateTime(FIFOQueue.getLast().getEstimatedEndTime());
+				FIFOQueue.add(order);
+				estimatedEndTime = estimatedEndTime.plusHours(1);
+				estimatedEndTime = canBeScheduledToday(estimatedEndTime);
+				order.setEstimatedEndTime(estimatedEndTime);
+				DateTime startTime = new DateTime(currentTime);
+				order.setStartTime(startTime);
+			}
+		}
+
+		private DateTime canBeScheduledToday(DateTime estimatedEndTime) {
+			if(!timeForNewOrder(estimatedEndTime)){
+				if(estimatedEndTime.getHourOfDay()<=shiftBeginHour){
+					return new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour+assemblyTime,0);
+					
+				}else{
+					estimatedEndTime =  new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour+assemblyTime,0);
+					return estimatedEndTime.plusDays(1);
+				}
+				
+
+			}else{
+				return estimatedEndTime;
+			}
 		}
 
 		/**
