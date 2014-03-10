@@ -189,12 +189,22 @@ public class AssemblyLine {
 
 		private void updateEstimatedTimes(int shiftduration) {
 			updateEstimatedTimeWorkStations(shiftduration);
+			nextDayOrders=0;
 			for(int i = 0;i<FIFOQueue.size();i++){
 				DateTime estimatedEndTime = new DateTime(currentTime);
 				estimatedEndTime = estimatedEndTime.plusHours(4+i);
-				if(estimatedEndTime.getHourOfDay()>=shiftEndHour || estimatedEndTime.getHourOfDay()<shiftBeginHour)
-					estimatedEndTime = estimatedEndTime.plusHours(24-shiftEndHour+shiftBeginHour+4+i);
-				FIFOQueue.get(i).setEstimatedEndTime(estimatedEndTime);
+				if(estimatedEndTime.getHourOfDay()>=shiftEndHour){
+					DateTime estDate = new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth()+1,shiftBeginHour,0);
+					estDate.plusHours(3+nextDayOrders);
+					nextDayOrders++;
+					FIFOQueue.get(i).setEstimatedEndTime(estDate);
+				}else if(estimatedEndTime.getHourOfDay()<shiftBeginHour){
+					DateTime estDate = new DateTime(2014,1,estimatedEndTime.getDayOfMonth()+1,6,0); 
+					estDate.plusHours(3+nextDayOrders);
+					nextDayOrders++;
+					FIFOQueue.get(i).setEstimatedEndTime(estDate);
+				}else
+					FIFOQueue.get(i).setEstimatedEndTime(estimatedEndTime);
 			}
 		}
 
@@ -208,15 +218,23 @@ public class AssemblyLine {
 		}
 
 		private void scheduleCarOrder(CarOrder order) {
+			
 			FIFOQueue.add(order);
 			DateTime estimatedEndTime = new DateTime(currentTime);
 			estimatedEndTime = estimatedEndTime.plusHours(3+FIFOQueue.size());
-			if(estimatedEndTime.getHourOfDay()>=shiftEndHour || estimatedEndTime.getHourOfDay()<shiftBeginHour){
-				estimatedEndTime = estimatedEndTime.plusHours(24-shiftEndHour+shiftBeginHour+3+nextDayOrders);
+			if(estimatedEndTime.getHourOfDay()>=shiftEndHour){
+				DateTime estDate = new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth()+1,shiftBeginHour,0);
+				estDate.plusHours(3+nextDayOrders);
 				nextDayOrders++;
-			}
-				
-			order.setEstimatedEndTime( estimatedEndTime);
+				order.setEstimatedEndTime(estDate);
+			}else if(estimatedEndTime.getHourOfDay()<shiftBeginHour){
+				DateTime estDate = new DateTime(2014,1,estimatedEndTime.getDayOfMonth()+1,6,0); 
+				estDate.plusHours(3+nextDayOrders);
+				nextDayOrders++;
+				order.setEstimatedEndTime(estDate);
+			}else
+				order.setEstimatedEndTime(estimatedEndTime);
+			
 			DateTime startTime = new DateTime(currentTime);
 			order.setStartTime(startTime);
 		}
