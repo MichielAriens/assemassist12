@@ -38,6 +38,10 @@ public class AssemblyLine {
 	 */
 	private DateTime currentTime;
 	
+	public DateTime getCurrentTime() {
+		return currentTime;
+	}
+
 	/**
 	 * A variable containing the schedule, which is used for scheduling orders.
 	 */
