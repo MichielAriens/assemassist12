@@ -38,6 +38,10 @@ public class AssemblyLine {
 	 */
 	private DateTime currentTime;
 	
+	public DateTime getCurrentTime() {
+		return currentTime;
+	}
+
 	/**
 	 * A variable containing the schedule, which is used for scheduling orders.
 	 */
@@ -58,6 +62,7 @@ public class AssemblyLine {
 	/**
 	 * Moves the car orders on the assembly line if every work station is ready and 
 	 * sets the end time of the first order to the given end time.
+	 * @param The time in minutes representing the duration of the current phase.
 	 * @return True if the assembly line can be moved.
 	 * @return False if the assembly line can not be moved.
 	 */
@@ -183,7 +188,11 @@ public class AssemblyLine {
 		private void updateEstimatedTimes() {
 			updateEstimatedTimeWorkStations();
 			for(int i = 0;i<FIFOQueue.size();i++){
-				FIFOQueue.get(i).setEstimatedEndTime(FIFOQueue.get(0).getEstimatedEndTime().plusHours(4+i));
+				DateTime estimatedEndTime = new DateTime(currentTime);
+				estimatedEndTime = estimatedEndTime.plusHours(4+i);
+				if(estimatedEndTime.getHourOfDay()>=shiftEndHour || estimatedEndTime.getHourOfDay()<shiftBeginHour)
+					estimatedEndTime = estimatedEndTime.plusHours(12-shiftEndHour+shiftBeginHour);
+				FIFOQueue.get(i).setEstimatedEndTime(estimatedEndTime);
 			}
 		}
 
@@ -203,7 +212,9 @@ public class AssemblyLine {
 			FIFOQueue.add(order);
 			DateTime estimatedEndTime = new DateTime(currentTime);
 			estimatedEndTime = estimatedEndTime.plusHours(3+FIFOQueue.size());
-			order.setEstimatedEndTime( new DateTime(currentTime));
+			if(estimatedEndTime.getHourOfDay()>=shiftEndHour || estimatedEndTime.getHourOfDay()<shiftBeginHour)
+				estimatedEndTime = estimatedEndTime.plusHours(12-shiftEndHour+shiftBeginHour);
+			order.setEstimatedEndTime( estimatedEndTime);
 			DateTime startTime = new DateTime(currentTime);
 			order.setStartTime(startTime);
 		}
@@ -224,7 +235,11 @@ public class AssemblyLine {
 	
 		private List<CarOrder> getFutureSchedule(){
 			ArrayList<CarOrder> returnList = new ArrayList<CarOrder>();
-			returnList.add(getNextOrder());
+			try{
+				returnList.add(FIFOQueue.getFirst());
+			}catch(NoSuchElementException e){
+				returnList.add(null);
+			}
 			returnList.add(workStations[0].getCurrentOrder());
 			returnList.add(workStations[1].getCurrentOrder());
 			return returnList;

@@ -66,5 +66,13 @@ public class BasicUnitTestsTest {
 		carparts.add(CarPart.GEARBOX_5AUTO);
 		CarSpecification cars = new CarSpecification(CarModel.MODEL1, carparts);
 	}
+	
+	
+	@Test
+	public void testCarPartMethods(){
+		CarPart someCarPart = CarPart.AIRCO_AUTO;
+		assertTrue(CarPart.getPartfromString(someCarPart.toString()) == someCarPart);
+	}
+
 
 }
