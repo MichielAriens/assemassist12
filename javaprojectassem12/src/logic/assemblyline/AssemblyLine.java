@@ -1,4 +1,6 @@
 package logic.assemblyline;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
@@ -208,7 +210,7 @@ public class AssemblyLine {
 		 */
 		private CarOrder getNextOrder() {
 			try{
-				return FIFOQueue.getFirst();
+				return FIFOQueue.remove();
 			}catch(NoSuchElementException e){
 				return null;
 			}
@@ -216,108 +218,14 @@ public class AssemblyLine {
 			
 		}
 	
-		
-//
-//		/**
-//		 * If the given order exists the estimated end time for the new order will be three hours
-//		 * later than the end time of the given order. If that time is passed
-//		 * 22:00 the estimated end time will be 09:00 the next day.
-//		 * If there is no order on the first work station of the assembly line there are 
-//		 * three options. First option is that the current time is before 06:00 so the estimated 
-//		 * end time will be 09:00. Second option is that the current time is between 06:00 and 
-//		 * 19:00 so the estimated end time will be three hours after the current time. Third option
-//		 * is that the current time is past 19:00 so the estimated end time will be at 09:00 on the
-//		 * next day.
-//		 * @return
-//		 */
-//		public DateTime calculateEstimatedEndTimeForOrderAfterGivenOrder(CarOrder previousOrder){			
-//			//If there is a current order on the first work station
-//			if(previousOrder != null){
-//				Calendar endTimePreviousOrder = previousOrder.getEstimatedEndTime();
-//				Calendar endTimeNextOrder = Calendar.getInstance(); 
-//				endTimeNextOrder = Calendar.getInstance();
-//				endTimeNextOrder.setTime(endTimePreviousOrder.getTime());
-//				endTimeNextOrder.add(Calendar.HOUR_OF_DAY, assemblyTime);
-//
-//				Calendar shiftEndTime = getGivenTimeOnGivenDay(endTimePreviousOrder, shiftEndHour, 0, 0);
-//				if(endTimeNextOrder.before(shiftEndTime)){
-//					return endTimeNextOrder;
-//				}
-//				else{
-//					//Set time to endTimePreviousOrder because it could be the day has been changed
-//					endTimeNextOrder.setTime(endTimePreviousOrder.getTime());
-//					//Add 1 day
-//					endTimeNextOrder.add(Calendar.DAY_OF_MONTH, 1);
-//					//Set hour to shiftBeginHour + assemblyTime
-//					endTimeNextOrder = getGivenTimeOnGivenDay(endTimeNextOrder, shiftBeginHour+assemblyTime, 0, 0);
-//					return endTimeNextOrder;
-//				}
-//			}
-//			
-//			//If there is no current order on the first work station
-//			else{
-//				//Set endTimeNextOrder to current date and time
-//				Calendar endTimeNextOrder = Calendar.getInstance();
-//				
-//				//Current date at shiftBeginTime
-//				Calendar shiftBeginTime = getGivenTimeOnGivenDay(endTimeNextOrder, shiftBeginHour, 0, 0);
-//				
-//				//Current date at shiftEndTime
-//				Calendar shiftEndTime = getGivenTimeOnGivenDay(endTimeNextOrder, shiftEndHour, 0, 0);
-//				
-//				//Check if endTimeNextOrder is after shiftBegintHour else it is at shigtBeginHour
-//				if(endTimeNextOrder.after(shiftBeginTime)){
-//					//Add assemblyTime hours to endTimeNextOrder
-//					endTimeNextOrder.add(Calendar.HOUR_OF_DAY, assemblyTime);
-//					//Check if endTimeNextOrder is before shiftEndTime else endTimeNextOrder is shiftBegintime + assemblyTime the next day
-//					if(endTimeNextOrder.before(shiftEndTime)){
-//						return endTimeNextOrder;
-//					}
-//					else{
-//						//Add 1 day
-//						endTimeNextOrder.add(Calendar.DAY_OF_MONTH, 1); 
-//						//Set time to shiftBeginHour assemblyTime
-//						endTimeNextOrder = getGivenTimeOnGivenDay(endTimeNextOrder, shiftBeginHour + assemblyTime, 0, 0); 
-//						return endTimeNextOrder;
-//					}
-//				}
-//				else{
-//					endTimeNextOrder = getGivenTimeOnGivenDay(endTimeNextOrder, shiftBeginHour + assemblyTime, 0, 0);
-//					return endTimeNextOrder;
-//				}	
-//			}	
-//		}
-//		
-//		/**
-//		 * If there is an order on the first work station of the assembly line the 
-//		 * estimated end time for the new order will be three hours later. If that time is passed
-//		 * 22:00 the estimated end time will be 09:00 the next day.
-//		 * If there is no order on the first work station of the assembly line there are 
-//		 * three options. First option is that the current time is before 06:00 so the estimated 
-//		 * end time will be 09:00. Second option is that the current time is between 06:00 and 
-//		 * 19:00 so the estimated end time will be three hours after the current time. Third option
-//		 * is that the current time is past 19:00 so the estimated end time will be at 09:00 on the
-//		 * next day.
-//		 * @return
-//		 */
-//		public Calendar calculateEstimatedEndTimeForNewOrder(){	
-//			int indexLastCarOrder = carOrders.size()-1;
-//			CarOrder lastCarOrder = carOrders.get(indexLastCarOrder);
-//			return calculateEstimatedEndTimeForOrderAfterGivenOrder(lastCarOrder);
-//		}
-//		
-//		/**
-//		 * Returns a calendar object on the given day with the given time in hours, minutes and seconds.
-//		 */
-//		public Calendar getGivenTimeOnGivenDay(Calendar givenDay, int hour, int minute, int second){
-//			Calendar givenTimeOnGivenDay = Calendar.getInstance(); 
-//			givenTimeOnGivenDay.setTime(givenDay.getTime());
-//			givenTimeOnGivenDay.set(Calendar.HOUR_OF_DAY, hour);
-//			givenTimeOnGivenDay.set(Calendar.MINUTE, minute);
-//			givenTimeOnGivenDay.set(Calendar.SECOND, second);
-//			return givenTimeOnGivenDay;
-//		}
-//		
+		public List<CarOrder> getFutureSchedule(){
+			ArrayList<CarOrder> returnList = new ArrayList<CarOrder>();
+			returnList.add(getNextOrder());
+			returnList.add(workStations[0].getCurrentOrder());
+			returnList.add(workStations[1].getCurrentOrder());
+			return returnList;
+		}
+	
 	}
 	
 	
