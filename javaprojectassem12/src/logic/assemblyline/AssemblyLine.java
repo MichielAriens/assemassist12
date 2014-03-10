@@ -1,5 +1,7 @@
 package logic.assemblyline;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.joda.time.DateTime;
@@ -8,6 +10,7 @@ import logic.car.CarOrder;
 import logic.workstation.AccessoriesPost;
 import logic.workstation.CarBodyPost;
 import logic.workstation.DriveTrainPost;
+import logic.workstation.Task;
 import logic.workstation.Workstation;
 
 /**
@@ -110,6 +113,11 @@ public class AssemblyLine {
 	 */
 	public void addCarOrder(CarOrder order){
 		schedule.scheduleCarOrder(order);
+	}
+	
+	//TODO: document
+	public List<String> getScheduleOverview(){
+		return schedule.getScheduleOverview();
 	}
 
 	/**
@@ -220,7 +228,20 @@ public class AssemblyLine {
 		 * Returns an overview of the estimated end times for all the orders in the schedule.
 		 * Returns "No orders planned." if there are no orders.
 		 */
-		public String getScheduleOverview(){
+		private List<String> getScheduleOverview(){ //TODO: fix documentation and shit
+			ArrayList<String> tasks = new ArrayList<String>();
+			for(Workstation stat : workStations){
+				String temp = stat.toString() + ":\n";
+				for(Task task : stat.getRequiredTasks()){
+					String status = "Pending";
+					if(task.isComplete())
+						status = "Completed";
+					temp += "   -" + task.toString() + ": " + status + "\n";
+				}
+				tasks.add(temp);
+			}
+			return tasks;
+			
 //			String overview = "";
 //			if(FIFOQueue.size()<1 && !hasOrder()){
 //				overview = "No orders planned.";
@@ -232,7 +253,6 @@ public class AssemblyLine {
 //				overview = overview +"Car order "+FIFOQueue.size() + FIFOQueue.get(FIFOQueue.size()-1).toString();
 //			}
 //			return overview;
-			
 			
 		}
 		private boolean hasOrder(){
