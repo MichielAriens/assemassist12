@@ -60,10 +60,6 @@ public class Mechanic extends User{
 		}
 		return false;
 	}
-
-	public void work(float actualWork) {
-		
-	}
 	
 	/**
 	 * Returns the list of tasks that need to be performed at the active workstation or null
