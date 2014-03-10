@@ -6,11 +6,10 @@ import java.util.List;
 
 import logic.assemblyline.AssemblyLine;
 import logic.car.CarOrder;
-import logic.workstation.Task;
 import logic.workstation.Workstation;
 
 /**
- * Class used to describe a car manufacturing companie.
+ * Class used to describe a car manufacturing company.
  */
 public class CarManufacturingCompany {
 	
