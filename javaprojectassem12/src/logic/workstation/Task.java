@@ -51,4 +51,13 @@ public class Task {
 		return completed;
 	}
 	
+	/**
+	 * Returns the string representation of this task.
+	 * @return The string representation of this task.
+	 */
+	@Override
+	public String toString(){
+		return "Install " + this.part.type.toString() + ": " + this.part.toString();
+	}
+	
 }

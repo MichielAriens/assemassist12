@@ -34,7 +34,7 @@ public class GUIMechanic {
 			writer.flush();
 			while(true){
 				selectTask();
-				if(!promptYesOrNo("Do you want to perform another taks? (y/n): "))
+				if(!promptYesOrNo("Do you want to perform another task? (y/n): "))
 					return;
 			}
 		} catch (IOException e) {
