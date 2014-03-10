@@ -165,19 +165,19 @@ public class AssemblyLine {
 				if(workstation.getCurrentOrder()!=null)
 					return false;
 			}
-			if(currentTime.getHourOfDay()>=(shiftEndHour-assemblyTime) || currentTime.getHourOfDay()<shiftBeginHour)
+			if(currentTime.getMinuteOfDay()>=(shiftEndHour*60-overTime-assemblyTime) || currentTime.getMinuteOfDay()<shiftBeginHour*60)
 				return true;
 			return false;
 		}
 
 		private boolean timeForNewOrder() {
-			return currentTime.getHourOfDay()<(shiftEndHour-assemblyTime) && currentTime.getHourOfDay()>=shiftBeginHour;
+			return currentTime.getMinuteOfDay()<(shiftEndHour*60-overTime-assemblyTime) && currentTime.getMinuteOfDay()>=shiftBeginHour*60;
 		}
 
 		private void updateEstimatedTimes() {
 			updateEstimatedTimeWorkStations();
 			for(int i = 0;i<FIFOQueue.size();i++){
-				FIFOQueue.get(i).setEstimatedEndTime(FIFOQueue.get(0).getEstimatedEndTime().plus(4+i));
+				FIFOQueue.get(i).setEstimatedEndTime(FIFOQueue.get(0).getEstimatedEndTime().plusHours(4+i));
 			}
 		}
 
@@ -221,19 +221,26 @@ public class AssemblyLine {
 		 * Returns "No orders planned." if there are no orders.
 		 */
 		public String getScheduleOverview(){
-			String overview = "";
-			if(FIFOQueue.size()<1){
-				overview = "No orders planned.";
-			}
-			else{
-				for(int i = 0; i < FIFOQueue.size()-1; i++){
-					overview = overview +"Car order "+ (i+1)+": " + FIFOQueue.get(i).toString()+"\n";
-				}
-				overview = overview +"Car order "+FIFOQueue.size() + FIFOQueue.get(FIFOQueue.size()-1).toString();
-			}
-			return overview;
+//			String overview = "";
+//			if(FIFOQueue.size()<1 && !hasOrder()){
+//				overview = "No orders planned.";
+//			}
+//			else{
+//				for(int i = 0; i < FIFOQueue.size()-1; i++){
+//					overview = overview +"Car order "+ (i+1)+": " + FIFOQueue.get(i).toString()+"\n";
+//				}
+//				overview = overview +"Car order "+FIFOQueue.size() + FIFOQueue.get(FIFOQueue.size()-1).toString();
+//			}
+//			return overview;
+			
+			
 		}
-		
+		private boolean hasOrder(){
+			for(Workstation workstation : workStations){
+				if(workstation.getCurrentOrder()!=null)
+					return true;
+			}return false;
+		}
 //
 //		/**
 //		 * If the given order exists the estimated end time for the new order will be three hours
