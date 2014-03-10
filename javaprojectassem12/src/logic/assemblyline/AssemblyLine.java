@@ -195,14 +195,14 @@ public class AssemblyLine {
 				estimatedEndTime = estimatedEndTime.plusHours(4+i);
 				if(estimatedEndTime.getHourOfDay()>=shiftEndHour){
 					DateTime estDate = new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth()+1,shiftBeginHour,0);
-					estDate.plusHours(3+nextDayOrders);
+					
+					FIFOQueue.get(i).setEstimatedEndTime(estDate.plusHours(3+nextDayOrders));
+
 					nextDayOrders++;
-					FIFOQueue.get(i).setEstimatedEndTime(estDate);
 				}else if(estimatedEndTime.getHourOfDay()<shiftBeginHour){
 					DateTime estDate = new DateTime(2014,1,estimatedEndTime.getDayOfMonth()+1,6,0); 
-					estDate.plusHours(3+nextDayOrders);
+					FIFOQueue.get(i).setEstimatedEndTime(estDate.plusHours(3+nextDayOrders));
 					nextDayOrders++;
-					FIFOQueue.get(i).setEstimatedEndTime(estDate);
 				}else
 					FIFOQueue.get(i).setEstimatedEndTime(estimatedEndTime);
 			}
@@ -224,14 +224,15 @@ public class AssemblyLine {
 			estimatedEndTime = estimatedEndTime.plusHours(3+FIFOQueue.size());
 			if(estimatedEndTime.getHourOfDay()>=shiftEndHour){
 				DateTime estDate = new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth()+1,shiftBeginHour,0);
-				estDate.plusHours(3+nextDayOrders);
+				
+				
+				order.setEstimatedEndTime(estDate.plusHours(3+nextDayOrders));
 				nextDayOrders++;
-				order.setEstimatedEndTime(estDate);
 			}else if(estimatedEndTime.getHourOfDay()<shiftBeginHour){
 				DateTime estDate = new DateTime(2014,1,estimatedEndTime.getDayOfMonth()+1,6,0); 
-				estDate.plusHours(3+nextDayOrders);
+				
 				nextDayOrders++;
-				order.setEstimatedEndTime(estDate);
+				order.setEstimatedEndTime(estDate.plusHours(3+nextDayOrders));
 			}else
 				order.setEstimatedEndTime(estimatedEndTime);
 			
