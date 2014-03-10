@@ -197,15 +197,12 @@ public class AssemblyLine {
 		}
 
 		private void updateEstimatedTimeWorkStations() {
-			CarOrder next = workStations[0].getCurrentOrder();
-			if(next!=null)
-				next.setEstimatedEndTime(next.getEstimatedEndTime().plusHours(3));
-			next = workStations[1].getCurrentOrder();
-			if(next!=null)
-				next.setEstimatedEndTime(next.getEstimatedEndTime().plusHours(2));
-			next = workStations[2].getCurrentOrder();
-			if(next!=null)
-				next.setEstimatedEndTime(next.getEstimatedEndTime().plusHours(1));
+			
+			for(Workstation next: workStations){
+				if(next.getCurrentOrder()!= null)
+					next.getCurrentOrder().setEstimatedEndTime(next.getCurrentOrder().getEstimatedEndTime().plusHours(1));
+			}
+			
 		}
 
 		private void scheduleCarOrder(CarOrder order) {
