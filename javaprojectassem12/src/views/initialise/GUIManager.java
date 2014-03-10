@@ -27,10 +27,18 @@ public class GUIManager {
 			}
 			writer.write("\n");
 			writer.flush();
-			//TODO: future
+
+			writer.write("Future status:\n\n");
+			for(String s : maController.getFutureStatus()){
+				writer.write(s + "\n");
+			}
+			writer.write("\n");
+			writer.flush();
+			
 			int time = getTimeSpent();
 			if(this.maController.moveAssemblyLine(time)){
-				writer.write("Assembly line moved forward successfully.\n");
+				writer.write("Assembly line moved forward successfully.\n\n");
+				writer.write("Current status:\n\n");
 				for(String s : maController.getTasksPerWorkstation()){
 					writer.write(s + "\n");
 				}
@@ -39,12 +47,13 @@ public class GUIManager {
 				return;
 			}
 			else{
-				writer.write("Assembly line could not be moved forward successfully.\n");
+				writer.write("Assembly line could not be moved forward successfully.\n\n");
+				writer.write("Unfinished tasks:\n\n");
 				for(String s : maController.getUnfinishedTasks()){
 					writer.write(s + "\n");
 				}
 				writer.flush();
-				waitForCompletion("Press enter to finish. ");
+				waitForCompletion("Press enter to finish.\n");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -64,6 +73,8 @@ public class GUIManager {
 						writer.flush();
 						continue;
 					}
+					writer.write("\n");
+					writer.flush();
 					return time;
 				} catch(NumberFormatException e){
 					writer.write("\nInvalid input, try again. ");

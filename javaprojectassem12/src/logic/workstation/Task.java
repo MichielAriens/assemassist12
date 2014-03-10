@@ -57,7 +57,15 @@ public class Task {
 	 */
 	@Override
 	public String toString(){
-		return "Install " + this.part.type.toString() + ": " + this.part.toString();
+		return "Install " + this.part.type.toString() + "= " + this.part.toString();
+	}
+	
+	/**
+	 * Returns the string representation of the description of this task.
+	 * @return The string representation of the description of this task.
+	 */
+	public String getDescription(){
+		return "Task description:\n   -Type of part needed: " + this.part.type.toString() + ",\n   -Car Part: " + this.part.toString() + "\n";
 	}
 	
 }

@@ -40,14 +40,33 @@ public class MechanicController extends UserController{
 		ArrayList<String> tasks = new ArrayList<String>();
 		int count = 1;
 		for(Task task : this.mechanic.getAvailableTasks()){
-			tasks.add(task.toString() + ": " + count);
-			count++;
+			if(!task.isComplete()){
+				tasks.add(task.toString() + ": " + count);
+				count++;
+			}
 		}
 		return tasks;
 	}
 	
 	public String getTaskInformation(String taskName){
-		return "testy: " + taskName;
+		if(this.mechanic == null)
+			return null;
+		for(Task task : this.mechanic.getActiveWorkstation().getRequiredTasks()){
+			if(task.toString().equals(taskName))
+				return task.getDescription();
+		}
+		return null;
+	}
+	
+	public void doTask(String taskName){
+		if(this.mechanic == null)
+			return;
+		for(Task task : this.mechanic.getActiveWorkstation().getRequiredTasks()){
+			if(task.toString().equals(taskName)){
+				this.mechanic.doTask(task);
+				return;
+			}
+		}
 	}
 	
 	public void setWorkStation(String name){

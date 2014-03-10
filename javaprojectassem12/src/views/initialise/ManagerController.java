@@ -3,6 +3,7 @@ package views.initialise;
 import java.util.ArrayList;
 import java.util.List;
 
+import logic.car.CarOrder;
 import logic.users.Manager;
 import logic.workstation.Task;
 import logic.workstation.Workstation;
@@ -30,7 +31,7 @@ public class ManagerController extends UserController{
 		for(Workstation stat : workStations){
 			String temp = stat.toString() + ":\n";
 			if(stat.getRequiredTasks().size() == 0)
-				temp += "Inactive.";
+				temp += "Inactive.\n";
 			else{
 				for(Task task : stat.getRequiredTasks()){
 					String status = "Pending";
@@ -54,11 +55,31 @@ public class ManagerController extends UserController{
 				String temp = stat.toString() + ":\n";
 				for(Task task : stat.getRequiredTasks()){
 					if(!task.isComplete()){
-						temp += "   -Unfinished taks: " + task.toString() + "\n";
+						temp += "   -Unfinished task: " + task.toString() + "\n";
 					}
 				}
 				tasks.add(temp);
 			}
+		}
+		return tasks;
+	}
+	
+	public List<String> getFutureStatus(){
+		if(this.manager == null)
+			return null;
+		Workstation[] workStations = this.manager.getWorkstations();
+		ArrayList<String> tasks = new ArrayList<String>();
+		for(int i = 0; i < workStations.length; i++){
+			String temp = workStations[i].toString() + ":\n";
+			if(manager.askFutureSchedule().get(i) == null)
+				temp += "Inactive.\n";
+			else{
+				for(Task task : manager.askFutureSchedule().get(i).getTasks()){
+					if(workStations[i].isCompatibleTask(task))
+						temp += "   -" + task.toString() + ": Pending\n";
+				}
+			}
+			tasks.add(temp);
 		}
 		return tasks;
 	}

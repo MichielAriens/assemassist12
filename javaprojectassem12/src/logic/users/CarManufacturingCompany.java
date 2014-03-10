@@ -2,8 +2,11 @@ package logic.users;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import logic.assemblyline.AssemblyLine;
 import logic.car.CarOrder;
+import logic.workstation.Task;
 import logic.workstation.Workstation;
 
 /**
@@ -117,5 +120,13 @@ public class CarManufacturingCompany {
 	 */
 	public boolean moveAssemblyLine(int shiftDuration){
 		return this.assemblyLine.moveAssemblyLine(shiftDuration);
+	}
+	
+	/**
+	 * Returns the car orders that would be on the assembly line if the assembly line was progressed.
+	 * @return The list of car orders.
+	 */
+	public List<CarOrder> askFutureSchedule(){
+		return this.assemblyLine.askFutureSchedule();
 	}
 }

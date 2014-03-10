@@ -1,5 +1,8 @@
 package logic.users;
 
+import java.util.List;
+
+import logic.car.CarOrder;
 import logic.workstation.Workstation;
 
 public class Manager extends User{
@@ -15,5 +18,9 @@ public class Manager extends User{
 	
 	public boolean moveAssemblyLine(int shiftDuration){
 		return this.company.moveAssemblyLine(shiftDuration);
+	}
+	
+	public List<CarOrder> askFutureSchedule(){
+		return this.company.askFutureSchedule();
 	}
 }

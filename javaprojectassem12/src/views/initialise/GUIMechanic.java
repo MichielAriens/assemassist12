@@ -30,7 +30,6 @@ public class GUIMechanic {
 			writer.flush();
 			String answer = checkInput("Type the number of your current work station: ", this.meController.getWorkStations());
 			this.meController.setWorkStation(answer);
-			writer.write("\n");
 			writer.flush();
 			while(true){
 				selectTask();
@@ -76,8 +75,9 @@ public class GUIMechanic {
 			writer.write(tasks + "\n");
 			writer.flush();
 			String answer = checkInput("Type the number of your current task: ", this.meController.getTasks());
-			writer.write(meController.getTaskInformation(answer));
+			writer.write("\n" + meController.getTaskInformation(answer) + "\n");
 			waitForCompletion();
+			this.meController.doTask(answer);
 		} catch(IOException e){
 			e.printStackTrace();
 		}
@@ -85,7 +85,7 @@ public class GUIMechanic {
 	
 	private void waitForCompletion(){
 		try{
-			writer.write("Press enter when the task is done.");
+			writer.write("Press enter when the task is done.\n");
 			writer.flush();
 			reader.readLine();
 		} catch(IOException e){
