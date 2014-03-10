@@ -1,51 +1,48 @@
 package logic.workstation;
 
-
-
 import logic.car.CarPart;
 
-
 /**
- * 
- * @author Team 12
+ * Class used to describe a task that needs to be performed in order to complete a car order.
  */
 public class Task {
+	
+	/**
+	 * Flag keeping track of the completion of the task. 
+	 */
 	private boolean completed = false;
 	
-	private final CarPart part;
+	/**
+	 * The car part where upon the task needs to be performed.
+	 */
+	private final CarPart carPart;
 	
 	/**
-	 * Creates a task corresponding with the installation of the prt provided
-	 * @param part	The CarPart to install
+	 * Creates a task corresponding with the given car part.
+	 * @param part	The car part to perform the task on.
 	 */
 	public Task(CarPart part){
-		this.part = part;
+		this.carPart = part;
 	}
 	
 	/**
-	 * The CarPart corresponding to this task
+	 * Returns the car part corresponding to this task.
+	 * @return the car part corresponding to this task.
 	 */
 	public CarPart getCarPart(){
-		return part;
+		return carPart;
 	}
 	
 	/**
-	 * Perform this task.
-	 * @param endTime2
-	 * @param mechanic
+	 * Performs this task. Sets completed to true.
 	 */
 	public void perform(){
-		
-		if(this.isComplete()){
-			return;
-		}
 		this.completed = true;
-		
-	}
-	
+	}	
 	
 	/**
 	 * Checks whether the task is completed.
+	 * @return completed
 	 */
 	public boolean isComplete(){
 		return completed;
@@ -57,7 +54,7 @@ public class Task {
 	 */
 	@Override
 	public String toString(){
-		return "Install " + this.part.type.toString() + "= " + this.part.toString();
+		return "Install " + this.getCarPart().type.toString() + "= " + this.getCarPart().toString();
 	}
 	
 	/**
@@ -65,7 +62,7 @@ public class Task {
 	 * @return The string representation of the description of this task.
 	 */
 	public String getDescription(){
-		return "Task description:\n   -Type of part needed: " + this.part.type.toString() + ",\n   -Car Part: " + this.part.toString() + "\n";
+		return "Task description:\n   -Type of part needed: " + this.getCarPart().type.toString() + ",\n   -Car Part: " + this.getCarPart().toString() + "\n";
 	}
 	
 }
