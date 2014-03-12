@@ -11,7 +11,6 @@ import controllers.GarageHolderController;
 import controllers.ManagerController;
 import controllers.MechanicController;
 import controllers.UserController;
-import logic.users.*;
 
 /**
  * A command line interface class used to represent the main UI, which is used to let the users log in. 
@@ -22,15 +21,39 @@ public class UI {
 	 * The controller that offers this UI the methods to let a user log in.
 	 */
 	private AssemAssistController controller;
+	
+	/**
+	 * A buffered reader that reads from the System's input stream.
+	 */
 	private BufferedReader reader;
+	
+	/**
+	 * A buffered writer that writes to the System's output stream.
+	 */
 	private BufferedWriter writer;
+	
+	/**
+	 * A command line interface that is used by garage holders to interact with the AssemAssist system.
+	 */
 	private UIGarageHolder garageHolderUI;
+	
+	/**
+	 * A command line interface that is used by managers to interact with the AssemAssist system.
+	 */
 	private UIManager managerUI;
+	
+	/**
+	 * A command line interface that is used by mechanics to interact with the AssemAssist system.
+	 */
 	private UIMechanic mechanicUI;
 	
+	/**
+	 * Make a new UI with a given AssemAssistController.
+	 * @param controller	The AssemAssistController that will be used by this UI to let users log into the 
+	 * 						AssemAssist system.
+	 */
 	public UI(AssemAssistController controller){
 		this.controller = controller;
-		this.controller.setGUI(this);
 		this.reader= new BufferedReader(new InputStreamReader(System.in));
 		this.writer= new BufferedWriter(new OutputStreamWriter(System.out));
 		this.garageHolderUI = new UIGarageHolder(this.reader, this.writer);
@@ -39,6 +62,13 @@ public class UI {
 		this.run();
 	}
 	
+	
+	/**
+	 * A method that is called on startup of this UI, which asks the user for his username and presents
+	 * the user with a CLI corresponding to the user's function in the company.
+	 * After a user has finished his interactions with the system, this method will continue and another
+	 * user can log in.
+	 */
 	private void run() {
 		while(true){
 			UserController userCont;
@@ -65,6 +95,13 @@ public class UI {
 		}
 	}
 	
+	/**
+	 * A method that enables a log in attempt. It will prompt the user for his username and ask the controller
+	 * to log this user in.
+	 * @return	Returns null if the username that has been typed in by the user is not recognized as a valid
+	 * 			username by the AssemAssist system. 
+	 * 			Returns a UserController corresponding to the user's function within the company otherwise.
+	 */
 	private UserController login(){
 		try{
 			writer.write("====LOGIN====\nEnter username: ");
@@ -75,20 +112,4 @@ public class UI {
 			return null;
 		}
 	}
-
-	class Communication{
-		public void write(String input) throws IOException{
-			writer.write(input);
-			writer.flush();
-		}
-		public String readInput() throws IOException{
-			return reader.readLine();
-		}
-	}
-
-	public AssemAssistController getController() {
-		
-		return this.controller;
-	}
-
 }

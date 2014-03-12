@@ -8,7 +8,6 @@ import logic.users.Mechanic;
 import logic.users.User;
 
 public class AssemAssistController {
-	private UI ui;
 	private CarManufacturingCompany company;
 	private GarageHolderController ghController;
 	private ManagerController maController;
@@ -18,13 +17,6 @@ public class AssemAssistController {
 		this.ghController = new GarageHolderController();
 		this.maController = new ManagerController();
 		this.meController = new MechanicController();
-	}
-
-	public void setGUI(UI ui){
-		if(ui!=null && ui.getController() == this ){
-			this.ui = ui;
-		}
-		
 	}
 
 	public UserController logIn(String userName) {
