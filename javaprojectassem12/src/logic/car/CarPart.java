@@ -1,6 +1,8 @@
 package logic.car;
 
-
+/**
+ * An enum that represents the possible car parts.
+ */
 public enum CarPart {
 	BODY_SEDAN 			(CarPartType.Body, 		"Sedan"),
 	BODY_BREAK			(CarPartType.Body, 		"Break"),
@@ -21,19 +23,40 @@ public enum CarPart {
 	WHEELS_SPORTS		(CarPartType.Wheels, 	"sports (low profile)");
 	
 	
+	/**
+	 * The car part type of this car part.
+	 */
 	public final CarPartType type;
+	
+	/**
+	 * The full name of this car part.
+	 */
 	public final String fullName;
 	
+	/**
+	 * Make a CarPart with given car part type and full name.
+	 * @param type		The type of this car part.
+	 * @param fullName	The full name of this car part.
+	 */
 	CarPart(CarPartType type, String fullName){
 		this.type = type;
 		this.fullName = fullName;
 	}
 	
+	/**
+	 * Returns a string representation of this car part.
+	 */
 	@Override
 	public String toString(){
 		return this.fullName;
 	}
 	
+	/**
+	 * Returns the CarPart that corresponds with a given name.
+	 * @param name	The name of the car part that has to be searched.
+	 * @return	Returns null if the given name does not correspond with the full name of any car part.
+	 * 			Returns the car part whose full name corresponds with the given name otherwise.
+	 */
 	public static CarPart getPartfromString(String name){
 		CarPart part = null;
 		for(CarPart p : CarPart.values()){

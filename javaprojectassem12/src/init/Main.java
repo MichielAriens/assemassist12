@@ -16,6 +16,6 @@ public class Main {
 	public static void main(String[] args) {
 		CarManufacturingCompany company = new CarManufacturingCompany();
 		AssemAssistController controller = new AssemAssistController(company);
-		new UI(controller);
+		new UI(controller, System.in, System.out);
 	}
 }
