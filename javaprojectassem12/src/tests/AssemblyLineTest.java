@@ -14,11 +14,13 @@ import logic.car.CarOrder;
 import logic.car.CarPart;
 import logic.car.CarSpecification;
 import logic.users.CarManufacturingCompany;
+import logic.users.Manager;
 import logic.users.Mechanic;
 import logic.workstation.Task;
 import logic.workstation.Workstation;
 
 import org.joda.time.DateTime;
+import org.joda.time.MutableDateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -132,6 +134,62 @@ public class AssemblyLineTest {
 				assertFalse(orders.get(i).done());
 			}
 		}
+	}
+	
+	
+	/**
+	 * This test tests the correct propgation of espimated completiontimes in one day.
+	 */
+	@Test
+	public void testEstimatesEasy(){
+		// The day starts at 6:00. Let's pretend time passes to 14:45 without any orders.
+		DateTime now = cmcMotors.getCurrentTime();
+		cmcMotors.moveAssemblyLine(9 * 60 - 15);
+		now = now.plusMinutes(9 * 60 - 15);
+		assertTrue(eqiDateTime(cmcMotors.getCurrentTime(),now));
+		
+		//Lets start adding orders.
+		cmcMotors.addOrder(orders.get(0));
+		//the first car order is automatically added to the assemblyline. The estimated completion date should be in 3 hours.
+		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusHours(3)));//17:45
+		//Let's keep adding
+		cmcMotors.addOrder(orders.get(1));
+		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusHours(4)));//18:45
+		cmcMotors.addOrder(orders.get(2));
+		assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusHours(5)));//19:45
+		cmcMotors.addOrder(orders.get(3));
+		assertTrue(eqiDateTime(orders.get(3).getEstimatedEndTime(), now.plusHours(6)));//20:45
+		cmcMotors.addOrder(orders.get(4));
+		assertTrue(eqiDateTime(orders.get(4).getEstimatedEndTime(), now.plusHours(7)));//21:45
+		cmcMotors.addOrder(orders.get(5));
+		MutableDateTime mu = now.toMutableDateTime();
+		mu.addDays(1);
+		mu.setHourOfDay(9);mu.setMinuteOfHour(0);
+		assertTrue(eqiDateTime(orders.get(5).getEstimatedEndTime(), mu.toDateTime()));//9:00 the next day.
+	}
+	
+	
+	/**
+	 * Tests whether the two DateTime object provided describe the same moment in time accurate to the minute. 
+	 */
+	public static boolean eqiDateTime(DateTime a, DateTime b){
+		if(a.getYear() == b.getYear()){
+			if(a.getDayOfYear() == b.getDayOfYear()){
+				if(a.getMinuteOfDay() == b.getMinuteOfDay()){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	@Test
+	public void testEqiDateTime(){
+		DateTime a = DateTime.now();
+		DateTime b = a.plusMinutes(1);
+		assertFalse(eqiDateTime(a, b));
+		b = b.minusMinutes(1);
+		assertTrue(eqiDateTime(a, b));
 	}
 	
 	
