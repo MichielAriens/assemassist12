@@ -17,7 +17,7 @@ public class CarOrder {
 	/**
 	 * The time this car order was created.
 	 */
-	private DateTime startTime;
+	private DateTime startTime = null;
 	
 	/**
 	 * The time this car order was completed.
@@ -123,7 +123,8 @@ public class CarOrder {
 	 * @param startTime	Time to set the start time to.
 	 */
 	public void setStartTime(DateTime startTime) {
-		this.startTime = startTime;
+		if(startTime == null)
+			this.startTime = startTime;
 	}
 
 	/**

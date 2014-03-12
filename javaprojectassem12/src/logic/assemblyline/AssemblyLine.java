@@ -101,6 +101,15 @@ public class AssemblyLine {
 		}
 		return false;
 	}
+	
+	public void progressTime(int phaseDuration){
+		currentTime = currentTime.plusMinutes(phaseDuration);
+		if(currentTime.getHourOfDay()>=22 || currentTime.getHourOfDay()<6){
+			schedule.setNextDay();
+			
+		}
+		schedule.updateEstimatedTimes(phaseDuration);
+	}
 
 	/**
 	 * Checks if all the work stations are done.
