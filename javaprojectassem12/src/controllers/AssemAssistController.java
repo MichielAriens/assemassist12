@@ -1,5 +1,6 @@
-package views.initialise;
+package controllers;
 
+import views.GUI;
 import logic.users.CarManufacturingCompany;
 import logic.users.GarageHolder;
 import logic.users.Manager;

@@ -1,9 +1,10 @@
-package views.initialise;
+package views;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 
+import controllers.ManagerController;
 import logic.users.Manager;
 
 public class GUIManager {

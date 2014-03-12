@@ -1,4 +1,4 @@
-package views.initialise;
+package views;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -6,6 +6,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+import controllers.AssemAssistController;
+import controllers.GarageHolderController;
+import controllers.ManagerController;
+import controllers.MechanicController;
+import controllers.UserController;
 import logic.users.*;
 
 public class GUI {

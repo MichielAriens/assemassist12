@@ -1,6 +1,9 @@
-package views.initialise;
+package init;
+
 
 import logic.users.CarManufacturingCompany;
+import views.GUI;
+import controllers.AssemAssistController;
 
 public class Main {
 	public static void main(String[] args) {
