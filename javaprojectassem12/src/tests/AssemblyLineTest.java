@@ -126,7 +126,7 @@ public class AssemblyLineTest {
 			assemblyLine.moveAssemblyLine(60);
 		}
 		for(int i = 0; i < 10; i++){
-			if(i < 7){
+			if(i < 8){
 				assertTrue(orders.get(i).done());
 			}else{
 				assertFalse(orders.get(i).done());
