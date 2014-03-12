@@ -53,7 +53,7 @@ public class UseCaseGarageHolderTest {
 		//if the user does not want to place the newly created order, the use case ends here (alternate flow 2)
 		ghCont.placeOrder(form);
 		//print pending and completed orders (pending no longer empty)
-		assertNotEquals(new ArrayList<String>(), ghCont.getPendingOrders());
+		assertFalse(new ArrayList<String>().equals(ghCont.getPendingOrders()));
 		assertEquals(1, ghCont.getPendingOrders().size());
 		assertEquals(new ArrayList<String>(), ghCont.getCompletedOrders());
 		//the user indicates that he doesn't want to place a new order and the use case ends
