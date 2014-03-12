@@ -7,20 +7,44 @@ import java.util.ArrayList;
 
 import controllers.GarageHolderController;
 import logic.car.CarModel;
-import logic.car.CarPart;
 import logic.car.CarPartType;
-import logic.users.GarageHolder;
 
+/**
+ * A command line interface class used to represent the garage holder UI, which is used by garage holders
+ * to place orders and look up the status of placed orders.
+ */
 public class UIGarageHolder {
 	
+	/**
+	 * A buffered reader that reads from the System's input stream.
+	 */
 	private BufferedReader reader;
+	
+	/**
+	 * A buffered writer that writes to the System's output stream.
+	 */
 	private BufferedWriter writer;
+	
+	/**
+	 * The controller that offers this UI the methods to let the current garage holder place and review orders.
+	 */
 	private GarageHolderController ghController;
+	
+	/**
+	 * Make a new garage holder UI with a given reader and writer.
+	 * @param reader	The buffered reader made by the main UI, that reads from the System's input stream.
+	 * @param writer	The buffered writer made by the main UI, that writes to the System's output stream.
+	 */
 	public UIGarageHolder(BufferedReader reader, BufferedWriter writer) {
 		this.reader = reader;
 		this.writer = writer;
 	}
 	
+	/**
+	 * A method that is called by the main UI, when a garage holder has successfully logged in.
+	 * @param ghController	The GarageHolderController that offers this UI methods to place and review orders
+	 * 						for the garage holder that is currently logged in.
+	 */
 	public void run(GarageHolderController ghController){
 		this.ghController = ghController;
 		try {
@@ -41,6 +65,12 @@ public class UIGarageHolder {
 		}
 	}
 	
+	/**
+	 * A method that prompts the user with the given query and waits for a 'y' or 'n' answer from the user.
+	 * @param query	The query that has to be printed out.
+	 * @return		Returns true if the user has responded with a 'y' meaning yes.
+	 * 				Returns false if the user has responded with a 'n' meaning no.
+	 */
 	private boolean promptYesOrNo(String query){
 		try{
 			while(true){
@@ -60,7 +90,11 @@ public class UIGarageHolder {
 			return false;
 		}
 	}
-
+	
+	/**
+	 * A method that creates
+	 * @return
+	 */
 	private ArrayList<String> orderingForm(){
 		ArrayList<String> spec = new ArrayList<String>();
 		try{
