@@ -92,7 +92,7 @@ public class SystemTest {
 		//add a car order to the assembly line
 		makeAndPlaceOrder();
 		//check if the future schedule now contains a car order
-		assertNotEquals(orders, m.askFutureSchedule());
+		assertFalse(orders.equals(m.askFutureSchedule()));
 		//check if the assembly line refuses to move before all tasks are done
 		assertEquals(false, m.moveAssemblyLine(60));
 		//complete all tasks and check if the assembly line moves again

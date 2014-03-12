@@ -35,7 +35,7 @@ public class AccessoriesPost extends Workstation {
 	 */
 	@Override
 	public String toString(){
-		return "Accesories Post";
+		return "Accessories Post";
 	}
 
 }

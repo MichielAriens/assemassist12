@@ -1,6 +1,9 @@
 package tests;
 
 import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
 import logic.users.CarManufacturingCompany;
 
 import org.junit.Before;
@@ -23,7 +26,16 @@ public class UseCaseManagerTest {
 	
 	@Test
 	public void mainSuccesTest() {
+		//the manager logs in
 		ManagerController maCont = (ManagerController) controller.logIn("Wander");
+		assertEquals("Wander", maCont.getUserName());
+		//the system shows the current and future status of the assembly line
+		ArrayList<String> tasks = new ArrayList<String>();
+		tasks.add("Car Body Post:\nInactive.\n");
+		tasks.add("Drive Train Post:\nInactive.\n");
+		tasks.add("Accessories Post:\nInactive.\n");
+		assertEquals(tasks, maCont.getTasksPerWorkstation());
+		assertEquals(tasks, maCont.getFutureStatus());
 	}
 
 }
