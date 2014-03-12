@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 import logic.assemblyline.AssemblyLine;
 import logic.car.CarOrder;
 import logic.workstation.Workstation;
@@ -127,5 +129,13 @@ public class CarManufacturingCompany {
 	 */
 	public List<CarOrder> askFutureSchedule(){
 		return this.assemblyLine.askFutureSchedule();
+	}
+	
+	/**
+	 * Returns the current time in this factory.
+	 * @return	The current time (immutable)
+	 */
+	public DateTime getCurrentTime(){
+		return this.assemblyLine.getCurrentTime();
 	}
 }
