@@ -147,8 +147,6 @@ public class AssemblyLineTest {
 		DateTime now = cmcMotors.getCurrentTime();
 		cmcMotors.progressTime(9 * 60 - 15);
 		now = now.plusMinutes(9 * 60 - 15);
-		System.out.println(now.toString());
-		System.out.println(cmcMotors.getCurrentTime().toString());
 		assertTrue(eqiDateTime(cmcMotors.getCurrentTime(),now));
 		
 		//Lets start adding orders.
@@ -214,7 +212,8 @@ public class AssemblyLineTest {
 	@Test
 	public void testOvertime(){
 		DateTime start = cmcMotors.getCurrentTime();
-		cmcMotors.progressTime(17 * 60); // Should induce one hour of overtime & will set the time to the next day.
+		cmcMotors.progressTime(14 * 60); // Should induce one hour of overtime & will set the time to the next day.
+		cmcMotors.moveAssemblyLine(3 * 60);
 		assertTrue(eqiDateTime(start.plusDays(1), cmcMotors.getCurrentTime()));
 		//Today should end at 21:00 instead of 22:00. We'll set the time to 17:45 and plan two orders. The first can be completed today, the second tomorrow.
 		cmcMotors.progressTime(11 * 60 + 45);
@@ -225,10 +224,45 @@ public class AssemblyLineTest {
 		
 		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusHours(3)));
 		assertFalse(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusHours(4)));
-		
-		
-		
 	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testOvertimeOver2Hours(){
+		//GO to 18:00
+		cmcMotors.progressTime(12 * 60);
+		cmcMotors.addOrder(orders.get(0));
+		barry.setActiveWorkstation(cmcMotors.getWorkStations()[0]);
+		for(Task task : orders.get(0).getTasks()){
+			barry.doTask(task);
+		}
+		cmcMotors.moveAssemblyLine(180);
+		barry.setActiveWorkstation(cmcMotors.getWorkStations()[1]);
+		for(Task task : orders.get(0).getTasks()){
+			barry.doTask(task);
+		}
+		cmcMotors.moveAssemblyLine(180);
+		barry.setActiveWorkstation(cmcMotors.getWorkStations()[2]);
+		for(Task task : orders.get(0).getTasks()){
+			barry.doTask(task);
+		}
+		cmcMotors.moveAssemblyLine(180);
+		//A new day has started. The overtime is 5 hours. The work day stops on 17:00
+		//goto 13:59 the last moment to post an order.
+		cmcMotors.progressTime(7 * 60 + 59);
+		DateTime now = cmcMotors.getCurrentTime();
+		cmcMotors.addOrder(orders.get(1));
+		cmcMotors.addOrder(orders.get(2));
+		System.out.println("now: " + now.toString());
+		System.out.println(orders.get(1).getEstimatedEndTime().toString());
+		System.out.println(orders.get(2).getEstimatedEndTime().toString());
+		
+		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusHours(3)));
+		assertFalse(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusHours(4)));
+	}
+	
 	
 	
 	/**
