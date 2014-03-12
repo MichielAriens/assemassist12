@@ -58,7 +58,7 @@ public class AssemblyLineTest {
 	
 	/**
 	 * This test simulates a single CarOrder object propagating through the assemblyline.
-	 * This is a really in depth test, constantly checking the states of al involved actors.
+	 * This is a really in depth test, constantly checking the states of all involved actors.
 	 */
 	@Test
 	public void singleCarOrderPropagation(){
@@ -139,15 +139,16 @@ public class AssemblyLineTest {
 	
 	
 	/**
-	 * This test tests the correct propgation of espimated completiontimes in one day.
+	 * This test tests the correct propagation of estimated completion times.
 	 */
 	@Test
 	public void testEstimatesEasy(){
 		// The day starts at 6:00. Let's pretend time passes to 14:45 without any orders.
-		Map<CarOrder, DateTime> checkTimes = new HashMap<CarOrder, DateTime>();
 		DateTime now = cmcMotors.getCurrentTime();
-		cmcMotors.moveAssemblyLine(9 * 60 - 15);
+		cmcMotors.progressTime(9 * 60 - 15);
 		now = now.plusMinutes(9 * 60 - 15);
+		System.out.println(now.toString());
+		System.out.println(cmcMotors.getCurrentTime().toString());
 		assertTrue(eqiDateTime(cmcMotors.getCurrentTime(),now));
 		
 		//Lets start adding orders.
@@ -207,6 +208,28 @@ public class AssemblyLineTest {
 		
 	}
 	
+	/**
+	 * 
+	 */
+	@Test
+	public void testOvertime(){
+		DateTime start = cmcMotors.getCurrentTime();
+		cmcMotors.progressTime(17 * 60); // Should induce one hour of overtime & will set the time to the next day.
+		assertTrue(eqiDateTime(start.plusDays(1), cmcMotors.getCurrentTime()));
+		//Today should end at 21:00 instead of 22:00. We'll set the time to 17:45 and plan two orders. The first can be completed today, the second tomorrow.
+		cmcMotors.progressTime(11 * 60 + 45);
+		DateTime now = cmcMotors.getCurrentTime();
+		
+		cmcMotors.addOrder(orders.get(0));
+		cmcMotors.addOrder(orders.get(1));
+		
+		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusHours(3)));
+		assertFalse(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusHours(4)));
+		
+		
+		
+	}
+	
 	
 	/**
 	 * Tests whether the two DateTime object provided describe the same moment in time accurate to the minute. 
@@ -222,6 +245,9 @@ public class AssemblyLineTest {
 		return false;
 	}
 	
+	/**
+	 * Tests the correctness of eqiDateTime(...)
+	 */
 	@Test
 	public void testEqiDateTime(){
 		DateTime a = DateTime.now();
