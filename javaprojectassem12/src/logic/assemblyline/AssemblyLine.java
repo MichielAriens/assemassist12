@@ -188,7 +188,7 @@ public class AssemblyLine {
 		 */
 		private void calculateOverTime() {
 			if(currentTime.getHourOfDay()<shiftBeginHour){
-				overTime = 24-shiftEndHour+currentTime.getMinuteOfDay();
+				overTime = (24-shiftEndHour) * 60 + currentTime.getMinuteOfDay();
 			}else{
 				setOverTime((currentTime.getMinuteOfDay()-(shiftEndHour*60)));
 			}

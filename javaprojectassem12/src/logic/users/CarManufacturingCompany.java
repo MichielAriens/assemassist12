@@ -138,4 +138,12 @@ public class CarManufacturingCompany {
 	public DateTime getCurrentTime(){
 		return this.assemblyLine.getCurrentTime();
 	}
+	
+	/**
+	 * Progresses the time without moving the assembly line for example when handling emergency situations.
+	 * @param mins
+	 */
+	public void progressTime(int mins){
+		this.assemblyLine.progressTime(mins);
+	}
 }
