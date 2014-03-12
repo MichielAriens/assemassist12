@@ -255,9 +255,6 @@ public class AssemblyLineTest {
 		DateTime now = cmcMotors.getCurrentTime();
 		cmcMotors.addOrder(orders.get(1));
 		cmcMotors.addOrder(orders.get(2));
-		System.out.println("now: " + now.toString());
-		System.out.println(orders.get(1).getEstimatedEndTime().toString());
-		System.out.println(orders.get(2).getEstimatedEndTime().toString());
 		
 		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusHours(3)));
 		assertFalse(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusHours(4)));
