@@ -93,5 +93,11 @@ public class BasicUnitTestsTest {
 		System.out.println(carOrder);
 	}
 
+	@Test
+	public void testCarModel(){
+		CarModel model = CarModel.MODEL1;
+		
+		assertTrue(model.validPart(CarPart.AIRCO_AUTO));
+	}
 
 }
