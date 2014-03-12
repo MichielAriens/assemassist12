@@ -130,7 +130,8 @@ public class AssemblyLine {
 	 * @param order The car order to be scheduled.
 	 */
 	public void addCarOrder(CarOrder order){
-		schedule.scheduleCarOrder(order);
+		if(order != null)
+			schedule.scheduleCarOrder(order);
 	}
 
 	/**
