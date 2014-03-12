@@ -2,31 +2,50 @@ package controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import logic.car.CarOrder;
 import logic.users.Manager;
 import logic.workstation.Task;
 import logic.workstation.Workstation;
 
+/**
+ * Class used to form a link between the user interface and the Manager class.
+ */
 public class ManagerController extends UserController{
 
-	private Manager manager;
+	/**
+	 * The current manager.
+	 */
+	private Manager currentManager;
 	
+	/**
+	 * Sets the current manager to the given manager.
+	 * @param manager	The new manager.
+	 */
 	public void setManager(Manager manager) {
-		this.manager = manager;
+		this.currentManager = manager;
 	}
 
+	/**
+	 * Returns the user name of the current manager.
+	 * @return The user name of the current manager if the current manager is not null.
+	 * @return Null if the current manager is null.
+	 */
 	@Override
 	public String getUserName() {
-		if(this.manager != null)
-			return manager.getUserName();
+		if(this.currentManager != null)
+			return currentManager.getUserName();
 		return null;
 	}
 	
+	/**
+	 * Returns the list of tasks per workstation, stating pending and completed tasks
+	 * or stating inactive if there are no tasks at the workstation.
+	 * @return 	The list of tasks per workstation, stating pending and completed tasks
+	 *			or stating inactive if there are no tasks at the workstation.
+	 */
 	public List<String> getTasksPerWorkstation(){
-		if(this.manager == null)
+		if(this.currentManager == null)
 			return null;
-		Workstation[] workStations = this.manager.getWorkstations();
+		Workstation[] workStations = this.currentManager.getWorkstations();
 		ArrayList<String> tasks = new ArrayList<String>();
 		for(Workstation stat : workStations){
 			String temp = stat.toString() + ":\n";
@@ -45,10 +64,14 @@ public class ManagerController extends UserController{
 		return tasks;
 	}
 	
+	/**
+	 * Returns the list of unfinished tasks over all workstations.
+	 * @return the list of unfinished tasks over all workstations.
+	 */
 	public List<String> getUnfinishedTasks(){
-		if(this.manager == null)
+		if(this.currentManager == null)
 			return null;
-		Workstation[] workStations = this.manager.getWorkstations();
+		Workstation[] workStations = this.currentManager.getWorkstations();
 		ArrayList<String> tasks = new ArrayList<String>();
 		for(Workstation stat : workStations){
 			if(stat.getRequiredTasks().size()>0){
@@ -64,17 +87,22 @@ public class ManagerController extends UserController{
 		return tasks;
 	}
 	
+	/**
+	 * Returns the future status of the assembly line.
+	 * @return Null if the current manager is null.
+	 * @return The future status of the assembly line otherwise.
+	 */
 	public List<String> getFutureStatus(){
-		if(this.manager == null)
+		if(this.currentManager == null)
 			return null;
-		Workstation[] workStations = this.manager.getWorkstations();
+		Workstation[] workStations = this.currentManager.getWorkstations();
 		ArrayList<String> tasks = new ArrayList<String>();
 		for(int i = 0; i < workStations.length; i++){
 			String temp = workStations[i].toString() + ":\n";
-			if(manager.askFutureSchedule().get(i) == null)
+			if(currentManager.askFutureSchedule().get(i) == null)
 				temp += "Inactive.\n";
 			else{
-				for(Task task : manager.askFutureSchedule().get(i).getTasks()){
+				for(Task task : currentManager.askFutureSchedule().get(i).getTasks()){
 					if(workStations[i].isCompatibleTask(task))
 						temp += "   -" + task.toString() + ": Pending\n";
 				}
@@ -84,10 +112,16 @@ public class ManagerController extends UserController{
 		return tasks;
 	}
 	
-	public boolean moveAssemblyLine(int shiftDuration){
-		if(this.manager == null)
+	/**
+	 * Moves the assembly line with the given shift duration. 
+	 * @param phaseDuration	The time spent on the current phase in minutes.
+	 * @return False if the current manager is null.
+	 * @return False if the assembly line can not be moved.
+	 * @return True if the assembly line has been moved successfully.
+	 */
+	public boolean moveAssemblyLine(int phaseDuration){
+		if(this.currentManager == null)
 			return false;
-		return this.manager.moveAssemblyLine(shiftDuration);
+		return this.currentManager.moveAssemblyLine(phaseDuration);
 	}
-
 }
