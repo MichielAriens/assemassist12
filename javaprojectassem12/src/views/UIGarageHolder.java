@@ -10,7 +10,7 @@ import logic.car.CarModel;
 import logic.car.CarPartType;
 
 /**
- * A command line interface class used to represent the garage holder UI, which is used by garage holders
+ * A command line interface class used to represent the garage holder's UI, which is used by garage holders
  * to place orders and look up the status of placed orders.
  */
 public class UIGarageHolder {
@@ -92,8 +92,8 @@ public class UIGarageHolder {
 	}
 	
 	/**
-	 * A method that creates
-	 * @return
+	 * A method that lets the current garage holder fill out an ordering form for a new car order.
+	 * @return	An ArrayList containing all the information about the new car order in String format.
 	 */
 	private ArrayList<String> orderingForm(){
 		ArrayList<String> spec = new ArrayList<String>();
@@ -121,6 +121,13 @@ public class UIGarageHolder {
 		return spec;
 	}
 	
+	/**
+	 * A method that asks the user for input with a given query and then checks the user's answer with
+	 * a list of valid answers, and keeps repeating this until the user has given a valid answer.
+	 * @param query		The query that has to be printed out.
+	 * @param answers	The list of valid answers.
+	 * @return	The answer from the list that corresponds with the user's valid answer.
+	 */
 	private String checkInput(String query, ArrayList<String> answers){
 		try{
 			while(true){
@@ -142,6 +149,12 @@ public class UIGarageHolder {
 		}
 	}
 	
+	/**
+	 * A method that prints out the given title and then the list of Strings or 'None.' if this list is empty, this method is used to 
+	 * print out the list of pending and completed orders.
+	 * @param title		The title that has to be printed out at the top.
+	 * @param orders	The list of orders that has to be printed out.
+	 */
 	private void printOrders(String title, ArrayList<String> orders){
 		try {
 			writer.write(title + "\n");
@@ -150,7 +163,7 @@ public class UIGarageHolder {
 			}
 			else{
 				for(String order : orders){
-					writer.write("- " + order + "; \n");
+					writer.write("   - " + order + "; \n");
 				}
 			}
 			writer.write("\n");

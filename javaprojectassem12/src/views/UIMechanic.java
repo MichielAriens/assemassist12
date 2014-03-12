@@ -6,19 +6,40 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import controllers.MechanicController;
-import logic.users.Mechanic;
+
 
 public class UIMechanic {
 	
+	/**
+	 * A buffered reader that reads from the System's input stream.
+	 */
 	private BufferedReader reader;
+	
+	/**
+	 * A buffered writer that writes to the System's output stream.
+	 */
 	private BufferedWriter writer;
+	
+	/**
+	 * The controller that offers this UI the methods to let the current mechanic perform tasks.
+	 */
 	private MechanicController meController;
 	
+	/**
+	 * Make a new mechanic UI with a given reader and writer.
+	 * @param reader	The buffered reader made by the main UI, that reads from the System's input stream.
+	 * @param writer	The buffered writer made by the main UI, that writes to the System's output stream.
+	 */
 	public UIMechanic(BufferedReader reader, BufferedWriter writer) {
 		this.reader = reader;
 		this.writer = writer;
 	}
 	
+	/**
+	 * A method that is called by the main UI, when a mechanic has successfully logged in.
+	 * @param meController	The MechanicController that offers this UI methods to check workstations and
+	 * 						perform tasks.
+	 */
 	public void run(MechanicController meController){
 		this.meController = meController;
 		try {
@@ -42,6 +63,12 @@ public class UIMechanic {
 		}
 	}
 	
+	/**
+	 * A method that prompts the user with the given query and waits for a 'y' or 'n' answer from the user.
+	 * @param query	The query that has to be printed out.
+	 * @return		Returns true if the user has responded with a 'y' meaning yes.
+	 * 				Returns false if the user has responded with a 'n' meaning no.
+	 */
 	private boolean promptYesOrNo(String query){
 		try{
 			while(true){
@@ -62,6 +89,10 @@ public class UIMechanic {
 		}
 	}
 	
+	/**
+	 * A method that provides the current mechanic with the available tasks at his current workstation,
+	 * and lets the mechanic pick a task to perform if there are tasks available.
+	 */
 	private void selectTask(){
 		try{
 			if(meController.getTasks().size() == 0){
@@ -84,6 +115,11 @@ public class UIMechanic {
 		}
 	}
 	
+	
+	/**
+	 * A method that prints out the given query and waits until the user presses enter to continue.
+	 * @param query	The query that has to be printed out.
+	 */
 	private void waitForCompletion(){
 		try{
 			writer.write("Press enter when the task is done.\n");
@@ -94,6 +130,13 @@ public class UIMechanic {
 		}
 	}
 	
+	/**
+	 * A method that asks the user for input with a given query and then checks the user's answer with
+	 * a list of valid answers, and keeps repeating this until the user has given a valid answer.
+	 * @param query		The query that has to be printed out.
+	 * @param answers	The list of valid answers.
+	 * @return	The answer from the list that corresponds with the user's valid answer.
+	 */
 	private String checkInput(String query, ArrayList<String> answers){
 		try{
 			while(true){
