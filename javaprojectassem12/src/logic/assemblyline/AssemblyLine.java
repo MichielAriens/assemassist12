@@ -66,6 +66,7 @@ public class AssemblyLine {
 	}
 
 	/**
+	 * First checks if the phaseDuration is between 0 and 180 minutes.
 	 * Moves the car orders on the assembly line if every work station is ready and 
 	 * sets the end time of the first order to the given end time if there was an order 
 	 * in the last workstation. Then checks if it's the end of the day. If it is the end of the day,
@@ -77,6 +78,9 @@ public class AssemblyLine {
 	 * @return False if the assembly line can not be moved.
 	 */
 	public boolean moveAssemblyLine(int phaseDuration){
+		if(phaseDuration < 0 || phaseDuration > 180)
+				return false;
+		
 		if(checkWorkStations()){
 
 			this.currentTime = currentTime.plusMinutes(phaseDuration);
