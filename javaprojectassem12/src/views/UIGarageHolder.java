@@ -11,12 +11,12 @@ import logic.car.CarPart;
 import logic.car.CarPartType;
 import logic.users.GarageHolder;
 
-public class GUIGarageHolder {
+public class UIGarageHolder {
 	
 	private BufferedReader reader;
 	private BufferedWriter writer;
 	private GarageHolderController ghController;
-	public GUIGarageHolder(BufferedReader reader, BufferedWriter writer) {
+	public UIGarageHolder(BufferedReader reader, BufferedWriter writer) {
 		this.reader = reader;
 		this.writer = writer;
 	}

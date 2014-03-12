@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import controllers.MechanicController;
 import logic.users.Mechanic;
 
-public class GUIMechanic {
+public class UIMechanic {
 	
 	private BufferedReader reader;
 	private BufferedWriter writer;
 	private MechanicController meController;
 	
-	public GUIMechanic(BufferedReader reader, BufferedWriter writer) {
+	public UIMechanic(BufferedReader reader, BufferedWriter writer) {
 		this.reader = reader;
 		this.writer = writer;
 	}

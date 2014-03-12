@@ -13,22 +13,29 @@ import controllers.MechanicController;
 import controllers.UserController;
 import logic.users.*;
 
-public class GUI {
+/**
+ * A command line interface class used to represent the main UI, which is used to let the users log in. 
+ */
+public class UI {
+	
+	/**
+	 * The controller that offers this UI the methods to let a user log in.
+	 */
 	private AssemAssistController controller;
 	private BufferedReader reader;
 	private BufferedWriter writer;
-	private GUIGarageHolder garageHolderGui;
-	private GUIManager managerGui;
-	private GUIMechanic mechanicGui;
+	private UIGarageHolder garageHolderUI;
+	private UIManager managerUI;
+	private UIMechanic mechanicUI;
 	
-	public GUI(AssemAssistController controller){
+	public UI(AssemAssistController controller){
 		this.controller = controller;
 		this.controller.setGUI(this);
 		this.reader= new BufferedReader(new InputStreamReader(System.in));
 		this.writer= new BufferedWriter(new OutputStreamWriter(System.out));
-		this.garageHolderGui = new GUIGarageHolder(this.reader, this.writer);
-		this.managerGui = new GUIManager(this.reader, this.writer);
-		this.mechanicGui = new GUIMechanic(this.reader, this.writer);
+		this.garageHolderUI = new UIGarageHolder(this.reader, this.writer);
+		this.managerUI = new UIManager(this.reader, this.writer);
+		this.mechanicUI = new UIMechanic(this.reader, this.writer);
 		this.run();
 	}
 	
@@ -41,13 +48,13 @@ public class GUI {
 					break;
 			}
 			if(userCont instanceof GarageHolderController){
-				garageHolderGui.run((GarageHolderController)userCont);
+				garageHolderUI.run((GarageHolderController)userCont);
 			}
 			else if(userCont instanceof ManagerController){
-				managerGui.run((ManagerController)userCont);
+				managerUI.run((ManagerController)userCont);
 			}
 			else if(userCont instanceof MechanicController){
-				mechanicGui.run((MechanicController)userCont);
+				mechanicUI.run((MechanicController)userCont);
 			}
 			try {
 				writer.write("\n\n");

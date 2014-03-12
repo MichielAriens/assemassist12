@@ -7,13 +7,13 @@ import java.io.IOException;
 import controllers.ManagerController;
 import logic.users.Manager;
 
-public class GUIManager {
+public class UIManager {
 	
 	private BufferedReader reader;
 	private BufferedWriter writer;
 	private ManagerController maController;
 	
-	public GUIManager(BufferedReader reader, BufferedWriter writer) {
+	public UIManager(BufferedReader reader, BufferedWriter writer) {
 		this.reader = reader;
 		this.writer = writer;
 	}

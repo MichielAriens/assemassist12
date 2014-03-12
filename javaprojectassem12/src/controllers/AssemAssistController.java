@@ -1,6 +1,6 @@
 package controllers;
 
-import views.GUI;
+import views.UI;
 import logic.users.CarManufacturingCompany;
 import logic.users.GarageHolder;
 import logic.users.Manager;
@@ -8,7 +8,7 @@ import logic.users.Mechanic;
 import logic.users.User;
 
 public class AssemAssistController {
-	private GUI gui;
+	private UI ui;
 	private CarManufacturingCompany company;
 	private GarageHolderController ghController;
 	private ManagerController maController;
@@ -20,9 +20,9 @@ public class AssemAssistController {
 		this.meController = new MechanicController();
 	}
 
-	public void setGUI(GUI gui){
-		if(gui!=null && gui.getController() == this ){
-			this.gui = gui;
+	public void setGUI(UI ui){
+		if(ui!=null && ui.getController() == this ){
+			this.ui = ui;
 		}
 		
 	}
