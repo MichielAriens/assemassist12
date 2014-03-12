@@ -34,7 +34,7 @@ public class Task {
 	}
 	
 	/**
-	 * Performs this task. Sets completed to true.
+	 * Sets completed to true.
 	 */
 	public void perform(){
 		this.completed = true;
@@ -42,7 +42,8 @@ public class Task {
 	
 	/**
 	 * Checks whether the task is completed.
-	 * @return completed
+	 * @return True if the task is completed.
+	 * @return False otherwise.
 	 */
 	public boolean isComplete(){
 		return completed;

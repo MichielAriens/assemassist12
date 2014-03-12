@@ -47,9 +47,9 @@ public abstract class Workstation {
 	}
 	
 	/**
-	 * Checks whether all tasks, of the current order and that can be performed on this 
+	 * Checks whether all tasks, of the current order which can be performed on this 
 	 * workstation, have been completed.
-	 * @return 	True if and only if there exists no task that this workspace can 
+	 * @return 	True if and only if there isn't a task left that this workspace can 
 	 * 			complete for the current order.
 	 * @return	False otherwise.
 	 */
@@ -66,11 +66,11 @@ public abstract class Workstation {
 	
 	/**
 	 * Sets the given order as the current order. The task list will be cleared and updated
-	 * with the compatible task of the new order.
+	 * with the compatible task(s) of the new order.
 	 * @param order	Any car order. Can be completed, semi-completed, or not started.
 	 */
 	public void setOrder(CarOrder order){
-		if(null == order){
+		if(order == null){
 			this.currentOrder=null;
 			this.tasks.clear();
 		}else{

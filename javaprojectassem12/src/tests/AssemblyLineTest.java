@@ -6,7 +6,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import logic.assemblyline.AssemblyLine;
 import logic.car.CarModel;
@@ -14,7 +16,6 @@ import logic.car.CarOrder;
 import logic.car.CarPart;
 import logic.car.CarSpecification;
 import logic.users.CarManufacturingCompany;
-import logic.users.Manager;
 import logic.users.Mechanic;
 import logic.workstation.Task;
 import logic.workstation.Workstation;
@@ -143,6 +144,7 @@ public class AssemblyLineTest {
 	@Test
 	public void testEstimatesEasy(){
 		// The day starts at 6:00. Let's pretend time passes to 14:45 without any orders.
+		Map<CarOrder, DateTime> checkTimes = new HashMap<CarOrder, DateTime>();
 		DateTime now = cmcMotors.getCurrentTime();
 		cmcMotors.moveAssemblyLine(9 * 60 - 15);
 		now = now.plusMinutes(9 * 60 - 15);
@@ -166,6 +168,43 @@ public class AssemblyLineTest {
 		mu.addDays(1);
 		mu.setHourOfDay(9);mu.setMinuteOfHour(0);
 		assertTrue(eqiDateTime(orders.get(5).getEstimatedEndTime(), mu.toDateTime()));//9:00 the next day.
+	
+		cmcMotors.addOrder(orders.get(6));
+		assertTrue(eqiDateTime(orders.get(6).getEstimatedEndTime(), mu.toDateTime().plusHours(1)));//10:00 the next day.
+		
+
+		/**
+		 * Now we'll test what happens when the shifts move up without 
+		 */
+		for(Task task : cmcMotors.getWorkStations()[0].getRequiredTasks()){
+			barry.setActiveWorkstation(cmcMotors.getWorkStations()[0]);
+			barry.doTask(task);
+		}
+		//The cycle took shorter than expected. We'll test whether this is reflected in the estimates.
+		cmcMotors.moveAssemblyLine(45);
+		now = cmcMotors.getCurrentTime();
+		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusHours(2)));
+		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusHours(3)));
+		// orders for the next day should not have moved.
+		assertTrue(eqiDateTime(orders.get(5).getEstimatedEndTime(), mu.toDateTime()));
+		
+		/**
+		 * If a cycle is very short an order from the next day can 'jump forwards'
+		 */
+		// Do all tasks
+		for(int i = 0; i < cmcMotors.getWorkStations().length; i++){
+			Workstation ws = cmcMotors.getWorkStations()[i];
+			barry.setActiveWorkstation(ws);
+			for(Task task : ws.getRequiredTasks()){
+				barry.doTask(task);
+			}
+		}
+		//Progress the line
+		cmcMotors.moveAssemblyLine(29);
+		now = cmcMotors.getCurrentTime();
+		assertTrue(eqiDateTime(orders.get(5).getEstimatedEndTime(), now.plusHours(6)));
+		
+		
 	}
 	
 	
