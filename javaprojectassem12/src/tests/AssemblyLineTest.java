@@ -266,6 +266,16 @@ public class AssemblyLineTest {
 		assertFalse(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusHours(4)));
 	}
 	
+	/**
+	 * 
+	 */
+	@Test
+	public void testProgressTime(){
+		DateTime now = cmcMotors.getCurrentTime();
+		cmcMotors.progressTime(22 * 60);
+		assertTrue(eqiDateTime(cmcMotors.getCurrentTime(), now.plusDays(1)));
+	}
+	
 	
 	
 	/**
