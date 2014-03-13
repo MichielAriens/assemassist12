@@ -39,35 +39,6 @@ public class UseCaseMechanic {
 		mCont.setWorkStation("Car Body Post");
 		ArrayList<String> tasks = new ArrayList<String>();
 		assertEquals(tasks,mCont.getTasks());
-		
-		
-//		assertEquals(new ArrayList<String>(), ghCont.getCompletedOrders());
-//		//if the user does not want to make a new order, the use case ends here (alternate flow 1)
-//		//the user fills in an ordering form on the gui:
-//		ArrayList<String> models = new ArrayList<String>();
-//		models.add("Model1: 1");
-//		assertEquals(models, ghCont.getModels());
-//		ArrayList<String> bodyParts = new ArrayList<String>();
-//		bodyParts.add("Sedan: 1");
-//		bodyParts.add("Break: 2");
-//		assertEquals(bodyParts, ghCont.getOptions(CarPartType.Body, CarModel.MODEL1));
-//		ArrayList<String> form = new ArrayList<String>();
-//		form.add("Model1");
-//		form.add("Sedan");
-//		form.add("Red");
-//		form.add("Standard 2l 4 cilinders");
-//		form.add("6 speed manual");
-//		form.add("leather black");
-//		form.add("manual");
-//		form.add("comfort");
-//		//user places the order:
-//		//if the user does not want to place the newly created order, the use case ends here (alternate flow 2)
-//		ghCont.placeOrder(form);
-//		//print pending and completed orders (pending no longer empty)
-//		assertNotEquals(new ArrayList<String>(), ghCont.getPendingOrders());
-//		assertEquals(1, ghCont.getPendingOrders().size());
-//		assertEquals(new ArrayList<String>(), ghCont.getCompletedOrders());
-		//the user indicates that he doesn't want to place a new order and the use case ends
 	}
 
 }
