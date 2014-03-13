@@ -40,8 +40,8 @@ public class Mechanic extends User{
 	
 	/**
 	 * Returns whether the mechanic is working at any workstation.
-	 * @return False if the active workstation is null.
-	 * @return True otherwise.
+	 * @return 	False if the active workstation is null.
+	 * 			True otherwise.
 	 */
 	public boolean isPosted(){
 		return this.getActiveWorkstation() != null;
@@ -50,8 +50,8 @@ public class Mechanic extends User{
 	/**
 	 * Performs a task if the task is compatible with the active workstation of the mechanic.
 	 * @param task	The task that needs to be performed.
-	 * @return True if the task is compatible with the active workstation.
-	 * @return False otherwise.
+	 * @return 	True if the task is compatible with the active workstation.
+	 * 			False otherwise.
 	 */
 	public boolean doTask(Task task){
 		if (getActiveWorkstation().isCompatibleTask(task)){
@@ -66,7 +66,7 @@ public class Mechanic extends User{
 	 * if the mechanic has no active workstation.
 	 * @return	The list of tasks that need to be performed at the active workstation 
 	 * 			if the active workstation is not null.
-	 * @return	Null otherwise.
+	 * 			Null otherwise.
 	 */
 	public List<Task> getAvailableTasks(){
 		if(!isPosted())
