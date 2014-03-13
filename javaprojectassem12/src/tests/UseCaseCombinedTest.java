@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import controllers.AssemAssistController;
 import controllers.GarageHolderController;
+import controllers.ManagerController;
 import controllers.MechanicController;
 
 public class UseCaseCombinedTest {
@@ -63,16 +64,43 @@ public class UseCaseCombinedTest {
 		assertEquals(new ArrayList<String>(), ghCont.getCompletedOrders());
 		//the user indicates that he doesn't want to place a new order and the use case ends
 		
+		//The manager tries to forward the assembly line but it's not possible
+		//the manager logs in
+		ManagerController maCont = (ManagerController) controller.logIn("Wander");
+		assertEquals("Wander", maCont.getUserName());
+		//the system shows the current and future status of the assembly line
+		ArrayList<String> tasks = new ArrayList<String>();
+		tasks.add("Car Body Post:\n   -Install Body= Sedan: Pending\n   -Install Colour= Red: Pending\n");
+		tasks.add("Drive Train Post:\nInactive.\n");
+		tasks.add("Accessories Post:\nInactive.\n");
+		assertEquals(tasks, maCont.getTasksPerWorkstation());
+		tasks.clear();
+		tasks.add("Car Body Post:\nInactive.\n");
+		tasks.add("Drive Train Post:\n   -Install Engine= Standard 2l 4 cilinders: Pending\n   -Install Gearbox= 6 speed manual: Pending\n");
+		tasks.add("Accessories Post:\nInactive.\n");
+		assertEquals(tasks, maCont.getFutureStatus());
+		//the user confirms that he wants to move the assembly line forward.
+		maCont.moveAssemblyLine(55); //the user enters the time in minutes spent at the current phase.
+		//There are still pending tasks, so the assembly line can't be moved forward and the system prints the unfinished tasks.
+		ArrayList<String> unfinished = new ArrayList<String>();
+		unfinished.add("Car Body Post:\n   -Unfinished task: Install Body= Sedan\n   -Unfinished task: Install Colour= Red\n");
+		assertEquals(unfinished, maCont.getUnfinishedTasks());
+		//the user then indicates he wants to leave the overview and the use case ends here
+		
 		//mechanic performs tasks on the car order.
+		//mechanic logs in
 		MechanicController mCont = (MechanicController) controller.logIn("Joren");
 		assertEquals("Joren", mCont.getUserName());
+		//the system prints out a list of workstations that the mechanic can choose from
 		ArrayList<String> workstations = new ArrayList<String>();
 		workstations.add("Car Body Post: 1");
 		workstations.add("Drive Train Post: 2");
 		workstations.add("Accessories Post: 3");
 		assertEquals(workstations, mCont.getWorkStations());
+		//the mechanic chooses the first work station
 		mCont.setWorkStation("Car Body Post");
-		ArrayList<String> tasks = new ArrayList<String>();
+		//The system prints out a list of tasks that the mechanic can perform in this workstation
+		tasks = new ArrayList<String>();
 		tasks.add("Install Body= Sedan: 1");
 		tasks.add("Install Colour= Red: 2");
 		assertEquals(tasks,mCont.getTasks());
@@ -81,7 +109,37 @@ public class UseCaseCombinedTest {
 		//The system shows information for this task and waits until the user indicates that he is done.
 		String info = "Task description:\n   -Type of part needed: Body,\n   -Car Part: Sedan\n";
 		assertEquals(info, mCont.getTaskInformation("Install Body= Sedan"));
+		//The system asks if the user wants to perform another task, and the user answers with yes
+		tasks.clear();
+		tasks.add("Install Colour= Red: 1");
+		assertEquals(tasks,mCont.getTasks());
+		//The mechanic chooses to perform the first task
+		mCont.doTask("Install Colour= Red");
+		//The system shows information for this task and waits until the user indicates that he is done.
+		info = "Task description:\n   -Type of part needed: Colour,\n   -Car Part: Red\n";
+		assertEquals(info, mCont.getTaskInformation("Install Colour= Red"));
+		//The system asks if the user wants to perform another task, and the user answers with no, the use case ends here
 		
+		//the manager successfully moves the assembly line forward
+		//the manager logs in
+		maCont = (ManagerController) controller.logIn("Wander");
+		assertEquals("Wander", maCont.getUserName());
+		//the system shows the current and future status of the assembly line
+		tasks = new ArrayList<String>();
+		tasks.add("Car Body Post:\n   -Install Body= Sedan: Completed\n   -Install Colour= Red: Completed\n");
+		tasks.add("Drive Train Post:\nInactive.\n");
+		tasks.add("Accessories Post:\nInactive.\n");
+		assertEquals(tasks, maCont.getTasksPerWorkstation());
+		tasks.clear();
+		tasks.add("Car Body Post:\nInactive.\n");
+		tasks.add("Drive Train Post:\n   -Install Engine= Standard 2l 4 cilinders: Pending\n   -Install Gearbox= 6 speed manual: Pending\n");
+		tasks.add("Accessories Post:\nInactive.\n");
+		assertEquals(tasks, maCont.getFutureStatus());
+		//the user confirms that he wants to move the assembly line forward.
+		maCont.moveAssemblyLine(55); //the user enters the time in minutes spent at the current phase.
+		//since there were no car orders, the status hasn't changed.
+		assertEquals(tasks, maCont.getTasksPerWorkstation());
+		//the user then indicates he wants to leave the overview and the use case ends here
 		
 	}
 
