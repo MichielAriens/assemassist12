@@ -74,8 +74,8 @@ public class AssemblyLine {
 	 * the car orders. It also calculates the overtime made during that day. Else just updates the
 	 * estimated time of the car orders.
 	 * @param phaseDuration The time in minutes representing the duration of the current phase.
-	 * @return True if the assembly line can be moved.
-	 * @return False if the assembly line can not be moved.
+	 * @return	False if the assembly line can not be moved.
+	 * 			True otherwise.
 	 */
 	public boolean moveAssemblyLine(int phaseDuration){
 		if(phaseDuration < 0 || phaseDuration > 180)
@@ -113,8 +113,8 @@ public class AssemblyLine {
 
 	/**
 	 * Checks if all the work stations are done.
-	 * @return true if all work stations are done.
-	 * @return false if one or more work stations are not done.
+	 * @return 	True if all work stations are done.
+	 * 			False if one or more work stations are not done.
 	 */
 	private boolean checkWorkStations() {
 		for(int i = 0; i < numberOfWorkStations; i++){
@@ -146,8 +146,8 @@ public class AssemblyLine {
 	/**
 	 * Returns a list of 3 car orders which would be in the workstations 
 	 * if the assembly is moved by the manager.
-	 * @return A list of car orders which would be in the workstations 
-	 * if the assembly line should move.
+	 * @return	A list of car orders which would be in the workstations 
+	 * 			if the assembly line should move.
 	 */
 	public List<CarOrder> askFutureSchedule(){
 		return schedule.getFutureSchedule();
@@ -221,8 +221,8 @@ public class AssemblyLine {
 
 		/**
 		 * Checks if it is the end of the working day, if it is returns true, else returns false.
-		 * @return True if all workstations are done and it is later than the end hour of the shift 
-		 * 		   minus the overtime or earlier than the begin hour of the shift.
+		 * @return 	True if all workstations are done and it is later than the end hour of the shift 
+		 * 		  	minus the overtime or earlier than the begin hour of the shift.
 		 * 			False otherwise.
 		 */
 		private boolean checkEndOfDay() {
@@ -365,6 +365,4 @@ public class AssemblyLine {
 		}
 
 	}
-
-
 }
