@@ -102,6 +102,12 @@ public class AssemblyLine {
 		return false;
 	}
 	
+	/**
+	 * Progresses time without progressing the assembly line. 
+	 * Does no checks as to the state of the line or overtime. As such this method can simulate prolonged idle time on the assemblyline.
+	 * Overtime will be carried to the next day if the invocation results in a moment between shifts.
+	 * @param phaseDuration		The duration of idle time in minutes.
+	 */
 	public void progressTime(int phaseDuration){
 		currentTime = currentTime.plusMinutes(phaseDuration);
 		if(currentTime.getHourOfDay()>=22 || currentTime.getHourOfDay()<6){
