@@ -1,7 +1,8 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
 import logic.car.CarModel;
@@ -9,9 +10,6 @@ import logic.car.CarOrder;
 import logic.car.CarPart;
 import logic.car.CarSpecification;
 
-import java.security.InvalidParameterException;
-
-import org.junit.Before;
 import org.junit.Test;
 
 public class BasicUnitTestsTest {
