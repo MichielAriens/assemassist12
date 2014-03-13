@@ -267,13 +267,30 @@ public class AssemblyLineTest {
 	}
 	
 	/**
-	 * 
+	 * Tests whether progressTime() starts a new day when the invokation would result in a time outside working hours.
 	 */
 	@Test
 	public void testProgressTime(){
 		DateTime now = cmcMotors.getCurrentTime();
 		cmcMotors.progressTime(22 * 60);
 		assertTrue(eqiDateTime(cmcMotors.getCurrentTime(), now.plusDays(1)));
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testNegativeOvertime(){
+		int day1 = cmcMotors.getCurrentTime().getDayOfYear();
+		cmcMotors.progressTime(12 * 60 + 30); //18:30
+		cmcMotors.moveAssemblyLine(60);//This will end the day and result in a theoretical overtime of -30. The overtime will be set to 0.
+		//We can't access the overtime directly, however progressing time to 21:59 should not result in a day switch.
+		assertTrue(cmcMotors.getCurrentTime().getDayOfYear() == day1 + 1);
+		cmcMotors.progressTime(12 * 60 + 59);
+		cmcMotors.moveAssemblyLine(3 * 60);//6:00 -> 21:59 (in two steps. Progress time ignores overtime)
+		assertTrue(cmcMotors.getCurrentTime().getDayOfYear() == day1 + 1);
+		cmcMotors.moveAssemblyLine(2);
+		assertTrue(cmcMotors.getCurrentTime().getDayOfYear() == day1 + 2);
 	}
 	
 	
