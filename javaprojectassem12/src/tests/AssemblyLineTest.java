@@ -32,6 +32,11 @@ public class AssemblyLineTest {
 	private List<CarOrder> orders = new ArrayList<CarOrder>();
 	private Mechanic barry;
 	
+	/**
+	 * We start by setting up an environment with assets commonly used by the test suite in the prequel.
+	 * This contains an AssemblyLine object and a list of CarOrder objects ready to launch on the assemblyline.
+	 * A mechanic is provided to work on the orders. A CarManufacturingCompany is included.  
+	 */
 	@Before
 	public void prequel(){
 		cmcMotors = new CarManufacturingCompany();
@@ -65,6 +70,7 @@ public class AssemblyLineTest {
 		DateTime startTime = assemblyLine.getCurrentTime();
 		assertFalse(orders.get(0).done());
 		assemblyLine.addCarOrder(orders.get(0));
+		/* Now we progress the line */
 		assemblyLine.moveAssemblyLine(0);
 		assertFalse(orders.get(0).done());
 		assertFalse(assemblyLine.moveAssemblyLine(60));
