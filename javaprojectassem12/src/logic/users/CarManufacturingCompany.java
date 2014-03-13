@@ -54,9 +54,12 @@ public class CarManufacturingCompany {
 	 * Initializes the users of this car manufacturing company.
 	 */
 	private void initialise() {
-		validNamesGarageHolders.add("Jex");
+		validNamesGarageHolders.add("Jeroen");
+		validNamesGarageHolders.add("gar");
 		validNamesManager.add("Wander");
+		validNamesManager.add("man");
 		validNamesMechanic.add("Joren");
+		validNamesMechanic.add("mech");
 		validNamesGarageHolders.add("Michiel");
 	}
 
