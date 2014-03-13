@@ -8,7 +8,6 @@ import logic.car.CarModel;
 import logic.car.CarPartType;
 import logic.users.CarManufacturingCompany;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import controllers.AssemAssistController;
@@ -16,29 +15,28 @@ import controllers.GarageHolderController;
 import controllers.ManagerController;
 import controllers.MechanicController;
 
+/**
+ * A test case to test the use case in which all users work together, the idea is to provide
+ * a realistic simulation of the system use.
+ */
 public class UseCaseCombinedTest {
-
-	private CarManufacturingCompany company;
-	private AssemAssistController controller;
 	
-	@Before
-	public void prelude(){
-		company = new CarManufacturingCompany();
-		controller = new AssemAssistController(company);
-	}
-
+	/**
+	 * The main test.
+	 */
 	@Test
 	public void mainSuccesTest() {
+		AssemAssistController controller = new AssemAssistController(new CarManufacturingCompany());
 		
 		//The garage holder adds a car order:
-		
+		//The garage holder logs in
 		GarageHolderController ghCont = (GarageHolderController) controller.logIn("Michiel");
 		assertEquals("Michiel", ghCont.getUserName());
-		//print pending and completed orders (currently empty)
+		//the system prints the pending and completed orders (both are currently empty)
 		assertEquals(new ArrayList<String>(), ghCont.getPendingOrders());
 		assertEquals(new ArrayList<String>(), ghCont.getCompletedOrders());
-		//if the user does not want to make a new order, the use case ends here (alternate flow 1)
-		//the user fills in an ordering form on the gui:
+		//if the user does not want to make a new order, the use case ends here (garage holder alternate flow 1)
+		//the user fills in an ordering form on the user interface:
 		ArrayList<String> models = new ArrayList<String>();
 		models.add("Model1: 1");
 		assertEquals(models, ghCont.getModels());
@@ -55,16 +53,16 @@ public class UseCaseCombinedTest {
 		form.add("leather black");
 		form.add("manual");
 		form.add("comfort");
-		//user places the order:
-		//if the user does not want to place the newly created order, the use case ends here (alternate flow 2)
+		//the user places the order:
+		//if the user does not want to place the newly created order, the use case ends here (garage holder alternate flow 2)
 		ghCont.placeOrder(form);
-		//print pending and completed orders (pending no longer empty)
+		//the system prints the pending and completed orders (pending orders is no longer empty)
 		assertFalse(new ArrayList<String>().equals(ghCont.getPendingOrders()));
 		assertEquals(1, ghCont.getPendingOrders().size());
 		assertEquals(new ArrayList<String>(), ghCont.getCompletedOrders());
-		//the user indicates that he doesn't want to place a new order and the use case ends
+		//the user indicates that he doesn't want to place a new order and the garage holder main use case ends
 		
-		//The manager tries to forward the assembly line but it's not possible
+		//The manager tries to forward the assembly line but it's not possible (manager alternate flow)
 		//the manager logs in
 		ManagerController maCont = (ManagerController) controller.logIn("Wander");
 		assertEquals("Wander", maCont.getUserName());
@@ -85,7 +83,7 @@ public class UseCaseCombinedTest {
 		ArrayList<String> unfinished = new ArrayList<String>();
 		unfinished.add("Car Body Post:\n   -Unfinished task: Install Body= Sedan\n   -Unfinished task: Install Colour= Red\n");
 		assertEquals(unfinished, maCont.getUnfinishedTasks());
-		//the user then indicates he wants to leave the overview and the use case ends here
+		//the user then indicates he wants to leave the overview and the manager use case alternate flow ends here
 		
 		//mechanic performs tasks on the car order.
 		//mechanic logs in
@@ -105,20 +103,20 @@ public class UseCaseCombinedTest {
 		tasks.add("Install Colour= Red: 2");
 		assertEquals(tasks,mCont.getTasks());
 		//The mechanic chooses to perform the first task
-		mCont.doTask("Install Body= Sedan");
 		//The system shows information for this task and waits until the user indicates that he is done.
 		String info = "Task description:\n   -Type of part needed: Body,\n   -Car Part: Sedan\n";
 		assertEquals(info, mCont.getTaskInformation("Install Body= Sedan"));
+		mCont.doTask("Install Body= Sedan");
 		//The system asks if the user wants to perform another task, and the user answers with yes
 		tasks.clear();
-		tasks.add("Install Colour= Red: 1");
+		tasks.add("Install Colour= Red: 1"); //now there will be only one available task
 		assertEquals(tasks,mCont.getTasks());
 		//The mechanic chooses to perform the first task
-		mCont.doTask("Install Colour= Red");
 		//The system shows information for this task and waits until the user indicates that he is done.
 		info = "Task description:\n   -Type of part needed: Colour,\n   -Car Part: Red\n";
 		assertEquals(info, mCont.getTaskInformation("Install Colour= Red"));
-		//The system asks if the user wants to perform another task, and the user answers with no, the use case ends here
+		mCont.doTask("Install Colour= Red");
+		//The system asks if the user wants to perform another task, and the user answers with no (mechanic alternate flow), the use case ends here
 		
 		//the manager successfully moves the assembly line forward
 		//the manager logs in
@@ -137,7 +135,7 @@ public class UseCaseCombinedTest {
 		assertEquals(tasks, maCont.getFutureStatus());
 		//the user confirms that he wants to move the assembly line forward.
 		maCont.moveAssemblyLine(55); //the user enters the time in minutes spent at the current phase.
-		//since there were no car orders, the status hasn't changed.
+		//The current status now equals the previous future status
 		assertEquals(tasks, maCont.getTasksPerWorkstation());
 		//the user then indicates he wants to leave the overview and the use case ends here
 		

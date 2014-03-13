@@ -8,31 +8,30 @@ import logic.car.CarModel;
 import logic.car.CarPartType;
 import logic.users.CarManufacturingCompany;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import controllers.*;
 
+/**
+ * A test case to test the use case of the garage holder. The other actors don't interact with the
+ * system in this test case, but this is done in the UseCaseCombinedTest case.
+ */
 public class UseCaseGarageHolderTest {
-	
-	private CarManufacturingCompany company;
-	private AssemAssistController controller;
-	
-	@Before
-	public void prelude(){
-		company = new CarManufacturingCompany();
-		controller = new AssemAssistController(company);
-	}
 
+	/**
+	 * The main test.
+	 */
 	@Test
 	public void mainSuccesTest() {
+		AssemAssistController controller = new AssemAssistController(new CarManufacturingCompany());
+		
 		GarageHolderController ghCont = (GarageHolderController) controller.logIn("Michiel");
 		assertEquals("Michiel", ghCont.getUserName());
-		//print pending and completed orders (currently empty)
+		//The system prints the pending and completed orders (both are currently empty)
 		assertEquals(new ArrayList<String>(), ghCont.getPendingOrders());
 		assertEquals(new ArrayList<String>(), ghCont.getCompletedOrders());
 		//if the user does not want to make a new order, the use case ends here (alternate flow 1)
-		//the user fills in an ordering form on the gui:
+		//the user fills in an ordering form on the user interface:
 		ArrayList<String> models = new ArrayList<String>();
 		models.add("Model1: 1");
 		assertEquals(models, ghCont.getModels());
@@ -52,7 +51,7 @@ public class UseCaseGarageHolderTest {
 		//user places the order:
 		//if the user does not want to place the newly created order, the use case ends here (alternate flow 2)
 		ghCont.placeOrder(form);
-		//print pending and completed orders (pending no longer empty)
+		//the system prints the pending and completed orders (pending orders is no longer empty)
 		assertFalse(new ArrayList<String>().equals(ghCont.getPendingOrders()));
 		assertEquals(1, ghCont.getPendingOrders().size());
 		assertEquals(new ArrayList<String>(), ghCont.getCompletedOrders());
