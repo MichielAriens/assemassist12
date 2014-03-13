@@ -129,8 +129,8 @@ public class CarOrder {
 
 	/**
 	 * Checks if this car order is completed by checking if all its tasks are completed.
-	 * @return True if this car order is completed.
-	 * @return False if this car order is not completed.
+	 * @return 	True if this car order is completed.
+	 * 			False if this car order is not completed.
 	 */
 	public boolean done(){
 		boolean retVal = true;
@@ -145,7 +145,7 @@ public class CarOrder {
 	
 	/**
 	 * Returns a string representation of this car order.
-	 * @return	Returns the estimated end time followed by the car specification.
+	 * @return	The estimated end time followed by the car specification.
 	 */
 	@Override
 	public String toString(){

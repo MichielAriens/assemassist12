@@ -77,10 +77,10 @@ public class MechanicController extends UserController{
 	/**
 	 * Returns the task information for the given task.
 	 * @param taskName	The task for which the information needs to be returned.
-	 * @return 	Null if the mechanic is null or if the given task name does not correspond 
-	 * 			with any of the tasks of the workstation the current mechanic is currently 
-	 * 			working on. 
-	 * 			The task information otherwise.
+	 * @return 	Returns null if:
+	 * 			- the mechanic is null
+	 * 			- the given task name does not correspond with any of the tasks of the workstation
+	 * 			Returns the task information otherwise.
 	 */
 	public String getTaskInformation(String taskName){
 		if(this.currentMechanic == null)

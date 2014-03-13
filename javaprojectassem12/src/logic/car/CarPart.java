@@ -54,8 +54,8 @@ public enum CarPart {
 	/**
 	 * Returns the CarPart that corresponds with a given name.
 	 * @param name	The name of the car part that has to be searched.
-	 * @return	Returns null if the given name does not correspond with the full name of any car part.
-	 * 			Returns the car part whose full name corresponds with the given name otherwise.
+	 * @return	Null if the given name does not correspond with the full name of any car part.
+	 * 			The car part whose full name corresponds with the given name otherwise.
 	 */
 	public static CarPart getPartfromString(String name){
 		CarPart part = null;
