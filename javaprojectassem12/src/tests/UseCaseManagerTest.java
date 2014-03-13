@@ -36,6 +36,12 @@ public class UseCaseManagerTest {
 		tasks.add("Accessories Post:\nInactive.\n");
 		assertEquals(tasks, maCont.getTasksPerWorkstation());
 		assertEquals(tasks, maCont.getFutureStatus());
+		//the user confirms that he wants to move the assembly line forward.
+		maCont.moveAssemblyLine(55); //the user enters the time in minutes spent at the current phase.
+		//since there were no car orders, the status hasn't changed.
+		assertEquals(tasks, maCont.getTasksPerWorkstation());
+		assertEquals(tasks, maCont.getFutureStatus());
+		//the user then indicates he wants to leave the overview and the use case ends here
 	}
 
 }
