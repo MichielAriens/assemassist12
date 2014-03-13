@@ -24,7 +24,7 @@ import logic.workstation.Workstation;
 import org.junit.Before;
 import org.junit.Test;
 
-public class WorkStationTests {
+public class WorkStationTest {
 	GarageHolder garageHolder;
 	CarManufacturingCompany carManufacturingCompany;
 	CarSpecification carSpecification;

@@ -14,17 +14,14 @@ import logic.users.Manager;
 import logic.users.Mechanic;
 import logic.workstation.Task;
 
-import org.junit.Before;
 import org.junit.Test;
 
-public class SystemTest {
+/**
+ * A test case to test the user classes.
+ */
+public class UserTest {
 	
-	CarManufacturingCompany company;
-	
-	@Before
-	public void prequel(){
-		company = new CarManufacturingCompany();
-	}
+	CarManufacturingCompany company = new CarManufacturingCompany();
 	
 	/**
 	 * Test the garageHolder class

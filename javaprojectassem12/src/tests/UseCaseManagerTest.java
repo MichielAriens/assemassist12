@@ -1,31 +1,28 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
 import logic.users.CarManufacturingCompany;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import controllers.AssemAssistController;
 import controllers.ManagerController;
 
+/**
+ * A test case to test the use case of the manager. The other actors don't interact with the
+ * system in this test case, but this is done in the UseCaseCombinedTest case.
+ */
 public class UseCaseManagerTest {
 	
-	private CarManufacturingCompany company;
-	private AssemAssistController controller;
-	
-	@Before
-	public void prelude(){
-		company = new CarManufacturingCompany();
-		controller = new AssemAssistController(company);
-	}
-
-	
+	/**
+	 * The main test.
+	 */
 	@Test
 	public void mainSuccesTest() {
+		AssemAssistController controller = new AssemAssistController(new CarManufacturingCompany());
 		//the manager logs in
 		ManagerController maCont = (ManagerController) controller.logIn("Wander");
 		assertEquals("Wander", maCont.getUserName());
