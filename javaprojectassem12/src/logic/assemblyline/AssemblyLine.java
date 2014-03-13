@@ -230,7 +230,7 @@ public class AssemblyLine {
 				if(workstation.getCurrentOrder()!=null)
 					return false;
 			}
-			if(currentTime.getMinuteOfDay()>=(shiftEndHour*60-overTime-assemblyTime) || currentTime.getMinuteOfDay()<shiftBeginHour*60)
+			if(currentTime.getMinuteOfDay()>=(shiftEndHour * 60-overTime - assemblyTime * 60) || currentTime.getMinuteOfDay()<shiftBeginHour*60)
 				return true;
 			return false;
 		}
