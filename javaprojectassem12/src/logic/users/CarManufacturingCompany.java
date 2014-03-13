@@ -116,8 +116,8 @@ public class CarManufacturingCompany {
 	/**
 	 * Moves the assembly line forward if every work station is ready and 
 	 * sets the end time of the first order to the given end time.
-	 * @return True if the assembly line can be moved.
-	 * @return False if the assembly line can not be moved.
+	 * @return 	True if the assembly line can be moved.
+	 * 			False if the assembly line can not be moved.
 	 */
 	public boolean moveAssemblyLine(int shiftDuration){
 		return this.assemblyLine.moveAssemblyLine(shiftDuration);

@@ -39,8 +39,8 @@ public abstract class Workstation {
 	
 	/**
 	 * Returns whether or not this workstation has been assigned a car order to work on.
-	 * @return True if the current order is null.
-	 * @return False if the current order is not null.
+	 * @return 	True if the current order is null.
+	 * 			False otherwise.
 	 */
 	public boolean idle(){
 		return this.currentOrder == null;
@@ -51,7 +51,7 @@ public abstract class Workstation {
 	 * workstation, have been completed.
 	 * @return 	True if and only if there isn't a task left that this workspace can 
 	 * 			complete for the current order.
-	 * @return	False otherwise.
+	 * 			False otherwise.
 	 */
 	public boolean done(){
 		boolean retVal = true;
@@ -89,7 +89,7 @@ public abstract class Workstation {
 	 * @param task	The task that needs to be checked for compatibility.
 	 * @return	True if and only if the task can be performed on this workstation,
 	 * 			the task is not null and the task is not already completed.
-	 * @return	False otherwise.
+	 * 			False otherwise.
 	 */
 	public boolean isCompatibleTask(Task task){
 		if(getCapabilities().contains(task.getCarPart().type) && !task.isComplete() && task != null){

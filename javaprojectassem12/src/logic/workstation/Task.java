@@ -42,8 +42,8 @@ public class Task {
 	
 	/**
 	 * Checks whether the task is completed.
-	 * @return True if the task is completed.
-	 * @return False otherwise.
+	 * @return 	True if the task is completed.
+	 * 			False otherwise.
 	 */
 	public boolean isComplete(){
 		return completed;
