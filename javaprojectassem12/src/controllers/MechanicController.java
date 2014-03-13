@@ -26,8 +26,8 @@ public class MechanicController extends UserController{
 
 	/**
 	 * Returns the user name of the current mechanic.
-	 * @return The user name of the current mechanic.
-	 * @return Null if the current mechanic is null.
+	 * @return 	Null if the current mechanic is null.
+	 * 			The user name of the current mechanic otherwise.
 	 */
 	@Override
 	public String getUserName() {
@@ -39,8 +39,8 @@ public class MechanicController extends UserController{
 	/**
 	 * Returns the list of workstations from the assembly line with numbering if the current
 	 * mechanic is not null.
-	 * @return The list of workstations from the assembly line with numbering.
-	 * @return Null if the current mechanic is null.
+	 * @return 	Null if the current mechanic is null.
+	 * 			The list of workstations from the assembly line with numbering otherwise.
 	 */
 	public ArrayList<String> getWorkStations(){
 		if(this.currentMechanic == null)
@@ -57,8 +57,8 @@ public class MechanicController extends UserController{
 	
 	/**
 	 * Returns the list of tasks the current mechanic can perform with numbering.
-	 * @return Null if the mechanic is null.
-	 * @return The list of tasks the mechanic can perform with numbering.
+	 * @return 	Null if the mechanic is null.
+	 * 			The list of tasks the mechanic can perform with numbering otherwise.
 	 */
 	public ArrayList<String> getTasks(){
 		if(this.currentMechanic == null)
@@ -77,10 +77,10 @@ public class MechanicController extends UserController{
 	/**
 	 * Returns the task information for the given task.
 	 * @param taskName	The task for which the information needs to be returned.
-	 * @return Null if the mechanic is null.
-	 * @return Null if the given task name does not correspond with any of the tasks 
-	 * 				of the workstation the current mechanic is currently working on. 
-	 * @return The task information otherwise.
+	 * @return 	Null if the mechanic is null or if the given task name does not correspond 
+	 * 			with any of the tasks of the workstation the current mechanic is currently 
+	 * 			working on. 
+	 * 			The task information otherwise.
 	 */
 	public String getTaskInformation(String taskName){
 		if(this.currentMechanic == null)

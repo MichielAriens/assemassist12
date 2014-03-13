@@ -46,8 +46,8 @@ public class AssemAssistController {
 	 * Checks if the given user is part of the system and returns the controller corresponding
 	 * to the user.
 	 * @param userName	The user name of the user who wants to log in.
-	 * @return Null if the user name is not in the system.
-	 * @return The controller corresponding to the user otherwise.
+	 * @return 	Null if the user name is not in the system.
+	 * 			The controller corresponding to the user otherwise.
 	 */
 	public UserController logIn(String userName) {
 		User user = company.logIn(userName);

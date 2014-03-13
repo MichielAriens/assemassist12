@@ -26,8 +26,8 @@ public class ManagerController extends UserController{
 
 	/**
 	 * Returns the user name of the current manager.
-	 * @return The user name of the current manager if the current manager is not null.
-	 * @return Null if the current manager is null.
+	 * @return 	Null if the current manager is null.
+	 * 			The user name of the current manager otherwise.
 	 */
 	@Override
 	public String getUserName() {

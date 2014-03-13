@@ -25,8 +25,8 @@ public class GarageHolderController extends UserController{
 
 	/**
 	 * Returns the user name of the current garage holder.
-	 * @return The user name of the current garage holder if the current garage holder is not null.
-	 * @return Null if the current garage holder is null.
+	 * @return 	Null if the current garage holder is null.
+	 * 			The user name of the current garage holder otherwise.
 	 */
 	@Override
 	public String getUserName() {
