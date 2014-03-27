@@ -45,7 +45,7 @@ public class ManagerController extends UserController{
 	public List<String> getTasksPerWorkstation(){
 		if(this.currentManager == null)
 			return null;
-		Workstation[] workStations = this.currentManager.getWorkstations();
+		List<Workstation> workStations = this.currentManager.getWorkstations();
 		ArrayList<String> tasks = new ArrayList<String>();
 		for(Workstation stat : workStations){
 			String temp = stat.toString() + ":\n";
@@ -71,7 +71,7 @@ public class ManagerController extends UserController{
 	public List<String> getUnfinishedTasks(){
 		if(this.currentManager == null)
 			return null;
-		Workstation[] workStations = this.currentManager.getWorkstations();
+		List<Workstation> workStations = this.currentManager.getWorkstations();
 		ArrayList<String> tasks = new ArrayList<String>();
 		for(Workstation stat : workStations){
 			if(stat.getRequiredTasks().size()>0){
@@ -95,15 +95,15 @@ public class ManagerController extends UserController{
 	public List<String> getFutureStatus(){
 		if(this.currentManager == null)
 			return null;
-		Workstation[] workStations = this.currentManager.getWorkstations();
+		List<Workstation> workStations = this.currentManager.getWorkstations();
 		ArrayList<String> tasks = new ArrayList<String>();
-		for(int i = 0; i < workStations.length; i++){
-			String temp = workStations[i].toString() + ":\n";
+		for(int i = 0; i < workStations.size(); i++){
+			String temp = workStations.get(i).toString() + ":\n";
 			if(currentManager.askFutureSchedule().get(i) == null)
 				temp += "Inactive.\n";
 			else{
 				for(Task task : currentManager.askFutureSchedule().get(i).getTasks()){
-					if(workStations[i].isCompatibleTask(task))
+					if(workStations.get(i).isCompatibleTask(task))
 						temp += "   -" + task.toString() + ": Pending\n";
 				}
 			}

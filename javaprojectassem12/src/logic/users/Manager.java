@@ -30,7 +30,7 @@ public class Manager extends User{
 	 * Returns the workstations of the car manufacturing company.
 	 * @return The workstations of the car manufacturing company.
 	 */
-	public Workstation[] getWorkstations(){
+	public List<Workstation> getWorkstations(){
 		return this.company.getWorkStations();
 	}
 	

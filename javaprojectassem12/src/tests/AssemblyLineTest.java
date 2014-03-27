@@ -72,41 +72,41 @@ public class AssemblyLineTest {
 		assemblyLine.moveAssemblyLine(0);
 		assertFalse(orders.get(0).done());
 		assertFalse(assemblyLine.moveAssemblyLine(60));
-		assertTrue(assemblyLine.getWorkStations()[0].getCurrentOrder().equals(orders.get(0)));
-		assertNull(assemblyLine.getWorkStations()[1].getCurrentOrder());
-		assertNull(assemblyLine.getWorkStations()[2].getCurrentOrder());
+		assertTrue(assemblyLine.getWorkStations().get(0).getCurrentOrder().equals(orders.get(0)));
+		assertNull(assemblyLine.getWorkStations().get(1).getCurrentOrder());
+		assertNull(assemblyLine.getWorkStations().get(2).getCurrentOrder());
 		
 		/* Now we progress the line */
-		barry.setActiveWorkstation(assemblyLine.getWorkStations()[0]);
-		assertFalse(assemblyLine.getWorkStations()[0].done());
-		for(Task task : assemblyLine.getWorkStations()[0].getRequiredTasks()){
+		barry.setActiveWorkstation(assemblyLine.getWorkStations().get(0));
+		assertFalse(assemblyLine.getWorkStations().get(0).done());
+		for(Task task : assemblyLine.getWorkStations().get(0).getRequiredTasks()){
 			barry.doTask(task);
 		}
-		assertTrue(assemblyLine.getWorkStations()[0].done());
+		assertTrue(assemblyLine.getWorkStations().get(0).done());
 		
 		assertTrue(assemblyLine.moveAssemblyLine(60));
-		assertNull(assemblyLine.getWorkStations()[0].getCurrentOrder());
+		assertNull(assemblyLine.getWorkStations().get(0).getCurrentOrder());
 		
 		/* Now we progress the line */
-		barry.setActiveWorkstation(assemblyLine.getWorkStations()[1]);
-		assertFalse(assemblyLine.getWorkStations()[1].done());
+		barry.setActiveWorkstation(assemblyLine.getWorkStations().get(1));
+		assertFalse(assemblyLine.getWorkStations().get(1).done());
 		assertFalse(orders.get(0).done());
-		for(Task task : assemblyLine.getWorkStations()[1].getRequiredTasks()){
+		for(Task task : assemblyLine.getWorkStations().get(1).getRequiredTasks()){
 			barry.doTask(task);
 		}
-		assertTrue(assemblyLine.getWorkStations()[1].done());
+		assertTrue(assemblyLine.getWorkStations().get(1).done());
 		assertTrue(assemblyLine.moveAssemblyLine(60));
 		assertFalse(assemblyLine.moveAssemblyLine(60));
-		assertNull(assemblyLine.getWorkStations()[0].getCurrentOrder());
-		assertNull(assemblyLine.getWorkStations()[1].getCurrentOrder());
+		assertNull(assemblyLine.getWorkStations().get(0).getCurrentOrder());
+		assertNull(assemblyLine.getWorkStations().get(1).getCurrentOrder());
 		
-		barry.setActiveWorkstation(assemblyLine.getWorkStations()[2]);
-		assertFalse(assemblyLine.getWorkStations()[2].done());
+		barry.setActiveWorkstation(assemblyLine.getWorkStations().get(2));
+		assertFalse(assemblyLine.getWorkStations().get(2).done());
 		assertFalse(orders.get(0).done());
-		for(Task task : assemblyLine.getWorkStations()[2].getRequiredTasks()){
+		for(Task task : assemblyLine.getWorkStations().get(2).getRequiredTasks()){
 			barry.doTask(task);
 		}
-		assertTrue(assemblyLine.getWorkStations()[2].done());
+		assertTrue(assemblyLine.getWorkStations().get(2).done());
 		assertTrue(orders.get(0).done());
 		assertTrue(assemblyLine.moveAssemblyLine(60));
 		assertTrue(orders.get(0).done());
@@ -179,8 +179,8 @@ public class AssemblyLineTest {
 		/**
 		 * Now we'll test what happens when the shifts move up without 
 		 */
-		for(Task task : cmcMotors.getWorkStations()[0].getRequiredTasks()){
-			barry.setActiveWorkstation(cmcMotors.getWorkStations()[0]);
+		for(Task task : cmcMotors.getWorkStations().get(0).getRequiredTasks()){
+			barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0));
 			barry.doTask(task);
 		}
 		//The cycle took shorter than expected. We'll test whether this is reflected in the estimates.
@@ -195,8 +195,8 @@ public class AssemblyLineTest {
 		 * If a cycle is very short an order from the next day can 'jump forwards'
 		 */
 		// Do all tasks
-		for(int i = 0; i < cmcMotors.getWorkStations().length; i++){
-			Workstation ws = cmcMotors.getWorkStations()[i];
+		for(int i = 0; i < cmcMotors.getWorkStations().size(); i++){
+			Workstation ws = cmcMotors.getWorkStations().get(i);
 			barry.setActiveWorkstation(ws);
 			for(Task task : ws.getRequiredTasks()){
 				barry.doTask(task);
@@ -238,17 +238,17 @@ public class AssemblyLineTest {
 		//GO to 18:00
 		cmcMotors.progressTime(12 * 60);
 		cmcMotors.addOrder(orders.get(0));
-		barry.setActiveWorkstation(cmcMotors.getWorkStations()[0]);
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0));
 		for(Task task : orders.get(0).getTasks()){
 			barry.doTask(task);
 		}
 		cmcMotors.moveAssemblyLine(180);
-		barry.setActiveWorkstation(cmcMotors.getWorkStations()[1]);
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(1));
 		for(Task task : orders.get(0).getTasks()){
 			barry.doTask(task);
 		}
 		cmcMotors.moveAssemblyLine(180);
-		barry.setActiveWorkstation(cmcMotors.getWorkStations()[2]);
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(2));
 		for(Task task : orders.get(0).getTasks()){
 			barry.doTask(task);
 		}

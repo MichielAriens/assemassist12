@@ -15,6 +15,21 @@ public abstract class Workstation {
 	 */
 	private CarOrder currentOrder;
 	
+	private Workstation nextWorkStation;
+	
+	public void setWorkStation(Workstation next){
+		this.nextWorkStation = next;
+	}
+	
+	public boolean canMoveAssemblyLine(){
+		if(!this.done())
+			return false;
+		else if(nextWorkStation==null)
+			return true;
+		else
+			return nextWorkStation.canMoveAssemblyLine();
+	}
+	
 	/**
 	 * A list of tasks that can be performed at this workstation.
 	 */
@@ -122,4 +137,6 @@ public abstract class Workstation {
 	public List<Task> getRequiredTasks() {
 		return tasks;
 	}
+	
+	
 }

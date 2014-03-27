@@ -78,7 +78,7 @@ public class UserTest {
 		Manager m = (Manager) company.logIn("Wander");
 		//check initial values
 		assertEquals("Wander", m.getUserName());
-		assertEquals(3, m.getWorkstations().length);
+		assertEquals(3, m.getWorkstations().size());
 		ArrayList<CarOrder> orders = new ArrayList<CarOrder>();
 		orders.add(null);
 		orders.add(null);
@@ -93,7 +93,7 @@ public class UserTest {
 		//check if the assembly line refuses to move before all tasks are done
 		assertEquals(false, m.moveAssemblyLine(60));
 		//complete all tasks and check if the assembly line moves again
-		CarOrder c = m.getWorkstations()[0].getCurrentOrder();
+		CarOrder c = m.getWorkstations().get(0).getCurrentOrder();
 		for(Task t : c.getTasks())
 			t.perform();
 		assertTrue(m.moveAssemblyLine(60));
@@ -125,7 +125,7 @@ public class UserTest {
 		assertFalse(m.isPosted());
 		assertEquals(null, m.getAvailableTasks());
 		//set a workstation
-		m.setActiveWorkstation(m.getAvailableWorkstations()[0]);
+		m.setActiveWorkstation(m.getAvailableWorkstations().get(0));
 		assertTrue(m.isPosted());
 		//place a car order and advance the assembly line
 		makeOrderAndAdvance();

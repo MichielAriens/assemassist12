@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import logic.users.Mechanic;
 import logic.workstation.Task;
@@ -46,7 +47,7 @@ public class MechanicController extends UserController{
 		if(this.currentMechanic == null)
 			return null;
 		ArrayList<String> workstations = new ArrayList<String>();
-		Workstation[] stations = this.currentMechanic.getAvailableWorkstations();
+		List<Workstation> stations = this.currentMechanic.getAvailableWorkstations();
 		int count = 1;
 		for(Workstation w : stations){
 			workstations.add(w.toString() + ": " + count);

@@ -112,7 +112,7 @@ public class CarManufacturingCompany {
 	 * of this car manufacturing company.
 	 * @return	The workstations of the assembly line.
 	 */
-	public Workstation[] getWorkStations(){
+	public List<Workstation> getWorkStations(){
 		return this.assemblyLine.getWorkStations();
 	}
 	

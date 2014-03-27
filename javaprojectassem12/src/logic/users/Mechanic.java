@@ -78,7 +78,7 @@ public class Mechanic extends User{
 	 * Returns the list of workstations from the assembly line of the car manufacturing company.
 	 * @return the list of workstations from the assembly line of the car manufacturing company.
 	 */
-	public Workstation[] getAvailableWorkstations(){
+	public List<Workstation> getAvailableWorkstations(){
 		return this.company.getWorkStations();
 	}
 	

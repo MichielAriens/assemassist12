@@ -22,12 +22,14 @@ public class AssemblyLine {
 	/**
 	 * Array holding the three workstations.
 	 */
-	private Workstation[] workStations = new Workstation[3];
+	private LinkedList<Workstation> workStations = new LinkedList<Workstation>();
+	
+	private Workstation firstWorkStation;
 
 	/**
 	 * Integer holding the number of work stations.
 	 */
-	private int numberOfWorkStations = workStations.length;
+	private int numberOfWorkStations;
 
 	/**
 	 * A list holding the pending orders not on the assemblyline.
@@ -59,10 +61,18 @@ public class AssemblyLine {
 	public AssemblyLine(){
 		FIFOQueue= new LinkedList<CarOrder>();
 		schedule = new Schedule();
-		workStations[0] = new CarBodyPost();
-		workStations[1] = new DriveTrainPost();
-		workStations[2] = new AccessoriesPost();
+		this.initialiseWorkStations();
 		this.currentTime = new DateTime(2014, 1, 1, 6, 0);
+	}
+	
+	private void initialiseWorkStations(){
+		workStations.add( new CarBodyPost());
+		workStations.add(new DriveTrainPost());
+		workStations.add(new AccessoriesPost());
+		this.firstWorkStation = workStations.getFirst();
+		workStations.get(0).setWorkStation(workStations.get(1));
+		workStations.get(1).setWorkStation(workStations.get(2));
+		numberOfWorkStations = workStations.size();
 	}
 
 	/**
@@ -84,13 +94,13 @@ public class AssemblyLine {
 		if(checkWorkStations()){
 
 			this.currentTime = currentTime.plusMinutes(phaseDuration);
-			CarOrder firstOrder = workStations[numberOfWorkStations-1].getCurrentOrder();
+			CarOrder firstOrder = workStations.get(numberOfWorkStations-1).getCurrentOrder();
 			if(firstOrder!=null)
 				firstOrder.setEndTime(currentTime);
 			for(int i = numberOfWorkStations - 1; i > 0; i--){
-				workStations[i].setOrder(workStations[i-1].getCurrentOrder());
+				workStations.get(i).setOrder(workStations.get(i-1).getCurrentOrder());
 			}
-			workStations[0].setOrder(null);
+			firstWorkStation.setOrder(null);
 			if(schedule.checkEndOfDay()){
 				schedule.calculateOverTime();
 				schedule.setNextDay();
@@ -123,23 +133,17 @@ public class AssemblyLine {
 	 * 			False if one or more work stations are not done.
 	 */
 	private boolean checkWorkStations() {
-		for(int i = 0; i < numberOfWorkStations; i++){
-			if(!workStations[i].done()){
-				return false;
-			}
-		}
-		return true;
+		return firstWorkStation.canMoveAssemblyLine();
 	}
 
 	/**
 	 * Asks a list of workstations available.
 	 * @return	The list of workstations.
 	 */
-	public Workstation[] getWorkStations() {
-		return workStations;
+	public List<Workstation> getWorkStations() {
+		return new LinkedList<Workstation>(workStations);
 	}
-
-
+	
 	/**
 	 * Calls the schedule and asks to schedule the given car order.
 	 * @param order The car order to be scheduled.
@@ -313,8 +317,8 @@ public class AssemblyLine {
 		 */
 		private void scheduleCarOrder(CarOrder order) {
 			DateTime estimatedEndTime = new DateTime(currentTime);
-			if(workStations[0].getCurrentOrder() == null && currentTime.getMinuteOfDay()<shiftEndHour*60-overTime-assemblyTime*60 && currentTime.getHourOfDay()>=shiftBeginHour && FIFOQueue.isEmpty()){
-				workStations[0].setOrder(order);
+			if(firstWorkStation.getCurrentOrder() == null && currentTime.getMinuteOfDay()<shiftEndHour*60-overTime-assemblyTime*60 && currentTime.getHourOfDay()>=shiftBeginHour && FIFOQueue.isEmpty()){
+				firstWorkStation.setOrder(order);
 				estimatedEndTime = estimatedEndTime.plusHours(assemblyTime);
 			}else if(FIFOQueue.isEmpty()){
 				FIFOQueue.add(order);
@@ -365,8 +369,8 @@ public class AssemblyLine {
 			}catch(NoSuchElementException e){
 				returnList.add(null);
 			}
-			returnList.add(workStations[0].getCurrentOrder());
-			returnList.add(workStations[1].getCurrentOrder());
+			returnList.add(firstWorkStation.getCurrentOrder());
+			returnList.add(workStations.get(1).getCurrentOrder());
 			return returnList;
 		}
 
