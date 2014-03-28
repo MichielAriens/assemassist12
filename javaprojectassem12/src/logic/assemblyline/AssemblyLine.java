@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 
 import logic.car.CarOrder;
+import logic.car.Order;
 import logic.workstation.AccessoriesPost;
 import logic.workstation.CarBodyPost;
 import logic.workstation.DriveTrainPost;
@@ -34,20 +35,20 @@ public class AssemblyLine {
 	/**
 	 * A list holding the pending orders not on the assemblyline.
 	 */
-	private LinkedList<CarOrder> queue;
+	private LinkedList<Order> queue;
 
 	/**
 	 * A dateTime object holding the current time of the system. 
 	 */
 	private DateTime currentTime;
 
-	/**
-	 * Asks the current time of the system.
-	 * @return	The current time of the system.
-	 */
-	public DateTime getCurrentTime() {
-		return currentTime;
-	}
+//	/**
+//	 * Asks the current time of the system.
+//	 * @return	The current time of the system.
+//	 */
+//	public DateTime getCurrentTime() {
+//		return currentTime;
+//	}
 
 	/**
 	 * A variable containing the schedule, which is used for scheduling orders.
@@ -59,7 +60,7 @@ public class AssemblyLine {
 	 * Also sets the current time to January first 2014 at the beginning of the shift. 
 	 */
 	public AssemblyLine(){
-		queue= new LinkedList<CarOrder>();
+		queue= new LinkedList<Order>();
 		schedule = new Schedule();
 		this.initialiseWorkStations();
 		this.currentTime = new DateTime(2014, 1, 1, 6, 0);
@@ -87,14 +88,12 @@ public class AssemblyLine {
 	 * @return	False if the assembly line can not be moved.
 	 * 			True otherwise.
 	 */
-	public boolean moveAssemblyLine(int phaseDuration){
-		if(phaseDuration < 0 || phaseDuration > 180)
-				return false;
+	private boolean moveAssemblyLine(int phaseDuration){
 		
-		if(checkWorkStations()){
+		
 
 			this.currentTime = currentTime.plusMinutes(phaseDuration);
-			CarOrder firstOrder = workStations.get(numberOfWorkStations-1).getCurrentOrder();
+			Order firstOrder = workStations.get(numberOfWorkStations-1).getCurrentOrder();
 			if(firstOrder!=null)
 				firstOrder.setEndTime(currentTime);
 			for(int i = numberOfWorkStations - 1; i > 0; i--){
@@ -106,10 +105,9 @@ public class AssemblyLine {
 				schedule.setNextDay();
 			}
 			schedule.updateEstimatedTimes(phaseDuration);
-			//Needs to return true at the end because the assembly line can be moved.
 			return true;
-		}
-		return false;
+		
+		
 	}
 	
 	/**
@@ -135,6 +133,13 @@ public class AssemblyLine {
 	private boolean checkWorkStations() {
 		return firstWorkStation.canMoveAssemblyLine();
 	}
+	
+	public boolean tryMoveAssemblyLine(int phaseDuration){
+		if(checkWorkStations())
+			return moveAssemblyLine(phaseDuration);
+		else
+			return false;
+	}
 
 	/**
 	 * Asks a list of workstations available.
@@ -148,9 +153,9 @@ public class AssemblyLine {
 	 * Calls the schedule and asks to schedule the given car order.
 	 * @param order The car order to be scheduled.
 	 */
-	public void addCarOrder(CarOrder order){
+	public void addOrder(Order order){
 		if(order != null)
-			schedule.scheduleCarOrder(order);
+			schedule.scheduleOrder(order);
 	}
 
 	/**
@@ -267,11 +272,11 @@ public class AssemblyLine {
 		 */
 		private void updateEstimatedTimes(int phaseDuration) {
 			updateEstimatedTimeWorkStations(phaseDuration);
-			LinkedList<CarOrder> copyOfQueue = makeCopyOfQueue();
+			LinkedList<Order> copyOfQueue = makeCopyOfQueue();
 			queue.clear();
 			if(!copyOfQueue.isEmpty()){
-				for(CarOrder next: copyOfQueue){
-					scheduleCarOrder(next);
+				for(Order next: copyOfQueue){
+					scheduleOrder(next);
 				}
 			}
 
@@ -282,9 +287,9 @@ public class AssemblyLine {
 		 * @return A list which is a copy of the queue containing the pending car orders.
 		 * 		   An empty list if there are no pending orders.
 		 */
-		private LinkedList<CarOrder> makeCopyOfQueue() {
-			LinkedList<CarOrder> returnList = new LinkedList<CarOrder>();
-			for(CarOrder next:queue){
+		private LinkedList<Order> makeCopyOfQueue() {
+			LinkedList<Order> returnList = new LinkedList<Order>();
+			for(Order next:queue){
 				returnList.add(next);
 			}
 			return returnList;
@@ -315,7 +320,7 @@ public class AssemblyLine {
 		 * is set, sets the start time of the order to the current time.
 		 * @param order the new car order that needs to be scheduled.
 		 */
-		private void scheduleCarOrder(CarOrder order) {
+		private void scheduleOrder(Order order) {
 			DateTime estimatedEndTime = new DateTime(currentTime);
 			if(firstWorkStation.getCurrentOrder() == null && currentTime.getMinuteOfDay()<shiftEndHour*60-overTime-assemblyTime*60 && currentTime.getHourOfDay()>=shiftBeginHour && queue.isEmpty()){
 				firstWorkStation.setOrder(order);
