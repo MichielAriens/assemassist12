@@ -3,11 +3,11 @@ package logic.car;
 public class CarOrderFactory extends OrderFactory{
 
 	@Override
-	public Order createOrder(OrderDetails details) {
-		if(!(details instanceof CarOrderDetails))
+	public Order createOrder(OrderDetails d) {
+		if(!(d instanceof CarOrderDetails))
 			return null;
-		CarOrderDetails 
-		return null;
+		CarOrderDetails details = (CarOrderDetails) d;
+		return new CarOrder(details);
 	}
 
 }

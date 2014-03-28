@@ -10,7 +10,8 @@ public enum CarPartType {
 	Gearbox("Gearbox"),
 	Seats("Seats"),
 	Airco("Airco"),
-	Wheels("Wheels");
+	Wheels("Wheels"),
+	Spoiler("Spoiler");
 	
 	/**
 	 * The name of this car part type.
