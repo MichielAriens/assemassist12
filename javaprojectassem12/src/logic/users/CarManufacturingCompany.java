@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.joda.time.DateTime;
-
 import logic.assemblyline.AssemblyLine;
 import logic.car.CarOrder;
+import logic.car.Order;
 import logic.workstation.Workstation;
 
 /**
@@ -102,9 +101,9 @@ public class CarManufacturingCompany {
 	 * Adds the given order to the assembly line if the given order is not null.
 	 * @param order	The order which needs to be added to the assembly line.
 	 */
-	public void addOrder(CarOrder order) {
+	public void addOrder(Order order) {
 		if(order != null)
-			this.assemblyLine.addCarOrder(order);
+			this.assemblyLine.addOrder(order);
 	}
 	
 	/**
@@ -123,7 +122,7 @@ public class CarManufacturingCompany {
 	 * 			False if the assembly line can not be moved.
 	 */
 	public boolean moveAssemblyLine(int shiftDuration){
-		return this.assemblyLine.moveAssemblyLine(shiftDuration);
+		return this.assemblyLine.tryMoveAssemblyLine(shiftDuration);
 	}
 	
 	/**
@@ -132,14 +131,6 @@ public class CarManufacturingCompany {
 	 */
 	public List<CarOrder> askFutureSchedule(){
 		return this.assemblyLine.askFutureSchedule();
-	}
-	
-	/**
-	 * Returns the current time in this factory.
-	 * @return	The current time (immutable)
-	 */
-	public DateTime getCurrentTime(){
-		return this.assemblyLine.getCurrentTime();
 	}
 	
 	/**

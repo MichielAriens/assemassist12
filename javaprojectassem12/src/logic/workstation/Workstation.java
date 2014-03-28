@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import logic.car.CarOrder;
 import logic.car.CarPartType;
+import logic.car.Order;
 
 /**
  * Class used to describe a work station of an assembly line.
@@ -13,7 +14,7 @@ public abstract class Workstation {
 	/**
 	 * The current order this workstation is working on.
 	 */
-	private CarOrder currentOrder;
+	private Order currentOrder;
 	
 	private Workstation nextWorkStation;
 	
@@ -28,6 +29,10 @@ public abstract class Workstation {
 			return true;
 		else
 			return nextWorkStation.canMoveAssemblyLine();
+	}
+	
+	public void advanceWorkstations(Order order){
+		
 	}
 	
 	/**
@@ -48,7 +53,7 @@ public abstract class Workstation {
 	 * When the current order is null, the workstation is idle.
 	 * @return The current order.
 	 */
-	public CarOrder getCurrentOrder(){
+	public Order getCurrentOrder(){
 		return currentOrder;
 	}
 	
@@ -68,7 +73,7 @@ public abstract class Workstation {
 	 * 			complete for the current order.
 	 * 			False otherwise.
 	 */
-	public boolean done(){
+	private boolean done(){
 		boolean retVal = true;
 		for(Task task : this.tasks){
 			if(!task.isComplete()){
@@ -84,7 +89,7 @@ public abstract class Workstation {
 	 * with the compatible task(s) of the new order.
 	 * @param order	Any car order. Can be completed, semi-completed, or not started.
 	 */
-	public void setOrder(CarOrder order){
+	public void setOrder(Order order){
 		if(order == null){
 			this.currentOrder=null;
 			this.tasks.clear();
