@@ -34,7 +34,7 @@ public class AssemblyLine {
 	/**
 	 * A list holding the pending orders not on the assemblyline.
 	 */
-	private LinkedList<CarOrder> FIFOQueue;
+	private LinkedList<CarOrder> queue;
 
 	/**
 	 * A dateTime object holding the current time of the system. 
@@ -59,7 +59,7 @@ public class AssemblyLine {
 	 * Also sets the current time to January first 2014 at the beginning of the shift. 
 	 */
 	public AssemblyLine(){
-		FIFOQueue= new LinkedList<CarOrder>();
+		queue= new LinkedList<CarOrder>();
 		schedule = new Schedule();
 		this.initialiseWorkStations();
 		this.currentTime = new DateTime(2014, 1, 1, 6, 0);
@@ -268,7 +268,7 @@ public class AssemblyLine {
 		private void updateEstimatedTimes(int phaseDuration) {
 			updateEstimatedTimeWorkStations(phaseDuration);
 			LinkedList<CarOrder> copyOfQueue = makeCopyOfQueue();
-			FIFOQueue.clear();
+			queue.clear();
 			if(!copyOfQueue.isEmpty()){
 				for(CarOrder next: copyOfQueue){
 					scheduleCarOrder(next);
@@ -284,7 +284,7 @@ public class AssemblyLine {
 		 */
 		private LinkedList<CarOrder> makeCopyOfQueue() {
 			LinkedList<CarOrder> returnList = new LinkedList<CarOrder>();
-			for(CarOrder next:FIFOQueue){
+			for(CarOrder next:queue){
 				returnList.add(next);
 			}
 			return returnList;
@@ -317,16 +317,16 @@ public class AssemblyLine {
 		 */
 		private void scheduleCarOrder(CarOrder order) {
 			DateTime estimatedEndTime = new DateTime(currentTime);
-			if(firstWorkStation.getCurrentOrder() == null && currentTime.getMinuteOfDay()<shiftEndHour*60-overTime-assemblyTime*60 && currentTime.getHourOfDay()>=shiftBeginHour && FIFOQueue.isEmpty()){
+			if(firstWorkStation.getCurrentOrder() == null && currentTime.getMinuteOfDay()<shiftEndHour*60-overTime-assemblyTime*60 && currentTime.getHourOfDay()>=shiftBeginHour && queue.isEmpty()){
 				firstWorkStation.setOrder(order);
 				estimatedEndTime = estimatedEndTime.plusHours(assemblyTime);
-			}else if(FIFOQueue.isEmpty()){
-				FIFOQueue.add(order);
+			}else if(queue.isEmpty()){
+				queue.add(order);
 				estimatedEndTime = estimatedEndTime.plusHours(assemblyTime+1);
 				estimatedEndTime = getEstimatedTime(estimatedEndTime);
 			}else{
-				estimatedEndTime = new DateTime(FIFOQueue.getLast().getEstimatedEndTime());
-				FIFOQueue.add(order);
+				estimatedEndTime = new DateTime(queue.getLast().getEstimatedEndTime());
+				queue.add(order);
 				estimatedEndTime = estimatedEndTime.plusHours(1);
 				estimatedEndTime = getEstimatedTime(estimatedEndTime);
 			}
@@ -363,8 +363,8 @@ public class AssemblyLine {
 			ArrayList<CarOrder> returnList = new ArrayList<CarOrder>();
 
 			try{
-				if(FIFOQueue.getFirst().getEstimatedEndTime().getDayOfMonth()==currentTime.getDayOfMonth() && FIFOQueue.getFirst().getEstimatedEndTime().getHourOfDay()<shiftEndHour)
-					returnList.add(FIFOQueue.getFirst());
+				if(queue.getFirst().getEstimatedEndTime().getDayOfMonth()==currentTime.getDayOfMonth() && queue.getFirst().getEstimatedEndTime().getHourOfDay()<shiftEndHour)
+					returnList.add(queue.getFirst());
 				else returnList.add(null);
 			}catch(NoSuchElementException e){
 				returnList.add(null);
