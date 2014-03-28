@@ -12,7 +12,7 @@ import logic.workstation.Task;
 /**
  * Class used to describe a car order.
  */
-public class CarOrder {
+public class CarOrder extends Order{
 
 	/**
 	 * The time this car order was created.
