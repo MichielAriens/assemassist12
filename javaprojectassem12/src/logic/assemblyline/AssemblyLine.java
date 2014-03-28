@@ -7,7 +7,6 @@ import java.util.NoSuchElementException;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
-import logic.car.CarOrder;
 import logic.car.Order;
 import logic.workstation.AccessoriesPost;
 import logic.workstation.CarBodyPost;
@@ -89,25 +88,7 @@ public class AssemblyLine {
 	 * 			True otherwise.
 	 */
 	private boolean moveAssemblyLine(int phaseDuration){
-		
-		
-
-			this.currentTime = currentTime.plusMinutes(phaseDuration);
-			Order firstOrder = workStations.get(numberOfWorkStations-1).getCurrentOrder();
-			if(firstOrder!=null)
-				firstOrder.setEndTime(currentTime);
-			for(int i = numberOfWorkStations - 1; i > 0; i--){
-				workStations.get(i).setOrder(workStations.get(i-1).getCurrentOrder());
-			}
-			firstWorkStation.setOrder(null);
-			if(schedule.checkEndOfDay()){
-				schedule.calculateOverTime();
-				schedule.setNextDay();
-			}
-			schedule.updateEstimatedTimes(phaseDuration);
-			return true;
-		
-		
+			return schedule.moveAndReschedule(phaseDuration);
 	}
 	
 	/**
@@ -164,7 +145,7 @@ public class AssemblyLine {
 	 * @return	A list of car orders which would be in the workstations 
 	 * 			if the assembly line should move.
 	 */
-	public List<CarOrder> askFutureSchedule(){
+	public List<Order> askFutureSchedule(){
 		return schedule.getFutureSchedule();
 	}
 
@@ -176,6 +157,9 @@ public class AssemblyLine {
 	 */
 	class Schedule {
 
+		SchedulingStrategy strategy = new FifoStrategy(); 
+		
+		
 		/**
 		 * The begin time of the shift, represented in hours.
 		 */
@@ -209,6 +193,35 @@ public class AssemblyLine {
 			}
 		}
 
+		private boolean moveAndReschedule(int phaseDuration) {
+
+			currentTime = currentTime.plusMinutes(phaseDuration);
+			Order firstOrder = workStations.get(numberOfWorkStations-1).getCurrentOrder();
+			if(firstOrder!=null)
+				firstOrder.setEndTime(currentTime);
+			
+			firstWorkStation.advanceWorkstations(null);
+			if(checkEndOfDay()){
+				calculateOverTime();
+				setNextDay();
+			}
+			schedule.updateEstimatedTimes(phaseDuration);
+			return true;
+		}
+		
+		private void reschedule(){
+			rescheduleWorkstations();
+		}
+
+		private void rescheduleWorkstations(){
+			LinkedList<Order> list = new LinkedList<Order>();
+			workStations.getLast().getCurrentOrder().setEstimatedEndTime(calculateMaxPhase());
+		}
+		
+		private int calculateMaxPhase(List<Order> orders){
+			
+		}
+		
 		/**
 		 * Sets the current time to the next day at the beginning of the shift, if the time is later than the begin hour of the shift.
 		 * Else just sets the hour at the beginning of the shift.
@@ -301,11 +314,7 @@ public class AssemblyLine {
 		 * @param phaseDuration The time it took for the current phase to be completed.
 		 */
 		private void updateEstimatedTimeWorkStations(int phaseDuration) {
-			int time = phaseDuration-60;
-			for(Workstation next: workStations){
-				if(next.getCurrentOrder()!= null)
-					next.getCurrentOrder().setEstimatedEndTime(next.getCurrentOrder().getEstimatedEndTime().plusMinutes(time));
-			}
+			firstWorkStation.updateEstimatedEndTimeCurrentOrder(phaseDuration);
 		}
 
 		/**
@@ -364,8 +373,8 @@ public class AssemblyLine {
 		 * assembly line would be moved. 
 		 * @return	A list of car orders which would be in the workstations after the assembly line is moved.
 		 */
-		private List<CarOrder> getFutureSchedule(){
-			ArrayList<CarOrder> returnList = new ArrayList<CarOrder>();
+		private List<Order> getFutureSchedule(){
+			ArrayList<Order> returnList = new ArrayList<Order>();
 
 			try{
 				if(queue.getFirst().getEstimatedEndTime().getDayOfMonth()==currentTime.getDayOfMonth() && queue.getFirst().getEstimatedEndTime().getHourOfDay()<shiftEndHour)

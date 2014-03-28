@@ -2,7 +2,7 @@ package logic.users;
 
 import java.util.List;
 
-import logic.car.CarOrder;
+import logic.car.Order;
 import logic.workstation.Workstation;
 
 /**
@@ -48,7 +48,7 @@ public class Manager extends User{
 	 * Returns the list of car orders in the schedule as it would be if the assembly line has been moved once.
 	 * @return the list of car orders in the schedule as it would be if the assembly line has been moved once.
 	 */
-	public List<CarOrder> askFutureSchedule(){
+	public List<Order> askFutureSchedule(){
 		return this.company.askFutureSchedule();
 	}
 }

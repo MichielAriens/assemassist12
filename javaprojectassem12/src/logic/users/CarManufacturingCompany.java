@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import logic.assemblyline.AssemblyLine;
-import logic.car.CarOrder;
 import logic.car.Order;
 import logic.workstation.Workstation;
 
@@ -129,7 +128,7 @@ public class CarManufacturingCompany {
 	 * Returns the car orders that would be on the assembly line if the assembly line was progressed.
 	 * @return The list of car orders.
 	 */
-	public List<CarOrder> askFutureSchedule(){
+	public List<Order> askFutureSchedule(){
 		return this.assemblyLine.askFutureSchedule();
 	}
 	

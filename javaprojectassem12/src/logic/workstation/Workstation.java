@@ -2,7 +2,6 @@ package logic.workstation;
 
 import java.util.ArrayList;
 import java.util.List;
-import logic.car.CarOrder;
 import logic.car.CarPartType;
 import logic.car.Order;
 
@@ -32,6 +31,17 @@ public abstract class Workstation {
 	}
 	
 	public void advanceWorkstations(Order order){
+		if(nextWorkStation!=null)
+			nextWorkStation.advanceWorkstations(currentOrder);
+		this.setOrder(order);
+	}
+	
+	public void updateEstimatedEndTimeCurrentOrder(int time){
+		if(currentOrder!=null){
+			currentOrder.setEstimatedEndTime(currentOrder.getEstimatedEndTime().plusMinutes(time));
+		}
+		if(nextWorkStation!=null)
+			nextWorkStation.updateEstimatedEndTimeCurrentOrder(time);
 		
 	}
 	
