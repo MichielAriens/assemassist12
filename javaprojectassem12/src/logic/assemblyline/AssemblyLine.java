@@ -234,19 +234,31 @@ public class AssemblyLine {
 			if(!queue.isEmpty()){
 				LinkedList<Order> list = new LinkedList<Order>();
 				DateTime estimatedEndTime = new DateTime(currentTime);
-				list.add(queue.getFirst());
-				list.add(firstWorkStation.getCurrentOrder());
-				list.add(workStations.get(1).getCurrentOrder());
-				estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-				list.removeLast();
-				estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-				list.removeLast();
-				estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-				list.removeLast();
-				queue.getFirst().setEstimatedEndTime(estimatedEndTime);
+				int index =0;
+				
+//				list.add(queue.getFirst());
+//				list.add(firstWorkStation.getCurrentOrder());
+//				list.add(workStations.get(1).getCurrentOrder());
+//				estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
+//				list.removeLast();
+//				estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
+//				list.removeLast();
+//				estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
+//				list.removeLast();
+//				queue.getFirst().setEstimatedEndTime(estimatedEndTime);
 				//list.add(firstWorkStation.getCurrentOrder());
 				//list.add(workStations.get(1).getCurrentOrder());
 				adjustPrevious(0);
+				
+				for(Order next : queue){
+					if(index==0){
+						list.addAll(addPrevious(index));
+						if(list.getFirst()==null){
+							
+						}
+					}
+					index++;
+				}
 			}
 		}
 		
@@ -305,7 +317,7 @@ public class AssemblyLine {
 					big=biggestPhaseTime(sublist).getPhaseTime();
 					if(order.getPhaseTime()>big){
 						for(Order next : sublist){
-							if(next!=null)// + check same day
+							if(next!=null && order.getEstimatedEndTime().getDayOfYear()==next.getEstimatedEndTime().getDayOfYear())
 								next.setEstimatedEndTime(next.getEstimatedEndTime().plusMinutes(order.getPhaseTime()-big));
 						}
 
