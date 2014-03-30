@@ -97,14 +97,14 @@ public class AssemblyLine {
 	 * Overtime will be carried to the next day if the invocation results in a moment between shifts.
 	 * @param phaseDuration		The duration of idle time in minutes.
 	 */
-	public void progressTime(int phaseDuration){
-		currentTime = currentTime.plusMinutes(phaseDuration);
-		if(currentTime.getHourOfDay()>=22 || currentTime.getHourOfDay()<6){
-			schedule.setNextDay();
-			
-		}
-		schedule.updateEstimatedTimes(phaseDuration);
-	}
+//	public void progressTime(int phaseDuration){
+//		currentTime = currentTime.plusMinutes(phaseDuration);
+//		if(currentTime.getHourOfDay()>=22 || currentTime.getHourOfDay()<6){
+//			schedule.setNextDay();
+//			
+//		}
+//		schedule.updateEstimatedTimes(phaseDuration);
+//	}
 
 	/**
 	 * Checks if all the work stations are done.
@@ -200,7 +200,8 @@ public class AssemblyLine {
 				calculateOverTime();
 				setNextDay();
 			}
-			schedule.updateEstimatedTimes(phaseDuration);
+
+			reschedule();
 			return true;
 		}
 		
@@ -235,41 +236,65 @@ public class AssemblyLine {
 				LinkedList<Order> list = new LinkedList<Order>();
 				DateTime estimatedEndTime = new DateTime(currentTime);
 				int index =0;
-				
-//				list.add(queue.getFirst());
-//				list.add(firstWorkStation.getCurrentOrder());
-//				list.add(workStations.get(1).getCurrentOrder());
-//				estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-//				list.removeLast();
-//				estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-//				list.removeLast();
-//				estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-//				list.removeLast();
-//				queue.getFirst().setEstimatedEndTime(estimatedEndTime);
-				//list.add(firstWorkStation.getCurrentOrder());
-				//list.add(workStations.get(1).getCurrentOrder());
-				adjustPrevious(0);
-				
+
 				for(Order next : queue){
 					if(index==0){
+						buildEstimateFirstInQueue();
+						adjustPrevious(index);
+					}else{
 						list.addAll(addPrevious(index));
-						if(list.getFirst()==null){
-							
-						}
+						estimatedEndTime = list.getFirst().getEstimatedEndTime();
+						int assemblyTime = getAssemblyTimeReversed(next,list);
+						estimatedEndTime = estimatedEndTime.plusMinutes(assemblyTime);
+						estimatedEndTime = getEstimatedTime(estimatedEndTime, next);
+						next.setEstimatedEndTime(estimatedEndTime);
+						adjustPrevious(index);
+						list.clear();
 					}
 					index++;
 				}
 			}
 		}
 		
-		private int getDifferencePhaseTime(Order first,Order second){
-			if(first!=null && second != null){
-				return first.getPhaseTime()-second.getPhaseTime();
-				
-			}
-			return 0;
+		private int getAssemblyTimeReversed(Order order, LinkedList<Order> list){
+			int returnval = 0;
+			returnval+=positiveDifference(order, biggestPhaseTime(list));
+			list.removeLast();
+			returnval+=positiveDifference(order, biggestPhaseTime(list));
+			returnval+=order.getPhaseTime();
+			return returnval;
 		}
 		
+		private int positiveDifference(Order first,Order second){
+			int returnval = first.getPhaseTime()-second.getPhaseTime();
+			if(returnval>0)
+				return returnval;
+			else
+				return 0;
+		}
+		
+		private void buildEstimateFirstInQueue(){
+			LinkedList<Order> list = new LinkedList<Order>();
+			DateTime estimatedEndTime = new DateTime(currentTime);
+			if(estimatedEndTime.getHourOfDay()<shiftBeginHour || estimatedEndTime.getMinuteOfDay()>=shiftEndHour*60){
+				estimatedEndTime = getEstimatedTime(estimatedEndTime, queue.getFirst());
+				queue.getFirst().setEstimatedEndTime(estimatedEndTime);
+				return;
+			}
+			list.add(queue.getFirst());
+			list.add(firstWorkStation.getCurrentOrder());
+			list.add(workStations.get(1).getCurrentOrder());
+			estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
+			list.removeLast();
+			estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
+			list.removeLast();
+			estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
+			list.removeLast();
+			estimatedEndTime = getEstimatedTime(estimatedEndTime, queue.getFirst());
+			queue.getFirst().setEstimatedEndTime(estimatedEndTime);
+			
+		}
+	
 		private LinkedList<Order> addPrevious(int index){
 			LinkedList<Order> list = new LinkedList<Order>();
 			int n = workStations.size();
@@ -308,7 +333,7 @@ public class AssemblyLine {
 			Order order = queue.get(index);
 			LinkedList<Order> list = addPrevious(index);
 
-			if(order.getEstimatedEndTime().getMinuteOfDay()<shiftEndHour*60-overTime && order.getEstimatedEndTime().getHourOfDay()>=shiftBeginHour){
+			if(timeForNewOrder(order.getEstimatedEndTime())){
 				int big = 0;
 				for(int i=0;i<list.size();i++){
 					LinkedList<Order> sublist = (LinkedList<Order>) list.subList(0, i+1);
@@ -317,7 +342,7 @@ public class AssemblyLine {
 					big=biggestPhaseTime(sublist).getPhaseTime();
 					if(order.getPhaseTime()>big){
 						for(Order next : sublist){
-							if(next!=null && order.getEstimatedEndTime().getDayOfYear()==next.getEstimatedEndTime().getDayOfYear())
+							if(next!=null && order.getEstimatedEndTime().getDayOfYear()==next.getEstimatedEndTime().getDayOfYear() && next.getEstimatedEndTime().getHourOfDay()>shiftBeginHour)
 								next.setEstimatedEndTime(next.getEstimatedEndTime().plusMinutes(order.getPhaseTime()-big));
 						}
 
@@ -392,6 +417,10 @@ public class AssemblyLine {
 				if(workstation.getCurrentOrder()!=null)
 					return false;
 			}
+			int assemblyTime = 60*numberOfWorkStations;
+			if(!queue.isEmpty()){
+				assemblyTime = queue.getFirst().getPhaseTime()*numberOfWorkStations;
+			}
 			if(currentTime.getMinuteOfDay()>=(shiftEndHour * 60-overTime - assemblyTime * 60) || currentTime.getMinuteOfDay()<shiftBeginHour*60)
 				return true;
 			return false;
@@ -417,39 +446,39 @@ public class AssemblyLine {
 		 * in a queue iteratively.
 		 * @param phaseDuration The duration of the current phase of the assembly line.
 		 */
-		private void updateEstimatedTimes(int phaseDuration) {
-			updateEstimatedTimeWorkStations(phaseDuration);
-			LinkedList<Order> copyOfQueue = makeCopyOfQueue();
-			queue.clear();
-			if(!copyOfQueue.isEmpty()){
-				for(Order next: copyOfQueue){
-					scheduleOrder(next);
-				}
-			}
-
-		}
+//		private void updateEstimatedTimes(int phaseDuration) {
+//			updateEstimatedTimeWorkStations(phaseDuration);
+//			LinkedList<Order> copyOfQueue = makeCopyOfQueue();
+//			queue.clear();
+//			if(!copyOfQueue.isEmpty()){
+//				for(Order next: copyOfQueue){
+//					scheduleOrder(next);
+//				}
+//			}
+//
+//		}
 
 		/**
 		 * Makes a copy of the queue containing the pending orders.
 		 * @return A list which is a copy of the queue containing the pending car orders.
 		 * 		   An empty list if there are no pending orders.
 		 */
-		private LinkedList<Order> makeCopyOfQueue() {
-			LinkedList<Order> returnList = new LinkedList<Order>();
-			for(Order next:queue){
-				returnList.add(next);
-			}
-			return returnList;
-		}
+//		private LinkedList<Order> makeCopyOfQueue() {
+//			LinkedList<Order> returnList = new LinkedList<Order>();
+//			for(Order next:queue){
+//				returnList.add(next);
+//			}
+//			return returnList;
+//		}
 
 		/**
 		 * Updates the estimated time of the orders in the workstations, workstations without an order
 		 * do not get updated. It considers the phaseDuration when updating the estimated end times.
 		 * @param phaseDuration The time it took for the current phase to be completed.
 		 */
-		private void updateEstimatedTimeWorkStations(int phaseDuration) {
-			firstWorkStation.updateEstimatedEndTimeCurrentOrder(phaseDuration);
-		}
+//		private void updateEstimatedTimeWorkStations(int phaseDuration) {
+//			firstWorkStation.updateEstimatedEndTimeCurrentOrder(phaseDuration);
+//		}
 
 		/**
 		 * Schedules the given car order into the assembly line.
@@ -463,38 +492,44 @@ public class AssemblyLine {
 		 * is set, sets the start time of the order to the current time.
 		 * @param order the new car order that needs to be scheduled.
 		 */
-		private void scheduleOrder(Order order) {
-			DateTime estimatedEndTime = new DateTime(currentTime);
-			if(firstWorkStation.getCurrentOrder() == null && currentTime.getMinuteOfDay()<shiftEndHour*60-overTime-assemblyTime*60 && currentTime.getHourOfDay()>=shiftBeginHour && queue.isEmpty()){
-				firstWorkStation.setOrder(order);
-				estimatedEndTime = estimatedEndTime.plusHours(assemblyTime);
-			}else if(queue.isEmpty()){
-				queue.add(order);
-				estimatedEndTime = estimatedEndTime.plusHours(assemblyTime+1);
-				estimatedEndTime = getEstimatedTime(estimatedEndTime);
-			}else{
-				estimatedEndTime = new DateTime(queue.getLast().getEstimatedEndTime());
-				queue.add(order);
-				estimatedEndTime = estimatedEndTime.plusHours(1);
-				estimatedEndTime = getEstimatedTime(estimatedEndTime);
-			}
-			order.setEstimatedEndTime(estimatedEndTime);
+//		private void scheduleOrder(Order order) {
+//			DateTime estimatedEndTime = new DateTime(currentTime);
+//			if(firstWorkStation.getCurrentOrder() == null && currentTime.getMinuteOfDay()<shiftEndHour*60-overTime-assemblyTime*60 && currentTime.getHourOfDay()>=shiftBeginHour && queue.isEmpty()){
+//				firstWorkStation.setOrder(order);
+//				estimatedEndTime = estimatedEndTime.plusHours(assemblyTime);
+//			}else if(queue.isEmpty()){
+//				queue.add(order);
+//				estimatedEndTime = estimatedEndTime.plusHours(assemblyTime+1);
+//				estimatedEndTime = getEstimatedTime(estimatedEndTime);
+//			}else{
+//				estimatedEndTime = new DateTime(queue.getLast().getEstimatedEndTime());
+//				queue.add(order);
+//				estimatedEndTime = estimatedEndTime.plusHours(1);
+//				estimatedEndTime = getEstimatedTime(estimatedEndTime);
+//			}
+//			order.setEstimatedEndTime(estimatedEndTime);
+//			DateTime startTime = new DateTime(currentTime);
+//			order.setStartTime(startTime);
+//		}
+
+		private void scheduleOrder(Order order){
 			DateTime startTime = new DateTime(currentTime);
 			order.setStartTime(startTime);
+			strategy.addOrder(order);
+			reschedule();
 		}
-
 		/**
 		 * Returns the right estimated end time from the given possibly wrong estimated end time.
 		 * @param estimatedEndTime The estimated end time that needs to be scheduled.
 		 * @return	The renewed estimated end time if it was scheduled wrong before. 
 		 */
-		private DateTime getEstimatedTime(DateTime estimatedEndTime) {
+		private DateTime getEstimatedTime(DateTime estimatedEndTime, Order order) {
 			if(!timeForNewOrder(estimatedEndTime)){
 				if(estimatedEndTime.getHourOfDay()<=shiftBeginHour){
-					return new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour+assemblyTime,0);
+					return new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour,0).plusMinutes(order.getPhaseTime()*numberOfWorkStations);
 
 				}else{
-					estimatedEndTime =  new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour+assemblyTime,0);
+					estimatedEndTime =  new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour,0).plusMinutes(order.getPhaseTime()*numberOfWorkStations);
 					return estimatedEndTime.plusDays(1);
 				}
 			}else{

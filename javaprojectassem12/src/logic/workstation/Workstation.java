@@ -36,14 +36,6 @@ public abstract class Workstation {
 		this.setOrder(order);
 	}
 	
-	public void updateEstimatedEndTimeCurrentOrder(int time){
-		if(currentOrder!=null){
-			currentOrder.setEstimatedEndTime(currentOrder.getEstimatedEndTime().plusMinutes(time));
-		}
-		if(nextWorkStation!=null)
-			nextWorkStation.updateEstimatedEndTimeCurrentOrder(time);
-		
-	}
 	
 	/**
 	 * A list of tasks that can be performed at this workstation.
