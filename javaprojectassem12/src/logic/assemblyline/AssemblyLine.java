@@ -515,7 +515,7 @@ public class AssemblyLine {
 		private void scheduleOrder(Order order){
 			DateTime startTime = new DateTime(currentTime);
 			order.setStartTime(startTime);
-			strategy.addOrder(order);
+			strategy.addOrder(order, queue);
 			reschedule();
 		}
 		/**
