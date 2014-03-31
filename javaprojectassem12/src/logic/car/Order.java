@@ -89,7 +89,7 @@ public abstract class Order {
 	 * @param startTime	Time to set the start time to.
 	 */
 	public void setStartTime(DateTime startTime) {
-		if(startTime == null)
+		if(this.startTime == null)
 			this.startTime = startTime;
 	}
 	
