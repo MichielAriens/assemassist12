@@ -12,6 +12,7 @@ public class CarOrderDetailsMaker {
 	public CarOrderDetailsMaker(CarModel model){
 		this.model = model;
 		this.chosenParts = new ArrayList<CarPart>();
+		this.chosenTypes = new ArrayList<CarPartType>();
 	}
 	
 	public void addPart(CarPart part){
@@ -57,6 +58,9 @@ public class CarOrderDetailsMaker {
 	}
 	
 	public CarOrderDetails getDetails(){
+		if(chosenParts.size() == 8){
+			return new CarOrderDetails(model, chosenParts);
+		}
 		return null;
 	}
 }

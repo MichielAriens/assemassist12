@@ -34,6 +34,11 @@ public class CarManufacturingCompany {
 	private ArrayList<String> validNamesMechanic = new ArrayList<String>();
 	
 	/**
+	 * List of all valid names for customs shop managers.
+	 */
+	private ArrayList<String> validNamesCustomsManager = new ArrayList<String>();
+	
+	/**
 	 * Variable holding the assembly line of this car manufacturing company.
 	 */
 	private AssemblyLine assemblyLine;
@@ -58,7 +63,8 @@ public class CarManufacturingCompany {
 		validNamesManager.add("man");
 		validNamesMechanic.add("Joren");
 		validNamesMechanic.add("mech");
-		validNamesGarageHolders.add("Michiel");
+		validNamesCustomsManager.add("Michiel");
+		validNamesCustomsManager.add("cust");
 	}
 
 	/**
@@ -72,6 +78,7 @@ public class CarManufacturingCompany {
 	 * 			- the list of valid manager names contains the given user name,
 	 * 			- the list of valid garage holders names contains the given user name or
 	 * 			- the list of valid mechanic names contains the given user name.
+	 * 			- the list of valid customs shop manager names contains the given user name.
 	 * 			Returns null otherwise.
 	 */
 	public User logIn(String userName){
@@ -90,6 +97,11 @@ public class CarManufacturingCompany {
 		}
 		if(validNamesMechanic.contains(userName)){
 			Mechanic user = new Mechanic(this, userName);
+			users.put(userName, user);
+			return user;
+		}
+		if(validNamesCustomsManager.contains(userName)){
+			CustomsManager user = new CustomsManager(this, userName);
 			users.put(userName, user);
 			return user;
 		}

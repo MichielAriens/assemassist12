@@ -41,6 +41,7 @@ public class AssemblyLine {
 	 */
 	private DateTime currentTime;
 
+	private Statistics stats;
 //	/**
 //	 * Asks the current time of the system.
 //	 * @return	The current time of the system.
@@ -59,10 +60,12 @@ public class AssemblyLine {
 	 * Also sets the current time to January first 2014 at the beginning of the shift. 
 	 */
 	public AssemblyLine(){
+		
 		queue= new LinkedList<Order>();
 		schedule = new Schedule();
 		this.initialiseWorkStations();
 		this.currentTime = new DateTime(2014, 1, 1, 6, 0);
+		Statistics stats = new Statistics(numberOfWorkStations);
 	}
 	
 	private void initialiseWorkStations(){
@@ -193,20 +196,61 @@ public class AssemblyLine {
 		}
 
 		private boolean moveAndReschedule(int phaseDuration) {
-
+			if(!checkPhaseDuration(phaseDuration))
+				return false;
+			adjustDelays(phaseDuration);
 			currentTime = currentTime.plusMinutes(phaseDuration);
 			Order firstOrder = workStations.get(numberOfWorkStations-1).getCurrentOrder();
-			if(firstOrder!=null)
+			if(firstOrder!=null){
 				firstOrder.setEndTime(currentTime);
-			
+				stats.finishedCarOrder(firstOrder);
+			}
 			firstWorkStation.advanceWorkstations(null);
 			if(checkEndOfDay()){
 				calculateOverTime();
 				setNextDay();
+				stats.setNextDay();
 			}
 
 			reschedule();
 			return true;
+		}
+		
+		private void adjustDelays(int phaseDuration){
+			LinkedList<Order> list = new LinkedList<Order>();
+			for(Workstation next : workStations){
+				list.add(next.getCurrentOrder());
+			}
+			int amount = phaseDuration - calculateMaxPhase(list);
+			for(Workstation next : workStations){
+				if(next.getCurrentOrder()!=null)
+					next.getCurrentOrder().addDelay(amount);
+			}
+			
+		}
+		
+		private boolean checkPhaseDuration(int phaseDuration){
+			int difference = 0;
+			for(Workstation next : workStations){
+				if(next.getCurrentOrder()!=null){
+					Order order =next.getCurrentOrder();
+					difference = getTimeDifference(order.getEstimatedEndTime(),currentTime);
+					break;
+				}
+			}
+			int diff= shiftBeginHour*60 - difference - 1;
+			int max = 24*60 - currentTime.getMinuteOfDay()+diff;
+			if(max>= phaseDuration)
+				return true;
+			return false;
+		}
+		
+		private int getTimeDifference(DateTime estimate, DateTime current){
+			if(estimate.getMinuteOfDay()>current.getMinuteOfDay()){
+				return estimate.getMinuteOfDay()-current.getMinuteOfDay();
+			}else{
+				return estimate.getMinuteOfDay()+ 24*60 -current.getMinuteOfDay();
+			}
 		}
 		
 		private void reschedule(){
@@ -280,7 +324,7 @@ public class AssemblyLine {
 		private void buildEstimateFirstInQueue(){
 			LinkedList<Order> list = new LinkedList<Order>();
 			DateTime estimatedEndTime = new DateTime(currentTime);
-			if(estimatedEndTime.getHourOfDay()<shiftBeginHour || estimatedEndTime.getMinuteOfDay()>=shiftEndHour*60){
+			if(estimatedEndTime.getHourOfDay()<shiftBeginHour || estimatedEndTime.getMinuteOfDay()>=shiftEndHour*60-overTime){
 				estimatedEndTime = getEstimatedTime(estimatedEndTime, queue.getFirst());
 				queue.getFirst().setEstimatedEndTime(estimatedEndTime);
 				return;
@@ -425,7 +469,7 @@ public class AssemblyLine {
 			if(!queue.isEmpty()){
 				assemblyTime = queue.getFirst().getPhaseTime()*numberOfWorkStations;
 			}
-			if(currentTime.getMinuteOfDay()>=(shiftEndHour * 60-overTime - assemblyTime * 60) || currentTime.getMinuteOfDay()<shiftBeginHour*60)
+			if(currentTime.getMinuteOfDay()>=(shiftEndHour * 60-overTime - assemblyTime) || currentTime.getMinuteOfDay()<shiftBeginHour*60)
 				return true;
 			return false;
 		}

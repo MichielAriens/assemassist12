@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import logic.car.*;
 import logic.users.GarageHolder;
@@ -14,6 +15,8 @@ public class GarageHolderController extends UserController{
 	 * The current garage holder.
 	 */
 	private GarageHolder currentGarageHolder;
+	
+	private CarOrderDetailsMaker maker;
 	
 	/**
 	 * Sets the current garage holder to the given garage holder.
@@ -86,18 +89,28 @@ public class GarageHolderController extends UserController{
 	 * @return Null if the given type or model is null.
 	 * @return The list of options for the given car part type and model with numbering.
 	 */
-	public ArrayList<String> getOptions(CarPartType type, CarModel model){
-		if(type == null || model == null)
+	public ArrayList<String> getOptions(CarPartType type){
+		if(type == null)
 			return null;
-		ArrayList<String> options = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<String>();
 		int count = 1;
-		for(CarPart opt : CarPart.values()){
-			if(opt.type == type && model.validPart(opt)){
-				options.add(opt.toString() + ": " + count);
-				count++;
-			}
+		for(CarPart opt : maker.getAvailableParts(type)){
+			result.add(opt.toString() + ": " + count);
+			count++;
 		}
-		return options;
+		return result;
+	}
+	
+	public void chooseModel(CarModel model){
+		if(model == null)
+			return;
+		this.maker = new CarOrderDetailsMaker(model);
+	}
+	
+	public void addPart(CarPart part){
+		if(part == null)
+			return;
+		this.maker.addPart(part);
 	}
 	
 	/**
@@ -105,15 +118,9 @@ public class GarageHolderController extends UserController{
 	 * given specifications and the current garage holder are not null. 
 	 * @param spec	The specifications for the car order to be placed.
 	 */
-	public void placeOrder(ArrayList<String> spec){
-		if(spec == null || currentGarageHolder == null)
+	public void placeOrder(){
+		if(currentGarageHolder == null)
 			return;
-		CarModel model = CarModel.getModelFromString(spec.get(0));
-		ArrayList<CarPart> parts = new ArrayList<CarPart>();
-		for(int i = 1; i < spec.size(); i++){
-			parts.add(CarPart.getPartfromString(spec.get(i)));
-		}
-		CarSpecification specification = new CarSpecification(model, parts);
-		this.currentGarageHolder.placeOrder(specification);
+		this.currentGarageHolder.placeOrder(maker.getDetails());
 	}
 }
