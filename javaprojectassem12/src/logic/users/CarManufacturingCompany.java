@@ -145,6 +145,6 @@ public class CarManufacturingCompany {
 	}
 
 	public String getStatistics() {
-		assemblyLine.getStatistics();
+		return assemblyLine.getStatistics();
 	}
 }
