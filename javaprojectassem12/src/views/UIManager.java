@@ -51,36 +51,98 @@ public class UIManager {
 			}
 			writer.write("\n");
 			writer.flush();
-
-			writer.write("Future status:\n\n");
-			for(String s : maController.getFutureStatus()){
-				writer.write(s + "\n");
-			}
-			writer.write("\n");
-			writer.flush();
 			
-			int time = getTimeSpent();
-			if(this.maController.moveAssemblyLine(time)){
-				writer.write("Assembly line moved forward successfully.\n\n");
-				writer.write("Current status:\n\n");
-				for(String s : maController.getTasksPerWorkstation()){
-					writer.write(s + "\n");
+			while(true){
+				
+				int answer = chooseAction("Select your action:\n   1: Check statistics\n   2: Select alternative scheduling algorithm\nAnswer: ", 2);
+				if(answer == 1){
+					writer.write("===Statistics===");
+					writer.flush();
+					maController.getStatistics();
 				}
-				writer.flush();
-				waitForCompletion("Press enter to finish. ");
-				return;
-			}
-			else{
-				writer.write("Assembly line could not be moved forward successfully.\n\n");
-				writer.write("Unfinished tasks:\n\n");
-				for(String s : maController.getUnfinishedTasks()){
-					writer.write(s + "\n");
+				else if(answer == 2){
+					writer.write("Alternative scheduling");
+					writer.flush();
 				}
-				writer.flush();
-				waitForCompletion("Press enter to finish.\n");
 			}
+
+//			writer.write("Future status:\n\n");
+//			for(String s : maController.getFutureStatus()){
+//				writer.write(s + "\n");
+//			}
+//			writer.write("\n");
+//			writer.flush();
+//			
+//			int time = getTimeSpent();
+//			if(this.maController.moveAssemblyLine(time)){
+//				writer.write("Assembly line moved forward successfully.\n\n");
+//				writer.write("Current status:\n\n");
+//				for(String s : maController.getTasksPerWorkstation()){
+//					writer.write(s + "\n");
+//				}
+//				writer.flush();
+//				waitForCompletion("Press enter to finish. ");
+//				return;
+//			}
+//			else{
+//				writer.write("Assembly line could not be moved forward successfully.\n\n");
+//				writer.write("Unfinished tasks:\n\n");
+//				for(String s : maController.getUnfinishedTasks()){
+//					writer.write(s + "\n");
+//				}
+//				writer.flush();
+//				waitForCompletion("Press enter to finish.\n");
+//			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private int chooseAction(String query, int max){
+		try{
+			while(true){
+				writer.write(query);
+				writer.flush();
+				String answer = reader.readLine();
+				writer.write("\n");
+				writer.flush();
+				try{
+					int result = Integer.parseInt(answer);
+					if(result > 0 && result <= max)
+						return result;
+				}
+				catch(NumberFormatException e){};
+			}
+		}
+		catch(IOException e){
+			e.printStackTrace();
+			return -1;
+		}
+	}
+	
+	/**
+	 * A method that prompts the user with the given query and waits for a 'y' or 'n' answer from the user.
+	 * @param query	The query that has to be printed out.
+	 * @return		Returns true if the user has responded with a 'y' meaning yes.
+	 * 				Returns false if the user has responded with a 'n' meaning no.
+	 */
+	private boolean promptYesOrNo(String query){
+		try{
+			while(true){
+				writer.write(query);
+				writer.flush();
+				String answer = reader.readLine();
+				writer.write("\n");
+				writer.flush();
+				if(answer.equals("y"))
+					return true;
+				if(answer.equals("n"))
+					return false;
+			}
+		}
+		catch(IOException e){
+			e.printStackTrace();
+			return false;
 		}
 	}
 	
