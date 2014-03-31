@@ -65,7 +65,7 @@ public class AssemblyLine {
 		schedule = new Schedule();
 		this.initialiseWorkStations();
 		this.currentTime = new DateTime(2014, 1, 1, 6, 0);
-		Statistics stats = new Statistics(numberOfWorkStations);
+		stats = new Statistics();
 	}
 	
 	private void initialiseWorkStations(){
