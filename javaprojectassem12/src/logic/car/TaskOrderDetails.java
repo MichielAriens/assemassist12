@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
 
 import logic.workstation.Task;
 
-public class TaskOrderDetails extends OrderDetails{
+public class TaskOrderDetails{
 	
 	private DateTime deadLine;
 	private ArrayList<Task> tasks;
@@ -22,7 +22,6 @@ public class TaskOrderDetails extends OrderDetails{
 		tasks.add(new Task(part));
 	}
 
-	@Override
 	public List<Task> getPendingTasks() {
 		return tasks;
 	}

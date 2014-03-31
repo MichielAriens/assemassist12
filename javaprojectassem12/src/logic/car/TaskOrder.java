@@ -43,4 +43,9 @@ public class TaskOrder extends Order{
 	public int getPhaseTime() {
 		return this.PHASE_TIME;
 	}
+	
+	@Override
+	public boolean equals(Object obj){
+		return super.equals(obj);
+	}
 }

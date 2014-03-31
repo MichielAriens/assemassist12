@@ -5,7 +5,7 @@ import java.util.List;
 
 import logic.workstation.Task;
 
-public class CarOrderDetails extends OrderDetails{
+public class CarOrderDetails{
 	
 	
 	private CarModel model;
@@ -23,7 +23,6 @@ public class CarOrderDetails extends OrderDetails{
 		}
 	}
 
-	@Override
 	public List<Task> getPendingTasks() {
 		return this.tasks;
 	}
