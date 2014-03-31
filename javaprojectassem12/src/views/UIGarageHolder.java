@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import controllers.GarageHolderController;
 import logic.car.CarModel;
+import logic.car.CarPart;
 import logic.car.CarPartType;
 
 /**
@@ -55,10 +56,10 @@ public class UIGarageHolder {
 				printOrders("Completed Orders: ", ghController.getCompletedOrders());
 				if(!promptYesOrNo("Do you want to place a new order? (y/n): "))
 					return;
-				ArrayList<String> spec = orderingForm();
+				orderingForm();
 				if(!promptYesOrNo("Do you want to submit this car order? (y/n): "))
 					continue;
-				ghController.placeOrder(spec);
+				ghController.placeOrder();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -95,8 +96,7 @@ public class UIGarageHolder {
 	 * A method that lets the current garage holder fill out an ordering form for a new car order.
 	 * @return	An ArrayList containing all the information about the new car order in String format.
 	 */
-	private ArrayList<String> orderingForm(){
-		ArrayList<String> spec = new ArrayList<String>();
+	private void orderingForm(){
 		try{
 			writer.write("Fill in the Car details:\n\n");
 			String models = "Available models: ";
@@ -105,20 +105,23 @@ public class UIGarageHolder {
 			}
 			writer.write(models + "\n");
 			writer.flush();
-			spec.add(checkInput("Type the number of the desired car model: ", ghController.getModels()));
+			String modelString = checkInput("Type the number of the desired car model: ", ghController.getModels());
 			
-			CarModel  model = CarModel.getModelFromString(spec.get(0));
+			CarModel  model = CarModel.getModelFromString(modelString);
+			ghController.chooseModel(model);
 			for(CarPartType partType : CarPartType.values()){
 				String typeString = "Select " + partType.toString() + "-type: ";
-				for(String part : ghController.getOptions(partType, model))
+				for(String part : ghController.getOptions(partType))
 					typeString += part + "; ";
 				writer.write(typeString+"\n");
-				spec.add(checkInput("Type the number of the desired car part: ", ghController.getOptions(partType, model))); 
+				
+				String partString = checkInput("Type the number of the desired car part: ", ghController.getOptions(partType));
+				CarPart part = CarPart.getPartfromString(partString);
+				ghController.addPart(part);
 			}
 		} catch(IOException e){
 			e.printStackTrace();
 		}
-		return spec;
 	}
 	
 	/**
