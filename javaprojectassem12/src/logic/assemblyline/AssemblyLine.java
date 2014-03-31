@@ -388,7 +388,7 @@ public class AssemblyLine {
 			if(timeForNewOrder(order.getEstimatedEndTime())){
 				int big = 0;
 				for(int i=0;i<list.size();i++){
-					LinkedList<Order> sublist = (LinkedList<Order>) list.subList(0, i+1);
+					LinkedList<Order> sublist = new LinkedList<Order>(list.subList(0, i+1));
 					if(biggestPhaseTime(sublist) == null)
 						continue;
 					big=biggestPhaseTime(sublist).getPhaseTime();
