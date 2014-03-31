@@ -8,47 +8,42 @@ import logic.car.Order;
  * Class handling the statistics of a car manufacturing company.
  */
 public class Statistics {
-	//TODO: er voor zorgen dat als er nog geen finishedcarorders zijn dat er geen indexoutofboundexception worden gegeven
 	/**
-	 * 
+	 * List of finished orders.
 	 */
 	private ArrayList<Order> finishedOrders = new ArrayList<Order>();
 	
 	/**
-	 * 
+	 * List of the number of finished cars per day.
 	 */
 	private ArrayList<Integer> finishedCarOrdersPerDay = new ArrayList<Integer>();
 	
 	/**
-	 * 
+	 * Number of cars finished today.
 	 */
 	private int finishedCarOrdersToday;
 	
 	/**
-	 * 
+	 * Creates statistics object for an assembly line by initializing the number of
+	 * finished car orders today to 0.
 	 */
-	private int numberOfPhases;
-	
-	/**
-	 * 
-	 */
-	public Statistics(int numberOfPhases){
-		this.numberOfPhases = numberOfPhases;
+	public Statistics(){
 		this.finishedCarOrdersToday = 0;
 	}
 	
-	//TODO: in assemblyline, als een order gefinished is deze methode oproepen
 	/**
-	 * 
+	 * Adds the given order to the list of finished orders and adds one to the number
+	 * of finished car orders for today.
+	 * @param order	The finished car order that needs to be added.
 	 */
 	public void finishedCarOrder(Order order){
 		finishedOrders.add(order);
 		finishedCarOrdersToday++;
 	}
 	
-	//TODO: in assemblyline, als er naar de volgende dag wordt gegaan deze methode oproepen
 	/**
-	 * 
+	 * Adds the number of finished car orders for today to the list of finished car orders
+	 * per day. Sets the number of finished car orders for today to zero.
 	 */
 	public void setNextDay(){
 		finishedCarOrdersPerDay.add(finishedCarOrdersToday);
@@ -56,32 +51,24 @@ public class Statistics {
 	}
 	
 	/**
-	 * 
-	 * @return
-	 */
-	private int getDaysPassed() {
-		return finishedCarOrdersPerDay.size();
-	}
-	
-	/**
-	 * 
-	 * @return
+	 * Returns the average number of cars produced.
+	 * @return the average number of cars produced.
 	 */
 	private int getAverageCarsProduced(){
 		return getAverage(finishedCarOrdersPerDay);
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns the median number of cars produced.
+	 * @return the median number of cars produced.
 	 */
 	private int getMedianCarsProduced(){
 		return getMedian(finishedCarOrdersPerDay);
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Returns the average delay on an order.
+	 * @return the average delay on an order.
 	 */
 	private int getAverageDelay(){
 		ArrayList<Integer> delays = getAllDelays();
@@ -89,8 +76,8 @@ public class Statistics {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Returns the median delay on an order.
+	 * @return the median delay on an order.
 	 */
 	private int getMedianDelay(){
 		ArrayList<Integer> delays = getAllDelays();
@@ -98,8 +85,8 @@ public class Statistics {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Returns a new ArrayList with the delays of all orders.
+	 * @return a new ArrayList with the delays of all orders.
 	 */
 	private ArrayList<Integer> getAllDelays(){
 		ArrayList<Integer> delays = new ArrayList<Integer>();
@@ -110,41 +97,54 @@ public class Statistics {
 	}
 	
 	/**
-	 * 
-	 * @param list
-	 * @return
+	 * Returns the average of the given list of integers.
+	 * @param list	The list of integers of which the average needs to be calculated.
+	 * @return	The average of the given list of integers.
 	 */
 	private int getAverage(ArrayList<Integer> list){
 		int total = 0;
 		for(int i : list){
 			total += i;
 		}
-		int average = total/list.size();
+		int average;
+		if(total == 0){
+			average = 0;
+		}
+		else{
+			average = total/list.size();
+		}
 		return average;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Returns the median of the given list of integers.
+	 * @param list	The list of integers of which the median needs to be calculated.
+	 * @return	The median of the given list of integers.
 	 */
 	private int getMedian(ArrayList<Integer> list){
 		int median;
-		ArrayList<Integer> sortedList = makeCopy(list);
-		Collections.sort(sortedList);
-		int middle = sortedList.size()/2;
-	    if(sortedList.size()%2 == 1){
-	        median = sortedList.get(middle);
-	    } 
-	    else{
-	        median = (sortedList.get(middle-1) + sortedList.get(middle))/2;
-	    }
+		if(list.size() == 0){
+			median = 0;
+		}
+		else{
+			ArrayList<Integer> sortedList = makeCopy(list);
+			Collections.sort(sortedList);
+			int middle = sortedList.size()/2;
+			if(sortedList.size()%2 == 1){
+				median = sortedList.get(middle);
+			} 
+			else{
+				median = (sortedList.get(middle-1) + sortedList.get(middle))/2;
+			}
+		}
 	    return median;
 	}
 	
 	/**
-	 * 
-	 * @param list
-	 * @return
+	 * Returns a copy of the given list by making a new list and adding all object from the
+	 * given list to the new list.
+	 * @param list	The list to be copied.
+	 * @return	A copy of the given list.
 	 */
 	private ArrayList<Integer> makeCopy(ArrayList<Integer> list) {
 		ArrayList<Integer> copy = new ArrayList<Integer>();
@@ -153,11 +153,11 @@ public class Statistics {
 		}
 		return copy;
 	}
-	
-	//TODO: aanpassen
+
 	/**
-	 * 
+	 * Returns a string representation of these statistics.
 	 */
+	@Override
 	public String toString(){
 		String statistics = "";
 		statistics += "Average number of cars produced: " + getAverageCarsProduced() + "/n";
@@ -167,41 +167,41 @@ public class Statistics {
 //		statistics += "One day ago: " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-1);
 //		statistics += "Two days ago: " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-2);
 		
-		
 		statistics += "Average delay: " + getAverageDelay() +" minutes/n";
 		statistics += "Mean delay: " + getMedianDelay() + " minutes/n";
 		statistics += "Two last delays:/n";
 		statistics += delayXLastDays(2);
-//		statistics += "One day ago: " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-1);
-//		statistics += "Two days ago: " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-2);
+//		statistics += "1) " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-1);
+//		statistics += "2) " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-2);
 				
 		return statistics;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Returns a string representation of the number of cars produced for the last X days.
+	 * @return a string representation of the number of cars produced for the last X days.
 	 */
 	private String carsProducedXLastDays(int days){
 		String statistics = "";
 		statistics += "1 day ago: " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-1);
-		for(int i = 2; i < days; i ++){
+		for(int i = 2; i <= days; i ++){
 			statistics += i + " days ago: " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-i);
 		}
 		return statistics;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Returns a string representation of the last X delays and the day they occurred.
+	 * @return a string representation of the last X delays and the day they occurred.
 	 */
 	private String delayXLastDays(int days){
 		String statistics = "";
+		
 		int delay = finishedOrders.get(finishedOrders.size()-1).getDelay();
-		statistics += "1 day ago: " + delay + " minutes/n";
-		for(int i = 2; i < days; i ++){
+		statistics += "1) " + delay + " minutes/n";
+		for(int i = 2; i <= days; i ++){
 			delay = finishedOrders.get(finishedOrders.size()-i).getDelay();
-			statistics += i + " days ago: " + delay + " minuts/n";
+			statistics += i + ") " + delay + " minuts/n";
 		}
 		return statistics;
 	}
