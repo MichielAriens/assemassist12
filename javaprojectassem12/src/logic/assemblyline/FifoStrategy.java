@@ -12,4 +12,11 @@ public class FifoStrategy extends SchedulingStrategy{
 		
 	}
 
+	@Override
+	protected void refactorQueue(LinkedList<Order> queue, LinkedList<Order> copy) {
+		for(Order next:copy){
+			queue.add(next);
+		}
+	}
+
 }

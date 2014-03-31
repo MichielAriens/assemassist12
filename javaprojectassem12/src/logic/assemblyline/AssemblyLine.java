@@ -139,6 +139,10 @@ public class AssemblyLine {
 			schedule.scheduleOrder(order);
 	}
 
+	public void changeStrategy(Order order){
+		schedule.changeStrategy(order);
+	}
+	
 	/**
 	 * Returns a list of 3 car orders which would be in the workstations 
 	 * if the assembly is moved by the manager.
@@ -463,13 +467,13 @@ public class AssemblyLine {
 		 * @return A list which is a copy of the queue containing the pending car orders.
 		 * 		   An empty list if there are no pending orders.
 		 */
-//		private LinkedList<Order> makeCopyOfQueue() {
-//			LinkedList<Order> returnList = new LinkedList<Order>();
-//			for(Order next:queue){
-//				returnList.add(next);
-//			}
-//			return returnList;
-//		}
+		private LinkedList<Order> makeCopyOfQueue() {
+			LinkedList<Order> returnList = new LinkedList<Order>();
+			for(Order next:queue){
+				returnList.add(next);
+			}
+			return returnList;
+		}
 
 		/**
 		 * Updates the estimated time of the orders in the workstations, workstations without an order
@@ -518,6 +522,17 @@ public class AssemblyLine {
 			strategy.addOrder(order, queue);
 			reschedule();
 		}
+		
+		private void changeStrategy(Order order){
+			if(order==null)
+				strategy = new FifoStrategy();
+			else
+				strategy = new BatchSpecificationStrategy(order);
+			LinkedList<Order> copy = makeCopyOfQueue();
+			queue.clear();
+			strategy.refactorQueue(queue,copy);
+		}
+		
 		/**
 		 * Returns the right estimated end time from the given possibly wrong estimated end time.
 		 * @param estimatedEndTime The estimated end time that needs to be scheduled.
