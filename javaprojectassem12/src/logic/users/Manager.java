@@ -51,4 +51,8 @@ public class Manager extends User{
 	public List<Order> askFutureSchedule(){
 		return this.company.askFutureSchedule();
 	}
+
+	public String getStatistics() {
+		return company.getStatistics();
+	}
 }

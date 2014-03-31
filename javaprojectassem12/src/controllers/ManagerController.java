@@ -124,4 +124,8 @@ public class ManagerController extends UserController{
 			return false;
 		return this.currentManager.moveAssemblyLine(phaseDuration);
 	}
+
+	public String getStatistics() {
+		return this.currentManager.getStatistics();		
+	}
 }

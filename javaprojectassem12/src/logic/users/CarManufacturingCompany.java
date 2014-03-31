@@ -143,17 +143,8 @@ public class CarManufacturingCompany {
 	public List<Order> askFutureSchedule(){
 		return this.assemblyLine.askFutureSchedule();
 	}
-	
-	/**
-	 * Progresses the time without moving the assembly line 
-	 * 
-	 * Progresses time without progressing the companies assembly line. 
-	 * Does no checks as to the state of the line or overtime. As such this method can simulate prolonged idle time on the assemblylin, 
-	 * for example when handling emergency situations or during testing.
-	 * Overtime will be carried to the next day if the invocation results in a moment between shifts.
-	 * @param mins		The duration of idle time in minutes.
-	 */
-	public void progressTime(int mins){
-		this.assemblyLine.progressTime(mins);
+
+	public String getStatistics() {
+		return assemblyLine.getStatistics();
 	}
 }

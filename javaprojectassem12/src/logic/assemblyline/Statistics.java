@@ -183,9 +183,11 @@ public class Statistics {
 	 */
 	private String carsProducedXLastDays(int days){
 		String statistics = "";
-		statistics += "1 day ago: " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-1);
+		int numberOfCars = finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-1);
+		statistics += "1 day ago: " + numberOfCars + "/n";
 		for(int i = 2; i <= days; i ++){
-			statistics += i + " days ago: " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-i);
+			numberOfCars = finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-i);
+			statistics += i + " days ago: " + numberOfCars + "/n";
 		}
 		return statistics;
 	}

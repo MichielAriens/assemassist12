@@ -94,6 +94,10 @@ public class AssemblyLine {
 			return schedule.moveAndReschedule(phaseDuration);
 	}
 	
+	public String getStatistics(){
+		return stats.toString();
+	}
+	
 	/**
 	 * Progresses time without progressing the assembly line. 
 	 * Does no checks as to the state of the line or overtime. As such this method can simulate prolonged idle time on the assemblyline.
