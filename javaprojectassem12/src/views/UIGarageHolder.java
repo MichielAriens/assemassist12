@@ -54,15 +54,44 @@ public class UIGarageHolder {
 			while(true){
 				printOrders("Pending Orders: ", ghController.getPendingOrders());
 				printOrders("Completed Orders: ", ghController.getCompletedOrders());
-				if(!promptYesOrNo("Do you want to place a new order? (y/n): "))
-					return;
-				orderingForm();
-				if(!promptYesOrNo("Do you want to submit this car order? (y/n): "))
-					continue;
-				ghController.placeOrder();
+				int answer = chooseAction("Select your action:\n   1: Place a new order\n   2: View order details\nAnswer: ", 2);
+				if(answer == 1){
+					if(!promptYesOrNo("Do you want to place a new order? (y/n): "))
+						return;
+					orderingForm();
+					if(!promptYesOrNo("Do you want to submit this car order? (y/n): "))
+						continue;
+					ghController.placeOrder();
+				}
+				else if(answer == 2){
+					writer.write("do da info shizzle");
+					writer.flush();
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private int chooseAction(String query, int max){
+		try{
+			while(true){
+				writer.write(query);
+				writer.flush();
+				String answer = reader.readLine();
+				writer.write("\n");
+				writer.flush();
+				try{
+					int result = Integer.parseInt(answer);
+					if(result > 0 && result <= max)
+						return result;
+				}
+				catch(NumberFormatException e){};
+			}
+		}
+		catch(IOException e){
+			e.printStackTrace();
+			return -1;
 		}
 	}
 	
