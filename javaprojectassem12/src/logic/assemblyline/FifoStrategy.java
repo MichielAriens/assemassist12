@@ -8,7 +8,14 @@ public class FifoStrategy extends SchedulingStrategy{
 
 	@Override
 	protected void addOrder(Order order, LinkedList<Order> queue) {
-		queue.add(order);
+		int index = 0;
+		for(Order next:queue){
+			if(checkDeadline(order, next))
+				break;
+			
+			index++;
+		}
+		queue.add(index,order);
 		
 	}
 
