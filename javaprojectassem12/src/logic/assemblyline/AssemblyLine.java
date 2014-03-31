@@ -193,7 +193,8 @@ public class AssemblyLine {
 		}
 
 		private boolean moveAndReschedule(int phaseDuration) {
-
+			if(!checkPhaseDuration(phaseDuration))
+				return false;
 			currentTime = currentTime.plusMinutes(phaseDuration);
 			Order firstOrder = workStations.get(numberOfWorkStations-1).getCurrentOrder();
 			if(firstOrder!=null)
@@ -207,6 +208,25 @@ public class AssemblyLine {
 
 			reschedule();
 			return true;
+		}
+		
+		private boolean checkPhaseDuration(int phaseDuration){
+			
+			for(Workstation next : workStations){
+				if(next.getCurrentOrder()!=null){
+					Order order =next.getCurrentOrder();
+					int difference = getTimeDifference(order.getEstimatedEndTime(),currentTime);
+					int diff=
+				}
+			}
+		}
+		
+		private int getTimeDifference(DateTime estimate, DateTime current){
+			if(estimate.getMinuteOfDay()>current.getMinuteOfDay()){
+				return estimate.getMinuteOfDay()-current.getMinuteOfDay();
+			}else{
+				return estimate.getMinuteOfDay()+ 24*60 -current.getMinuteOfDay();
+			}
 		}
 		
 		private void reschedule(){
@@ -280,7 +300,7 @@ public class AssemblyLine {
 		private void buildEstimateFirstInQueue(){
 			LinkedList<Order> list = new LinkedList<Order>();
 			DateTime estimatedEndTime = new DateTime(currentTime);
-			if(estimatedEndTime.getHourOfDay()<shiftBeginHour || estimatedEndTime.getMinuteOfDay()>=shiftEndHour*60){
+			if(estimatedEndTime.getHourOfDay()<shiftBeginHour || estimatedEndTime.getMinuteOfDay()>=shiftEndHour*60-overTime){
 				estimatedEndTime = getEstimatedTime(estimatedEndTime, queue.getFirst());
 				queue.getFirst().setEstimatedEndTime(estimatedEndTime);
 				return;
@@ -425,7 +445,7 @@ public class AssemblyLine {
 			if(!queue.isEmpty()){
 				assemblyTime = queue.getFirst().getPhaseTime()*numberOfWorkStations;
 			}
-			if(currentTime.getMinuteOfDay()>=(shiftEndHour * 60-overTime - assemblyTime * 60) || currentTime.getMinuteOfDay()<shiftBeginHour*60)
+			if(currentTime.getMinuteOfDay()>=(shiftEndHour * 60-overTime - assemblyTime) || currentTime.getMinuteOfDay()<shiftBeginHour*60)
 				return true;
 			return false;
 		}
