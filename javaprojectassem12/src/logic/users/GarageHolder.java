@@ -2,7 +2,7 @@ package logic.users;
 
 import java.util.ArrayList;
 import logic.car.CarOrder;
-import logic.car.CarSpecification;
+import logic.car.CarOrderDetails;
 
 /**
  * Class used to describe a garage holder who can order cars from a car manufacturing company.
@@ -58,14 +58,13 @@ public class GarageHolder extends User{
 	}
 	
 	/**
-	 * Commits a new order with the given car specification if the given car specifications
-	 * are not null.
-	 * @param specification	The car specification for the new order.
+	 * Commits a new order with the given car order details if the given car order details are not null.
+	 * @param details The car order details for the new order.
 	 */
-	public void placeOrder(CarSpecification specification){
-		if(specification == null)
+	public void placeOrder(CarOrderDetails details){
+		if(details == null)
 			return;
-		CarOrder order = new CarOrder(specification);
+		CarOrder order = new CarOrder(details);
 		company.addOrder(order);
 		this.committedOrders.add(order);
 	}

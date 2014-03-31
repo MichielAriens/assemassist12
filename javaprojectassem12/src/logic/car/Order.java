@@ -90,6 +90,15 @@ public abstract class Order {
 	 * 			False if this order is not completed.
 	 */
 	public abstract boolean done();
-
-
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj == null) return false;
+		if(this.getClass() != obj.getClass()) return false;
+		return equals((Order) obj);
+	}
+	
+	private boolean equals(Order other){
+		return this.getTasks().equals(other.getTasks());
+	}
 }

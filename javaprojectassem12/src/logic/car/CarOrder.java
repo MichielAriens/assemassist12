@@ -37,6 +37,10 @@ public class CarOrder extends Order{
 	public int getPhaseTime() {
 		return this.details.getPhaseTime();
 	}
-
+	
+	@Override
+	public boolean equals(Object obj){
+		return super.equals(obj);
+	}
 
 }

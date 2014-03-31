@@ -66,4 +66,14 @@ public class Task {
 		return "Task description:\n   -Type of part needed: " + this.getCarPart().type.toString() + ",\n   -Car Part: " + this.getCarPart().toString() + "\n";
 	}
 	
+	@Override
+	public boolean equals(Object obj){
+		if(obj == null) return false;
+		if(this.getClass() != obj.getClass()) return false;
+		return equals((Task) obj);
+	}
+	
+	private boolean equals(Task other){
+		return this.carPart == other.carPart;
+	}
 }

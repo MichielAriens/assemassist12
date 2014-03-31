@@ -24,10 +24,12 @@ public enum CarPart {
 	SEATS_VINYL_GRAY	(CarPartType.Seats, 	"Vinyl grey"),
 	AIRCO_MANUAL		(CarPartType.Airco,		"Manual"),	
 	AIRCO_AUTO			(CarPartType.Airco,		"Automatic"),
+	AIRCO_NONE			(CarPartType.Airco,		"None"),	
 	WHEELS_COMFORT		(CarPartType.Wheels,	"Comfort"),
 	WHEELS_WINTER		(CarPartType.Wheels,	"Winter"), 
 	WHEELS_SPORTS		(CarPartType.Wheels, 	"Sports"),
 	SPOILER_LOW			(CarPartType.Spoiler,	"Low"),
+	SPOILER_NONE		(CarPartType.Spoiler,	"None"),
 	SPOILER_HIGH		(CarPartType.Spoiler,	"High");
 	
 	
