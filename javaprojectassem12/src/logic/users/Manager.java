@@ -55,4 +55,8 @@ public class Manager extends User{
 	public String getStatistics() {
 		return company.getStatistics();
 	}
+
+	public String getCurrentStrategy() {
+		return company.getCurrentStrategy();
+	}
 }

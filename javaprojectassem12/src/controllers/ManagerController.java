@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import logic.users.Manager;
 import logic.workstation.Task;
 import logic.workstation.Workstation;
@@ -127,5 +128,17 @@ public class ManagerController extends UserController{
 
 	public String getStatistics() {
 		return this.currentManager.getStatistics();		
+	}
+
+	public String getCurrentStrategy() {
+		return currentManager.getCurrentStrategy();
+	}
+
+	public ArrayList<String> getCarOptionsBatchProcessing() {
+		// TODO Auto-generated method stub
+	}
+
+	public ArrayList<String> getStrategies() {
+		// TODO Auto-generated method stub
 	}
 }

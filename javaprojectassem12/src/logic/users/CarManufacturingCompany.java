@@ -147,4 +147,8 @@ public class CarManufacturingCompany {
 	public String getStatistics() {
 		return assemblyLine.getStatistics();
 	}
+
+	public String getCurrentStrategy() {
+		return assemblyLine.getCurrentStrategy();
+	}
 }

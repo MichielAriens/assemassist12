@@ -160,16 +160,16 @@ public class Statistics {
 	@Override
 	public String toString(){
 		String statistics = "";
-		statistics += "Average number of cars produced: " + getAverageCarsProduced() + "/n";
-		statistics += "Mean number of cars produced: " + getMedianCarsProduced() + "/n";
-		statistics += "Exact numbers two last days:/n";
+		statistics += "Average number of cars produced: " + getAverageCarsProduced() + "\n";
+		statistics += "Mean number of cars produced: " + getMedianCarsProduced() + "\n";
+		statistics += "Exact numbers two last days:\n";
 		statistics += carsProducedXLastDays(2);
 //		statistics += "One day ago: " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-1);
 //		statistics += "Two days ago: " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-2);
 		
-		statistics += "Average delay: " + getAverageDelay() +" minutes/n";
-		statistics += "Mean delay: " + getMedianDelay() + " minutes/n";
-		statistics += "Two last delays:/n";
+		statistics += "Average delay: " + getAverageDelay() +" minutes\n";
+		statistics += "Mean delay: " + getMedianDelay() + " minutes\n";
+		statistics += "Two last delays:\n";
 		statistics += delayXLastDays(2);
 //		statistics += "1) " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-1);
 //		statistics += "2) " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-2);
@@ -183,11 +183,23 @@ public class Statistics {
 	 */
 	private String carsProducedXLastDays(int days){
 		String statistics = "";
-		int numberOfCars = finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-1);
-		statistics += "1 day ago: " + numberOfCars + "/n";
-		for(int i = 2; i <= days; i ++){
-			numberOfCars = finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-i);
-			statistics += i + " days ago: " + numberOfCars + "/n";
+		int maxIndex = finishedCarOrdersPerDay.size()-1;
+		if(maxIndex >= 0){
+			int numberOfCars = finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-1);
+			statistics += "   1 day ago: " + numberOfCars + "\n";
+			for(int i = 2; i <= days; i ++){
+				if(i <= maxIndex){
+					numberOfCars = finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-i);
+					statistics += "   " + i + " days ago: " + numberOfCars + "\n";
+				}
+				else{
+					statistics += "   No further records.\n";
+					break;
+				}
+			}
+		}
+		else{
+			statistics += "   No records.\n";
 		}
 		return statistics;
 	}
@@ -198,12 +210,23 @@ public class Statistics {
 	 */
 	private String delayXLastDays(int days){
 		String statistics = "";
-		
-		int delay = finishedOrders.get(finishedOrders.size()-1).getDelay();
-		statistics += "1) " + delay + " minutes/n";
-		for(int i = 2; i <= days; i ++){
-			delay = finishedOrders.get(finishedOrders.size()-i).getDelay();
-			statistics += i + ") " + delay + " minuts/n";
+		int maxIndex = finishedOrders.size()-1;
+		if(maxIndex >= 0){
+			int delay = finishedOrders.get(finishedOrders.size()-1).getDelay();
+			statistics += "   1) " + delay + " minutes\n";
+			for(int i = 2; i <= days; i ++){
+				if(i <= maxIndex){
+					delay = finishedOrders.get(finishedOrders.size()-i).getDelay();
+					statistics += "   " + i + ") " + delay + " minuts\n";
+				}
+				else{
+					statistics += "   No further records.\n";
+					break;
+				}
+			}
+		}
+		else{
+			statistics += "   No records.\n";
 		}
 		return statistics;
 	}
