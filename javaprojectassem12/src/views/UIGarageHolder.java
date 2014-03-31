@@ -63,29 +63,36 @@ public class UIGarageHolder {
 				if(answer == 1){
 					writer.write("==ORDERING FORM==\n");
 					writer.flush();
-					if(!promptYesOrNo("Do you want to place a new order? (y/n): "))
-						return;
 					orderingForm();
-					if(!promptYesOrNo("Do you want to submit this car order? (y/n): "))
-						continue;
-					ghController.placeOrder();
+					if(promptYesOrNo("Do you want to submit this car order? (y/n): ")){
+						ghController.placeOrder();
+						String info = ghController.getPendingInfo(ghController.getPendingOrders().size()-1);
+						writer.write("New Order placed:\n");
+						writer.write(info + "\n");
+						writer.flush();
+					}
+					if(!promptYesOrNo("Do you want to place another car order? (y/n): "))
+						return;
 				}
 				else if(answer == 2){
 					writer.write("==ORDER DETAILS==\n");
 					if(nbOfOrders < 1){
 						writer.write("There are no orders available to review.\n\n");
 						writer.flush();
-						continue;
 					}
-					writer.flush();
-					int ordernr = chooseAction("Choose the order you want to review: ", nbOfOrders);
-					String info = "";
-					if(ordernr > pending.size())
-						info = ghController.getCompletedInfo(ordernr-pending.size()-1);
-					else
-						info = ghController.getPendingInfo(ordernr-1);
-					writer.write(info + "\n");
-					writer.flush();
+					else{
+						writer.flush();
+						int ordernr = chooseAction("Choose the order you want to review: ", nbOfOrders);
+						String info = "";
+						if(ordernr > pending.size())
+							info = ghController.getCompletedInfo(ordernr-pending.size()-1);
+						else
+							info = ghController.getPendingInfo(ordernr-1);
+						writer.write(info + "\n");
+						writer.flush();
+					}
+					if(!promptYesOrNo("Do you want to review another car order? (y/n): "))
+						return;
 				}
 				else if(answer == 3){
 					return;
