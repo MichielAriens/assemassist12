@@ -48,9 +48,21 @@ public class GarageHolderController extends UserController{
 			return null;
 		ArrayList<String> pendingOrderStrings = new ArrayList<String>();
 		for(CarOrder order : this.currentGarageHolder.getPendingOrders()){
-			pendingOrderStrings.add(order.toString());
+			pendingOrderStrings.add("Pending, est. completion at: " + order.toString());
 		}
 		return pendingOrderStrings;
+	}
+	
+	public String getPendingInfo(int index){
+		if(this.currentGarageHolder == null)
+			return null;
+		return this.currentGarageHolder.getPendingOrders().get(index).getInformation();
+	}
+	
+	public String getCompletedInfo(int index){
+		if(this.currentGarageHolder == null)
+			return null;
+		return this.currentGarageHolder.getCompletedOrders().get(index).getInformation();
 	}
 
 	/**
@@ -63,7 +75,7 @@ public class GarageHolderController extends UserController{
 			return null;
 		ArrayList<String> completedOrderStrings = new ArrayList<String>();
 		for(CarOrder order : this.currentGarageHolder.getCompletedOrders()){
-			completedOrderStrings.add(order.toString());
+			completedOrderStrings.add("Completed on: " + order.toString());
 		}
 		return completedOrderStrings;
 	}

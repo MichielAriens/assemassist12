@@ -30,5 +30,16 @@ public class CarOrderDetails{
 	public int getPhaseTime() {
 		return model.phaseDuration;
 	}
+	
+	@Override
+	public String toString(){
+		String str = this.model.toString() + "; (";
+		for(Task task : tasks){
+			str += task.getCarPart().toString() + ", ";
+		}
+		str = str.substring(0, str.length()-2);
+		str += ")";
+		return str;
+	}
 
 }

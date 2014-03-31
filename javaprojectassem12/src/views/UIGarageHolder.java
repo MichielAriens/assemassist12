@@ -52,10 +52,17 @@ public class UIGarageHolder {
 			writer.write("Garage holder " + ghController.getUserName()+ " has logged in.\n\n");
 			writer.flush();
 			while(true){
-				printOrders("Pending Orders: ", ghController.getPendingOrders());
-				printOrders("Completed Orders: ", ghController.getCompletedOrders());
-				int answer = chooseAction("Select your action:\n   1: Place a new order\n   2: View order details\nAnswer: ", 2);
+				writer.write("==ORDER OVERVIEW==\n");
+				writer.flush();
+				ArrayList<String> pending = ghController.getPendingOrders();
+				ArrayList<String> completed = ghController.getCompletedOrders();
+				int nbOfOrders = pending.size() + completed.size();
+				printOrders("Pending Orders: ", pending,1);
+				printOrders("Completed Orders: ", completed,pending.size()+1);
+				int answer = chooseAction("Select your action:\n   1: Place a new order\n   2: View order details\n   3: Leave the overview\nAnswer: ", 3);
 				if(answer == 1){
+					writer.write("==ORDERING FORM==\n");
+					writer.flush();
 					if(!promptYesOrNo("Do you want to place a new order? (y/n): "))
 						return;
 					orderingForm();
@@ -64,8 +71,24 @@ public class UIGarageHolder {
 					ghController.placeOrder();
 				}
 				else if(answer == 2){
-					writer.write("do da info shizzle");
+					writer.write("==ORDER DETAILS==\n");
+					if(nbOfOrders < 1){
+						writer.write("There are no orders available to review.\n\n");
+						writer.flush();
+						continue;
+					}
 					writer.flush();
+					int ordernr = chooseAction("Choose the order you want to review: ", nbOfOrders);
+					String info = "";
+					if(ordernr > pending.size())
+						info = ghController.getCompletedInfo(ordernr-pending.size()-1);
+					else
+						info = ghController.getPendingInfo(ordernr-1);
+					writer.write(info + "\n");
+					writer.flush();
+				}
+				else if(answer == 3){
+					return;
 				}
 			}
 		} catch (IOException e) {
@@ -187,7 +210,8 @@ public class UIGarageHolder {
 	 * @param title		The title that has to be printed out at the top.
 	 * @param orders	The list of orders that has to be printed out.
 	 */
-	private void printOrders(String title, ArrayList<String> orders){
+	private void printOrders(String title, ArrayList<String> orders, int start){
+		int count = start;
 		try {
 			writer.write(title + "\n");
 			if(orders.size() == 0){
@@ -195,7 +219,8 @@ public class UIGarageHolder {
 			}
 			else{
 				for(String order : orders){
-					writer.write("   - " + order + "; \n");
+					writer.write("   -" + count + ": " + order + "; \n");
+					count++;
 				}
 			}
 			writer.write("\n");
