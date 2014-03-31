@@ -162,9 +162,9 @@ public class UIGarageHolder {
 			for(String mod : ghController.getModels()){
 				models += mod + "; ";
 			}
-			writer.write(models + "\n");
+			writer.write("   " + models + "\n");
 			writer.flush();
-			String modelString = checkInput("Type the number of the desired car model: ", ghController.getModels());
+			String modelString = checkInput("   Type the number of the desired car model: ", ghController.getModels());
 			
 			CarModel  model = CarModel.getModelFromString(modelString);
 			ghController.chooseModel(model);
@@ -172,9 +172,9 @@ public class UIGarageHolder {
 				String typeString = "Select " + partType.toString() + "-type: ";
 				for(String part : ghController.getOptions(partType))
 					typeString += part + "; ";
-				writer.write(typeString+"\n");
+				writer.write("   " + typeString+"\n");
 				
-				String partString = checkInput("Type the number of the desired car part: ", ghController.getOptions(partType));
+				String partString = checkInput("   Type the number of the desired car part: ", ghController.getOptions(partType));
 				CarPart part = CarPart.getPartfromString(partString);
 				ghController.addPart(part);
 			}
@@ -202,7 +202,7 @@ public class UIGarageHolder {
 					if(s.endsWith(answer))
 						return s.substring(0, s.indexOf(":"));
 				}
-				writer.write("Invalid input, try again.\n");
+				writer.write("   Invalid input, try again.\n");
 			}
 		}
 		catch(IOException e){
@@ -220,13 +220,13 @@ public class UIGarageHolder {
 	private void printOrders(String title, ArrayList<String> orders, int start){
 		int count = start;
 		try {
-			writer.write(title + "\n");
+			writer.write("   " + title + "\n");
 			if(orders.size() == 0){
-				writer.write("None. \n");
+				writer.write("      None. \n");
 			}
 			else{
 				for(String order : orders){
-					writer.write("   -" + count + ": " + order + "; \n");
+					writer.write("      -" + count + ": " + order + "; \n");
 					count++;
 				}
 			}
