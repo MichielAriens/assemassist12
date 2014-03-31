@@ -1,7 +1,9 @@
 package logic.car;
 
 import java.util.List;
+
 import logic.workstation.Task;
+
 import org.joda.time.DateTime;
 
 
@@ -22,6 +24,8 @@ public abstract class Order {
 	 * If the order is finished this will be the same as the end time.
 	 */
 	private DateTime estimatedEndTime;
+	
+	private int delay = 0;
 	
 	/**
 	 * Returns the time this order was created.
@@ -46,6 +50,21 @@ public abstract class Order {
 	 */
 	public DateTime getEstimatedEndTime() {
 		return estimatedEndTime;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int getDelay() {
+		return delay;
+	}
+	
+	/**
+	 * 
+	 */
+	public void addDelay(int amount){
+		delay+= amount;
 	}
 	
 	/**
