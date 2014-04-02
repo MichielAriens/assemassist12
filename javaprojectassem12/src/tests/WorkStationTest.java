@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import logic.car.CarModel;
+import logic.car.*;
 import logic.car.CarOrder;
 import logic.car.CarPart;
 import logic.car.CarPartType;
@@ -51,19 +51,21 @@ public class WorkStationTest {
 		garageHolder = new GarageHolder(carManufacturingCompany, "Lando");//new GarageHolder(carManufacturingCompany);
 		
 		CarPart[] partsArray = {
-				CarPart.AIRCO_AUTO, 
 				CarPart.BODY_BREAK, 
-				CarPart.COLOUR_BLACK, 
-				CarPart.ENGINE_4, 
-				CarPart.GEARBOX_5AUTO, 
-				CarPart.SEATS_LEATHER_BLACK, 
-				CarPart.WHEELS_COMFORT
+				CarPart.COLOUR_RED,
+				CarPart.ENGINE_4,
+				CarPart.GEARBOX_5AUTO,
+				CarPart.SEATS_LEATHER_WHITE,
+				CarPart.AIRCO_MANUAL,
+				CarPart.WHEELS_COMFORT,
+				CarPart.SPOILER_NONE
 			};
 		
-		List<CarPart> parts = (List<CarPart>) Arrays.asList(partsArray);
-		carSpecification = new CarSpecification(CarModel.MODEL1,new ArrayList<CarPart>(parts));
-		carOrder = new CarOrder(carSpecification);
-		
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELA);
+		for(CarPart part : partsArray){
+			maker.addPart(part);
+		}
+		carOrder = new CarOrder(maker.getDetails());
 		
 		universalPost = new Workstation() {
 			@Override
