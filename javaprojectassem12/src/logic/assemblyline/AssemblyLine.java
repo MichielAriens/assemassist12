@@ -80,19 +80,6 @@ public class AssemblyLine {
 		numberOfWorkStations = workStations.size();
 	}
 	
-
-	/**
-	 * First checks if the phaseDuration is between 0 and 180 minutes.
-	 * Moves the car orders on the assembly line if every work station is ready and 
-	 * sets the end time of the first order to the given end time if there was an order 
-	 * in the last workstation. Then checks if it's the end of the day. If it is the end of the day,
-	 * sets the time to the next day at the beginning of the shift and updates the estimated time of
-	 * the car orders. It also calculates the overtime made during that day. Else just updates the
-	 * estimated time of the car orders.
-	 * @param phaseDuration The time in minutes representing the duration of the current phase.
-	 * @return	False if the assembly line can not be moved.
-	 * 			True otherwise.
-	 */
 	private boolean moveAssemblyLine(int phaseDuration){
 			return schedule.moveAndReschedule(phaseDuration);
 	}
@@ -101,21 +88,6 @@ public class AssemblyLine {
 		return stats.toString();
 	}
 	
-	/**
-	 * Progresses time without progressing the assembly line. 
-	 * Does no checks as to the state of the line or overtime. As such this method can simulate prolonged idle time on the assemblyline.
-	 * Overtime will be carried to the next day if the invocation results in a moment between shifts.
-	 * @param phaseDuration		The duration of idle time in minutes.
-	 */
-//	public void progressTime(int phaseDuration){
-//		currentTime = currentTime.plusMinutes(phaseDuration);
-//		if(currentTime.getHourOfDay()>=22 || currentTime.getHourOfDay()<6){
-//			schedule.setNextDay();
-//			
-//		}
-//		schedule.updateEstimatedTimes(phaseDuration);
-//	}
-
 	/**
 	 * Checks if all the work stations are done.
 	 * @return 	True if all work stations are done.
@@ -512,23 +484,6 @@ public class AssemblyLine {
 		}
 
 		/**
-		 * First updates the estimated end time of the workstations, then reschedules the pending car orders
-		 * in a queue iteratively.
-		 * @param phaseDuration The duration of the current phase of the assembly line.
-		 */
-//		private void updateEstimatedTimes(int phaseDuration) {
-//			updateEstimatedTimeWorkStations(phaseDuration);
-//			LinkedList<Order> copyOfQueue = makeCopyOfQueue();
-//			queue.clear();
-//			if(!copyOfQueue.isEmpty()){
-//				for(Order next: copyOfQueue){
-//					scheduleOrder(next);
-//				}
-//			}
-//
-//		}
-
-		/**
 		 * Makes a copy of the queue containing the pending orders.
 		 * @return A list which is a copy of the queue containing the pending car orders.
 		 * 		   An empty list if there are no pending orders.
@@ -540,48 +495,7 @@ public class AssemblyLine {
 			}
 			return returnList;
 		}
-
-		/**
-		 * Updates the estimated time of the orders in the workstations, workstations without an order
-		 * do not get updated. It considers the phaseDuration when updating the estimated end times.
-		 * @param phaseDuration The time it took for the current phase to be completed.
-		 */
-//		private void updateEstimatedTimeWorkStations(int phaseDuration) {
-//			firstWorkStation.updateEstimatedEndTimeCurrentOrder(phaseDuration);
-//		}
-
-		/**
-		 * Schedules the given car order into the assembly line.
-		 * If the first workstation is empty and there is time for a new car order, sets the order of the 
-		 * first workstation to the given order. The estimated time is set to the curren time plus assembly time.
-		 * Else if the queue of pending orders if empty, adds it and sets the estimated time to the currentime plus 
-		 * the assembly time plus 1 hour. 
-		 * Else adds the order at the end of the pending queue and looks at the previous estimated end time and adds
-		 * 1 hour to it. 
-		 * After the order is added to the workstation or to the queue of pending orders, and the estimated time
-		 * is set, sets the start time of the order to the current time.
-		 * @param order the new car order that needs to be scheduled.
-		 */
-//		private void scheduleOrder(Order order) {
-//			DateTime estimatedEndTime = new DateTime(currentTime);
-//			if(firstWorkStation.getCurrentOrder() == null && currentTime.getMinuteOfDay()<shiftEndHour*60-overTime-assemblyTime*60 && currentTime.getHourOfDay()>=shiftBeginHour && queue.isEmpty()){
-//				firstWorkStation.setOrder(order);
-//				estimatedEndTime = estimatedEndTime.plusHours(assemblyTime);
-//			}else if(queue.isEmpty()){
-//				queue.add(order);
-//				estimatedEndTime = estimatedEndTime.plusHours(assemblyTime+1);
-//				estimatedEndTime = getEstimatedTime(estimatedEndTime);
-//			}else{
-//				estimatedEndTime = new DateTime(queue.getLast().getEstimatedEndTime());
-//				queue.add(order);
-//				estimatedEndTime = estimatedEndTime.plusHours(1);
-//				estimatedEndTime = getEstimatedTime(estimatedEndTime);
-//			}
-//			order.setEstimatedEndTime(estimatedEndTime);
-//			DateTime startTime = new DateTime(currentTime);
-//			order.setStartTime(startTime);
-//		}
-
+		
 		private void scheduleOrder(Order order){
 			DateTime startTime = new DateTime(currentTime);
 			order.setStartTime(startTime);
