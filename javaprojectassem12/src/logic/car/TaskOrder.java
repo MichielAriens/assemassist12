@@ -5,6 +5,8 @@ import java.util.List;
 import logic.workstation.Task;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class TaskOrder extends Order{
 	
@@ -52,5 +54,10 @@ public class TaskOrder extends Order{
 	@Override
 	public Order getRawCopy(){
 		return new TaskOrder(details.getRawCopy());
+	}
+	
+	public String toString(){
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm");
+		return "Estimated completion: " + fmt.print(super.getEstimatedEndTime());
 	}
 }

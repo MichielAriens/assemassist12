@@ -16,11 +16,12 @@ public class CustomsManager extends User{
 	 * Commits a new order with the given task order details if the given task order details are not null.
 	 * @param details The task order details for the new order.
 	 */
-	public void placeOrder(TaskOrderDetails details){
+	public String placeOrder(TaskOrderDetails details){
 		if(details == null)
-			return;
+			return null;
 		TaskOrder order = new TaskOrder(details);
 		company.addOrder(order);
+		return order.toString();
 	}
 
 }
