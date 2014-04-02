@@ -25,7 +25,6 @@ import org.junit.Test;
 public class AssemblyLineTest {
 	private CarManufacturingCompany cmcMotors;
 	private AssemblyLine assemblyLine;
-	private CarSpecification carSpecification;
 	private List<CarOrder> orders = new ArrayList<CarOrder>();
 	private Mechanic barry;
 	
@@ -71,7 +70,7 @@ public class AssemblyLineTest {
 	public void singleCarOrderPropagation(){
 		DateTime startTime = assemblyLine.getCurrentTime();
 		assertFalse(orders.get(0).done());
-		assemblyLine.addCarOrder(orders.get(0));
+		assemblyLine.addOrder(orders.get(0));
 		/* Now we progress the line */
 		assemblyLine.moveAssemblyLine(0);
 		assertFalse(orders.get(0).done());
@@ -124,7 +123,7 @@ public class AssemblyLineTest {
 	@Test
 	public void tenOrdersTest(){
 		for(CarOrder order : orders){
-			assemblyLine.addCarOrder(order);
+			assemblyLine.addOrder(order);
 			assertFalse(order.done());
 		}
 		for(int i = 0; i < 10; i++){
