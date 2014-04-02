@@ -149,11 +149,15 @@ public class CarManufacturingCompany {
 		return assemblyLine.getStatistics();
 	}
 
-	public SchedulingStrategy getCurrentStrategy() {
-		return assemblyLine.getCurrentStrategy();
+	public ArrayList<SchedulingStrategy> getStrategies() {
+		return assemblyLine.getStrategies();
 	}
 
-	public ArrayList<SchedulingStrategy> getAvailableStrategies() {
-		return assemblyLine.getAvailableStrategies();
+	public ArrayList<Order> getBatchList() {
+		return assemblyLine.getBatchList();
+	}
+
+	public void changeStrategy(Order order) {
+		assemblyLine.changeStrategy(order);
 	}
 }

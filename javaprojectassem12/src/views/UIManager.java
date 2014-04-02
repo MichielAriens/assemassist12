@@ -45,24 +45,17 @@ public class UIManager {
 	public void run(ManagerController maController){
 		this.maController = maController;
 		try {
-			writer.write("Manager " + maController.getUserName()+ " has logged in.\n\n");
-//			writer.write("Current status:\n\n");
-//			for(String s : maController.getTasksPerWorkstation()){
-//				writer.write(s + "\n");
-//			}
-//			writer.write("\n");
-//			writer.flush();
-			
+			writer.write("Manager " + maController.getUserName()+ " has logged in.\n\n");			
 			while(true){				
-				int answer = chooseAction("Select your action:\n   1: Check statistics\n   2: Select alternative scheduling algorithm\nAnswer: ", 2);
-				if(answer == 1){
+				int answer = chooseAction("Select your action:\n   1: Check statistics\n   2: Select alternative scheduling algorithm\n   3: Leave overview\nAnswer: ", 3);
+				if(answer == 1)
 					writeStatistics();
-				}
-				else if(answer == 2){
-					if(!promptYesOrNo("Do you want to select a new scheduling algorithm? (y/n): "))
-						return;
+				else if(answer == 2)
 					newSchedulingAlgorithm();
-				}
+					if(promptYesOrNo("Do you want to select a new scheduling algorithm? (y/n): "))
+						newSchedulingAlgorithm();
+				else if(answer == 3)
+					return;
 			}
 
 //			writer.write("Future status:\n\n");
@@ -107,10 +100,11 @@ public class UIManager {
 	private void newSchedulingAlgorithm() throws IOException {
 		writer.write("ALTERNATIVE SCHEDULING\n");
 		writer.flush();
-		writer.write("Current algorithm:\n   " + maController.getCurrentStrategy() + "\n");
-		ArrayList<String> strategies = maController.getAvailableStrategies();
+		ArrayList<String> strategies = maController.getStrategies();
+		writer.write("Current algorithm:\n   " + strategies.get(0) + "\n");
+		
 		String query = "Select your algorithm:\n";
-		for(int i = 0; i < strategies.size(); i++){
+		for(int i = 1; i < strategies.size(); i++){
 			query += "   " + (i+1) + ": " + strategies.get(i) + "\n";
 		}
 		query += "   " + (strategies.size()+1) + ": Leave the overview\nAnswer: ";
@@ -120,7 +114,7 @@ public class UIManager {
 			//TODO FIFO: select FIFO queue algorithm
 		}
 		else if(chosenStrategy.equals("Specification Batch")){
-			ArrayList<String> listCarOptions = maController.getCarOptionsBatchProcessing();
+			ArrayList<String> listCarOptions = maController.getBatchList();
 			if(listCarOptions.isEmpty()){
 				writer.write("No available sets of car options!\n");
 				writer.flush();
@@ -130,9 +124,9 @@ public class UIManager {
 				writer.write("Available sets of car options:\n");
 				query = "Select desired set:\n";
 				for(int i = 0; i < listCarOptions.size(); i++){
-					query += "Set " + (i+1) + ":\n"+listCarOptions.get(i);
+					query += listCarOptions.get(i);
 				}
-				int carOption = chooseAction(query, strategies.size()+1);
+				int carOption = chooseAction(query, listCarOptions.size());
 				//TODO batch processing opstarten met de gekozen car options
 				
 			}

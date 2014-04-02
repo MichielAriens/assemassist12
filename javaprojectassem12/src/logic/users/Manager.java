@@ -39,17 +39,16 @@ public class Manager extends User{
 	public String getStatistics() {
 		return company.getStatistics();
 	}
-
-	public SchedulingStrategy getCurrentStrategy() {
-		return company.getCurrentStrategy();
+	
+	public ArrayList<SchedulingStrategy> getStrategies() {
+		return company.getStrategies();
 	}
 
-	public ArrayList<SchedulingStrategy> getAvailableStrategies() {
-		return company.getAvailableStrategies();
+	public ArrayList<Order> getBatchList() {
+		return company.getBatchList();
 	}
 
-	public void getCarOptionsBatchProcessing() {
-		// TODO Auto-generated method stub
-		
+	public void changeStrategy(Order order) {
+		company.changeStrategy(order);
 	}
 }
