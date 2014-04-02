@@ -8,11 +8,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.smartcardio.CardException;
+
 import logic.assemblyline.AssemblyLine;
-import logic.car.CarModel;
-import logic.car.CarOrder;
-import logic.car.CarPart;
-import logic.car.CarSpecification;
+import logic.car.*;
 import logic.users.CarManufacturingCompany;
 import logic.users.Mechanic;
 import logic.workstation.Task;
@@ -26,9 +25,27 @@ import org.junit.Test;
 public class AssemblyLineTest {
 	private CarManufacturingCompany cmcMotors;
 	private AssemblyLine assemblyLine;
-	private CarSpecification carSpecification;
 	private List<CarOrder> orders = new ArrayList<CarOrder>();
 	private Mechanic barry;
+	
+	private CarOrder buildStandardOrderA(){
+		CarPart[] partsArray = {
+				CarPart.BODY_BREAK, 
+				CarPart.COLOUR_RED,
+				CarPart.ENGINE_4,
+				CarPart.GEARBOX_5AUTO,
+				CarPart.SEATS_LEATHER_WHITE,
+				CarPart.AIRCO_MANUAL,
+				CarPart.WHEELS_COMFORT,
+				CarPart.SPOILER_NONE
+			};
+		
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELA);
+		for(CarPart part : partsArray){
+			maker.addPart(part);
+		}
+		return new CarOrder(maker.getDetails());
+	}
 	
 	/**
 	 * We start by setting up an environment with assets commonly used by the test suite in the prequel.
@@ -39,22 +56,8 @@ public class AssemblyLineTest {
 	public void prequel(){
 		cmcMotors = new CarManufacturingCompany();
 		barry = new Mechanic(cmcMotors, "Barry");
-		
-		assemblyLine = new AssemblyLine();
-		CarPart[] partsArray = {
-				CarPart.AIRCO_AUTO, 
-				CarPart.BODY_BREAK, 
-				CarPart.COLOUR_BLACK, 
-				CarPart.ENGINE_4, 
-				CarPart.GEARBOX_5AUTO, 
-				CarPart.SEATS_LEATHER_BLACK, 
-				CarPart.WHEELS_COMFORT
-			};
-		
-		List<CarPart> parts = (List<CarPart>) Arrays.asList(partsArray);
-		carSpecification = new CarSpecification(CarModel.MODEL1,parts);
 		for(int i = 0; i < 10; i++){
-			orders.add(new CarOrder(carSpecification));
+			orders.add(buildStandardOrderA());
 		}
 	}
 	
@@ -67,7 +70,7 @@ public class AssemblyLineTest {
 	public void singleCarOrderPropagation(){
 		DateTime startTime = assemblyLine.getCurrentTime();
 		assertFalse(orders.get(0).done());
-		assemblyLine.addCarOrder(orders.get(0));
+		assemblyLine.addOrder(orders.get(0));
 		/* Now we progress the line */
 		assemblyLine.moveAssemblyLine(0);
 		assertFalse(orders.get(0).done());
@@ -120,7 +123,7 @@ public class AssemblyLineTest {
 	@Test
 	public void tenOrdersTest(){
 		for(CarOrder order : orders){
-			assemblyLine.addCarOrder(order);
+			assemblyLine.addOrder(order);
 			assertFalse(order.done());
 		}
 		for(int i = 0; i < 10; i++){

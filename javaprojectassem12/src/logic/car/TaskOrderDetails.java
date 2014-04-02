@@ -29,5 +29,9 @@ public class TaskOrderDetails{
 	public DateTime getDeadLine() {
 		return this.deadLine;
 	}
+	
+	public TaskOrderDetails getRawCopy(){
+		return new TaskOrderDetails(tasks.get(0).getCarPart(), null);
+	}
 
 }

@@ -15,7 +15,7 @@ public class AccessoriesPost extends Workstation {
 	 */
 	private static List<CarPartType> compatibleTasks;
 	{
-		CarPartType[] array= {CarPartType.Seats, CarPartType.Airco, CarPartType.Wheels};
+		CarPartType[] array= {CarPartType.Seats, CarPartType.Airco, CarPartType.Wheels, CarPartType.Spoiler};
 		compatibleTasks = (List<CarPartType>) Arrays.asList(array);
 	}
 

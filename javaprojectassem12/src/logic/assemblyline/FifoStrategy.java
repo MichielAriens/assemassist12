@@ -30,4 +30,15 @@ public class FifoStrategy extends SchedulingStrategy{
 		return "FIFO";
 	}
 
+	@Override
+	protected SchedulingStrategy getRawCopy() {
+		try {
+			return this.getClass().newInstance();
+		} catch (InstantiationException e) {
+			return null;
+		} catch (IllegalAccessException e) {
+			return null;
+		}
+	}
+
 }

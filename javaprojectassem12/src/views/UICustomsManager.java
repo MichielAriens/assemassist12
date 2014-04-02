@@ -46,6 +46,10 @@ public class UICustomsManager {
 		try {
 			writer.write("Customs shop manager " + cuController.getUserName()+ " has logged in.\n\n");
 			writer.flush();
+			while(true){
+				writer.write("==AVAILABLE TASKS==\n");
+				writer.flush();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
