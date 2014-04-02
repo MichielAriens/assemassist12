@@ -19,7 +19,7 @@ public class ManagerController extends UserController{
 	 */
 	private Manager currentManager;
 	
-	private ArrayList<Order> currentBatchList;
+	private List<Order> currentBatchList;
 	
 	/**
 	 * Sets the current manager to the given manager.
@@ -51,7 +51,7 @@ public class ManagerController extends UserController{
 		if(this.currentManager == null)
 			return null;
 		List<Workstation> workStations = this.currentManager.getWorkstations();
-		ArrayList<String> tasks = new ArrayList<String>();
+		List<String> tasks = new ArrayList<String>();
 		for(Workstation stat : workStations){
 			String temp = stat.toString() + ":\n";
 			if(stat.getRequiredTasks().size() == 0)

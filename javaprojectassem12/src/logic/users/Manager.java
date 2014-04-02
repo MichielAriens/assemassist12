@@ -40,11 +40,11 @@ public class Manager extends User{
 		return company.getStatistics();
 	}
 	
-	public ArrayList<SchedulingStrategy> getStrategies() {
+	public List<SchedulingStrategy> getStrategies() {
 		return company.getStrategies();
 	}
 
-	public ArrayList<Order> getBatchList() {
+	public List<Order> getBatchList() {
 		return company.getBatchList();
 	}
 
