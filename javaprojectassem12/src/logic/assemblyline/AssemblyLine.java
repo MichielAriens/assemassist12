@@ -66,6 +66,7 @@ public class AssemblyLine {
 		this.initialiseWorkStations();
 		this.currentTime = new DateTime(2014, 1, 1, 6, 0);
 		stats = new Statistics();
+		
 	}
 	
 	private void initialiseWorkStations(){
@@ -77,6 +78,7 @@ public class AssemblyLine {
 		workStations.get(1).setWorkStation(workStations.get(2));
 		numberOfWorkStations = workStations.size();
 	}
+	
 
 	/**
 	 * First checks if the phaseDuration is between 0 and 180 minutes.
@@ -168,8 +170,14 @@ public class AssemblyLine {
 	 */
 	class Schedule {
 
-		SchedulingStrategy strategy = new FifoStrategy(); 
+		SchedulingStrategy currentStrategy = new FifoStrategy(); 
 		
+		LinkedList<SchedulingStrategy> stratList = new LinkedList<SchedulingStrategy>();
+		
+		private Schedule(){
+			stratList.add(new FifoStrategy());
+			stratList.add(new BatchSpecificationStrategy());
+		}
 		
 		/**
 		 * The begin time of the shift, represented in hours.
@@ -570,18 +578,20 @@ public class AssemblyLine {
 		private void scheduleOrder(Order order){
 			DateTime startTime = new DateTime(currentTime);
 			order.setStartTime(startTime);
-			strategy.addOrder(order, queue);
+			currentStrategy.addOrder(order, queue);
 			reschedule();
 		}
 		
 		private void changeStrategy(Order order){
-			if(order==null)
-				strategy = new FifoStrategy();
-			else
-				strategy = new BatchSpecificationStrategy(order);
+			if(order==null){
+				currentStrategy = new FifoStrategy();
+			}else{
+				currentStrategy = new BatchSpecificationStrategy();
+				currentStrategy.setExample(order);
+			}
 			LinkedList<Order> copy = makeCopyOfQueue();
 			queue.clear();
-			strategy.refactorQueue(queue,copy);
+			currentStrategy.refactorQueue(queue,copy);
 		}
 		
 		/**

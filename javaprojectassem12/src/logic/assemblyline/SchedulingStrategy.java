@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import logic.car.Order;
 
 public abstract class SchedulingStrategy {
+	
+	protected Order example;
 
 	protected abstract void addOrder(Order order, LinkedList<Order> queue);
 
@@ -16,5 +18,10 @@ public abstract class SchedulingStrategy {
 		if(next.getDeadLine()==null)
 			return true;
 		return order.getDeadLine().isBefore(next.getDeadLine());
+	}
+	
+	protected void setExample(Order order){
+		if(order!=null)
+			this.example = order;
 	}
 }

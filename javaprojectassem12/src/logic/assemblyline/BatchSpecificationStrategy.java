@@ -6,12 +6,10 @@ import logic.car.Order;
 
 public class BatchSpecificationStrategy extends SchedulingStrategy{
 
-	private Order example;
-	
-	protected BatchSpecificationStrategy(Order order){
-		example = order;
+	protected BatchSpecificationStrategy(){
+		
 	}
-
+	
 	@Override
 	protected void addOrder(Order order, LinkedList<Order> queue) {
 		int index = 0;
