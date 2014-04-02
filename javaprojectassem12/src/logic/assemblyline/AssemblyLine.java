@@ -130,6 +130,10 @@ public class AssemblyLine {
 		else
 			return false;
 	}
+	
+	public List<SchedulingStrategy> getStrategies(){
+		return schedule.getStrategies();
+	}
 
 	/**
 	 * Asks a list of workstations available.
@@ -170,13 +174,14 @@ public class AssemblyLine {
 	 */
 	class Schedule {
 
-		SchedulingStrategy currentStrategy = new FifoStrategy(); 
+		SchedulingStrategy currentStrategy; 
 		
 		LinkedList<SchedulingStrategy> stratList = new LinkedList<SchedulingStrategy>();
 		
 		private Schedule(){
 			stratList.add(new FifoStrategy());
 			stratList.add(new BatchSpecificationStrategy());
+			currentStrategy = stratList.getFirst();
 		}
 		
 		/**
@@ -581,9 +586,9 @@ public class AssemblyLine {
 		
 		private void changeStrategy(Order order){
 			if(order==null){
-				currentStrategy = new FifoStrategy();
+				currentStrategy = stratList.getFirst();
 			}else{
-				currentStrategy = new BatchSpecificationStrategy();
+				currentStrategy = stratList.getLast();
 				currentStrategy.setExample(order);
 			}
 			LinkedList<Order> copy = makeCopyOfQueue();
@@ -627,6 +632,15 @@ public class AssemblyLine {
 			}
 			returnList.add(firstWorkStation.getCurrentOrder());
 			returnList.add(workStations.get(1).getCurrentOrder());
+			return returnList;
+		}
+		
+		private List<SchedulingStrategy> getStrategies(){
+			LinkedList<SchedulingStrategy> returnList = new LinkedList<SchedulingStrategy>();
+			returnList.add(currentStrategy.getRawCopy());
+			for(SchedulingStrategy next : stratList){
+				returnList.add(next.getRawCopy());
+			}
 			return returnList;
 		}
 

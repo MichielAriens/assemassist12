@@ -64,4 +64,15 @@ public class BatchSpecificationStrategy extends SchedulingStrategy{
 		return "Specification Batch";
 	}
 
+	@Override
+	protected SchedulingStrategy getRawCopy() {
+		try {
+			return this.getClass().newInstance();
+		} catch (InstantiationException e) {
+			return null;
+		} catch (IllegalAccessException e) {
+			return null;
+		}
+	}
+
 }
