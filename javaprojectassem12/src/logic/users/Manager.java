@@ -1,7 +1,9 @@
 package logic.users;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import logic.assemblyline.SchedulingStrategy;
 import logic.car.Order;
 import logic.workstation.Workstation;
 
@@ -33,30 +35,21 @@ public class Manager extends User{
 	public List<Workstation> getWorkstations(){
 		return this.company.getWorkStations();
 	}
-	
-	/**
-	 * Moves the assembly line.
-	 * @param phaseDuration	The duration spent on the current phase.
-	 * @return 	True if the assembly line has been moved.
-	 * 			False if the assembly line can not be moved.
-	 */
-	public boolean moveAssemblyLine(int phaseDuration){
-		return this.company.moveAssemblyLine(phaseDuration);
-	}
-	
-	/**
-	 * Returns the list of car orders in the schedule as it would be if the assembly line has been moved once.
-	 * @return the list of car orders in the schedule as it would be if the assembly line has been moved once.
-	 */
-	public List<Order> askFutureSchedule(){
-		return this.company.askFutureSchedule();
-	}
 
 	public String getStatistics() {
 		return company.getStatistics();
 	}
 
-	public String getCurrentStrategy() {
+	public SchedulingStrategy getCurrentStrategy() {
 		return company.getCurrentStrategy();
+	}
+
+	public ArrayList<SchedulingStrategy> getAvailableStrategies() {
+		return company.getAvailableStrategies();
+	}
+
+	public void getCarOptionsBatchProcessing() {
+		// TODO Auto-generated method stub
+		
 	}
 }

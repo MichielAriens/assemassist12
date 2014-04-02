@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import logic.assemblyline.AssemblyLine;
+import logic.assemblyline.SchedulingStrategy;
 import logic.car.Order;
 import logic.workstation.Workstation;
 
@@ -148,7 +149,11 @@ public class CarManufacturingCompany {
 		return assemblyLine.getStatistics();
 	}
 
-	public String getCurrentStrategy() {
+	public SchedulingStrategy getCurrentStrategy() {
 		return assemblyLine.getCurrentStrategy();
+	}
+
+	public ArrayList<SchedulingStrategy> getAvailableStrategies() {
+		return assemblyLine.getAvailableStrategies();
 	}
 }

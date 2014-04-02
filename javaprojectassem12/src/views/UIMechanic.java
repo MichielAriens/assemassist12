@@ -44,19 +44,36 @@ public class UIMechanic {
 		this.meController = meController;
 		try {
 			writer.write("Mechanic " + meController.getUserName()+ " has logged in.\n\n");
-			String stat = "Available work stations: ";
-			for(String station : meController.getWorkStations()){
-				stat += station + "; ";
-			}
-			writer.write(stat + "\n");
-			writer.flush();
-			String answer = checkInput("Type the number of your current work station: ", this.meController.getWorkStations());
-			this.meController.setWorkStation(answer);
-			writer.flush();
 			while(true){
-				selectTask();
-				if(!promptYesOrNo("Do you want to perform another task? (y/n): "))
+				int answer = chooseAction("Select your action:\n   1: Check current status\n   2: Perform task\n   3: Leave the overview\nAnswer: ", 3);
+				if(answer == 1){
+					writer.write("Current status:\n\n");
+					for(String s : meController.getTasksPerWorkstation()){
+						writer.write(s + "\n");
+					}
+					writer.write("\n");
+					writer.flush();
+				}
+				//TODO: aanpassen aan use case
+				if(answer == 2){
+					String stat = "Available work stations: ";
+					for(String station : meController.getWorkStations()){
+						stat += station + "; ";
+					}
+					writer.write(stat + "\n");
+					writer.flush();
+					String workStation = checkInput("Type the number of your current work station: ", this.meController.getWorkStations());
+					this.meController.setWorkStation(workStation);
+					writer.flush();
+					while(true){
+						selectTask();
+						if(!promptYesOrNo("Do you want to perform another task? (y/n): "))
+							break;
+					}
+				}
+				if(answer == 3){
 					return;
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -109,7 +126,8 @@ public class UIMechanic {
 			String answer = checkInput("Type the number of your current task: ", this.meController.getTasks());
 			writer.write("\n" + meController.getTaskInformation(answer) + "\n");
 			waitForCompletion();
-			this.meController.doTask(answer);
+			int duration = getTimeSpent();
+			this.meController.doTask(answer, duration);
 		} catch(IOException e){
 			e.printStackTrace();
 		}
@@ -158,5 +176,58 @@ public class UIMechanic {
 		}
 	}
 	
+	private int chooseAction(String query, int max){
+		try{
+			while(true){
+				writer.write(query);
+				writer.flush();
+				String answer = reader.readLine();
+				writer.write("\n");
+				writer.flush();
+				try{
+					int result = Integer.parseInt(answer);
+					if(result > 0 && result <= max)
+						return result;
+				}
+				catch(NumberFormatException e){};
+			}
+		}
+		catch(IOException e){
+			e.printStackTrace();
+			return -1;
+		}
+	}
+
+	/**
+	 * A method that prompts the user for the time spent in minutes in the current phase.
+	 * @return	An int that holds the time in minutes spent in the current phase according to the current manager.
+	 */
+	private int getTimeSpent(){
+		try{
+			writer.write("Enter the time (in minutes) spent during the current phase: ");
+			writer.flush();
+			while(true){
+				String answer = reader.readLine();
+				try{
+					int time = Integer.parseInt(answer);
+					if(time < 0 || time > 180){
+						writer.write("\nInvalid input, try again. ");
+						writer.flush();
+						continue;
+					}
+					writer.write("\n");
+					writer.flush();
+					return time;
+				} catch(NumberFormatException e){
+					writer.write("\nInvalid input, try again. ");
+					writer.flush();
+					continue;
+				}
+			}
+		} catch(IOException e){
+			e.printStackTrace();
+			return 0;
+		}
+	}
 
 }

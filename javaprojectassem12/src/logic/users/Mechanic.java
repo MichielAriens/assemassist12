@@ -20,6 +20,12 @@ public class Mechanic extends User{
 	private CarManufacturingCompany company;
 	
 	/**
+	 * The maximum time it took to perform a task and so the maximum duration of
+	 * a phase in the assembly line. Supposed that every task can be performed parallel.
+	 */
+	private int maxPhaseDuration = 0;
+	
+	/**
 	 * Constructs a new mechanic initializing its company and user name with the given 
 	 * parameters.
 	 * @param company	The car manufacturing company the new mechanic works for.
@@ -48,19 +54,41 @@ public class Mechanic extends User{
 	}
 	
 	/**
-	 * Performs a task if the task is compatible with the active workstation of the mechanic.
+	 * Performs a task if the task is compatible with the active workstation of the mechanic
+	 * and tries to move the assembly line.
 	 * @param task	The task that needs to be performed.
 	 * @return 	True if the task is compatible with the active workstation.
 	 * 			False otherwise.
 	 */
-	public boolean doTask(Task task){
+	public boolean doTask(Task task, int duration){
 		if (getActiveWorkstation().isCompatibleTask(task)){
 			task.perform();
+			setMaxPhaseDuration(duration);
+			if(company.moveAssemblyLine(maxPhaseDuration))
+				resetMaxPhaseDuration();
 			return true;
 		}
 		return false;
 	}
+
+	/**
+	 * Sets the maximum phase duration to the given duration if the given duration
+	 * is greater than the maximum phase duration.
+	 * @param duration
+	 */
+	private void setMaxPhaseDuration(int duration) {
+		if(duration > maxPhaseDuration){
+			maxPhaseDuration = duration;
+		}
+	}
 	
+	/**
+	 * Resets the maximum phase duration to zero.
+	 */
+	private void resetMaxPhaseDuration() {
+		maxPhaseDuration = 0;
+	}
+
 	/**
 	 * Returns the list of tasks that need to be performed at the active workstation or null
 	 * if the mechanic has no active workstation.
@@ -78,7 +106,7 @@ public class Mechanic extends User{
 	 * Returns the list of workstations from the assembly line of the car manufacturing company.
 	 * @return the list of workstations from the assembly line of the car manufacturing company.
 	 */
-	public List<Workstation> getAvailableWorkstations(){
+	public List<Workstation> getWorkstations(){
 		return this.company.getWorkStations();
 	}
 	
