@@ -278,11 +278,11 @@ public class AssemblyLine {
 			LinkedList<Order> list = new LinkedList<Order>();
 			int assemblyTime = 0;
 			list.add(order);
-			assemblyTime+=calculateMaxPhase(list);
-			list.add(workStations.get(1).getCurrentOrder());
-			assemblyTime+=calculateMaxPhase(list);
-			list.add(workStations.get(2).getCurrentOrder());
-			assemblyTime+=calculateMaxPhase(list);
+			assemblyTime += calculateMaxPhase(list);
+			for(int i = 1; i < getWorkStations().size(); i++){
+				list.add(getWorkStations().get(i).getCurrentOrder());
+				assemblyTime += calculateMaxPhase(list);
+			}
 			DateTime estimatedEndTime = new DateTime(currentTime);
 			estimatedEndTime = estimatedEndTime.plusMinutes(assemblyTime);
 			if(estimatedEndTime.getMinuteOfDay()<shiftEndHour*60-overTime || estimatedEndTime.getHourOfDay()>=shiftBeginHour){
@@ -341,21 +341,18 @@ public class AssemblyLine {
 				queue.getFirst().setEstimatedEndTime(estimatedEndTime);
 				return;
 			}
-			
-			list.add(firstWorkStation.getCurrentOrder());
-			list.add(workStations.get(1).getCurrentOrder());
-			list.add(workStations.get(2).getCurrentOrder());
+			for(Workstation ws : getWorkStations()){
+				list.add(ws.getCurrentOrder());				
+			}
 			estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
 			list.removeLast();
 			list.add(0,queue.getFirst());
-			estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-			list.removeLast();
-			estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-			list.removeLast();
-			estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
+			while(!list.isEmpty()){
+				estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
+				list.removeLast();
+			}
 			estimatedEndTime = getEstimatedTime(estimatedEndTime, queue.getFirst());
 			queue.getFirst().setEstimatedEndTime(estimatedEndTime);
-			
 		}
 	
 		private LinkedList<Order> addPrevious(int index){
