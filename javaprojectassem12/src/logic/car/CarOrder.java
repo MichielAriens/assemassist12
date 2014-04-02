@@ -67,5 +67,10 @@ public class CarOrder extends Order{
 			str +=   "   Est. End Time:    " + fmt.print(super.getEstimatedEndTime()) + "\n";
 		return str;
 	}
+	
+	@Override
+	public Order getRawCopy(){
+		return new CarOrder(details.getRawCopy());
+	}
 
 }

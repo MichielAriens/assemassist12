@@ -103,6 +103,8 @@ public abstract class Order {
 	
 	public abstract List<Task> getTasks();
 	
+	public abstract Order getRawCopy();
+	
 	/**
 	 * Checks if this order is completed by checking if all its tasks are completed.
 	 * @return 	True if this order is completed.

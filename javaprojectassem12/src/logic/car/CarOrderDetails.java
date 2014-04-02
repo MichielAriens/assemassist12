@@ -31,6 +31,14 @@ public class CarOrderDetails{
 		return model.phaseDuration;
 	}
 	
+	public CarOrderDetails getRawCopy(){
+		ArrayList<CarPart> parts = new ArrayList<CarPart>();
+		for(Task t : tasks){
+			parts.add(t.getCarPart());
+		}
+		return new CarOrderDetails(model, parts);
+	}
+	
 	@Override
 	public String toString(){
 		String str = this.model.toString() + "; (";

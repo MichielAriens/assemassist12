@@ -48,4 +48,9 @@ public class TaskOrder extends Order{
 	public boolean equals(Object obj){
 		return super.equals(obj);
 	}
+	
+	@Override
+	public Order getRawCopy(){
+		return new TaskOrder(details.getRawCopy());
+	}
 }
