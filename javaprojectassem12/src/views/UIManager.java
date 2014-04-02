@@ -108,7 +108,7 @@ public class UIManager {
 		writer.write("ALTERNATIVE SCHEDULING\n");
 		writer.flush();
 		writer.write("Current algorithm:\n   " + maController.getCurrentStrategy() + "\n");
-		ArrayList<String> strategies = maController.getStrategies();
+		ArrayList<String> strategies = maController.getAvailableStrategies();
 		String query = "Select your algorithm:\n";
 		for(int i = 0; i < strategies.size(); i++){
 			query += "   " + (i+1) + ": " + strategies.get(i) + "\n";

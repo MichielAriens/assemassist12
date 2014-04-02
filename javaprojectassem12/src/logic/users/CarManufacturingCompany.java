@@ -151,4 +151,8 @@ public class CarManufacturingCompany {
 	public String getCurrentStrategy() {
 		return assemblyLine.getCurrentStrategy();
 	}
+
+	public ArrayList<String> getAvailableStrategies() {
+		return assemblyLine.getAvailableStrategies();
+	}
 }

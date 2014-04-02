@@ -1,5 +1,6 @@
 package logic.users;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import logic.car.Order;
@@ -58,5 +59,9 @@ public class Manager extends User{
 
 	public String getCurrentStrategy() {
 		return company.getCurrentStrategy();
+	}
+
+	public ArrayList<String> getAvailableStrategies() {
+		return company.getAvailableStrategies();
 	}
 }

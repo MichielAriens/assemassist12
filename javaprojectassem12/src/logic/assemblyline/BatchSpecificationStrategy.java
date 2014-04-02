@@ -61,5 +61,9 @@ public class BatchSpecificationStrategy extends SchedulingStrategy{
 		}
 		
 	}
+	
+	public String toString(){
+		return "Specification Batch";
+	}
 
 }

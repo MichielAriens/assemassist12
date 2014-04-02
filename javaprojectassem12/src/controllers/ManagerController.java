@@ -133,12 +133,14 @@ public class ManagerController extends UserController{
 	public String getCurrentStrategy() {
 		return currentManager.getCurrentStrategy();
 	}
+	
+	public ArrayList<String> getAvailableStrategies() {
+		// TODO Auto-generated method stub
+		return currentManager.getAvailableStrategies();
+	}
 
 	public ArrayList<String> getCarOptionsBatchProcessing() {
 		// TODO Auto-generated method stub
-	}
-
-	public ArrayList<String> getStrategies() {
-		// TODO Auto-generated method stub
-	}
+		currentManager.getCarOptionsBatchProcessing();
+	}	
 }

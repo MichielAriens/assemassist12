@@ -25,5 +25,9 @@ public class FifoStrategy extends SchedulingStrategy{
 			queue.add(next);
 		}
 	}
+	
+	public String toString(){
+		return "FIFO";
+	}
 
 }
