@@ -66,6 +66,7 @@ public class AssemblyLine {
 		this.initialiseWorkStations();
 		this.currentTime = new DateTime(2014, 1, 1, 6, 0);
 		stats = new Statistics();
+		
 	}
 	
 	private void initialiseWorkStations(){
@@ -77,6 +78,7 @@ public class AssemblyLine {
 		workStations.get(1).setWorkStation(workStations.get(2));
 		numberOfWorkStations = workStations.size();
 	}
+	
 
 	/**
 	 * First checks if the phaseDuration is between 0 and 180 minutes.
@@ -168,8 +170,14 @@ public class AssemblyLine {
 	 */
 	class Schedule {
 
-		SchedulingStrategy strategy = new FifoStrategy(); 
+		SchedulingStrategy currentStrategy = new FifoStrategy(); 
 		
+		LinkedList<SchedulingStrategy> stratList = new LinkedList<SchedulingStrategy>();
+		
+		private Schedule(){
+			stratList.add(new FifoStrategy());
+			stratList.add(new BatchSpecificationStrategy());
+		}
 		
 		/**
 		 * The begin time of the shift, represented in hours.
@@ -270,11 +278,11 @@ public class AssemblyLine {
 			LinkedList<Order> list = new LinkedList<Order>();
 			int assemblyTime = 0;
 			list.add(order);
-			assemblyTime+=calculateMaxPhase(list);
-			list.add(workStations.get(1).getCurrentOrder());
-			assemblyTime+=calculateMaxPhase(list);
-			list.add(workStations.get(2).getCurrentOrder());
-			assemblyTime+=calculateMaxPhase(list);
+			assemblyTime += calculateMaxPhase(list);
+			for(int i = 1; i < getWorkStations().size(); i++){
+				list.add(getWorkStations().get(i).getCurrentOrder());
+				assemblyTime += calculateMaxPhase(list);
+			}
 			DateTime estimatedEndTime = new DateTime(currentTime);
 			estimatedEndTime = estimatedEndTime.plusMinutes(assemblyTime);
 			if(estimatedEndTime.getMinuteOfDay()<shiftEndHour*60-overTime || estimatedEndTime.getHourOfDay()>=shiftBeginHour){
@@ -333,21 +341,18 @@ public class AssemblyLine {
 				queue.getFirst().setEstimatedEndTime(estimatedEndTime);
 				return;
 			}
-			
-			list.add(firstWorkStation.getCurrentOrder());
-			list.add(workStations.get(1).getCurrentOrder());
-			list.add(workStations.get(2).getCurrentOrder());
+			for(Workstation ws : getWorkStations()){
+				list.add(ws.getCurrentOrder());				
+			}
 			estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
 			list.removeLast();
 			list.add(0,queue.getFirst());
-			estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-			list.removeLast();
-			estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-			list.removeLast();
-			estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
+			while(!list.isEmpty()){
+				estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
+				list.removeLast();
+			}
 			estimatedEndTime = getEstimatedTime(estimatedEndTime, queue.getFirst());
 			queue.getFirst().setEstimatedEndTime(estimatedEndTime);
-			
 		}
 	
 		private LinkedList<Order> addPrevious(int index){
@@ -570,18 +575,20 @@ public class AssemblyLine {
 		private void scheduleOrder(Order order){
 			DateTime startTime = new DateTime(currentTime);
 			order.setStartTime(startTime);
-			strategy.addOrder(order, queue);
+			currentStrategy.addOrder(order, queue);
 			reschedule();
 		}
 		
 		private void changeStrategy(Order order){
-			if(order==null)
-				strategy = new FifoStrategy();
-			else
-				strategy = new BatchSpecificationStrategy(order);
+			if(order==null){
+				currentStrategy = new FifoStrategy();
+			}else{
+				currentStrategy = new BatchSpecificationStrategy();
+				currentStrategy.setExample(order);
+			}
 			LinkedList<Order> copy = makeCopyOfQueue();
 			queue.clear();
-			strategy.refactorQueue(queue,copy);
+			currentStrategy.refactorQueue(queue,copy);
 		}
 		
 		/**
