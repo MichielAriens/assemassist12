@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import logic.assemblyline.SchedulingStrategy;
+import logic.car.Order;
 import logic.users.Manager;
 import logic.workstation.Task;
 import logic.workstation.Workstation;
@@ -17,6 +18,8 @@ public class ManagerController extends UserController{
 	 * The current manager.
 	 */
 	private Manager currentManager;
+	
+	private ArrayList<Order> currentBatchList;
 	
 	/**
 	 * Sets the current manager to the given manager.
@@ -130,22 +133,48 @@ public class ManagerController extends UserController{
 	public String getStatistics() {
 		return this.currentManager.getStatistics();		
 	}
+	
+	public ArrayList<String> getStrategies() {
+		ArrayList<String> strategies = new ArrayList<String>();
+		for(SchedulingStrategy s : currentManager.getStrategies()){
+			strategies.add(s.toString());
+		}
+		return strategies;
+	}
 
-	public String getCurrentStrategy() {
-		return currentManager.getCurrentStrategy().toString();
+	public ArrayList<String> getBatchList() {
+		currentBatchList = currentManager.getBatchList();
+		if(currentBatchList.isEmpty()){
+			return null;
+		}
+		else{
+			ArrayList<String> carOptions = new ArrayList<String>();
+			for(int i = 0; i < currentBatchList.size(); i++){
+				String carOption = "Option " + (i+1) + ":\n";
+				//TODO: caroptions erbij zetten
+				
+				carOptions.add(carOption);
+			}
+			return carOptions;
+		}
 	}
 	
-	public ArrayList<String> getAvailableStrategies() {
-		ArrayList<String> availableStrategies = new ArrayList<String>();
-		for(SchedulingStrategy s : currentManager.getAvailableStrategies()){
-			availableStrategies.add(s.toString());
+	//TODO
+	public boolean changeStrategyToFIFO(){
+		if(!currentManager.getStrategies().get(0).toString().equals("FIFO")){
+			currentManager.changeStrategy(null);
+			return true;
 		}
-		return availableStrategies;
+		return false;
 	}
-
-	public ArrayList<String> getCarOptionsBatchProcessing() {
-		// TODO Auto-generated method stub
-		currentManager.getCarOptionsBatchProcessing();
-		return null;
-	}	
+	
+	//TODO
+	public boolean changeStrategyToBatchProcessing(int index){
+		if(!currentManager.getStrategies().get(0).equals("Batch Processing")){
+			currentManager.changeStrategy(currentBatchList.get(index));
+			currentBatchList.clear();
+			return true;
+		}
+		return false;
+	}
 }

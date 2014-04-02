@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 import logic.car.Order;
 
-public abstract class SchedulingStrategy {
+public abstract class SchedulingStrategy{
 	
 	protected Order example;
 
@@ -24,4 +24,6 @@ public abstract class SchedulingStrategy {
 		if(order!=null)
 			this.example = order;
 	}
+	
+	protected abstract SchedulingStrategy getRawCopy();
 }

@@ -7,6 +7,7 @@ import logic.car.Order;
 
 /**
  * Class used to describe a work station of an assembly line.
+ * TODO: Maybe change the workstation to pull the tasks form it's order instead of storing locally.
  */
 public abstract class Workstation {
 	
@@ -75,7 +76,7 @@ public abstract class Workstation {
 	 * 			complete for the current order.
 	 * 			False otherwise.
 	 */
-	private boolean done(){
+	public boolean done(){
 		boolean retVal = true;
 		for(Task task : this.tasks){
 			if(!task.isComplete()){
