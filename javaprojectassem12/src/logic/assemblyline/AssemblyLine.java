@@ -42,13 +42,14 @@ public class AssemblyLine {
 	private DateTime currentTime;
 
 	private Statistics stats;
-//	/**
-//	 * Asks the current time of the system.
-//	 * @return	The current time of the system.
-//	 */
-//	public DateTime getCurrentTime() {
-//		return currentTime;
-//	}
+	
+	/**
+	 * Asks the current time of the system.
+	 * @return	The current time of the system.
+	 */
+	public DateTime getCurrentTime() {
+		return currentTime;
+	}
 
 	/**
 	 * A variable containing the schedule, which is used for scheduling orders.
@@ -133,6 +134,10 @@ public class AssemblyLine {
 	
 	public List<SchedulingStrategy> getStrategies(){
 		return schedule.getStrategies();
+	}
+	
+	public List<Order> getBachList(){
+		return schedule.getBachList();
 	}
 
 	/**
@@ -640,6 +645,29 @@ public class AssemblyLine {
 			returnList.add(currentStrategy.getRawCopy());
 			for(SchedulingStrategy next : stratList){
 				returnList.add(next.getRawCopy());
+			}
+			return returnList;
+		}
+		
+		private List<Order> getBachList(){
+			LinkedList<Order> returnList = new LinkedList<Order>();
+			LinkedList<Order> allOrdersList = new LinkedList<Order>();
+			LinkedList<Order> allOrdersList2 = new LinkedList<Order>(allOrdersList);
+			for(Workstation next : workStations){
+				allOrdersList.add(next.getCurrentOrder().getRawCopy());
+			}
+			for(Order next: queue){
+				allOrdersList.add(next.getRawCopy());
+			}
+			for(Order order: allOrdersList){
+				int count = 0;
+				for(Order next : allOrdersList2){
+					if(order.equals(next))
+						count++;
+				}
+				if(count>=3)
+					returnList.add(order);
+				allOrdersList2.removeFirst();
 			}
 			return returnList;
 		}
