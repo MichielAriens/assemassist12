@@ -59,8 +59,9 @@ public class CustomsManagerController extends UserController{
 		int count = 1;
 		for(CarPart part: maker.getAvailableParts(type)){
 			options.add(part.toString() + ": " + count);
-			cou
+			count++;
 		}
+		return options;
 	}
 	
 	public boolean chooseDeadLine(String deadlineStr){
@@ -72,6 +73,12 @@ public class CustomsManagerController extends UserController{
 		}catch(Exception e){
 			return false;
 		}
+	}
+	
+	public String placeOrder(){
+		if(currentCustomsManager == null)
+			return null;
+		return currentCustomsManager.placeOrder(maker.getDetails());
 	}
 	
 }

@@ -116,7 +116,7 @@ public class UI {
 	 */
 	private UserController login(){
 		try{
-			writer.write("====LOGIN====\nEnter username (Valid names: man, mech, gar): ");
+			writer.write("====LOGIN====\nEnter username (Valid names: man, mech, gar, cust): ");
 			writer.flush();
 			String userName = reader.readLine();
 			return controller.logIn(userName);
