@@ -132,8 +132,8 @@ public class UIManager {
 				query += "Option " + (listCarOptions.size()+1) + "\nCancel\n";
 				int carOption = chooseAction(query, listCarOptions.size()+1);
 				if(carOption != listCarOptions.size()+1){
-					maController.changeStrategyToBatchProcessing(carOption);
-					
+					maController.changeStrategyToBatchProcessing(carOption-1);
+					waitForCompletion("Chosen strategy has been applied. Press enter to continue.\n");
 				}
 				else{
 					//cancel
