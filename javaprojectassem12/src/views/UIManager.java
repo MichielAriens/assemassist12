@@ -108,40 +108,49 @@ public class UIManager {
 		for(int i = 1; i < strategies.size(); i++){
 			query += "   " + (i) + ": " + strategies.get(i) + "\n";
 		}
-		query += "   " + (strategies.size()) + ": Cancel selecting alternate scheduling mechanism\nAnswer: ";
+		query += "   " + (strategies.size()) + ": Cancel\nAnswer: ";
 		int algorithm = chooseAction(query, strategies.size());
-		String chosenStrategy = strategies.get(algorithm);
-		if(chosenStrategy.equals("FIFO")){
-			if(maController.changeStrategyToFIFO()){
+		int indexOfCancel = strategies.size(); 
+		if(algorithm != indexOfCancel){
+			String chosenStrategy = strategies.get(algorithm);
+			if(chosenStrategy.equals("FIFO")){
+				chooseFIFO();
+			}
+			else if(chosenStrategy.equals("Specification Batch")){
+				chooseSpecificationBatch();
+			}
+		}
+	}
+
+	private void chooseFIFO() {
+		if(maController.changeStrategyToFIFO()){
+			waitForCompletion("Chosen strategy has been applied. Press enter to continue.\n");
+		}
+		else{
+			waitForCompletion("Chosen strategy is the current strategy, nothing has changed. Press enter to continue.\n");
+		}
+	}
+
+	private void chooseSpecificationBatch() {
+		String query;
+		ArrayList<String> listCarOptions = maController.getBatchList();
+		if(listCarOptions == null){
+			waitForCompletion("No available sets of car options. Press enter to continue.\n");
+		}
+		else{
+			query = "===Select desired set===\n";
+			for(int i = 0; i < listCarOptions.size(); i++){
+				query += listCarOptions.get(i);
+			}
+			query += "Option " + (listCarOptions.size()+1) + "\nCancel\n";
+			int carOption = chooseAction(query, listCarOptions.size()+1);
+			if(carOption != listCarOptions.size()+1){
+				maController.changeStrategyToBatchProcessing(carOption-1);
 				waitForCompletion("Chosen strategy has been applied. Press enter to continue.\n");
 			}
 			else{
-				waitForCompletion("Chosen strategy is the current strategy, nothing has changed. Press enter to continue.\n");
+				//cancel
 			}
-		}
-		else if(chosenStrategy.equals("Specification Batch")){
-			ArrayList<String> listCarOptions = maController.getBatchList();
-			if(listCarOptions == null){
-				waitForCompletion("No available sets of car options. Press enter to continue.\n");
-			}
-			else{
-				query = "===Select desired set===\n";
-				for(int i = 0; i < listCarOptions.size(); i++){
-					query += listCarOptions.get(i);
-				}
-				query += "Option " + (listCarOptions.size()+1) + "\nCancel\n";
-				int carOption = chooseAction(query, listCarOptions.size()+1);
-				if(carOption != listCarOptions.size()+1){
-					maController.changeStrategyToBatchProcessing(carOption-1);
-					waitForCompletion("Chosen strategy has been applied. Press enter to continue.\n");
-				}
-				else{
-					//cancel
-				}
-			}
-		}
-		else if(algorithm == 3){
-			//cancel == do nothing
 		}
 	}
 	
