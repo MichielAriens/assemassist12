@@ -3,6 +3,7 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import logic.assemblyline.SchedulingStrategy;
 import logic.users.Manager;
 import logic.workstation.Task;
 import logic.workstation.Workstation;
@@ -93,25 +94,25 @@ public class ManagerController extends UserController{
 	 * @return Null if the current manager is null.
 	 * @return The future status of the assembly line otherwise.
 	 */
-	public List<String> getFutureStatus(){
-		if(this.currentManager == null)
-			return null;
-		List<Workstation> workStations = this.currentManager.getWorkstations();
-		ArrayList<String> tasks = new ArrayList<String>();
-		for(int i = 0; i < workStations.size(); i++){
-			String temp = workStations.get(i).toString() + ":\n";
-			if(currentManager.askFutureSchedule().get(i) == null)
-				temp += "Inactive.\n";
-			else{
-				for(Task task : currentManager.askFutureSchedule().get(i).getTasks()){
-					if(workStations.get(i).isCompatibleTask(task))
-						temp += "   -" + task.toString() + ": Pending\n";
-				}
-			}
-			tasks.add(temp);
-		}
-		return tasks;
-	}
+//	public List<String> getFutureStatus(){
+//		if(this.currentManager == null)
+//			return null;
+//		List<Workstation> workStations = this.currentManager.getWorkstations();
+//		ArrayList<String> tasks = new ArrayList<String>();
+//		for(int i = 0; i < workStations.size(); i++){
+//			String temp = workStations.get(i).toString() + ":\n";
+//			if(currentManager.askFutureSchedule().get(i) == null)
+//				temp += "Inactive.\n";
+//			else{
+//				for(Task task : currentManager.askFutureSchedule().get(i).getTasks()){
+//					if(workStations.get(i).isCompatibleTask(task))
+//						temp += "   -" + task.toString() + ": Pending\n";
+//				}
+//			}
+//			tasks.add(temp);
+//		}
+//		return tasks;
+//	}
 	
 	/**
 	 * Moves the assembly line with the given shift duration. 
@@ -120,27 +121,31 @@ public class ManagerController extends UserController{
 	 * @return False if the assembly line can not be moved.
 	 * @return True if the assembly line has been moved successfully.
 	 */
-	public boolean moveAssemblyLine(int phaseDuration){
-		if(this.currentManager == null)
-			return false;
-		return this.currentManager.moveAssemblyLine(phaseDuration);
-	}
+//	public boolean moveAssemblyLine(int phaseDuration){
+//		if(this.currentManager == null)
+//			return false;
+//		return this.currentManager.moveAssemblyLine(phaseDuration);
+//	}
 
 	public String getStatistics() {
 		return this.currentManager.getStatistics();		
 	}
 
 	public String getCurrentStrategy() {
-		return currentManager.getCurrentStrategy();
+		return currentManager.getCurrentStrategy().toString();
 	}
 	
 	public ArrayList<String> getAvailableStrategies() {
-		// TODO Auto-generated method stub
-		return currentManager.getAvailableStrategies();
+		ArrayList<String> availableStrategies = new ArrayList<String>();
+		for(SchedulingStrategy s : currentManager.getAvailableStrategies()){
+			availableStrategies.add(s.toString());
+		}
+		return availableStrategies;
 	}
 
 	public ArrayList<String> getCarOptionsBatchProcessing() {
 		// TODO Auto-generated method stub
 		currentManager.getCarOptionsBatchProcessing();
+		return null;
 	}	
 }

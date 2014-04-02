@@ -46,12 +46,12 @@ public class UIManager {
 		this.maController = maController;
 		try {
 			writer.write("Manager " + maController.getUserName()+ " has logged in.\n\n");
-			writer.write("Current status:\n\n");
-			for(String s : maController.getTasksPerWorkstation()){
-				writer.write(s + "\n");
-			}
-			writer.write("\n");
-			writer.flush();
+//			writer.write("Current status:\n\n");
+//			for(String s : maController.getTasksPerWorkstation()){
+//				writer.write(s + "\n");
+//			}
+//			writer.write("\n");
+//			writer.flush();
 			
 			while(true){				
 				int answer = chooseAction("Select your action:\n   1: Check statistics\n   2: Select alternative scheduling algorithm\nAnswer: ", 2);
@@ -113,7 +113,7 @@ public class UIManager {
 		for(int i = 0; i < strategies.size(); i++){
 			query += "   " + (i+1) + ": " + strategies.get(i) + "\n";
 		}
-		query += "   " + (strategies.size()+1) + ": Cancel\nAnswer: ";
+		query += "   " + (strategies.size()+1) + ": Leave the overview\nAnswer: ";
 		int algorithm = chooseAction(query, strategies.size()+1);
 		String chosenStrategy = strategies.get(algorithm-1);
 		if(chosenStrategy.equals("FIFO")){
@@ -191,38 +191,6 @@ public class UIManager {
 	}
 	
 	/**
-	 * A method that prompts the user for the time spent in minutes in the current phase.
-	 * @return	An int that holds the time in minutes spent in the current phase according to the current manager.
-	 */
-	private int getTimeSpent(){
-		try{
-			writer.write("Enter the time (in minutes) spent during the current phase: ");
-			writer.flush();
-			while(true){
-				String answer = reader.readLine();
-				try{
-					int time = Integer.parseInt(answer);
-					if(time < 0 || time > 180){
-						writer.write("\nInvalid input, try again. ");
-						writer.flush();
-						continue;
-					}
-					writer.write("\n");
-					writer.flush();
-					return time;
-				} catch(NumberFormatException e){
-					writer.write("\nInvalid input, try again. ");
-					writer.flush();
-					continue;
-				}
-			}
-		} catch(IOException e){
-			e.printStackTrace();
-			return 0;
-		}
-	}
-	
-	/**
 	 * A method that prints out the given query and waits until the user presses enter to continue.
 	 * @param query	The query that has to be printed out.
 	 */
@@ -235,5 +203,4 @@ public class UIManager {
 			e.printStackTrace();
 		}
 	}
-
 }

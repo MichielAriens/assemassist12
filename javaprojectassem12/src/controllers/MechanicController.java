@@ -47,7 +47,7 @@ public class MechanicController extends UserController{
 		if(this.currentMechanic == null)
 			return null;
 		ArrayList<String> workstations = new ArrayList<String>();
-		List<Workstation> stations = this.currentMechanic.getAvailableWorkstations();
+		List<Workstation> stations = this.currentMechanic.getWorkstations();
 		int count = 1;
 		for(Workstation w : stations){
 			workstations.add(w.toString() + ": " + count);
@@ -96,13 +96,14 @@ public class MechanicController extends UserController{
 	/**
 	 * Performs the given task if the current mechanic is not null.
 	 * @param taskName	The name of the task that needs to be performed.
+	 * @param duration	How long the task took to perform.
 	 */
-	public void doTask(String taskName){
+	public void doTask(String taskName, int duration){
 		if(this.currentMechanic == null)
 			return;
 		for(Task task : this.currentMechanic.getActiveWorkstation().getRequiredTasks()){
 			if(task.toString().equals(taskName)){
-				this.currentMechanic.doTask(task);
+				this.currentMechanic.doTask(task, duration);
 				return;
 			}
 		}
@@ -115,10 +116,38 @@ public class MechanicController extends UserController{
 	public void setWorkStation(String workstationName){
 		if(this.currentMechanic == null)
 			return;
-		for(Workstation workstation :this.currentMechanic.getAvailableWorkstations()){
+		for(Workstation workstation :this.currentMechanic.getWorkstations()){
 			if(workstation.toString().equals(workstationName))
 				this.currentMechanic.setActiveWorkstation(workstation);
 		}
+	}
+
+	/**
+	 * Returns the list of tasks per workstation, stating pending and completed tasks
+	 * or stating inactive if there are no tasks at the workstation.
+	 * @return 	The list of tasks per workstation, stating pending and completed tasks
+	 *			or stating inactive if there are no tasks at the workstation.
+	 */
+	public List<String> getTasksPerWorkstation(){
+		if(this.currentMechanic == null)
+			return null;
+		List<Workstation> workStations = this.currentMechanic.getWorkstations();
+		ArrayList<String> tasks = new ArrayList<String>();
+		for(Workstation stat : workStations){
+			String temp = stat.toString() + ":\n";
+			if(stat.getRequiredTasks().size() == 0)
+				temp += "Inactive.\n";
+			else{
+				for(Task task : stat.getRequiredTasks()){
+					String status = "Pending";
+					if(task.isComplete())
+						status = "Completed";
+					temp += "   -" + task.toString() + ": " + status + "\n";
+				}
+			}
+			tasks.add(temp);
+		}
+		return tasks;
 	}
 
 }
