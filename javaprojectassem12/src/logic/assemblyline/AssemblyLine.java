@@ -652,13 +652,14 @@ public class AssemblyLine {
 		private List<Order> getBachList(){
 			LinkedList<Order> returnList = new LinkedList<Order>();
 			LinkedList<Order> allOrdersList = new LinkedList<Order>();
-			LinkedList<Order> allOrdersList2 = new LinkedList<Order>(allOrdersList);
 			for(Workstation next : workStations){
+				if(next.getCurrentOrder() != null)
 				allOrdersList.add(next.getCurrentOrder().getRawCopy());
 			}
 			for(Order next: queue){
 				allOrdersList.add(next.getRawCopy());
 			}
+			LinkedList<Order> allOrdersList2 = new LinkedList<Order>(allOrdersList);
 			for(Order order: allOrdersList){
 				int count = 0;
 				for(Order next : allOrdersList2){

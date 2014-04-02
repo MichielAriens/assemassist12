@@ -144,21 +144,29 @@ public class ManagerController extends UserController{
 
 	public ArrayList<String> getBatchList() {
 		currentBatchList = currentManager.getBatchList();
-		if(currentBatchList.isEmpty()){
+		if(currentBatchList == null){
 			return null;
 		}
 		else{
 			ArrayList<String> carOptions = new ArrayList<String>();
 			for(int i = 0; i < currentBatchList.size(); i++){
 				String carOption = "Option " + (i+1) + ":\n";
-				//TODO: caroptions erbij zetten
-				
+				carOption += getCarOptions(currentBatchList.get(i)) + "\n";
 				carOptions.add(carOption);
 			}
 			return carOptions;
 		}
 	}
 	
+	private String getCarOptions(Order order) {
+		String options = "";
+		List<Task> tasks = order.getTasks();
+		for(Task t : tasks){
+			options += "   - " + t.getCarPart().toString() + "\n";
+		}
+		return options;
+	}
+
 	//TODO
 	public boolean changeStrategyToFIFO(){
 		if(!currentManager.getStrategies().get(0).toString().equals("FIFO")){
@@ -169,12 +177,8 @@ public class ManagerController extends UserController{
 	}
 	
 	//TODO
-	public boolean changeStrategyToBatchProcessing(int index){
-		if(!currentManager.getStrategies().get(0).equals("Batch Processing")){
+	public void changeStrategyToBatchProcessing(int index){
 			currentManager.changeStrategy(currentBatchList.get(index));
 			currentBatchList.clear();
-			return true;
-		}
-		return false;
 	}
 }
