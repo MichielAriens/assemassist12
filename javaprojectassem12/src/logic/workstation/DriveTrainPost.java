@@ -2,6 +2,7 @@ package logic.workstation;
 
 import java.util.Arrays;
 import java.util.List;
+
 import logic.car.CarPartType;
 
 /**
@@ -28,6 +29,11 @@ public class DriveTrainPost extends Workstation {
 	public
 	List<CarPartType> getCapabilities() {
 		return DriveTrainPost.compatibleTasks;
+	}
+	
+	@Override
+	protected Workstation getRawCopy(){
+		return new DriveTrainPost();
 	}
 	
 	/**

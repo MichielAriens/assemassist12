@@ -30,6 +30,11 @@ public class AccessoriesPost extends Workstation {
 		return AccessoriesPost.compatibleTasks;
 	}
 	
+	@Override
+	protected Workstation getRawCopy(){
+		return new AccessoriesPost();
+	}
+	
 	/**
 	 * Returns a string representation of an accessories post.
 	 */
