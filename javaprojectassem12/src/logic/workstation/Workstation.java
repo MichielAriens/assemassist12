@@ -1,7 +1,10 @@
 package logic.workstation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import org.joda.time.DateTime;
 
 import logic.car.CarPartType;
 import logic.car.Order;
@@ -169,6 +172,25 @@ public abstract class Workstation {
 		if(numberOfOrders > 1 && nextWorkStation != null){
 			nextWorkStation.buildOrderList(orders, numberOfOrders);
 		}
+	}
+	
+	public DateTime reschedule(List<Integer> prePhaseDurations, int NbOfWorkstations, DateTime currentTime){
+		DateTime nextStationEET = currentTime;
+		if(nextWorkStation != null){
+			prePhaseDurations.add(currentOrder.getPhaseTime());
+			nextStationEET = nextWorkStation.reschedule(prePhaseDurations, NbOfWorkstations, currentTime);
+		}
+		int maxPre = currentOrder.getPhaseTime();
+		int j = 0;
+		for(int i = prePhaseDurations.size()-1; i >=0; i--){
+			if(j >= NbOfWorkstations)
+				break;
+			j++;
+			if(prePhaseDurations.get(i)>maxPre)
+				maxPre = prePhaseDurations.get(i);
+		}
+		currentOrder.setEndTime(nextStationEET.plusMinutes(maxPre));
+		return currentOrder.getEstimatedEndTime();
 	}
 	
 }
