@@ -48,7 +48,7 @@ public class UseCaseGarageHolderTest {
 		ghCont.addPart("Model A");
 		ghCont.addPart("Sedan");
 		ghCont.addPart("Red");
-		ghCont.addPart("Standard 2l 4 cilinders");
+		ghCont.addPart("Standard 2l v4");
 		ghCont.addPart("6 speed manual");
 		ghCont.addPart("Leather black");
 		ghCont.addPart("Manual");
@@ -60,8 +60,8 @@ public class UseCaseGarageHolderTest {
 //		//the system prints the pending and completed orders (pending orders is no longer empty)
 		System.out.println(ghCont.getPendingOrders());
 		assertFalse(new ArrayList<String>().equals(ghCont.getPendingOrders()));
-//		assertEquals(1, ghCont.getPendingOrders().size());
-//		assertEquals(new ArrayList<String>(), ghCont.getCompletedOrders());
+		assertEquals(1, ghCont.getPendingOrders().size());
+		assertEquals(new ArrayList<String>(), ghCont.getCompletedOrders());
 		//the user indicates that he doesn't want to place a new order and the use case ends
 	}
 }
