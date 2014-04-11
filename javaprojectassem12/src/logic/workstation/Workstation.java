@@ -32,9 +32,11 @@ public abstract class Workstation {
 	}
 	
 	public void advanceWorkstations(Order order){
-		if(nextWorkStation!=null)
-			nextWorkStation.advanceWorkstations(currentOrder);
-		this.setOrder(order);
+		if(canMoveAssemblyLine()){
+			if(nextWorkStation!=null)
+				nextWorkStation.advanceWorkstations(currentOrder);
+			this.setOrder(order);
+		}
 	}
 	
 	
@@ -56,8 +58,8 @@ public abstract class Workstation {
 	 * When the current order is null, the workstation is idle.
 	 * @return The current order.
 	 */
-	public Order getCurrentOrder(){
-		return currentOrder;
+	private Order getCurrentOrder(){
+		return currentOrder.getRawCopy();
 	}
 	
 	/**
@@ -146,5 +148,6 @@ public abstract class Workstation {
 		return tasks;
 	}
 	
+	public LinkedList<>
 	
 }

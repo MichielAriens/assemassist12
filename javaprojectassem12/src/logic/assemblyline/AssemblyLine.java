@@ -19,10 +19,7 @@ import logic.workstation.Workstation;
 
 public class AssemblyLine {
 
-	/**
-	 * Array holding the three workstations.
-	 */
-	private LinkedList<Workstation> workStations = new LinkedList<Workstation>();
+	
 	
 	private Workstation firstWorkStation;
 
@@ -64,21 +61,11 @@ public class AssemblyLine {
 		
 		queue= new LinkedList<Order>();
 		schedule = new Schedule();
-		this.initialiseWorkStations();
 		this.currentTime = new DateTime(2014, 1, 1, 6, 0);
 		stats = new Statistics();
 		
 	}
 	
-	private void initialiseWorkStations(){
-		workStations.add( new CarBodyPost());
-		workStations.add(new DriveTrainPost());
-		workStations.add(new AccessoriesPost());
-		this.firstWorkStation = workStations.getFirst();
-		workStations.get(0).setWorkStation(workStations.get(1));
-		workStations.get(1).setWorkStation(workStations.get(2));
-		numberOfWorkStations = workStations.size();
-	}
 	
 	private boolean moveAssemblyLine(int phaseDuration){
 			return schedule.moveAndReschedule(phaseDuration);
@@ -88,17 +75,10 @@ public class AssemblyLine {
 		return stats.toString();
 	}
 	
-	/**
-	 * Checks if all the work stations are done.
-	 * @return 	True if all work stations are done.
-	 * 			False if one or more work stations are not done.
-	 */
-	private boolean checkWorkStations() {
-		return firstWorkStation.canMoveAssemblyLine();
-	}
+	
 	
 	public boolean tryMoveAssemblyLine(int phaseDuration){
-		if(checkWorkStations())
+		if(firstWorkStation.canMoveAssemblyLine())
 			return moveAssemblyLine(phaseDuration);
 		else
 			return false;
@@ -117,7 +97,9 @@ public class AssemblyLine {
 	 * @return	The list of workstations.
 	 */
 	public List<Workstation> getWorkStations() {
-		return new LinkedList<Workstation>(workStations);
+		LinkedList<Workstation> workStations = new LinkedList<Workstation>();
+		firstWorkStation.buildList(workStations,numberOfWorkStations);
+		return workStations;
 	}
 	
 	/**
