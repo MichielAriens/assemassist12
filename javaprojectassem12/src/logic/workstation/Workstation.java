@@ -2,6 +2,7 @@ package logic.workstation;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import logic.car.CarPartType;
 import logic.car.Order;
 
@@ -59,6 +60,8 @@ public abstract class Workstation {
 	 * @return The current order.
 	 */
 	private Order getCurrentOrder(){
+		if(currentOrder == null)
+			return null;
 		return currentOrder.getRawCopy();
 	}
 	
@@ -148,6 +151,24 @@ public abstract class Workstation {
 		return tasks;
 	}
 	
-	public LinkedList<>
+	protected abstract Workstation getRawCopy();
+	
+	public void buildWorkstationList(List<Workstation> workstations, int numberOfWorkstations){
+		if(numberOfWorkstations > 0){
+			workstations.add(this.getRawCopy());
+		}
+		if(numberOfWorkstations > 1 && nextWorkStation != null){
+			nextWorkStation.buildWorkstationList(workstations, --numberOfWorkstations);
+		}
+	}
+	
+	public void buildOrderList(List<Order> orders, int numberOfOrders){
+		if(numberOfOrders > 0){
+			orders.add(this.getCurrentOrder());
+		}
+		if(numberOfOrders > 1 && nextWorkStation != null){
+			nextWorkStation.buildOrderList(orders, numberOfOrders);
+		}
+	}
 	
 }

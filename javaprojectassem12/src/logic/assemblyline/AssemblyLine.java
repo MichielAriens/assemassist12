@@ -10,8 +10,10 @@ import org.joda.time.Days;
 import logic.car.Order;
 import logic.workstation.AccessoriesPost;
 import logic.workstation.CarBodyPost;
+import logic.workstation.ConcreteWorkstationBuilder;
 import logic.workstation.DriveTrainPost;
 import logic.workstation.Workstation;
+import logic.workstation.WorkstationDirector;
 
 /**
  * Class handling an assembly line of a car manufacturing company.
@@ -58,12 +60,18 @@ public class AssemblyLine {
 	 * Also sets the current time to January first 2014 at the beginning of the shift. 
 	 */
 	public AssemblyLine(){
-		
 		queue= new LinkedList<Order>();
 		schedule = new Schedule();
+		initialiseWorkstations();
 		this.currentTime = new DateTime(2014, 1, 1, 6, 0);
 		stats = new Statistics();
-		
+	}
+	
+	private void initialiseWorkstations(){
+		ConcreteWorkstationBuilder builder = new ConcreteWorkstationBuilder();
+		WorkstationDirector director = new WorkstationDirector(builder);
+		director.construct();
+		this.firstWorkStation = builder.getResult();
 	}
 	
 	

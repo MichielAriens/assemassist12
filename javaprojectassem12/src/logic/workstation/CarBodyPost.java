@@ -31,6 +31,11 @@ public class CarBodyPost extends Workstation {
 		return CarBodyPost.compatibleTasks;
 	}
 	
+	@Override
+	protected Workstation getRawCopy(){
+		return new CarBodyPost();
+	}
+	
 	/**
 	 * Returns a string representation of a car body post.
 	 */
