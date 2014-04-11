@@ -106,7 +106,7 @@ public class AssemblyLine {
 	 */
 	public List<Workstation> getWorkStations() {
 		LinkedList<Workstation> workStations = new LinkedList<Workstation>();
-		firstWorkStation.buildList(workStations,numberOfWorkStations);
+		firstWorkStation.buildWorkstationList(workStations,numberOfWorkStations);
 		return workStations;
 	}
 	

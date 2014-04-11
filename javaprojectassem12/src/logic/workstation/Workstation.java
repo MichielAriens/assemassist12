@@ -59,7 +59,7 @@ public abstract class Workstation {
 	 * When the current order is null, the workstation is idle.
 	 * @return The current order.
 	 */
-	private Order getCurrentOrder(){
+	public Order getCurrentOrder(){
 		if(currentOrder == null)
 			return null;
 		return currentOrder.getRawCopy();
