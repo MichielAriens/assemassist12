@@ -175,8 +175,7 @@ public class UIGarageHolder {
 				writer.write("   " + typeString+"\n");
 				
 				String partString = checkInput("   Type the number of the desired car part: ", ghController.getOptions(partType));
-				CarPart part = CarPart.getPartfromString(partString);
-				ghController.addPart(part);
+				ghController.addPart(partString);
 			}
 		} catch(IOException e){
 			e.printStackTrace();

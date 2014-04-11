@@ -118,10 +118,10 @@ public class GarageHolderController extends UserController{
 		this.maker = new CarOrderDetailsMaker(model);
 	}
 	
-	public void addPart(CarPart part){
-		if(part == null)
+	public void addPart(String partString){
+		if(partString == null)
 			return;
-		this.maker.addPart(part);
+		this.maker.addPart(CarPart.getPartfromString(partString));
 	}
 	
 	/**
