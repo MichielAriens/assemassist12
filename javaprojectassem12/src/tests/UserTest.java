@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import logic.car.CarModel;
 import logic.car.CarOrder;
+import logic.car.CarOrderDetails;
+import logic.car.CarOrderDetailsMaker;
 import logic.car.CarPart;
 import logic.car.CarSpecification;
 import logic.users.CarManufacturingCompany;
@@ -29,24 +31,36 @@ public class UserTest {
 	@Test
 	public void garageHolderTest() {
 		//login with garageholder account
-		GarageHolder g = (GarageHolder) company.logIn("Michiel");
+		GarageHolder g = (GarageHolder) company.logIn("Jeroen");
 		//check initial values
-		assertEquals("Michiel", g.getUserName());
+		assertEquals("Jeroen", g.getUserName());
 		assertEquals(0,g.getPendingOrders().size());
 		assertEquals(0,g.getCompletedOrders().size());
 		//try to add a car order with null as carspecification
 		g.placeOrder(null);
 		//make carspecification to place an order
-		ArrayList<CarPart> carparts = new ArrayList<CarPart>();
-		carparts.add(CarPart.BODY_BREAK);
-		carparts.add(CarPart.COLOUR_BLACK);
-		carparts.add(CarPart.SEATS_LEATHER_BLACK);
-		carparts.add(CarPart.AIRCO_AUTO);
-		carparts.add(CarPart.WHEELS_COMFORT);
-		carparts.add(CarPart.ENGINE_4);
-		carparts.add(CarPart.GEARBOX_5AUTO);
-		CarSpecification spec = new CarSpecification(CarModel.MODEL1, carparts);
-		g.placeOrder(spec);
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELA);
+		maker.addPart(CarPart.getPartfromString("Model A"));
+		maker.addPart(CarPart.getPartfromString("Sedan"));
+		maker.addPart(CarPart.getPartfromString("Red"));
+		maker.addPart(CarPart.getPartfromString("Standard 2l v4"));
+		maker.addPart(CarPart.getPartfromString("6 speed manual"));
+		maker.addPart(CarPart.getPartfromString("Leather black"));
+		maker.addPart(CarPart.getPartfromString("Manual"));
+		maker.addPart(CarPart.getPartfromString("Comfort"));
+		maker.addPart(CarPart.getPartfromString("No Spoiler"));
+
+//		ArrayList<CarPart> carparts = new ArrayList<CarPart>();
+//		carparts.add(CarPart.BODY_BREAK);
+//		carparts.add(CarPart.COLOUR_BLACK);
+//		carparts.add(CarPart.SEATS_LEATHER_BLACK);
+//		carparts.add(CarPart.AIRCO_AUTO);
+//		carparts.add(CarPart.WHEELS_COMFORT);
+//		carparts.add(CarPart.ENGINE_4);
+//		carparts.add(CarPart.GEARBOX_5AUTO);
+//		CarSpecification spec = new CarSpecification(CarModel.MODELA, carparts);
+		//g.placeOrder(spec);
+		g.placeOrder(maker.getDetails());
 		//check for new pending order
 		assertEquals(1,g.getPendingOrders().size());
 		assertEquals(0,g.getCompletedOrders().size());
@@ -68,7 +82,7 @@ public class UserTest {
 		carparts.add(CarPart.WHEELS_COMFORT);
 		carparts.add(CarPart.ENGINE_4);
 		carparts.add(CarPart.GEARBOX_5AUTO);
-		CarSpecification spec = new CarSpecification(CarModel.MODEL1, carparts);
+		CarSpecification spec = new CarSpecification(CarModel.MODELA, carparts);
 		g.placeOrder(spec);
 	}
 	
@@ -109,7 +123,7 @@ public class UserTest {
 		carparts.add(CarPart.WHEELS_COMFORT);
 		carparts.add(CarPart.ENGINE_4);
 		carparts.add(CarPart.GEARBOX_5AUTO);
-		CarSpecification spec = new CarSpecification(CarModel.MODEL1, carparts);
+		CarSpecification spec = new CarSpecification(CarModel.MODELA, carparts);
 		g.placeOrder(spec);
 		Manager m = (Manager) company.logIn("Wander");
 		m.moveAssemblyLine(60);
