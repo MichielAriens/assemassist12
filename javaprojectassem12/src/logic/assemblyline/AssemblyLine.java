@@ -183,9 +183,9 @@ public class AssemblyLine {
 		private boolean moveAndReschedule(int phaseDuration) {
 			if(!checkPhaseDuration(phaseDuration))
 				return false;
-			adjustDelays(phaseDuration);
+			firstWorkStation.adjustDelays(phaseDuration);
 			currentTime = currentTime.plusMinutes(phaseDuration);
-			Order firstOrder = workStations.get(numberOfWorkStations-1).getCurrentOrder();
+			Order firstOrder = firstWorkStation.getLastOrder();
 			if(firstOrder!=null){
 				firstOrder.setEndTime(currentTime);
 				stats.finishedCarOrder(firstOrder);
@@ -201,28 +201,23 @@ public class AssemblyLine {
 			return true;
 		}
 		
-		private void adjustDelays(int phaseDuration){
-			LinkedList<Order> list = new LinkedList<Order>();
-			for(Workstation next : workStations){
-				list.add(next.getCurrentOrder());
-			}
-			int amount = phaseDuration - calculateMaxPhase(list);
-			for(Workstation next : workStations){
-				if(next.getCurrentOrder()!=null)
-					next.getCurrentOrder().addDelay(amount);
-			}
-			
-		}
+//		private void adjustDelays(int phaseDuration){
+//			LinkedList<Order> list = new LinkedList<Order>();
+//			for(Workstation next : workStations){
+//				list.add(next.getCurrentOrder());
+//			}
+//			int amount = phaseDuration - calculateMaxPhase(list);
+//			for(Workstation next : workStations){
+//				if(next.getCurrentOrder()!=null)
+//					next.getCurrentOrder().addDelay(amount);
+//			}
+//			
+//		}
 		
 		private boolean checkPhaseDuration(int phaseDuration){
 			int difference = 0;
-			for(Workstation next : workStations){
-				if(next.getCurrentOrder()!=null){
-					Order order =next.getCurrentOrder();
-					difference = getTimeDifference(order.getEstimatedEndTime(),currentTime);
-					break;
-				}
-			}
+			if(firstWorkStation.getTotalEstimatedEndTime() != null)
+				difference = getTimeDifference(firstWorkStation.getTotalEstimatedEndTime(), currentTime);
 			int diff= shiftBeginHour*60 - difference - 1;
 			int max = 24*60 - currentTime.getMinuteOfDay()+diff;
 			if(max>= phaseDuration)
@@ -292,142 +287,142 @@ public class AssemblyLine {
 			
 		}
 		
-		private void rescheduleQueue(){
-			if(!queue.isEmpty()){
-				LinkedList<Order> list = new LinkedList<Order>();
-				DateTime estimatedEndTime = new DateTime(currentTime);
-				int index =0;
-
-				for(Order next : queue){
-					if(index==0){
-						buildEstimateFirstInQueue();
-						adjustPrevious(index);
-					}else{
-						list.addAll(addPrevious(index));
-						estimatedEndTime = list.getFirst().getEstimatedEndTime();
-						int assemblyTime = getAssemblyTimeReversed(next,list);
-						estimatedEndTime = estimatedEndTime.plusMinutes(assemblyTime);
-						estimatedEndTime = getEstimatedTime(estimatedEndTime, next);
-						next.setEstimatedEndTime(estimatedEndTime);
-						adjustPrevious(index);
-						list.clear();
-					}
-					index++;
-				}
-			}
-		}
+//		private void rescheduleQueue(){
+//			if(!queue.isEmpty()){
+//				LinkedList<Order> list = new LinkedList<Order>();
+//				DateTime estimatedEndTime = new DateTime(currentTime);
+//				int index =0;
+//
+//				for(Order next : queue){
+//					if(index==0){
+//						buildEstimateFirstInQueue();
+//						adjustPrevious(index);
+//					}else{
+//						list.addAll(addPrevious(index));
+//						estimatedEndTime = list.getFirst().getEstimatedEndTime();
+//						int assemblyTime = getAssemblyTimeReversed(next,list);
+//						estimatedEndTime = estimatedEndTime.plusMinutes(assemblyTime);
+//						estimatedEndTime = getEstimatedTime(estimatedEndTime, next);
+//						next.setEstimatedEndTime(estimatedEndTime);
+//						adjustPrevious(index);
+//						list.clear();
+//					}
+//					index++;
+//				}
+//			}
+//		}
 		
-		private int getAssemblyTimeReversed(Order order, LinkedList<Order> list){
-			int returnval = 0;
-			returnval+=positiveDifference(order, biggestPhaseTime(list));
-			list.removeLast();
-			returnval+=positiveDifference(order, biggestPhaseTime(list));
-			returnval+=order.getPhaseTime();
-			return returnval;
-		}
+//		private int getAssemblyTimeReversed(Order order, LinkedList<Order> list){
+//			int returnval = 0;
+//			returnval+=positiveDifference(order, biggestPhaseTime(list));
+//			list.removeLast();
+//			returnval+=positiveDifference(order, biggestPhaseTime(list));
+//			returnval+=order.getPhaseTime();
+//			return returnval;
+//		}
 		
-		private int positiveDifference(Order first,Order second){
-			int returnval = first.getPhaseTime()-second.getPhaseTime();
-			if(returnval>0)
-				return returnval;
-			else
-				return 0;
-		}
+//		private int positiveDifference(Order first,Order second){
+//			int returnval = first.getPhaseTime()-second.getPhaseTime();
+//			if(returnval>0)
+//				return returnval;
+//			else
+//				return 0;
+//		}
 		
-		private void buildEstimateFirstInQueue(){
-			LinkedList<Order> list = new LinkedList<Order>();
-			DateTime estimatedEndTime = new DateTime(currentTime);
-			if(estimatedEndTime.getHourOfDay()<shiftBeginHour || estimatedEndTime.getMinuteOfDay()>=shiftEndHour*60-overTime){
-				estimatedEndTime = getEstimatedTime(estimatedEndTime, queue.getFirst());
-				queue.getFirst().setEstimatedEndTime(estimatedEndTime);
-				return;
-			}
-			for(Workstation ws : getWorkStations()){
-				list.add(ws.getCurrentOrder());				
-			}
-			estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-			list.removeLast();
-			list.add(0,queue.getFirst());
-			while(!list.isEmpty()){
-				estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-				list.removeLast();
-			}
-			estimatedEndTime = getEstimatedTime(estimatedEndTime, queue.getFirst());
-			queue.getFirst().setEstimatedEndTime(estimatedEndTime);
-		}
+//		private void buildEstimateFirstInQueue(){
+//			LinkedList<Order> list = new LinkedList<Order>();
+//			DateTime estimatedEndTime = new DateTime(currentTime);
+//			if(estimatedEndTime.getHourOfDay()<shiftBeginHour || estimatedEndTime.getMinuteOfDay()>=shiftEndHour*60-overTime){
+//				estimatedEndTime = getEstimatedTime(estimatedEndTime, queue.getFirst());
+//				queue.getFirst().setEstimatedEndTime(estimatedEndTime);
+//				return;
+//			}
+//			for(Workstation ws : getWorkStations()){
+//				list.add(ws.getCurrentOrder());				
+//			}
+//			estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
+//			list.removeLast();
+//			list.add(0,queue.getFirst());
+//			while(!list.isEmpty()){
+//				estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
+//				list.removeLast();
+//			}
+//			estimatedEndTime = getEstimatedTime(estimatedEndTime, queue.getFirst());
+//			queue.getFirst().setEstimatedEndTime(estimatedEndTime);
+//		}
 	
-		private LinkedList<Order> addPrevious(int index){
-			LinkedList<Order> list = new LinkedList<Order>();
-			int n = workStations.size();
-			int nbInStations = n-1-index;
-			int count = 0;
-			for(int i = index-1; i >= 0; i--){
-				if(count >= n-1)
-					break;
-				list.add(queue.get(i));
-				count++;
-			}
-			for(int i = 0; i < nbInStations; i++){
-				list.add(workStations.get(i).getCurrentOrder());
-			}
-			return list;
-		}
+//		private LinkedList<Order> addPrevious(int index){
+//			LinkedList<Order> list = new LinkedList<Order>();
+//			int n = workStations.size();
+//			int nbInStations = n-1-index;
+//			int count = 0;
+//			for(int i = index-1; i >= 0; i--){
+//				if(count >= n-1)
+//					break;
+//				list.add(queue.get(i));
+//				count++;
+//			}
+//			for(int i = 0; i < nbInStations; i++){
+//				list.add(workStations.get(i).getCurrentOrder());
+//			}
+//			return list;
+//		}
 		
 		
-		private Order biggestPhaseTime(List<Order> orders){
-			if(orders == null)
-				return null;
-			int maximum = 0;
-			Order bestOrder = null;
-			for(Order o: orders){
-				if(o != null){
-					if(o.getPhaseTime() > maximum){
-						maximum = o.getPhaseTime();
-						bestOrder = o;
-					}
-				}
-			}
-			return bestOrder;
-		}
+//		private Order biggestPhaseTime(List<Order> orders){
+//			if(orders == null)
+//				return null;
+//			int maximum = 0;
+//			Order bestOrder = null;
+//			for(Order o: orders){
+//				if(o != null){
+//					if(o.getPhaseTime() > maximum){
+//						maximum = o.getPhaseTime();
+//						bestOrder = o;
+//					}
+//				}
+//			}
+//			return bestOrder;
+//		}
 		
-		private void adjustPrevious(int index){
-			Order order = queue.get(index);
-			LinkedList<Order> list = addPrevious(index);
-
-			if(timeForNewOrder(order.getEstimatedEndTime())){
-				int big = 0;
-				for(int i=0;i<list.size();i++){
-					LinkedList<Order> sublist = new LinkedList<Order>(list.subList(0, i+1));
-					if(biggestPhaseTime(sublist) == null)
-						continue;
-					big=biggestPhaseTime(sublist).getPhaseTime();
-					if(order.getPhaseTime()>big){
-						for(Order next : sublist){
-							if(next!=null && order.getEstimatedEndTime().getDayOfYear()==next.getEstimatedEndTime().getDayOfYear() && next.getEstimatedEndTime().getHourOfDay()>shiftBeginHour)
-								next.setEstimatedEndTime(next.getEstimatedEndTime().plusMinutes(order.getPhaseTime()-big));
-						}
-
-
-					}
-				}
-			}
-		}
+//		private void adjustPrevious(int index){
+//			Order order = queue.get(index);
+//			LinkedList<Order> list = addPrevious(index);
+//
+//			if(timeForNewOrder(order.getEstimatedEndTime())){
+//				int big = 0;
+//				for(int i=0;i<list.size();i++){
+//					LinkedList<Order> sublist = new LinkedList<Order>(list.subList(0, i+1));
+//					if(biggestPhaseTime(sublist) == null)
+//						continue;
+//					big=biggestPhaseTime(sublist).getPhaseTime();
+//					if(order.getPhaseTime()>big){
+//						for(Order next : sublist){
+//							if(next!=null && order.getEstimatedEndTime().getDayOfYear()==next.getEstimatedEndTime().getDayOfYear() && next.getEstimatedEndTime().getHourOfDay()>shiftBeginHour)
+//								next.setEstimatedEndTime(next.getEstimatedEndTime().plusMinutes(order.getPhaseTime()-big));
+//						}
+//
+//
+//					}
+//				}
+//			}
+//		}
 		
 
-		private void rescheduleWorkstations(){
-			LinkedList<Order> list = new LinkedList<Order>();
-			DateTime estimatedEndTime = new DateTime(currentTime);
-			for(Workstation w : workStations){
-				list.add(w.getCurrentOrder());
-			}
-			estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-			for(int i = workStations.size()-1; i >= 0; i--){
-				if(workStations.get(i).getCurrentOrder()!=null)
-					workStations.get(i).getCurrentOrder().setEstimatedEndTime(estimatedEndTime);
-				list.removeLast();
-				estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-			}
-		}
+//		private void rescheduleWorkstations(){
+//			LinkedList<Order> list = new LinkedList<Order>();
+//			DateTime estimatedEndTime = new DateTime(currentTime);
+//			for(Workstation w : workStations){
+//				list.add(w.getCurrentOrder());
+//			}
+//			estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
+//			for(int i = workStations.size()-1; i >= 0; i--){
+//				if(workStations.get(i).getCurrentOrder()!=null)
+//					workStations.get(i).getCurrentOrder().setEstimatedEndTime(estimatedEndTime);
+//				list.removeLast();
+//				estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
+//			}
+//		}
 		
 		private int calculateMaxPhase(List<Order> orders){
 			int max = 0;
@@ -474,10 +469,9 @@ public class AssemblyLine {
 		 * 			False otherwise.
 		 */
 		private boolean checkEndOfDay() {
-			for(Workstation workstation : workStations){
-				if(workstation.getCurrentOrder()!=null)
-					return false;
-			}
+			boolean doneWorking = firstWorkStation.allIdle();
+			if(!doneWorking)
+				return false;
 			int assemblyTime = 60*numberOfWorkStations;
 			if(!queue.isEmpty()){
 				assemblyTime = queue.getFirst().getPhaseTime()*numberOfWorkStations;
@@ -494,13 +488,13 @@ public class AssemblyLine {
 		 * @param time	The time to check against the current time of the system.
 		 * @return True if there is time for a new order on this day, else returns false.
 		 */
-		private boolean timeForNewOrder(DateTime time) {
-			if(Days.daysBetween(time, currentTime).getDays()==0){
-				return time.getMinuteOfDay()<(shiftEndHour*60-overTime) && time.getMinuteOfDay()>=shiftBeginHour*60;
-			}else{
-				return  time.getMinuteOfDay()<(shiftEndHour*60) && time.getMinuteOfDay()>=shiftBeginHour*60;
-			}
-		}
+//		private boolean timeForNewOrder(DateTime time) {
+//			if(Days.daysBetween(time, currentTime).getDays()==0){
+//				return time.getMinuteOfDay()<(shiftEndHour*60-overTime) && time.getMinuteOfDay()>=shiftBeginHour*60;
+//			}else{
+//				return  time.getMinuteOfDay()<(shiftEndHour*60) && time.getMinuteOfDay()>=shiftBeginHour*60;
+//			}
+//		}
 
 		/**
 		 * Makes a copy of the queue containing the pending orders.
@@ -539,19 +533,19 @@ public class AssemblyLine {
 		 * @param estimatedEndTime The estimated end time that needs to be scheduled.
 		 * @return	The renewed estimated end time if it was scheduled wrong before. 
 		 */
-		private DateTime getEstimatedTime(DateTime estimatedEndTime, Order order) {
-			if(!timeForNewOrder(estimatedEndTime)){
-				if(estimatedEndTime.getHourOfDay()<=shiftBeginHour){
-					return new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour,0).plusMinutes(order.getPhaseTime()*numberOfWorkStations);
-
-				}else{
-					estimatedEndTime =  new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour,0).plusMinutes(order.getPhaseTime()*numberOfWorkStations);
-					return estimatedEndTime.plusDays(1);
-				}
-			}else{
-				return estimatedEndTime;
-			}
-		}
+//		private DateTime getEstimatedTime(DateTime estimatedEndTime, Order order) {
+//			if(!timeForNewOrder(estimatedEndTime)){
+//				if(estimatedEndTime.getHourOfDay()<=shiftBeginHour){
+//					return new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour,0).plusMinutes(order.getPhaseTime()*numberOfWorkStations);
+//
+//				}else{
+//					estimatedEndTime =  new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour,0).plusMinutes(order.getPhaseTime()*numberOfWorkStations);
+//					return estimatedEndTime.plusDays(1);
+//				}
+//			}else{
+//				return estimatedEndTime;
+//			}
+//		}
 
 		/**
 		 * Returns a list of 3 car orders which shows the car orders in the workstations if the
@@ -568,8 +562,7 @@ public class AssemblyLine {
 			}catch(NoSuchElementException e){
 				returnList.add(null);
 			}
-			returnList.add(firstWorkStation.getCurrentOrder());
-			returnList.add(workStations.get(1).getCurrentOrder());
+			firstWorkStation.buildFutureOrderList(returnList);
 			return returnList;
 		}
 		
@@ -585,10 +578,7 @@ public class AssemblyLine {
 		private List<Order> getBachList(){
 			LinkedList<Order> returnList = new LinkedList<Order>();
 			LinkedList<Order> allOrdersList = new LinkedList<Order>();
-			for(Workstation next : workStations){
-				if(next.getCurrentOrder() != null)
-				allOrdersList.add(next.getCurrentOrder().getRawCopy());
-			}
+			firstWorkStation.buildOrderList(allOrdersList);
 			for(Order next: queue){
 				allOrdersList.add(next.getRawCopy());
 			}

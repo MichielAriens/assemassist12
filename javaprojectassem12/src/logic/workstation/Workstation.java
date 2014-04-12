@@ -161,17 +161,21 @@ public abstract class Workstation {
 			workstations.add(this.getRawCopy());
 		}
 		if(numberOfWorkstations > 1 && nextWorkStation != null){
-			nextWorkStation.buildWorkstationList(workstations, --numberOfWorkstations);
+			nextWorkStation.buildWorkstationList(workstations, numberOfWorkstations-1);
 		}
 	}
 	
-	public void buildOrderList(List<Order> orders, int numberOfOrders){
-		if(numberOfOrders > 0){
+	public void buildOrderList(List<Order> orders){
+		if(this.currentOrder != null)
 			orders.add(this.getCurrentOrder());
-		}
-		if(numberOfOrders > 1 && nextWorkStation != null){
-			nextWorkStation.buildOrderList(orders, numberOfOrders);
-		}
+		if(nextWorkStation != null)
+			nextWorkStation.buildOrderList(orders);
+	}
+	
+	public void buildFutureOrderList(List<Order> orders){
+		if(nextWorkStation != null)
+			orders.add(this.getCurrentOrder());
+			nextWorkStation.buildFutureOrderList(orders);
 	}
 	
 	public DateTime reschedule(List<Integer> prePhaseDurations, int NbOfWorkstations, DateTime currentTime){
@@ -209,4 +213,48 @@ public abstract class Workstation {
 		return nextWorkStation.countWorkStations()+1;
 	}
 	
+	public DateTime getTotalEstimatedEndTime(){
+		if(this.currentOrder != null)
+			return this.currentOrder.getEstimatedEndTime();
+		if(this.nextWorkStation != null)
+			return nextWorkStation.getTotalEstimatedEndTime();
+		return null;
+	}
+	
+	public void adjustDelays(int phaseDuration){
+		int delay = phaseDuration - getTotalMaxPhaseTime();
+		addDelay(delay);
+	}
+	
+	private void addDelay(int delay){
+		if(this.currentOrder != null)
+			this.currentOrder.addDelay(delay);
+		if(this.nextWorkStation != null)
+			this.nextWorkStation.addDelay(delay);
+	}
+	
+	private int getTotalMaxPhaseTime(){
+		if(this.nextWorkStation == null){
+			if(this.currentOrder == null)
+				return 0;
+			return this.currentOrder.getPhaseTime();
+		}
+		if(this.currentOrder == null)
+			return this.nextWorkStation.getTotalMaxPhaseTime();
+		return Math.max(this.currentOrder.getPhaseTime(), this.nextWorkStation.getTotalMaxPhaseTime());
+	}
+	
+	public Order getLastOrder(){
+		if(nextWorkStation != null)
+			return nextWorkStation.getLastOrder();
+		return this.currentOrder;
+	}
+	
+	public boolean allIdle(){
+		if(this.currentOrder != null)
+			return false;
+		if(this.nextWorkStation != null)
+			return this.nextWorkStation.allIdle();
+		return true;
+	}
 }
