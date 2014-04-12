@@ -63,6 +63,7 @@ public class AssemblyLine {
 		queue= new LinkedList<Order>();
 		schedule = new Schedule();
 		initialiseWorkstations();
+		this.numberOfWorkStations = firstWorkStation.countWorkStations();
 		this.currentTime = new DateTime(2014, 1, 1, 6, 0);
 		stats = new Statistics();
 	}
@@ -241,8 +242,36 @@ public class AssemblyLine {
 			if(firstWorkStation.getCurrentOrder()==null && !queue.isEmpty()){
 				addOrderToFirstWorkstation();
 			}
-			rescheduleWorkstations();
-			rescheduleQueue();
+			DateTime workstationEET = firstWorkStation.reschedule(getPhaseDurations(), numberOfWorkStations, currentTime);
+			rescheduleQueue(workstationEET);
+		}
+		
+		private List<Integer> getPhaseDurations(){
+			ArrayList<Integer> prePhaseDurations = new ArrayList<Integer>();
+			int j = 0;
+			for(int i = 0; i < queue.size(); i++){
+				if(j >= numberOfWorkStations-1)
+					break;
+				j++;
+				prePhaseDurations.add(0, queue.get(i).getPhaseTime());
+			}
+			return prePhaseDurations;
+		}
+		
+		private void rescheduleQueue(DateTime startTime){
+			for(int i = 0; i < queue.size(); i++){
+				int count = 0;
+				int maxPhase = queue.get(i).getPhaseTime();
+				for(int j = i+1; j < queue.size(); j++){
+					if(count >= numberOfWorkStations-1)
+						break;
+					count++;
+					if(queue.get(j).getPhaseTime() > maxPhase)
+						maxPhase = queue.get(j).getPhaseTime();
+				}
+				startTime = startTime.plusMinutes(maxPhase);
+				queue.get(i).setEstimatedEndTime(startTime);
+			}
 		}
 		
 		private void addOrderToFirstWorkstation(){

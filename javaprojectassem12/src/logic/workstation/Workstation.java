@@ -177,20 +177,36 @@ public abstract class Workstation {
 	public DateTime reschedule(List<Integer> prePhaseDurations, int NbOfWorkstations, DateTime currentTime){
 		DateTime nextStationEET = currentTime;
 		if(nextWorkStation != null){
-			prePhaseDurations.add(currentOrder.getPhaseTime());
+			if(currentOrder == null)
+				prePhaseDurations.add(0);
+			else
+				prePhaseDurations.add(currentOrder.getPhaseTime());
 			nextStationEET = nextWorkStation.reschedule(prePhaseDurations, NbOfWorkstations, currentTime);
-		}
-		int maxPre = currentOrder.getPhaseTime();
+		}	
+		int maxPre = 0;
+		if(currentOrder != null)
+			maxPre = currentOrder.getPhaseTime();
 		int j = 0;
 		for(int i = prePhaseDurations.size()-1; i >=0; i--){
-			if(j >= NbOfWorkstations)
+			if(j >= NbOfWorkstations-1)
 				break;
 			j++;
 			if(prePhaseDurations.get(i)>maxPre)
 				maxPre = prePhaseDurations.get(i);
 		}
-		currentOrder.setEndTime(nextStationEET.plusMinutes(maxPre));
-		return currentOrder.getEstimatedEndTime();
+		if(prePhaseDurations.size()>0)
+			prePhaseDurations.remove(prePhaseDurations.size()-1);
+		if(currentOrder != null){
+			currentOrder.setEndTime(nextStationEET.plusMinutes(maxPre));
+			return currentOrder.getEstimatedEndTime();
+		}
+		return nextStationEET.plusMinutes(maxPre);
+	}
+	
+	public int countWorkStations(){
+		if(nextWorkStation == null)
+			return 1;
+		return nextWorkStation.countWorkStations()+1;
 	}
 	
 }

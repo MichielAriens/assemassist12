@@ -19,7 +19,7 @@ public class ConcreteWorkstationBuilder extends WorkstationBuilder{
 	@Override
 	public void buildDriveTrainPost() {
 		Workstation temp = lastAdded;
-		this.lastAdded = new CarBodyPost(); 
+		this.lastAdded = new DriveTrainPost(); 
 		if(result == null)
 			result = lastAdded;
 		if(temp != null)
@@ -29,7 +29,7 @@ public class ConcreteWorkstationBuilder extends WorkstationBuilder{
 	@Override
 	public void buildAccessoriesPost() {
 		Workstation temp = lastAdded;
-		this.lastAdded = new CarBodyPost(); 
+		this.lastAdded = new AccessoriesPost(); 
 		if(result == null)
 			result = lastAdded;
 		if(temp != null)
