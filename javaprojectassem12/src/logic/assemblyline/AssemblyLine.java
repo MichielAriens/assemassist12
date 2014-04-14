@@ -84,7 +84,21 @@ public class AssemblyLine {
 		return stats.toString();
 	}
 	
+	public boolean doTask(String taskIdentifier, String workstationIdentifier){
+		return firstWorkStation.doTask(taskIdentifier, workstationIdentifier);
+	}
 	
+	public List<String> getRequiredTaskIdentifiers(String workstationIdentifier){
+		return this.firstWorkStation.getRequiredTaskIdentifiers(workstationIdentifier);
+	}
+	
+	public String getTaskDescription(String taskIdentifier, String workstationIdentifier){
+		return this.firstWorkStation.getTaskDescription(workstationIdentifier, taskIdentifier);
+	}
+	
+	public List<String> getTaskStatus(String workstationIdentifier){
+		return this.firstWorkStation.getTaskStatus(workstationIdentifier);
+	}
 	
 	public boolean tryMoveAssemblyLine(int phaseDuration){
 		if(firstWorkStation.canMoveAssemblyLine())

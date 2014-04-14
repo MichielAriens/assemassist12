@@ -1,6 +1,7 @@
 package logic.users;
 
 import java.util.List; 
+
 import logic.workstation.Task;
 import logic.workstation.Workstation;
 
@@ -12,7 +13,7 @@ public class Mechanic extends User{
 	/**
 	 * The workstation this mechanic is currently working on.
 	 */
-	private Workstation activeStation = null;
+	private String activeStationIdentifier = null;
 	
 	/**
 	 * The manufacturing company for which the mechanic works.
@@ -40,8 +41,8 @@ public class Mechanic extends User{
 	 * Returns the workstation the mechanic is currently working on.
 	 * @return The workstation the mechanic is currently working on.
 	 */
-	public Workstation getActiveWorkstation(){
-		return this.activeStation;
+	public String getActiveWorkstation(){
+		return this.activeStationIdentifier;
 	}
 	
 	/**
@@ -60,15 +61,14 @@ public class Mechanic extends User{
 	 * @return 	True if the task is compatible with the active workstation.
 	 * 			False otherwise.
 	 */
-	public boolean doTask(Task task, int duration){
-		if (getActiveWorkstation().isCompatibleTask(task)){
-			task.perform();
+	public boolean doTask(String taskIdentifier, int duration){
+		boolean performed = company.doTask(taskIdentifier, this.activeStationIdentifier);
+		if(performed){
 			setMaxPhaseDuration(duration);
 			if(company.moveAssemblyLine(maxPhaseDuration))
 				resetMaxPhaseDuration();
-			return true;
 		}
-		return false;
+		return performed;
 	}
 
 	/**
@@ -89,17 +89,31 @@ public class Mechanic extends User{
 		maxPhaseDuration = 0;
 	}
 
-	/**
-	 * Returns the list of tasks that need to be performed at the active workstation or null
-	 * if the mechanic has no active workstation.
-	 * @return	The list of tasks that need to be performed at the active workstation 
-	 * 			if the active workstation is not null.
-	 * 			Null otherwise.
-	 */
-	public List<Task> getAvailableTasks(){
+//	/**
+//	 * Returns the list of tasks that need to be performed at the active workstation or null
+//	 * if the mechanic has no active workstation.
+//	 * @return	The list of tasks that need to be performed at the active workstation 
+//	 * 			if the active workstation is not null.
+//	 * 			Null otherwise.
+//	 */
+//	public List<Task> getAvailableTasks(){
+//		if(!isPosted())
+//			return null;
+//		return this.activeStation.getRequiredTasks();
+//	}
+	
+	public List<String> getAvailableTaskIdentifiers(){
 		if(!isPosted())
 			return null;
-		return this.activeStation.getRequiredTasks();
+		return this.company.getRequiredTaskIdentifiers(this.activeStationIdentifier);
+	}
+	
+	public List<String> getTaskStatus(String workstationIdentifier){
+		return this.company.getTaskStatus(workstationIdentifier);
+	}
+	
+	public String getTaskDescription(String taskIdentifier){
+		return company.getTaskDescription(taskIdentifier, this.activeStationIdentifier);
 	}
 	
 	/**
@@ -110,12 +124,16 @@ public class Mechanic extends User{
 		return this.company.getWorkStations();
 	}
 	
-	/**
-	 * Sets the active workstation to the given workstation.
-	 * @param station	The new active workstation.
-	 */
-	public void setActiveWorkstation(Workstation station){
-		this.activeStation = station;
+//	/**
+//	 * Sets the active workstation to the given workstation.
+//	 * @param station	The new active workstation.
+//	 */
+//	public void setActiveWorkstation(Workstation station){
+//		this.activeStation = station;
+//	}
+	
+	public void setActiveWorkstation(String identifier){
+		this.activeStationIdentifier = identifier;
 	}
 
 }

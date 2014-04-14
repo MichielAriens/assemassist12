@@ -160,4 +160,20 @@ public class CarManufacturingCompany {
 	public void changeStrategy(Order order) {
 		assemblyLine.changeStrategy(order);
 	}
+	
+	public boolean doTask(String taskIdentifier, String workstationIdentifier){
+		return assemblyLine.doTask(taskIdentifier, workstationIdentifier);
+	}
+	
+	public List<String> getRequiredTaskIdentifiers(String workstationIdentifier){
+		return this.assemblyLine.getRequiredTaskIdentifiers(workstationIdentifier);
+	}
+	
+	public String getTaskDescription(String taskIdentifier, String workstationIdentifier){
+		return this.assemblyLine.getTaskDescription(taskIdentifier, workstationIdentifier);
+	}
+	
+	public List<String> getTaskStatus(String workstationIdentifier){
+		return this.assemblyLine.getTaskStatus(workstationIdentifier);
+	}
 }

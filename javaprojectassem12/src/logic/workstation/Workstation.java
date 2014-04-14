@@ -145,6 +145,61 @@ public abstract class Workstation {
 		if(this.isCompatibleTask(task))
 			task.perform();
 	}
+	
+	public boolean doTask(String taskIdentifier, String workstationIdentifier){
+		if(this.toString().equals(workstationIdentifier)){
+			for(Task t : tasks){
+				if(t.toString().equals(taskIdentifier))
+					t.perform();
+			}
+			return true;
+		}
+		if(this.nextWorkStation != null)
+			return this.nextWorkStation.doTask(taskIdentifier, workstationIdentifier);
+		return false;
+	}
+	
+	public List<String> getRequiredTaskIdentifiers(String workstationIdentifier){
+		if(this.toString().equals(workstationIdentifier)){
+			ArrayList<String> returnlist = new ArrayList<String>();
+			for(Task t : tasks){
+				if(!t.isComplete())
+					returnlist.add(t.toString());
+			}
+			return returnlist;
+		}
+		if(this.nextWorkStation != null)
+			return this.nextWorkStation.getRequiredTaskIdentifiers(workstationIdentifier);
+		return null;
+	}
+	
+	public String getTaskDescription(String workstationIdentifier, String taskIdentifier){
+		if(this.toString().equals(workstationIdentifier)){
+			for(Task t : tasks){
+				if(t.toString().equals(taskIdentifier))
+					return t.getDescription();
+			}
+		}
+		if(this.nextWorkStation != null)
+			return this.nextWorkStation.getTaskDescription(workstationIdentifier, taskIdentifier);
+		return null;
+	}
+	
+	public List<String> getTaskStatus(String workstationIdentifier){
+		if(this.toString().equals(workstationIdentifier)){
+			ArrayList<String> returnlist = new ArrayList<String>();
+			for(Task t : tasks){
+				if(t.isComplete())
+					returnlist.add(t.toString() + ": Completed");
+				else
+					returnlist.add(t.toString() + ": Pending");
+			}
+			return returnlist;
+		}
+		if(this.nextWorkStation != null)
+			return this.nextWorkStation.getTaskStatus(workstationIdentifier);
+		return null;
+	}
 
 	/**
 	 * Returns the list of tasks from the current order that can be performed on this workstation.

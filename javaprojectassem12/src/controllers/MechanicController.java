@@ -66,11 +66,9 @@ public class MechanicController extends UserController{
 			return null;
 		ArrayList<String> tasks = new ArrayList<String>();
 		int count = 1;
-		for(Task task : this.currentMechanic.getAvailableTasks()){
-			if(!task.isComplete()){
-				tasks.add(task.toString() + ": " + count);
-				count++;
-			}
+		for(String taskStr : this.currentMechanic.getAvailableTaskIdentifiers()){
+			tasks.add(taskStr + ": " + count);
+			count++;
 		}
 		return tasks;
 	}
@@ -86,11 +84,7 @@ public class MechanicController extends UserController{
 	public String getTaskInformation(String taskName){
 		if(this.currentMechanic == null)
 			return null;
-		for(Task task : this.currentMechanic.getActiveWorkstation().getRequiredTasks()){
-			if(task.toString().equals(taskName))
-				return task.getDescription();
-		}
-		return null;
+		return this.currentMechanic.getTaskDescription(taskName);
 	}
 	
 	/**
@@ -101,12 +95,7 @@ public class MechanicController extends UserController{
 	public void doTask(String taskName, int duration){
 		if(this.currentMechanic == null)
 			return;
-		for(Task task : this.currentMechanic.getActiveWorkstation().getRequiredTasks()){
-			if(task.toString().equals(taskName)){
-				this.currentMechanic.doTask(task, duration);
-				return;
-			}
-		}
+		this.currentMechanic.doTask(taskName, duration);
 	}
 	
 	/**
@@ -116,10 +105,7 @@ public class MechanicController extends UserController{
 	public void setWorkStation(String workstationName){
 		if(this.currentMechanic == null)
 			return;
-		for(Workstation workstation :this.currentMechanic.getWorkstations()){
-			if(workstation.toString().equals(workstationName))
-				this.currentMechanic.setActiveWorkstation(workstation);
-		}
+		this.currentMechanic.setActiveWorkstation(workstationName);
 	}
 
 	/**
@@ -135,14 +121,11 @@ public class MechanicController extends UserController{
 		ArrayList<String> tasks = new ArrayList<String>();
 		for(Workstation stat : workStations){
 			String temp = stat.toString() + ":\n";
-			if(stat.getRequiredTasks().size() == 0)
+			if(this.currentMechanic.getTaskStatus(stat.toString()).size() == 0)
 				temp += "Inactive.\n";
 			else{
-				for(Task task : stat.getRequiredTasks()){
-					String status = "Pending";
-					if(task.isComplete())
-						status = "Completed";
-					temp += "   -" + task.toString() + ": " + status + "\n";
+				for(String taskStr : this.currentMechanic.getTaskStatus(stat.toString())){
+					temp += "   -" + taskStr + "\n";
 				}
 			}
 			tasks.add(temp);
