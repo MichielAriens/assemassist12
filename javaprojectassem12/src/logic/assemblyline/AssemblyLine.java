@@ -8,10 +8,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 
 import logic.car.Order;
-import logic.workstation.AccessoriesPost;
-import logic.workstation.CarBodyPost;
 import logic.workstation.ConcreteWorkstationBuilder;
-import logic.workstation.DriveTrainPost;
 import logic.workstation.Workstation;
 import logic.workstation.WorkstationDirector;
 
@@ -279,6 +276,8 @@ public class AssemblyLine {
 						maxPhase = queue.get(j).getPhaseTime();
 				}
 				startTime = startTime.plusMinutes(maxPhase);
+				if(startTime.getHourOfDay()<shiftBeginHour || startTime.getMinuteOfDay()>=shiftEndHour*60-overTime)
+					startTime = getEstimatedTime(startTime, queue.get(i));
 				queue.get(i).setEstimatedEndTime(startTime);
 			}
 		}
@@ -502,13 +501,13 @@ public class AssemblyLine {
 		 * @param time	The time to check against the current time of the system.
 		 * @return True if there is time for a new order on this day, else returns false.
 		 */
-//		private boolean timeForNewOrder(DateTime time) {
-//			if(Days.daysBetween(time, currentTime).getDays()==0){
-//				return time.getMinuteOfDay()<(shiftEndHour*60-overTime) && time.getMinuteOfDay()>=shiftBeginHour*60;
-//			}else{
-//				return  time.getMinuteOfDay()<(shiftEndHour*60) && time.getMinuteOfDay()>=shiftBeginHour*60;
-//			}
-//		}
+		private boolean timeForNewOrder(DateTime time) {
+			if(Days.daysBetween(time, currentTime).getDays()==0){
+				return time.getMinuteOfDay()<(shiftEndHour*60-overTime) && time.getMinuteOfDay()>=shiftBeginHour*60;
+			}else{
+				return  time.getMinuteOfDay()<(shiftEndHour*60) && time.getMinuteOfDay()>=shiftBeginHour*60;
+			}
+		}
 
 		/**
 		 * Makes a copy of the queue containing the pending orders.
@@ -547,19 +546,19 @@ public class AssemblyLine {
 		 * @param estimatedEndTime The estimated end time that needs to be scheduled.
 		 * @return	The renewed estimated end time if it was scheduled wrong before. 
 		 */
-//		private DateTime getEstimatedTime(DateTime estimatedEndTime, Order order) {
-//			if(!timeForNewOrder(estimatedEndTime)){
-//				if(estimatedEndTime.getHourOfDay()<=shiftBeginHour){
-//					return new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour,0).plusMinutes(order.getPhaseTime()*numberOfWorkStations);
-//
-//				}else{
-//					estimatedEndTime =  new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour,0).plusMinutes(order.getPhaseTime()*numberOfWorkStations);
-//					return estimatedEndTime.plusDays(1);
-//				}
-//			}else{
-//				return estimatedEndTime;
-//			}
-//		}
+		private DateTime getEstimatedTime(DateTime estimatedEndTime, Order order) {
+			if(!timeForNewOrder(estimatedEndTime)){
+				if(estimatedEndTime.getHourOfDay()<=shiftBeginHour){
+					return new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour,0).plusMinutes(order.getPhaseTime()*numberOfWorkStations);
+
+				}else{
+					estimatedEndTime =  new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour,0).plusMinutes(order.getPhaseTime()*numberOfWorkStations);
+					return estimatedEndTime.plusDays(1);
+				}
+			}else{
+				return estimatedEndTime;
+			}
+		}
 
 		/**
 		 * Returns a list of 3 car orders which shows the car orders in the workstations if the
