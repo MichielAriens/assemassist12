@@ -109,7 +109,7 @@ public class AssemblyLine {
 	}
 	
 	public List<Order> getBachList(){
-		return schedule.getBachList();
+		return schedule.getBatchList();
 	}
 
 	/**
@@ -207,9 +207,25 @@ public class AssemblyLine {
 				setNextDay();
 				stats.setNextDay();
 			}
-
+			
+			checkStrategy();
+			
 			reschedule();
 			return true;
+		}
+		
+		private void checkStrategy(){
+
+			LinkedList<Order> listo = new LinkedList<Order>();
+			listo = makeCopyOfQueue();
+			firstWorkStation.buildOrderList(listo);
+			if(currentStrategy instanceof BatchSpecificationStrategy){
+				for(Order nexto : listo){
+					if(nexto.equals(currentStrategy.example))
+						return;
+				}
+			}
+			currentStrategy = stratList.getFirst();
 		}
 		
 //		private void adjustDelays(int phaseDuration){
@@ -539,11 +555,13 @@ public class AssemblyLine {
 			LinkedList<Order> copy = makeCopyOfQueue();
 			queue.clear();
 			currentStrategy.refactorQueue(queue,copy);
+			reschedule();
 		}
 		
 		/**
 		 * Returns the right estimated end time from the given possibly wrong estimated end time.
 		 * @param estimatedEndTime The estimated end time that needs to be scheduled.
+		 * @param order The order for which the estimated end time possibly needs to change.
 		 * @return	The renewed estimated end time if it was scheduled wrong before. 
 		 */
 		private DateTime getEstimatedTime(DateTime estimatedEndTime, Order order) {
@@ -579,6 +597,11 @@ public class AssemblyLine {
 			return returnList;
 		}
 		
+		/**
+		 * Returns a list of strategies used by the system. The first element is the current strategy used.
+		 * It contains the currentstrategy 2 times.
+		 * @return A list containing the different strategies.
+		 */
 		private List<SchedulingStrategy> getStrategies(){
 			LinkedList<SchedulingStrategy> returnList = new LinkedList<SchedulingStrategy>();
 			returnList.add(currentStrategy.getRawCopy());
@@ -588,7 +611,12 @@ public class AssemblyLine {
 			return returnList;
 		}
 		
-		private List<Order> getBachList(){
+		/**
+		 * Checks if there are orders in the workstations and the queue for which batch processing can be applied.
+		 * It then returns a list 
+		 * @return A list of orders for which batch processing can be used.
+		 */
+		private List<Order> getBatchList(){
 			LinkedList<Order> returnList = new LinkedList<Order>();
 			LinkedList<Order> allOrdersList = new LinkedList<Order>();
 			firstWorkStation.buildOrderList(allOrdersList);
@@ -602,7 +630,7 @@ public class AssemblyLine {
 					if(order.equals(next))
 						count++;
 				}
-				if(count>=3)
+				if(count>=3 && !returnList.contains(order))
 					returnList.add(order);
 				allOrdersList2.removeFirst();
 			}

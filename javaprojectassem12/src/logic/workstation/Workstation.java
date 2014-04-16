@@ -228,9 +228,10 @@ public abstract class Workstation {
 	}
 	
 	public void buildFutureOrderList(List<Order> orders){
-		if(nextWorkStation != null)
+		if(nextWorkStation != null){
 			orders.add(this.getCurrentOrder());
 			nextWorkStation.buildFutureOrderList(orders);
+		}
 	}
 	
 	public DateTime reschedule(List<Integer> prePhaseDurations, int NbOfWorkstations, DateTime currentTime){
