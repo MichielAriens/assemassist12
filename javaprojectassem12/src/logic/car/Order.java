@@ -7,7 +7,7 @@ import logic.workstation.Task;
 import org.joda.time.DateTime;
 
 
-public abstract class Order {
+public abstract class Order implements Comparable<Order>{
 	
 	/**
 	 * The time this order was created.
@@ -121,5 +121,12 @@ public abstract class Order {
 	
 	private boolean equals(Order other){
 		return this.getTasks().equals(other.getTasks());
+	}
+	
+	@Override
+	public int compareTo(Order o) {
+		if(o == null)
+			return -1;
+		return this.estimatedEndTime.compareTo(o.estimatedEndTime);
 	}
 }

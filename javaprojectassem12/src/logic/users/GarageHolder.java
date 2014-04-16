@@ -1,6 +1,8 @@
 package logic.users;
 
 import java.util.ArrayList;
+import java.util.Collections;
+
 import logic.car.CarOrder;
 import logic.car.CarOrderDetails;
 
@@ -47,7 +49,6 @@ public class GarageHolder extends User{
 	/**
 	 * Returns a list of all committed orders that are completed.
 	 * @return a list of all committed orders that are completed.
-	 * TODO: sortuuueueeeeheheeueheueeuh
 	 */
 	public ArrayList<CarOrder> getCompletedOrders(){
 		ArrayList<CarOrder> completedOrders = new ArrayList<CarOrder>();
@@ -55,6 +56,7 @@ public class GarageHolder extends User{
 			if(o.done())
 				completedOrders.add(o);
 		}
+		Collections.sort(completedOrders);
 		return completedOrders;
 	}
 	
