@@ -3,12 +3,12 @@ package tests;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import logic.car.*;
+import logic.car.CarModel;
 import logic.car.CarOrder;
+import logic.car.CarOrderDetailsMaker;
 import logic.car.CarPart;
 import logic.car.CarPartType;
 import logic.car.CarSpecification;
@@ -71,6 +71,12 @@ public class WorkStationTest {
 			@Override
 			public List<CarPartType> getCapabilities() {
 				return Arrays.asList(CarPartType.values());
+			}
+
+			@Override
+			protected Workstation getRawCopy() {
+				//This method is not needed for these tests.
+				return null;
 			}
 		};
 		

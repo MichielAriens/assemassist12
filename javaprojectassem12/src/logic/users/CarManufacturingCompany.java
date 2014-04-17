@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 import logic.assemblyline.AssemblyLine;
 import logic.assemblyline.SchedulingStrategy;
 import logic.car.Order;
@@ -135,6 +137,10 @@ public class CarManufacturingCompany {
 	 */
 	public boolean moveAssemblyLine(int shiftDuration){
 		return this.assemblyLine.tryMoveAssemblyLine(shiftDuration);
+	}
+	
+	public DateTime getCurrentTime(){
+		return this.assemblyLine.getCurrentTime();
 	}
 	
 	/**
