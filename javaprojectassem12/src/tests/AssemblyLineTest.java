@@ -173,13 +173,21 @@ public class AssemblyLineTest {
 		//The thirs order will be done after 50 + 70 + 70 + 70 + 60 mins = 320 mins
 		assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusMinutes(320)));
 
+		System.out.println(orders.get(0).getEstimatedEndTime().toString());
+		System.out.println(orders.get(1).getEstimatedEndTime().toString());
+		System.out.println(orders.get(2).getEstimatedEndTime().toString());
+		
 		//Lets to all tasks in workstation 1, thus progressing the line. 
 		//We'll complete this phase 20 minutes early to check that the estimates come forwards too. 
-		for(int i = orders.size() - 1; i >= 0; i--){
-			for(Task task : orders.get(i).getTasks()){
-				barry.doTask(task.toString(), orders.get(i).getPhaseTime() - 20);
+		for(Task task : orders.get(0).getTasks()){
+			if(cmcMotors.getWorkStations().get(0).getCapabilities().contains(task.getCarPart().type)){
+				barry.doTask(task.toString(), orders.get(0).getPhaseTime() - 20);
+				System.out.println(task.toString());
 			}
 		}
+		System.out.println("now: " + cmcMotors.getCurrentTime().toString());
+		//assertTrue(eqiDateTime(now.plusMinutes(30), cmcMotors.getCurrentTime()));
+		//now = cmcMotors.getCurrentTime();
 		
 		
 		//assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusMinutes(170)));
