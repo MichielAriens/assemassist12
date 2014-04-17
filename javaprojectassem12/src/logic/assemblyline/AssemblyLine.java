@@ -261,7 +261,8 @@ public class AssemblyLine {
 		}
 		
 		/**
-		 * 
+		 * If the first workstation does not have an order in it and the queue is not empty, then tries to add
+		 * an order to the first workstation. After that reschedules the workstations orders and the queue.
 		 */
 		private void reschedule(){
 			if(firstWorkStation.getCurrentOrder()==null && !queue.isEmpty()){
