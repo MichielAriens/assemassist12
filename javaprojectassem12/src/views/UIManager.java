@@ -134,7 +134,7 @@ public class UIManager {
 	private void chooseSpecificationBatch() {
 		String query;
 		ArrayList<String> listCarOptions = maController.getBatchList();
-		if(listCarOptions == null){
+		if(listCarOptions.size() < 1){
 			waitForCompletion("No available sets of car options. Press enter to continue.\n");
 		}
 		else{
