@@ -210,7 +210,7 @@ public class UIMechanic {
 				String answer = reader.readLine();
 				try{
 					int time = Integer.parseInt(answer);
-					if(time < 0 || time > 180){
+					if(time < 0){
 						writer.write("\nInvalid input, try again. ");
 						writer.flush();
 						continue;
