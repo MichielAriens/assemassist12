@@ -67,7 +67,7 @@ public class AssemblyLineTest {
 				CarPart.SPOILER_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELA);
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELB);
 		for(CarPart part : partsArray){
 			maker.addPart(part);
 		}
@@ -82,15 +82,15 @@ public class AssemblyLineTest {
 		CarPart[] partsArray = {
 				CarPart.BODY_SPORT, 
 				CarPart.COLOUR_BLACK,
-				CarPart.ENGINE_6,
-				CarPart.GEARBOX_5AUTO,
+				CarPart.ENGINE_8,
+				CarPart.GEARBOX_6MANUAL,
 				CarPart.SEATS_LEATHER_WHITE,
-				CarPart.AIRCO_MANUAL,
+				CarPart.AIRCO_NONE,
 				CarPart.WHEELS_SPORTS,
 				CarPart.SPOILER_LOW
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELA);
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELC);
 		for(CarPart part : partsArray){
 			maker.addPart(part);
 		}
@@ -102,9 +102,13 @@ public class AssemblyLineTest {
 	 */
 	@Test
 	public void testOrdersValid(){
-		assertTrue(buildStandardOrderA() != null);
-		assertTrue(buildStandardOrderB() != null);
-		assertTrue(buildStandardOrderC() != null);
+		CarOrder order;
+		order = buildStandardOrderA();
+		assertFalse(order.getTasks().isEmpty());
+		order = buildStandardOrderB();
+		assertFalse(order.getTasks().isEmpty());
+		order = buildStandardOrderC();
+		assertFalse(order.getTasks().isEmpty());
 	}
 	
 	/**
@@ -117,26 +121,29 @@ public class AssemblyLineTest {
 		cmcMotors = new CarManufacturingCompany();
 		barry = new Mechanic(cmcMotors, "Barry");
 		for(int i = 0; i < 10; i++){
-			if(i % 3 == 0)
+			if((i % 3) == 0){
 				orders.add(buildStandardOrderA());
-			else if(i % 3 == 1)
+			} else if((i % 3) == 1){
 				orders.add(buildStandardOrderB());
-			else
+			}else{
 				orders.add(buildStandardOrderC());
+			}
 		}
 	}
 	
 	/**
 	 * Try to do every single task in the system. The standard phase durations are used.
 	 */
-	private void tryAllTasks(){
+	private void tryAllTasks(){tryAllTasks(0);}
+	private void tryAllTasks(int offset){
 		for(CarOrder order : orders){
 			for(Task task : order.getTasks()){
-				barry.doTask(task.toString(), order.getPhaseTime() );
-			}
+				barry.doTask(task.toString(), order.getPhaseTime() + offset );
+			}s
 		}
 	}
 	
+
 	/**
 	 * This test tests the correct propagation of estimated completion times.
 	 * 50 - 70 - 60 - 50 - 70 - 60 - ...
@@ -150,31 +157,37 @@ public class AssemblyLineTest {
 		cmcMotors.addOrder(orders.get(0));
 		//the first car order is automatically added to the assemblyline. The estimated completion date should be in 150 minutes.
 		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusMinutes(150)));
-		System.out.println("got: " + orders.get(0).getEstimatedEndTime() + " | expected: " + now.plusMinutes(150));
-		//Let's add the second order: this will have a total duration of 210. 
+		
+		//Let's add the second order (70 mins cycle): this will have a total duration of 210. 
 		cmcMotors.addOrder(orders.get(1));
 		//This means that the first order will have to wait 20 minutes extra on two of the workstations inducing a total duration of 190 minutes.
-		System.out.println("got: " + orders.get(0).getEstimatedEndTime() + " | expected: " + now.plusMinutes(190));
-		System.out.println("got: " + orders.get(1).getEstimatedEndTime() + " | expected: " + now.plusMinutes(260));
 		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusMinutes(190)));
+		//the second order is comleted after 50 + 3* 70 mins
 		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusMinutes(260)));
 		
-//		cmcMotors.addOrder(orders.get(2));
-//		assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusHours(5)));//19:45
-//		cmcMotors.addOrder(orders.get(3));
-//		assertTrue(eqiDateTime(orders.get(3).getEstimatedEndTime(), now.plusHours(6)));//20:45
-//		cmcMotors.addOrder(orders.get(4));
-//		assertTrue(eqiDateTime(orders.get(4).getEstimatedEndTime(), now.plusHours(7)));//21:45
-//		cmcMotors.addOrder(orders.get(5));
-//		MutableDateTime mu = now.toMutableDateTime();
-//		mu.addDays(1);
-//		mu.setHourOfDay(9);mu.setMinuteOfHour(0);
-//		assertTrue(eqiDateTime(orders.get(5).getEstimatedEndTime(), mu.toDateTime()));//9:00 the next day.
-//	
-//		cmcMotors.addOrder(orders.get(6));
-//		assertTrue(eqiDateTime(orders.get(6).getEstimatedEndTime(), mu.toDateTime().plusHours(1)));//10:00 the next day.
-//
-//		tryAllTasks();
+		//Let's add the third order (60 mins cycle):
+		cmcMotors.addOrder(orders.get(2));
+		//The first & second order should be unaffected.
+		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusMinutes(190)));
+		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusMinutes(260)));
+		//The thirs order will be done after 50 + 70 + 70 + 70 + 60 mins = 320 mins
+		assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusMinutes(320)));
+
+		//Lets to all tasks in workstation 1, thus progressing the line. 
+		//We'll complete this phase 20 minutes early to check that the estimates come forwards too. 
+		for(int i = orders.size() - 1; i >= 0; i--){
+			for(Task task : orders.get(i).getTasks()){
+				barry.doTask(task.toString(), orders.get(i).getPhaseTime() - 20);
+			}
+		}
+		
+		
+		//assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusMinutes(170)));
+		System.out.println(orders.get(0).getEstimatedEndTime().toString());
+		//assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusMinutes(240)));
+		System.out.println(orders.get(1).getEstimatedEndTime().toString());
+		//assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusMinutes(300)));
+		System.out.println(orders.get(2).getEstimatedEndTime().toString());
 //		
 //		
 //		//The cycle took shorter than expected. We'll test whether this is reflected in the estimates.
