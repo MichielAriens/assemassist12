@@ -8,7 +8,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 
 import logic.car.Order;
-import logic.workstation.ConcreteWorkstationBuilder;
+import logic.workstation.WorkstationChainBuilder;
 import logic.workstation.Workstation;
 import logic.workstation.WorkstationDirector;
 
@@ -74,7 +74,7 @@ public class AssemblyLine {
 	 * Initializes the workstation using a builder.
 	 */
 	private void initialiseWorkstations(){
-		ConcreteWorkstationBuilder builder = new ConcreteWorkstationBuilder();
+		WorkstationChainBuilder builder = new WorkstationChainBuilder();
 		WorkstationDirector director = new WorkstationDirector(builder);
 		director.construct();
 		this.firstWorkStation = builder.getResult();
