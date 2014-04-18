@@ -8,24 +8,47 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+/**
+ * A class representing a car order and all its requirements. 
+ */
 public class CarOrder extends Order{
 	
+	/**
+	 * A variable holding the car order details. 
+	 */
 	private CarOrderDetails details;
 	
+	/**
+	 * Sets the car order details of this class to the given details.
+	 * @param details	The car order details which need to be set.
+	 */
 	public CarOrder(CarOrderDetails details){
 		this.details = details;
 	}
 
+	/**
+	 * Returns a time object which represents the deadline of this car order.
+	 * @return	The deadline of this car order.
+	 */
 	@Override
 	public DateTime getDeadLine() {
 		return null;
 	}
 
+	/**
+	 * Returns a list of tasks which are required to complete this car order's details and thus the car itself.
+	 * @return	A list of task needed to complete the details of this car order.
+	 */
 	@Override
 	public List<Task> getTasks() {
 		return this.details.getPendingTasks();
 	}
 
+	/**
+	 * returns a boolean holding whether this car order is done or not.
+	 * @return	True if all tasks from the details of this car order are done or this object is null.
+	 * 			False otherwise
+	 */
 	@Override
 	public boolean done() {
 		for(Task t : details.getPendingTasks()){
@@ -35,6 +58,10 @@ public class CarOrder extends Order{
 		return true;
 	}
 
+	/**
+	 * Returns the phase duration of this car order's detail.
+	 * @return	An integer holding the phase duration of this car order's details.
+	 */
 	@Override
 	public int getPhaseTime() {
 		return this.details.getPhaseTime();
