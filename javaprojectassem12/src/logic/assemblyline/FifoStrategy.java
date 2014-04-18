@@ -19,6 +19,7 @@ public class FifoStrategy extends SchedulingStrategy{
 		
 	}
 
+	
 	@Override
 	protected void refactorQueue(LinkedList<Order> queue, LinkedList<Order> copy) {
 		for(Order next:copy){
@@ -26,6 +27,7 @@ public class FifoStrategy extends SchedulingStrategy{
 		}
 	}
 	
+	@Override
 	public String toString(){
 		return "FIFO";
 	}

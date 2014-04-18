@@ -60,6 +60,7 @@ public class BatchSpecificationStrategy extends SchedulingStrategy{
 		
 	}
 	
+	@Override
 	public String toString(){
 		return "Specification Batch";
 	}
