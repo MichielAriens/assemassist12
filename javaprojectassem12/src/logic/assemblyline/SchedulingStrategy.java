@@ -58,5 +58,9 @@ public abstract class SchedulingStrategy{
 	 */
 	protected abstract SchedulingStrategy getRawCopy();
 	
+	/**
+	 * Returns a string which represents this class.
+	 * @return	A string which represents this class.
+	 */
 	public abstract String toString();
 }
