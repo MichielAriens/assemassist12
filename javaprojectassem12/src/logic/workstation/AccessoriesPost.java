@@ -13,7 +13,7 @@ public class AccessoriesPost extends Workstation {
 	/**
 	 * Initializes the compatible tasks for this accessories post.
 	 */
-	private static List<CarPartType> compatibleTasks;
+	private List<CarPartType> compatibleTasks;
 	{
 		CarPartType[] array= {CarPartType.Seats, CarPartType.Airco, CarPartType.Wheels, CarPartType.Spoiler};
 		compatibleTasks = (List<CarPartType>) Arrays.asList(array);
@@ -26,8 +26,8 @@ public class AccessoriesPost extends Workstation {
 	 * 				({CarPartType.Seats, CarPartType.Airco, CarPartType.Wheels})
 	 */
 	@Override
-	public List<CarPartType> getCapabilities() {
-		return AccessoriesPost.compatibleTasks;
+	protected List<CarPartType> getCapabilities() {
+		return this.compatibleTasks;
 	}
 	
 	@Override
