@@ -30,6 +30,9 @@ public class AccessoriesPost extends Workstation {
 		return this.compatibleTasks;
 	}
 	
+	/**
+	 * Get a new instance of AccesoriesPost
+	 */
 	@Override
 	protected Workstation getRawCopy(){
 		return new AccessoriesPost();

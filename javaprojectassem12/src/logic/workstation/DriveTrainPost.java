@@ -30,6 +30,9 @@ public class DriveTrainPost extends Workstation {
 		return this.compatibleTasks;
 	}
 	
+	/**
+	 * Get a new instance of DriveTrainPost.
+	 */
 	@Override
 	protected Workstation getRawCopy(){
 		return new DriveTrainPost();

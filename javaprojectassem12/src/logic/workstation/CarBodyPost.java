@@ -30,6 +30,9 @@ public class CarBodyPost extends Workstation {
 		return this.compatibleTasks;
 	}
 	
+	/**
+	 * Get a new instance of CarBodyPost.
+	 */
 	@Override
 	protected Workstation getRawCopy(){
 		return new CarBodyPost();
