@@ -19,7 +19,9 @@ import logic.workstation.WorkstationDirector;
 public class AssemblyLine {
 
 	
-	
+	/**
+	 * The first workstation in a line of workstations.
+	 */
 	private Workstation firstWorkStation;
 
 	/**
@@ -37,6 +39,9 @@ public class AssemblyLine {
 	 */
 	private DateTime currentTime;
 
+	/**
+	 * A variable holding the statistics of the assembly line.
+	 */
 	private Statistics stats;
 	
 	/**
@@ -53,7 +58,7 @@ public class AssemblyLine {
 	private Schedule schedule;
 
 	/**
-	 * Initializes the workstations, the schedule and the queue containing the orders.
+	 * Initializes the workstations, the schedule, the statistics and the queue containing the orders.
 	 * Also sets the current time to January first 2014 at the beginning of the shift. 
 	 */
 	public AssemblyLine(){
@@ -65,6 +70,9 @@ public class AssemblyLine {
 		stats = new Statistics();
 	}
 	
+	/**
+	 * Initializes the workstation using a builder.
+	 */
 	private void initialiseWorkstations(){
 		ConcreteWorkstationBuilder builder = new ConcreteWorkstationBuilder();
 		WorkstationDirector director = new WorkstationDirector(builder);
@@ -72,31 +80,68 @@ public class AssemblyLine {
 		this.firstWorkStation = builder.getResult();
 	}
 	
-	
+	/**
+	 * Returns true if the assembly line can be moved.
+	 * @param phaseDuration	The longest time needed to complete this phase.
+	 * @return	True if the assembly line can be moved
+	 * 			False otherwise.
+	 */
 	private boolean moveAssemblyLine(int phaseDuration){
 			return schedule.moveAndReschedule(phaseDuration);
 	}
 	
+	/**
+	 * Returns a string containing the representation of the statistics.
+	 * @return	A string of the statistics.
+	 */
 	public String getStatistics(){
 		return stats.toString();
 	}
-	
+	/**
+	 * completes a task in a certain workstation using the two given identifiers.
+	 * @param taskIdentifier	The identifier for the task that needs to be completed.
+	 * @param workstationIdentifier	The identifier for the workstation that needs to complete a task.
+	 * @return	True if the task is completed succesfully
+	 * 			False an identifier is wrong.
+	 */
 	public boolean doTask(String taskIdentifier, String workstationIdentifier){
 		return firstWorkStation.doTask(taskIdentifier, workstationIdentifier);
 	}
 	
+	/**
+	 * Returns a list of required task identifiers in the given workstation.
+	 * @param workstationIdentifier	The identifier for the workstation for which we need the required tasks.
+	 * @return	A list of required task identifiers in the form of strings.
+	 */
 	public List<String> getRequiredTaskIdentifiers(String workstationIdentifier){
 		return this.firstWorkStation.getRequiredTaskIdentifiers(workstationIdentifier);
 	}
 	
+	/**
+	 * Returns a string which holds the description for a given task in a given workstation.
+	 * @param taskIdentifier	The task for which we need the description.
+	 * @param workstationIdentifier	The workstation in which we find the right task.
+	 * @return	A string of the description of a given task.
+	 */
 	public String getTaskDescription(String taskIdentifier, String workstationIdentifier){
 		return this.firstWorkStation.getTaskDescription(workstationIdentifier, taskIdentifier);
 	}
 	
+	/**
+	 * Returns a list of strings containing the tasks in the given workstation with its status.
+	 * @param workstationIdentifier	The identifier for the workstation from which we want the task status.
+	 * @return	A list of strings containing the tasks status in one workstation.
+	 */
 	public List<String> getTaskStatus(String workstationIdentifier){
 		return this.firstWorkStation.getTaskStatus(workstationIdentifier);
 	}
 	
+	/**
+	 * If the assembly line can be moved then returns true. false otherwise
+	 * @param phaseDuration The largest time needed for this phase to complete.
+	 * @return	True if the assembly line and workstations can be moved.
+	 * 			false otherwise.
+	 */
 	public boolean tryMoveAssemblyLine(int phaseDuration){
 		if(firstWorkStation.canMoveAssemblyLine())
 			return moveAssemblyLine(phaseDuration);
@@ -104,17 +149,25 @@ public class AssemblyLine {
 			return false;
 	}
 	
+	/**
+	 * Returns a list of strategies used by the system.
+	 * @return	A list containing all the strategies.
+	 */
 	public List<SchedulingStrategy> getStrategies(){
 		return schedule.getStrategies();
 	}
 	
+	/**
+	 * Returns a list of orders which can be used in the batch processing strategy.
+	 * @return	A list of orders which qualify for batch processing.
+	 */
 	public List<Order> getBachList(){
 		return schedule.getBatchList();
 	}
 
 	/**
 	 * Asks a list of workstations available.
-	 * @return	The list of workstations.
+	 * @return	The list containing copies of the workstations.
 	 */
 	public List<Workstation> getWorkStations() {
 		LinkedList<Workstation> workStations = new LinkedList<Workstation>();
@@ -131,6 +184,11 @@ public class AssemblyLine {
 			schedule.scheduleOrder(order);
 	}
 
+	/**
+	 * Changes the strategy if possible. Doesn't change anything if the manager wants to change to the currently used strategy. 
+	 * @param order null if the manager wants to change to fifo strategy.
+	 * 				the example order used in batch processing otherwise.
+	 */
 	public void changeStrategy(Order order){
 		schedule.changeStrategy(order);
 	}
@@ -146,17 +204,23 @@ public class AssemblyLine {
 	}
 
 	/**
-	 *A class which keeps the begin and end hour of the shift. Also holds the expected assembly time
-	 *for a car order and the overtime made during the previous day. It calculates estimated end times
-	 *and start time of car orders. It can also schedule new car orders into a queue containing 
-	 *pending car orders.
+	 *A class made to reschedule the assembly line and workstations. Changes the different times from orders appropriately.
 	 */
 	class Schedule {
 
+		/**
+		 * The currently used strategy.
+		 */
 		SchedulingStrategy currentStrategy; 
 		
+		/**
+		 * A list containing the different strategies used by the system.
+		 */
 		LinkedList<SchedulingStrategy> stratList = new LinkedList<SchedulingStrategy>();
-		
+	
+		/**
+		 * A constructor which initializes the used strategies and sets the current strategy to fifo strategy.
+		 */
 		private Schedule(){
 			stratList.add(new FifoStrategy());
 			stratList.add(new BatchSpecificationStrategy());
@@ -191,6 +255,16 @@ public class AssemblyLine {
 			}
 		}
 
+		/**
+		 * First checks if the given phase duration is allowed or not.
+		 * Updates the current time and sets the end time of the order in the last workstation if there is one.
+		 * Also sets the next day and overtime if necessary and updates the statistics. 
+		 * Then checks if the strategy needs to change back to fifo.
+		 * Reschedules all orders both in the queue and workstations.
+		 * @param phaseDuration	The amount which represents the longest time worked on a certain task.
+		 * @return	True if the workstation has been moved and rescheduled.	
+		 * 			False if the given phase duration is too big.
+		 */
 		private boolean moveAndReschedule(int phaseDuration) {
 			if(!checkPhaseDuration(phaseDuration))
 				return false;
@@ -214,8 +288,11 @@ public class AssemblyLine {
 			return true;
 		}
 		
+		/**
+		 * If the current strategy is using batch specification, then checks if the system can change to fifo strategy,
+		 * if there are no more orders which qualify for batch processing. 
+		 */
 		private void checkStrategy(){
-
 			LinkedList<Order> listo = new LinkedList<Order>();
 			listo = makeCopyOfQueue();
 			firstWorkStation.buildOrderList(listo);
@@ -228,19 +305,13 @@ public class AssemblyLine {
 			currentStrategy = stratList.getFirst();
 		}
 		
-//		private void adjustDelays(int phaseDuration){
-//			LinkedList<Order> list = new LinkedList<Order>();
-//			for(Workstation next : workStations){
-//				list.add(next.getCurrentOrder());
-//			}
-//			int amount = phaseDuration - calculateMaxPhase(list);
-//			for(Workstation next : workStations){
-//				if(next.getCurrentOrder()!=null)
-//					next.getCurrentOrder().addDelay(amount);
-//			}
-//			
-//		}
-		
+		/**
+		 * If the given phase duration does not cause the day to change to the next day after 6 am, then returns true,
+		 * otherwise returns false.
+		 * @param phaseDuration	The phase duration that needs to be checked.
+		 * @return	True if the given phase duration is allowed.
+		 * 			False if it is too big.
+		 */
 		private boolean checkPhaseDuration(int phaseDuration){
 			int difference = 0;
 			if(firstWorkStation.getTotalEstimatedEndTime() != null)
@@ -252,6 +323,12 @@ public class AssemblyLine {
 			return false;
 		}
 		
+		/**
+		 * Returns the difference in minutes between two given times.
+		 * @param estimate	The time for which we need the difference.
+		 * @param current	The current time which is a reference point.
+		 * @return	An integer containing the difference in minutes between the two given times.
+		 */
 		private int getTimeDifference(DateTime estimate, DateTime current){
 			if(estimate.getMinuteOfDay()>current.getMinuteOfDay()){
 				return estimate.getMinuteOfDay()-current.getMinuteOfDay();
@@ -292,7 +369,7 @@ public class AssemblyLine {
 		
 		/**
 		 * Given the start time, calculates the estimated time of the orders in the queue.
-		 * Every order calculates its own estimated end time using the amount of workstations next orders.
+		 * Every order calculates its own estimated end time using a number of next orders that is equal to the amount of workstations minus one.
 		 * @param startTime	The time used for scheduling the queue.
 		 */
 		private void rescheduleQueue(DateTime startTime){
@@ -539,146 +616,3 @@ public class AssemblyLine {
 	}
 }
 
-
-
-
-
-
-
-
-//private void rescheduleQueue(){
-//	if(!queue.isEmpty()){
-//		LinkedList<Order> list = new LinkedList<Order>();
-//		DateTime estimatedEndTime = new DateTime(currentTime);
-//		int index =0;
-//
-//		for(Order next : queue){
-//			if(index==0){
-//				buildEstimateFirstInQueue();
-//				adjustPrevious(index);
-//			}else{
-//				list.addAll(addPrevious(index));
-//				estimatedEndTime = list.getFirst().getEstimatedEndTime();
-//				int assemblyTime = getAssemblyTimeReversed(next,list);
-//				estimatedEndTime = estimatedEndTime.plusMinutes(assemblyTime);
-//				estimatedEndTime = getEstimatedTime(estimatedEndTime, next);
-//				next.setEstimatedEndTime(estimatedEndTime);
-//				adjustPrevious(index);
-//				list.clear();
-//			}
-//			index++;
-//		}
-//	}
-//}
-
-//private int getAssemblyTimeReversed(Order order, LinkedList<Order> list){
-//	int returnval = 0;
-//	returnval+=positiveDifference(order, biggestPhaseTime(list));
-//	list.removeLast();
-//	returnval+=positiveDifference(order, biggestPhaseTime(list));
-//	returnval+=order.getPhaseTime();
-//	return returnval;
-//}
-
-//private int positiveDifference(Order first,Order second){
-//	int returnval = first.getPhaseTime()-second.getPhaseTime();
-//	if(returnval>0)
-//		return returnval;
-//	else
-//		return 0;
-//}
-
-//private void buildEstimateFirstInQueue(){
-//	LinkedList<Order> list = new LinkedList<Order>();
-//	DateTime estimatedEndTime = new DateTime(currentTime);
-//	if(estimatedEndTime.getHourOfDay()<shiftBeginHour || estimatedEndTime.getMinuteOfDay()>=shiftEndHour*60-overTime){
-//		estimatedEndTime = getEstimatedTime(estimatedEndTime, queue.getFirst());
-//		queue.getFirst().setEstimatedEndTime(estimatedEndTime);
-//		return;
-//	}
-//	for(Workstation ws : getWorkStations()){
-//		list.add(ws.getCurrentOrder());				
-//	}
-//	estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-//	list.removeLast();
-//	list.add(0,queue.getFirst());
-//	while(!list.isEmpty()){
-//		estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-//		list.removeLast();
-//	}
-//	estimatedEndTime = getEstimatedTime(estimatedEndTime, queue.getFirst());
-//	queue.getFirst().setEstimatedEndTime(estimatedEndTime);
-//}
-
-//private LinkedList<Order> addPrevious(int index){
-//	LinkedList<Order> list = new LinkedList<Order>();
-//	int n = workStations.size();
-//	int nbInStations = n-1-index;
-//	int count = 0;
-//	for(int i = index-1; i >= 0; i--){
-//		if(count >= n-1)
-//			break;
-//		list.add(queue.get(i));
-//		count++;
-//	}
-//	for(int i = 0; i < nbInStations; i++){
-//		list.add(workStations.get(i).getCurrentOrder());
-//	}
-//	return list;
-//}
-
-
-//private Order biggestPhaseTime(List<Order> orders){
-//	if(orders == null)
-//		return null;
-//	int maximum = 0;
-//	Order bestOrder = null;
-//	for(Order o: orders){
-//		if(o != null){
-//			if(o.getPhaseTime() > maximum){
-//				maximum = o.getPhaseTime();
-//				bestOrder = o;
-//			}
-//		}
-//	}
-//	return bestOrder;
-//}
-
-//private void adjustPrevious(int index){
-//	Order order = queue.get(index);
-//	LinkedList<Order> list = addPrevious(index);
-//
-//	if(timeForNewOrder(order.getEstimatedEndTime())){
-//		int big = 0;
-//		for(int i=0;i<list.size();i++){
-//			LinkedList<Order> sublist = new LinkedList<Order>(list.subList(0, i+1));
-//			if(biggestPhaseTime(sublist) == null)
-//				continue;
-//			big=biggestPhaseTime(sublist).getPhaseTime();
-//			if(order.getPhaseTime()>big){
-//				for(Order next : sublist){
-//					if(next!=null && order.getEstimatedEndTime().getDayOfYear()==next.getEstimatedEndTime().getDayOfYear() && next.getEstimatedEndTime().getHourOfDay()>shiftBeginHour)
-//						next.setEstimatedEndTime(next.getEstimatedEndTime().plusMinutes(order.getPhaseTime()-big));
-//				}
-//
-//
-//			}
-//		}
-//	}
-//}
-
-
-//private void rescheduleWorkstations(){
-//	LinkedList<Order> list = new LinkedList<Order>();
-//	DateTime estimatedEndTime = new DateTime(currentTime);
-//	for(Workstation w : workStations){
-//		list.add(w.getCurrentOrder());
-//	}
-//	estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-//	for(int i = workStations.size()-1; i >= 0; i--){
-//		if(workStations.get(i).getCurrentOrder()!=null)
-//			workStations.get(i).getCurrentOrder().setEstimatedEndTime(estimatedEndTime);
-//		list.removeLast();
-//		estimatedEndTime = estimatedEndTime.plusMinutes(calculateMaxPhase(list));
-//	}
-//}
