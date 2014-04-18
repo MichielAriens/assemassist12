@@ -2,7 +2,6 @@ package logic.users;
 
 import java.util.List; 
 
-import logic.workstation.Task;
 import logic.workstation.Workstation;
 
 /**
@@ -11,7 +10,7 @@ import logic.workstation.Workstation;
 public class Mechanic extends User{
 	
 	/**
-	 * The workstation this mechanic is currently working on.
+	 * The string identifier of the workstation this mechanic is currently working on.
 	 */
 	private String activeStationIdentifier = null;
 	
@@ -57,9 +56,9 @@ public class Mechanic extends User{
 	/**
 	 * Performs a task if the task is compatible with the active workstation of the mechanic
 	 * and tries to move the assembly line.
-	 * @param task	The task that needs to be performed.
-	 * @return 	True if the task is compatible with the active workstation.
-	 * 			False otherwise.
+	 * @param task	The string identifier of the task that needs to be performed.
+	 * @return 	True 	if the specified task has been successfully performed at the active workstation.
+	 * 			False 	otherwise.
 	 */
 	public boolean doTask(String taskIdentifier, int duration){
 		boolean performed = company.doTask(taskIdentifier, this.activeStationIdentifier);
@@ -74,7 +73,8 @@ public class Mechanic extends User{
 	/**
 	 * Sets the maximum phase duration to the given duration if the given duration
 	 * is greater than the maximum phase duration.
-	 * @param duration
+	 * @param duration	The duration that has to be checked and saved if it's greater than the current
+	 * 					maximum.
 	 */
 	private void setMaxPhaseDuration(int duration) {
 		if(duration > maxPhaseDuration){
@@ -88,30 +88,38 @@ public class Mechanic extends User{
 	private void resetMaxPhaseDuration() {
 		maxPhaseDuration = 0;
 	}
-
-//	/**
-//	 * Returns the list of tasks that need to be performed at the active workstation or null
-//	 * if the mechanic has no active workstation.
-//	 * @return	The list of tasks that need to be performed at the active workstation 
-//	 * 			if the active workstation is not null.
-//	 * 			Null otherwise.
-//	 */
-//	public List<Task> getAvailableTasks(){
-//		if(!isPosted())
-//			return null;
-//		return this.activeStation.getRequiredTasks();
-//	}
 	
+	/**
+	 * Returns a list of string identifiers of the tasks that are currently pending at this mechanic's 
+	 * active workstation.
+	 * @return	null	if the mechanic is not currently posted, or his current workstation is incorrectly
+	 * 					specified by the string identifier.
+	 * 			The list of string identifiers otherwise.
+	 */
 	public List<String> getAvailableTaskIdentifiers(){
 		if(!isPosted())
 			return null;
 		return this.company.getRequiredTaskIdentifiers(this.activeStationIdentifier);
 	}
 	
+	/**
+	 * Returns a list of strings, that contains all task identifiers of the workstation specified by 
+	 * the given workstation identifier, together with their status: 'Pending' or 'Completed'.
+	 * @param workstationIdentifier	A string that defines a the workstation that has to be checked.
+	 * @return	null	if the workstation was incorrectly specified.
+	 * 			A list of strings with all tasks identifiers with their statuses at that workstation otherwise. 
+	 */
 	public List<String> getTaskStatus(String workstationIdentifier){
 		return this.company.getTaskStatus(workstationIdentifier);
 	}
 	
+	/**
+	 * Returns the task description of the task corresponding to the given task identifier.
+	 * @param taskIdentifier	A string that defines the task whose description is needed.
+	 * @return	null	If the task has been incorrectly specified, or there is no task of that
+	 * 					type currently at the active workstation.	
+	 * 			The given task's description otherwise.
+	 */
 	public String getTaskDescription(String taskIdentifier){
 		return company.getTaskDescription(taskIdentifier, this.activeStationIdentifier);
 	}
@@ -124,14 +132,10 @@ public class Mechanic extends User{
 		return this.company.getWorkStations();
 	}
 	
-//	/**
-//	 * Sets the active workstation to the given workstation.
-//	 * @param station	The new active workstation.
-//	 */
-//	public void setActiveWorkstation(Workstation station){
-//		this.activeStation = station;
-//	}
-	
+	/**
+	 * Set the identifier of the active workstation to the given identifier.
+	 * @param identifier
+	 */
 	public void setActiveWorkstation(String identifier){
 		this.activeStationIdentifier = identifier;
 	}

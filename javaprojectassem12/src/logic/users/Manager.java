@@ -1,11 +1,9 @@
 package logic.users;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import logic.assemblyline.SchedulingStrategy;
 import logic.car.Order;
-import logic.workstation.Workstation;
 
 /**
  * Class used to describe a manager working for a car manufacturing company.
@@ -29,25 +27,33 @@ public class Manager extends User{
 	}
 	
 	/**
-	 * Returns the workstations of the car manufacturing company.
-	 * @return The workstations of the car manufacturing company.
+	 * Returns a string representation of the current statistics.
+	 * @return	a string representation of the current statistics.
 	 */
-	public List<Workstation> getWorkstations(){
-		return this.company.getWorkStations();
-	}
-
 	public String getStatistics() {
 		return company.getStatistics();
 	}
 	
+	/**
+	 * Returns a list of available scheduling strategies.
+	 * @return	the list of available scheduling strategies.
+	 */
 	public List<SchedulingStrategy> getStrategies() {
 		return company.getStrategies();
 	}
-
+	
+	/**
+	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy.
+	 * @return	a list of orders that are viable to be used by the batch specification scheduling strategy.
+	 */
 	public List<Order> getBatchList() {
 		return company.getBatchList();
 	}
-
+	
+	/**
+	 * Changes the strategy according to the given order.
+	 * @param order	The order that has to be used as a template for the strategy.
+	 */
 	public void changeStrategy(Order order) {
 		company.changeStrategy(order);
 	}
