@@ -255,34 +255,40 @@ public class AssemblyLineTest {
 		for(int i = 0; i < 10; i++){
 			simpleOrders.add(buildStandardOrderB());
 		}
+		System.out.println(simpleOrders.get(0).getPhaseTime());
 		
 		//GO to 18:00
 		cmcMotors.moveAssemblyLine(12 * 60);
-		cmcMotors.addOrder(orders.get(0));
-		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0));
-		for(Task task : orders.get(0).getTasks()){
-			barry.doTask(task);
+		System.out.println(cmcMotors.getCurrentTime().toString());
+		cmcMotors.addOrder(simpleOrders.get(0));
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0).toString());
+		for(Task task : simpleOrders.get(0).getTasks()){
+			barry.doTask(task.toString(), 180);
 		}
-		cmcMotors.moveAssemblyLine(180);
-		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(1));
-		for(Task task : orders.get(0).getTasks()){
-			barry.doTask(task);
+		System.out.println(cmcMotors.getCurrentTime().toString());
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(1).toString());
+		for(Task task : simpleOrders.get(0).getTasks()){
+			barry.doTask(task.toString(), 180);
 		}
-		cmcMotors.moveAssemblyLine(180);
-		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(2));
-		for(Task task : orders.get(0).getTasks()){
-			barry.doTask(task);
+		System.out.println(cmcMotors.getCurrentTime().toString());
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(2).toString());
+		for(Task task : simpleOrders.get(0).getTasks()){
+			barry.doTask(task.toString(), 180);
 		}
-		cmcMotors.moveAssemblyLine(180);
+		System.out.println(cmcMotors.getCurrentTime().toString());
 		//A new day has started. The overtime is 5 hours. The work day stops on 17:00
 		//goto 13:59 the last moment to post an order.
-		cmcMotors.progressTime(7 * 60 + 59);
+		cmcMotors.moveAssemblyLine(7 * 60 + 59);
 		DateTime now = cmcMotors.getCurrentTime();
-		cmcMotors.addOrder(orders.get(1));
-		cmcMotors.addOrder(orders.get(2));
+		System.out.println(now.toString());
+		cmcMotors.addOrder(simpleOrders.get(1));
+		cmcMotors.addOrder(simpleOrders.get(2));
 		
-		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusHours(3)));
-		assertFalse(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusHours(4)));
+		System.out.println("1: " + simpleOrders.get(1).getEstimatedEndTime().toString());
+		System.out.println("2: " + simpleOrders.get(2).getEstimatedEndTime().toString());
+		
+		assertTrue(eqiDateTime(simpleOrders.get(1).getEstimatedEndTime(), now.plusHours(3)));
+		assertFalse(eqiDateTime(simpleOrders.get(2).getEstimatedEndTime(), now.plusHours(4)));
 	}
 	
 	/**
