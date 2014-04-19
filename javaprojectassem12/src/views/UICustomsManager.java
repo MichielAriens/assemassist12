@@ -85,6 +85,10 @@ public class UICustomsManager {
 		}
 	}
 	
+	/**
+	 * Prompts the user for a deadline.
+	 * @throws IOException When IO fails.
+	 */
 	private void placeDeadline() throws IOException{
 		while(true){
 			writer.write("Type in the desired deadline in this format: 'dd-MM-yyyy HH:mm'\nAnswer: ");

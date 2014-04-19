@@ -7,7 +7,10 @@ import java.util.ArrayList;
 
 import controllers.MechanicController;
 
-
+/**
+ * A command line interface class used to represent the mechanic's UI, which is used by mechanics
+ * to perform tasks and look up the status of the assembly line.
+ */
 public class UIMechanic {
 	
 	/**
@@ -21,7 +24,8 @@ public class UIMechanic {
 	private BufferedWriter writer;
 	
 	/**
-	 * The controller that offers this UI the methods to let the current mechanic perform tasks.
+	 * The controller that offers this UI the methods to let the current mechanic perform tasks and
+	 * check the assembly line status.
 	 */
 	private MechanicController meController;
 	
@@ -37,8 +41,8 @@ public class UIMechanic {
 	
 	/**
 	 * A method that is called by the main UI, when a mechanic has successfully logged in.
-	 * @param meController	The MechanicController that offers this UI methods to check workstations and
-	 * 						perform tasks.
+	 * @param meController	The MechanicController that offers this UI methods to check the assembly line 
+	 *						status and perform tasks.
 	 */
 	public void run(MechanicController meController){
 		this.meController = meController;
@@ -54,7 +58,6 @@ public class UIMechanic {
 					writer.write("\n");
 					writer.flush();
 				}
-				//TODO: aanpassen aan use case
 				if(answer == 2){
 					String stat = "Available work stations: ";
 					for(String station : meController.getWorkStations()){
@@ -176,6 +179,13 @@ public class UIMechanic {
 		}
 	}
 	
+	/**
+	 * Lets the user choose an option from a given query.
+	 * @param query	The query that has to be printed out to the user.
+	 * @param max	The greatest acceptable answer.
+	 * @return	-1	If an IO exception occurs.
+	 * 			The users answer otherwise.
+	 */
 	private int chooseAction(String query, int max){
 		try{
 			while(true){

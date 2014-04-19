@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import controllers.GarageHolderController;
 import logic.car.CarModel;
-import logic.car.CarPart;
 import logic.car.CarPartType;
 
 /**
@@ -103,6 +102,13 @@ public class UIGarageHolder {
 		}
 	}
 	
+	/**
+	 * Lets the user choose an option from a given query.
+	 * @param query	The query that has to be printed out to the user.
+	 * @param max	The greatest acceptable answer.
+	 * @return	-1	If an IO exception occurs.
+	 * 			The users answer otherwise.
+	 */
 	private int chooseAction(String query, int max){
 		try{
 			while(true){
@@ -153,7 +159,6 @@ public class UIGarageHolder {
 	
 	/**
 	 * A method that lets the current garage holder fill out an ordering form for a new car order.
-	 * @return	An ArrayList containing all the information about the new car order in String format.
 	 */
 	private void orderingForm(){
 		try{

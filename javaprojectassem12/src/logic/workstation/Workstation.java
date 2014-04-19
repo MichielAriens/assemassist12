@@ -278,19 +278,6 @@ public abstract class Workstation {
 	}
 	
 	/**
-	 * Builds a list of orders for the future schedule, by adding copies of orders to the back of the given list.
-	 * The order in the last workstation is ignored, since it will be finished in the future schedule.
-	 * Idle workstations will also add their (null) order to the list.
-	 * @param orders	The list of orders, to which orders in the chain need to be added.
-	 */
-	public void buildFutureOrderList(List<Order> orders){
-		if(nextWorkStation != null){
-			orders.add(this.getCurrentOrder());
-			nextWorkStation.buildFutureOrderList(orders);
-		}
-	}
-	
-	/**
 	 * Recalculates the estimated completion times of the orders currently in the chain.
 	 * @param prePhaseDurations	A list with the standard phase durations of the orders that come after the order
 	 * 							in this workstation. 

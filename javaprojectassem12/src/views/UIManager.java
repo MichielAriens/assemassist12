@@ -9,7 +9,7 @@ import controllers.ManagerController;
 
 /**
  * A command line interface class used to represent the manager's UI, which is used by managers
- * to look up the status of the assembly line and advance it if possible.
+ * to look up the current statistics and change scheduling strategies.
  */
 public class UIManager {
 	
@@ -24,7 +24,7 @@ public class UIManager {
 	private BufferedWriter writer;
 	
 	/**
-	 * The controller that offers this UI the methods to let the current manager check and advance the assembly line.
+	 * The controller that offers this UI methods to check statistics and change scheduling strategies.
 	 */
 	private ManagerController maController;
 	
@@ -40,7 +40,8 @@ public class UIManager {
 	
 	/**
 	 * A method that is called by the main UI, when a manager has successfully logged in.
-	 * @param maController	The ManagerController that offers this UI methods to check and advance the assembly line.
+	 * @param maController	The ManagerController that offers this UI methods to check statistics and change
+	 * 						scheduling strategies.
 	 */
 	public void run(ManagerController maController){
 		this.maController = maController;
@@ -58,39 +59,15 @@ public class UIManager {
 					return;
 				}
 			}
-
-//			writer.write("Future status:\n\n");
-//			for(String s : maController.getFutureStatus()){
-//				writer.write(s + "\n");
-//			}
-//			writer.write("\n");
-//			writer.flush();
-//			
-//			int time = getTimeSpent();
-//			if(this.maController.moveAssemblyLine(time)){
-//				writer.write("Assembly line moved forward successfully.\n\n");
-//				writer.write("Current status:\n\n");
-//				for(String s : maController.getTasksPerWorkstation()){
-//					writer.write(s + "\n");
-//				}
-//				writer.flush();
-//				waitForCompletion("Press enter to finish. ");
-//				return;
-//			}
-//			else{
-//				writer.write("Assembly line could not be moved forward successfully.\n\n");
-//				writer.write("Unfinished tasks:\n\n");
-//				for(String s : maController.getUnfinishedTasks()){
-//					writer.write(s + "\n");
-//				}
-//				writer.flush();
-//				waitForCompletion("Press enter to finish.\n");
-//			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Writes the current statistics to the screen.
+	 * @throws IOException	When IO fails.
+	 */
 	private void writeStatistics()throws IOException {
 		writer.write("===STATISTICS===\n");
 		writer.flush();
@@ -98,6 +75,10 @@ public class UIManager {
 		writer.flush();
 	}
 	
+	/**
+	 * Lets the user choose an alternate scheduling algorithm.
+	 * @throws IOException	When IO fails.
+	 */
 	private void newSchedulingAlgorithm() throws IOException {
 		writer.write("===ALTERNATE SCHEDULING MECHANISM===\n");
 		writer.flush();
@@ -121,7 +102,10 @@ public class UIManager {
 			}
 		}
 	}
-
+	
+	/**
+	 * Changes the strategy to FIFO and notifies the user of what happened.
+	 */
 	private void chooseFIFO() {
 		if(maController.changeStrategyToFIFO()){
 			waitForCompletion("Chosen strategy has been applied. Press enter to continue.\n");
@@ -130,7 +114,11 @@ public class UIManager {
 			waitForCompletion("Chosen strategy is the current strategy, nothing has changed. Press enter to continue.\n");
 		}
 	}
-
+	
+	/**
+	 * Lets the user choose which set of options to use for the batch specifications strategy,
+	 * and applies this strategy if possible.
+	 */
 	private void chooseSpecificationBatch() {
 		String query;
 		ArrayList<String> listCarOptions = maController.getBatchList();
@@ -142,18 +130,22 @@ public class UIManager {
 			for(int i = 0; i < listCarOptions.size(); i++){
 				query += listCarOptions.get(i);
 			}
-			query += "Option " + (listCarOptions.size()+1) + "\nCancel\n";
+			query += "   " + (listCarOptions.size()+1) + ": Cancel\n";
 			int carOption = chooseAction(query, listCarOptions.size()+1);
 			if(carOption != listCarOptions.size()+1){
 				maController.changeStrategyToBatchProcessing(carOption-1);
 				waitForCompletion("Chosen strategy has been applied. Press enter to continue.\n");
 			}
-			else{
-				//cancel
-			}
 		}
 	}
 	
+	/**
+	 * Lets the user choose an option from a given query.
+	 * @param query	The query that has to be printed out to the user.
+	 * @param max	The greatest acceptable answer.
+	 * @return	-1	If an IO exception occurs.
+	 * 			The users answer otherwise.
+	 */
 	private int chooseAction(String query, int max){
 		try{
 			while(true){
@@ -173,32 +165,6 @@ public class UIManager {
 		catch(IOException e){
 			e.printStackTrace();
 			return -1;
-		}
-	}
-	
-	/**
-	 * A method that prompts the user with the given query and waits for a 'y' or 'n' answer from the user.
-	 * @param query	The query that has to be printed out.
-	 * @return		Returns true if the user has responded with a 'y' meaning yes.
-	 * 				Returns false if the user has responded with a 'n' meaning no.
-	 */
-	private boolean promptYesOrNo(String query){
-		try{
-			while(true){
-				writer.write(query);
-				writer.flush();
-				String answer = reader.readLine();
-				writer.write("\n");
-				writer.flush();
-				if(answer.equals("y"))
-					return true;
-				if(answer.equals("n"))
-					return false;
-			}
-		}
-		catch(IOException e){
-			e.printStackTrace();
-			return false;
 		}
 	}
 	

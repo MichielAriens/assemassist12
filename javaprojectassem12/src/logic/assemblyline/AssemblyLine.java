@@ -2,7 +2,6 @@ package logic.assemblyline;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -192,16 +191,6 @@ public class AssemblyLine {
 	 */
 	public void changeStrategy(Order order){
 		schedule.changeStrategy(order);
-	}
-	
-	/**
-	 * Returns a list of 3 car orders which would be in the workstations 
-	 * if the assembly is moved by the manager.
-	 * @return	A list of car orders which would be in the workstations 
-	 * 			if the assembly line should move.
-	 */
-	public List<Order> askFutureSchedule(){
-		return schedule.getFutureSchedule();
 	}
 
 	/**
@@ -553,25 +542,6 @@ public class AssemblyLine {
 			}else{
 				return estimatedEndTime;
 			}
-		}
-
-		/**
-		 * Returns a list of 3 car orders which shows the car orders in the workstations if the
-		 * assembly line would be moved. 
-		 * @return	A list of car orders which would be in the workstations after the assembly line is moved.
-		 */
-		private List<Order> getFutureSchedule(){
-			ArrayList<Order> returnList = new ArrayList<Order>();
-
-			try{
-				if(queue.getFirst().getEstimatedEndTime().getDayOfMonth()==currentTime.getDayOfMonth() && queue.getFirst().getEstimatedEndTime().getHourOfDay()<shiftEndHour)
-					returnList.add(queue.getFirst());
-				else returnList.add(null);
-			}catch(NoSuchElementException e){
-				returnList.add(null);
-			}
-			firstWorkStation.buildFutureOrderList(returnList);
-			return returnList;
 		}
 		
 		/**

@@ -7,7 +7,6 @@ import logic.assemblyline.SchedulingStrategy;
 import logic.car.Order;
 import logic.users.Manager;
 import logic.workstation.Task;
-import logic.workstation.Workstation;
 
 /**
  * Class used to form a link between the user interface and the Manager class.
@@ -61,7 +60,7 @@ public class ManagerController extends UserController{
 		else{
 			ArrayList<String> carOptions = new ArrayList<String>();
 			for(int i = 0; i < currentBatchList.size(); i++){
-				String carOption = "Option " + (i+1) + ":\n";
+				String carOption = "   " + (i+1) + ": Option " + (i+1) + ":\n";
 				carOption += getCarOptions(currentBatchList.get(i)) + "\n";
 				carOptions.add(carOption);
 			}
@@ -73,7 +72,7 @@ public class ManagerController extends UserController{
 		String options = "";
 		List<Task> tasks = order.getTasks();
 		for(Task t : tasks){
-			options += "   - " + t.getCarPart().toString() + "\n";
+			options += "      - " + t.getCarPart().toString() + "\n";
 		}
 		return options;
 	}

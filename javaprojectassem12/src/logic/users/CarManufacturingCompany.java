@@ -148,14 +148,6 @@ public class CarManufacturingCompany {
 	}
 	
 	/**
-	 * Returns the car orders that would be on the assembly line if the assembly line was progressed.
-	 * @return The list of car orders.
-	 */
-	public List<Order> askFutureSchedule(){
-		return this.assemblyLine.askFutureSchedule();
-	}
-	
-	/**
 	 * Returns a string representation of the current statistics.
 	 * @return	A string representation of the current statistics.
 	 */
