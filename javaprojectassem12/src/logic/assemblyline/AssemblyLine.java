@@ -457,7 +457,7 @@ public class AssemblyLine {
 			boolean doneWorking = firstWorkStation.allIdle();
 			if(!doneWorking)
 				return false;
-			int assemblyTime = 60*numberOfWorkStations;
+			int assemblyTime = 50*numberOfWorkStations;
 			if(!queue.isEmpty()){
 				assemblyTime = queue.getFirst().getPhaseTime()*numberOfWorkStations;
 			}
