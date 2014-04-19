@@ -44,14 +44,17 @@ public class CarOrderDetailsMaker {
 		}
 	}
 	
+	/**
+	 * Checks if the given part is compatible with the parts in this car order detail.
+	 * @param part	The part that needs to be checked.
+	 * @return	True if the part is allowed in the model and is present in the list of chosen types and in the list of present car parts.
+	 * 			False if it's not present and some requirements are not met.
+	 */
 	private boolean isCompatiblePart(CarPart part){
-		//check if it is valid for the car model
 		if(!model.validPart(part))
 			return false;
-		//the part can not be of a type that has already been chosen
 		if(chosenTypes.contains(part.type))
 			return false;
-		//the parts that have no restrictions are valid
 		if(part.type != CarPartType.Airco && part.type != CarPartType.Engine && part.type != CarPartType.Spoiler)
 			return true;
 		if(part.type == CarPartType.Airco){
@@ -69,7 +72,11 @@ public class CarOrderDetailsMaker {
 		return true;
 	}
 	
-	//volgorde ligt vast: body, color, engine, gearbox, seats, airco, wheels, spoiler
+	/**
+	 * Given a certain car part type, returns a list of all possible parts which are of the given type and are based on the model of this object. 
+	 * @param type	The type for which we want the parts.
+	 * @return	A list containing all the parts who have the given type and which are in the possible parts list of this object's model.
+	 */
 	public List<CarPart> getAvailableParts(CarPartType type){
 		ArrayList<CarPart> result = new ArrayList<CarPart>();
 		for(CarPart part: model.possibleParts){
@@ -79,6 +86,10 @@ public class CarOrderDetailsMaker {
 		return result;
 	}
 	
+	/**
+	 * Makes a car order detail with this objects model and parts and returns it if possible
+	 * @return	A new car order detail with this object's model and parts, null if there are too many or too less parts in this object's parts list.
+	 */
 	public CarOrderDetails getDetails(){
 		if(chosenParts.size() == 8){
 			return new CarOrderDetails(model, chosenParts);

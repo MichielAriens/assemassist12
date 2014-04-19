@@ -6,7 +6,9 @@ import logic.workstation.Task;
 
 import org.joda.time.DateTime;
 
-
+/**
+ * A class which represents different orders placed by users, only car orders and task orders available at the moment.
+ */
 public abstract class Order implements Comparable<Order>{
 	
 	/**
@@ -25,6 +27,9 @@ public abstract class Order implements Comparable<Order>{
 	 */
 	private DateTime estimatedEndTime;
 	
+	/**
+	 * The amount of delay there is on this order in minutes.
+	 */
 	private int delay = 0;
 	
 	/**
@@ -53,15 +58,16 @@ public abstract class Order implements Comparable<Order>{
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Returns the delay there is on this order.
+	 * @return	An integer holding the total delay on this order.
 	 */
 	public int getDelay() {
 		return delay;
 	}
 	
 	/**
-	 * 
+	 * Adds a certain amount of delay to this order.
+	 * @param amount	The amount of delay that needs to be added to this order.
 	 */
 	public void addDelay(int amount){
 		delay+= amount;
@@ -99,8 +105,16 @@ public abstract class Order implements Comparable<Order>{
 	 */
 	public abstract int getPhaseTime();
 	
+	/**
+	 * Returns the time this order needs to be finished.
+	 * @return	The time which is the absolute end time of this order.
+	 */
 	public abstract DateTime getDeadLine();
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public abstract List<Task> getTasks();
 	
 	public abstract Order getRawCopy();
