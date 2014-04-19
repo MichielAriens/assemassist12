@@ -26,7 +26,7 @@ public class AccessoriesPost extends Workstation {
 	 * 				({CarPartType.Seats, CarPartType.Airco, CarPartType.Wheels})
 	 */
 	@Override
-	protected List<CarPartType> getCapabilities() {
+	public List<CarPartType> getCapabilities() {
 		return this.compatibleTasks;
 	}
 	

@@ -26,7 +26,7 @@ public class DriveTrainPost extends Workstation {
 	 * 				({CarPartType.Engine, CarPartType.Gearbox})
 	 */
 	@Override
-	protected List<CarPartType> getCapabilities() {
+	public List<CarPartType> getCapabilities() {
 		return this.compatibleTasks;
 	}
 	

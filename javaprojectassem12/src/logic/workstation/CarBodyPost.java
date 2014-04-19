@@ -26,7 +26,7 @@ public class CarBodyPost extends Workstation {
 	 * 				({CarPartType.Body, CarPartType.Colour})
 	 */
 	@Override
-	protected List<CarPartType> getCapabilities(){
+	public List<CarPartType> getCapabilities(){
 		return this.compatibleTasks;
 	}
 	

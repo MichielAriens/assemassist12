@@ -22,6 +22,8 @@ import org.joda.time.MutableDateTime;
 import org.junit.Before;
 import org.junit.Test;
 
+import sun.security.acl.WorldGroupImpl;
+
 public class AssemblyLineTest {
 	private CarManufacturingCompany cmcMotors;
 	//private AssemblyLine assemblyLine;
@@ -134,12 +136,18 @@ public class AssemblyLineTest {
 	/**
 	 * Try to do every single task in the system. The standard phase durations are used.
 	 */
-	private void tryAllTasks(){tryAllTasks(0);}
-	private void tryAllTasks(int offset){
+	private void tryAllTasks(){
+		for(Workstation ws : cmcMotors.getWorkStations()){
+			tryAllTasks(ws);
+		}
+	}
+	private void tryAllTasks(Workstation ws){tryAllTasks(ws,0);}
+	private void tryAllTasks(Workstation ws, int offset){
+		barry.setActiveWorkstation(ws.toString());
 		for(CarOrder order : orders){
 			for(Task task : order.getTasks()){
 				barry.doTask(task.toString(), order.getPhaseTime() + offset );
-			}s
+			}
 		}
 	}
 	
@@ -172,40 +180,80 @@ public class AssemblyLineTest {
 		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusMinutes(260)));
 		//The thirs order will be done after 50 + 70 + 70 + 70 + 60 mins = 320 mins
 		assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusMinutes(320)));
-
-		System.out.println(orders.get(0).getEstimatedEndTime().toString());
-		System.out.println(orders.get(1).getEstimatedEndTime().toString());
-		System.out.println(orders.get(2).getEstimatedEndTime().toString());
-		
 		//Lets to all tasks in workstation 1, thus progressing the line. 
 		//We'll complete this phase 20 minutes early to check that the estimates come forwards too. 
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0).toString());
 		for(Task task : orders.get(0).getTasks()){
 			if(cmcMotors.getWorkStations().get(0).getCapabilities().contains(task.getCarPart().type)){
 				barry.doTask(task.toString(), orders.get(0).getPhaseTime() - 20);
-				System.out.println(task.toString());
 			}
 		}
 		System.out.println("now: " + cmcMotors.getCurrentTime().toString());
 		//assertTrue(eqiDateTime(now.plusMinutes(30), cmcMotors.getCurrentTime()));
 		//now = cmcMotors.getCurrentTime();
+	
+		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusMinutes(170)));
+		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusMinutes(240)));
+		assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusMinutes(300)));
+
+	}
+	
+	
+	@Test
+	public void testDayOverflow(){
+		// The day starts at 6:00. Let's pretend time passes to 14:45 without any orders.
+		DateTime now = cmcMotors.getCurrentTime();
+		cmcMotors.moveAssemblyLine(9 * 60 - 15);
+		now = now.plusMinutes(9 * 60 - 15);
+		assertTrue(eqiDateTime(cmcMotors.getCurrentTime(),now));
+		
+		//Lets start adding orders.
+		cmcMotors.addOrder(orders.get(0));
+		//the first car order is automatically added to the assemblyline. The estimated completion date should be in 3 hours.
+		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusHours(3)));//17:45
+		//Let's keep adding
+		cmcMotors.addOrder(orders.get(1));
+		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusHours(4)));//18:45
+		cmcMotors.addOrder(orders.get(2));
+		assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusHours(5)));//19:45
+		cmcMotors.addOrder(orders.get(3));
+		assertTrue(eqiDateTime(orders.get(3).getEstimatedEndTime(), now.plusHours(6)));//20:45
+		cmcMotors.addOrder(orders.get(4));
+		assertTrue(eqiDateTime(orders.get(4).getEstimatedEndTime(), now.plusHours(7)));//21:45
+		cmcMotors.addOrder(orders.get(5));
+		MutableDateTime mu = now.toMutableDateTime();
+		mu.addDays(1);
+		mu.setHourOfDay(9);mu.setMinuteOfHour(0);
+		assertTrue(eqiDateTime(orders.get(5).getEstimatedEndTime(), mu.toDateTime()));//9:00 the next day.
+	
+		cmcMotors.addOrder(orders.get(6));
+		assertTrue(eqiDateTime(orders.get(6).getEstimatedEndTime(), mu.toDateTime().plusHours(1)));//10:00 the next day.
+
+		tryAllTasks();
 		
 		
-		//assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusMinutes(170)));
-		System.out.println(orders.get(0).getEstimatedEndTime().toString());
-		//assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusMinutes(240)));
-		System.out.println(orders.get(1).getEstimatedEndTime().toString());
-		//assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusMinutes(300)));
-		System.out.println(orders.get(2).getEstimatedEndTime().toString());
-//		
-//		
-//		//The cycle took shorter than expected. We'll test whether this is reflected in the estimates.
-//		cmcMotors.moveAssemblyLine(45);
-//		now = cmcMotors.getCurrentTime();
-//		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusHours(2)));
-//		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusHours(3)));
-//		// orders for the next day should not have moved.
-//		assertTrue(eqiDateTime(orders.get(5).getEstimatedEndTime(), mu.toDateTime()));
-//		
+		//The cycle took shorter than expected. We'll test whether this is reflected in the estimates.
+		cmcMotors.moveAssemblyLine(45);
+		now = cmcMotors.getCurrentTime();
+		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusHours(2)));
+		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusHours(3)));
+		// orders for the next day should not have moved.
+		assertTrue(eqiDateTime(orders.get(5).getEstimatedEndTime(), mu.toDateTime()));
+		
+		
+		// Do all tasks
+		for(int i = 0; i < cmcMotors.getWorkStations().size(); i++){
+			Workstation ws = cmcMotors.getWorkStations().get(i);
+			barry.setActiveWorkstation(ws);
+			for(Task task : ws.getRequiredTasks()){
+				barry.doTask(task);
+			}
+		}
+		//Progress the line
+		cmcMotors.moveAssemblyLine(29);
+		now = cmcMotors.getCurrentTime();
+		assertTrue(eqiDateTime(orders.get(5).getEstimatedEndTime(), now.plusHours(6)));
+	}
 //		/**
 //		 * If a cycle is very short an order from the next day can 'jump forwards'
 //		 */
@@ -223,7 +271,7 @@ public class AssemblyLineTest {
 //		assertTrue(eqiDateTime(orders.get(5).getEstimatedEndTime(), now.plusHours(6)));
 		
 		
-	}
+	
 	
 	/**
 	 * 
