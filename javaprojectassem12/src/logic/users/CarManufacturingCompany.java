@@ -132,13 +132,17 @@ public class CarManufacturingCompany {
 	/**
 	 * Moves the assembly line forward if every work station is ready and 
 	 * sets the end time of the first order to the given end time.
-	 * @return 	True if the assembly line can be moved.
+	 * @return 	True if the assembly line has been moved.
 	 * 			False if the assembly line can not be moved.
 	 */
 	public boolean moveAssemblyLine(int shiftDuration){
 		return this.assemblyLine.tryMoveAssemblyLine(shiftDuration);
 	}
 	
+	/**
+	 * Returns the current time.
+	 * @return	The current time.
+	 */
 	public DateTime getCurrentTime(){
 		return this.assemblyLine.getCurrentTime();
 	}
@@ -150,35 +154,74 @@ public class CarManufacturingCompany {
 	public List<Order> askFutureSchedule(){
 		return this.assemblyLine.askFutureSchedule();
 	}
-
+	
+	/**
+	 * Returns a string representation of the current statistics.
+	 * @return	A string representation of the current statistics.
+	 */
 	public String getStatistics() {
 		return assemblyLine.getStatistics();
 	}
-
+	
+	/**
+	 * Returns a list of available scheduling strategies.
+	 * @return	the list of available scheduling strategies.
+	 */
 	public List<SchedulingStrategy> getStrategies() {
 		return assemblyLine.getStrategies();
 	}
-
+	
+	/**
+	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy.
+	 * @return	a list of orders that are viable to be used by the batch specification scheduling strategy.
+	 */
 	public List<Order> getBatchList() {
 		return assemblyLine.getBachList();
 	}
-
+	
+	/**
+	 * Changes the strategy according to the given order.
+	 * @param order	The order that has to be used as a template for the strategy.
+	 */
 	public void changeStrategy(Order order) {
 		assemblyLine.changeStrategy(order);
 	}
 	
+	/**
+	 * completes a task in a certain workstation using the two given identifiers.
+	 * @param taskIdentifier	The identifier for the task that needs to be completed.
+	 * @param workstationIdentifier	The identifier for the workstation that needs to complete a task.
+	 * @return	True if the task is completed successfully
+	 * 			False an identifier is wrong.
+	 */
 	public boolean doTask(String taskIdentifier, String workstationIdentifier){
 		return assemblyLine.doTask(taskIdentifier, workstationIdentifier);
 	}
 	
+	/**
+	 * Returns a list of required task identifiers in the given workstation.
+	 * @param workstationIdentifier	The identifier for the workstation for which we need the required tasks.
+	 * @return	A list of required task identifiers in the form of strings.
+	 */
 	public List<String> getRequiredTaskIdentifiers(String workstationIdentifier){
 		return this.assemblyLine.getRequiredTaskIdentifiers(workstationIdentifier);
 	}
 	
+	/**
+	 * Returns a string which holds the description for a given task in a given workstation.
+	 * @param taskIdentifier	The task for which we need the description.
+	 * @param workstationIdentifier	The workstation in which we find the right task.
+	 * @return	A string of the description of a given task.
+	 */
 	public String getTaskDescription(String taskIdentifier, String workstationIdentifier){
 		return this.assemblyLine.getTaskDescription(taskIdentifier, workstationIdentifier);
 	}
 	
+	/**
+	 * Returns a list of strings containing the tasks in the given workstation with its status.
+	 * @param workstationIdentifier	The identifier for the workstation from which we want the task status.
+	 * @return	A list of strings containing the tasks status in one workstation.
+	 */
 	public List<String> getTaskStatus(String workstationIdentifier){
 		return this.assemblyLine.getTaskStatus(workstationIdentifier);
 	}

@@ -47,8 +47,8 @@ public class GarageHolder extends User{
 	}
 	
 	/**
-	 * Returns a list of all committed orders that are completed.
-	 * @return a list of all committed orders that are completed.
+	 * Returns a list of all committed orders that are completed sorted on end time.
+	 * @return a list of all committed orders that are completed sorted on end time.
 	 */
 	public ArrayList<CarOrder> getCompletedOrders(){
 		ArrayList<CarOrder> completedOrders = new ArrayList<CarOrder>();

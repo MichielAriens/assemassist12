@@ -97,11 +97,12 @@ public class AssemblyLine {
 	public String getStatistics(){
 		return stats.toString();
 	}
+	
 	/**
 	 * completes a task in a certain workstation using the two given identifiers.
 	 * @param taskIdentifier	The identifier for the task that needs to be completed.
 	 * @param workstationIdentifier	The identifier for the workstation that needs to complete a task.
-	 * @return	True if the task is completed succesfully
+	 * @return	True if the task is completed successfully
 	 * 			False an identifier is wrong.
 	 */
 	public boolean doTask(String taskIdentifier, String workstationIdentifier){
