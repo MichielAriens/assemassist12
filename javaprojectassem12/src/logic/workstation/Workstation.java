@@ -356,6 +356,27 @@ public abstract class Workstation {
 			this.nextWorkStation.addDelay(delay);
 	}
 	
+	
+	/**
+	 * Returns the phase duration of the order in the workstation specified by the workstationNumber.
+	 * @param workstationNumber	The workstation whose order has to be checked.
+	 * @return	0	if workstationNumber is smaller than 0 or greater than the amount of workstations.
+	 * 			0	if there is no order present in the specified workstation.
+	 * 			The phase duration of the order in the specified workstation otherwise.
+	 */
+	public int getPhaseDuration(int workstationNumber){
+		if(workstationNumber < 0)
+			return 0;
+		if(workstationNumber == 0){
+			if(this.currentOrder == null)
+				return 0;
+			return this.currentOrder.getPhaseTime();
+		}
+		if(this.nextWorkStation == null)
+			return 0;
+		return nextWorkStation.getPhaseDuration(workstationNumber-1);
+	}
+	
 	/**
 	 * Returns the biggest standard phase duration of all orders in the chain.
 	 * @return	0	if there are no orders in the chain.
