@@ -29,6 +29,7 @@ public class AssemblyLineTest {
 	//private AssemblyLine assemblyLine;
 	private List<CarOrder> orders = new ArrayList<CarOrder>();
 	private Mechanic barry;
+	private List<CarOrder> simpleOrders;
 	
 	/**
 	 * Build a standard order: duration 50
@@ -131,6 +132,12 @@ public class AssemblyLineTest {
 				orders.add(buildStandardOrderC());
 			}
 		}
+		
+		//Build a list of orders of duration 60.
+		simpleOrders = new ArrayList<CarOrder>();
+		for(int i = 0; i < 10; i++){
+			simpleOrders.add(buildStandardOrderC());
+		}
 	}
 	
 	/**
@@ -221,84 +228,79 @@ public class AssemblyLineTest {
 		mu.addMinutes(210);
 		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), mu.toDateTime()));//210 mins after 6:00 the next day.
 	}
-		
-		
-	
-	
-	/**
-	 * 
-	 */
-	@Test
-	public void testOvertime(){
-		DateTime start = cmcMotors.getCurrentTime();
-		cmcMotors.progressTime(14 * 60); // Should induce one hour of overtime & will set the time to the next day.
-		cmcMotors.moveAssemblyLine(3 * 60);
-		assertTrue(eqiDateTime(start.plusDays(1), cmcMotors.getCurrentTime()));
-		//Today should end at 21:00 instead of 22:00. We'll set the time to 17:45 and plan two orders. The first can be completed today, the second tomorrow.
-		cmcMotors.progressTime(11 * 60 + 45);
-		DateTime now = cmcMotors.getCurrentTime();
-		
-		cmcMotors.addOrder(orders.get(0));
-		cmcMotors.addOrder(orders.get(1));
-		
-		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusHours(3)));
-		assertFalse(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusHours(4)));
-	}
 	
 	/**
 	 * 
 	 */
 	@Test
 	public void testOvertimeOver2Hours(){
-		//Build a list of orders of duration 60.
-		List<CarOrder> simpleOrders = new ArrayList<CarOrder>();
-		for(int i = 0; i < 10; i++){
-			simpleOrders.add(buildStandardOrderB());
-		}
-		System.out.println(simpleOrders.get(0).getPhaseTime());
-		
 		//GO to 18:00
 		cmcMotors.moveAssemblyLine(12 * 60);
-		System.out.println(cmcMotors.getCurrentTime().toString());
 		cmcMotors.addOrder(simpleOrders.get(0));
 		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0).toString());
 		for(Task task : simpleOrders.get(0).getTasks()){
 			barry.doTask(task.toString(), 180);
 		}
-		System.out.println(cmcMotors.getCurrentTime().toString());
 		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(1).toString());
 		for(Task task : simpleOrders.get(0).getTasks()){
 			barry.doTask(task.toString(), 180);
 		}
-		System.out.println(cmcMotors.getCurrentTime().toString());
 		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(2).toString());
 		for(Task task : simpleOrders.get(0).getTasks()){
 			barry.doTask(task.toString(), 180);
 		}
-		System.out.println(cmcMotors.getCurrentTime().toString());
 		//A new day has started. The overtime is 5 hours. The work day stops on 17:00
-		//goto 13:59 the last moment to post an order.
+		//goto 13:59 the last moment to post an order
+		assertTrue(cmcMotors.getCurrentTime().getHourOfDay() == 6 && cmcMotors.getCurrentTime().getMinuteOfHour() == 00);
 		cmcMotors.moveAssemblyLine(7 * 60 + 59);
 		DateTime now = cmcMotors.getCurrentTime();
-		System.out.println(now.toString());
+		
+		//Add 2 orders.
 		cmcMotors.addOrder(simpleOrders.get(1));
 		cmcMotors.addOrder(simpleOrders.get(2));
-		
-		System.out.println("1: " + simpleOrders.get(1).getEstimatedEndTime().toString());
-		System.out.println("2: " + simpleOrders.get(2).getEstimatedEndTime().toString());
 		
 		assertTrue(eqiDateTime(simpleOrders.get(1).getEstimatedEndTime(), now.plusHours(3)));
 		assertFalse(eqiDateTime(simpleOrders.get(2).getEstimatedEndTime(), now.plusHours(4)));
 	}
 	
 	/**
-	 * Tests whether progressTime() starts a new day when the invokation would result in a time outside working hours.
+	 * 
 	 */
 	@Test
-	public void testProgressTime(){
-		DateTime now = cmcMotors.getCurrentTime();
-		cmcMotors.progressTime(22 * 60);
-		assertTrue(eqiDateTime(cmcMotors.getCurrentTime(), now.plusDays(1)));
+	public void testOvertimeOver2HoursPhase70(){
+		//Build a list of orders of duration 60.
+		List<CarOrder> simpleOrders = new ArrayList<CarOrder>();
+		for(int i = 0; i < 10; i++){
+			simpleOrders.add(buildStandardOrderB());
+		}
+		
+		//GO to 18:00
+		cmcMotors.moveAssemblyLine(12 * 60);
+		cmcMotors.addOrder(simpleOrders.get(0));
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0).toString());
+		for(Task task : simpleOrders.get(0).getTasks()){
+			barry.doTask(task.toString(), 180);
+		}
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(1).toString());
+		for(Task task : simpleOrders.get(0).getTasks()){
+			barry.doTask(task.toString(), 180);
+		}
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(2).toString());
+		for(Task task : simpleOrders.get(0).getTasks()){
+			barry.doTask(task.toString(), 180);
+		}
+		//A new day has started. The overtime is 5 hours. The work day stops on 17:00
+		//goto 13:59 like in the previous test. However this time the order can't be completed anymore.
+		assertTrue(cmcMotors.getCurrentTime().getHourOfDay() == 6 && cmcMotors.getCurrentTime().getMinuteOfHour() == 00);
+		cmcMotors.moveAssemblyLine(7 * 60 + 59);
+		DateTime tomorrow = getNextDayStart(cmcMotors.getCurrentTime());
+		
+		//Add 2 orders.
+		cmcMotors.addOrder(simpleOrders.get(1));
+		cmcMotors.addOrder(simpleOrders.get(2));
+		
+		assertTrue(eqiDateTime(simpleOrders.get(1).getEstimatedEndTime(), tomorrow.plusMinutes(3 * 70)));
+		assertTrue(eqiDateTime(simpleOrders.get(2).getEstimatedEndTime(), tomorrow.plusMinutes(4 * 70)));
 	}
 	
 	/**
@@ -307,10 +309,13 @@ public class AssemblyLineTest {
 	@Test
 	public void testNegativeOvertime(){
 		int day1 = cmcMotors.getCurrentTime().getDayOfYear();
-		cmcMotors.progressTime(12 * 60 + 30); //18:30
+		cmcMotors.moveAssemblyLine(12 * 60 + 30); //18:30
 		cmcMotors.moveAssemblyLine(60);//This will end the day and result in a theoretical overtime of -30. The overtime will be set to 0.
 		//We can't access the overtime directly, however progressing time to 21:59 should not result in a day switch.
 		assertTrue(cmcMotors.getCurrentTime().getDayOfYear() == day1 + 1);
+		cmcMotors.moveAssemblyLine(16 * 60 - 151);
+		System.out.println(cmcMotors.getCurrentTime().toString());
+		assertFalse(cmcMotors.getCurrentTime().getDayOfYear() == day1 + 2);
 	}
 	
 	
@@ -341,6 +346,17 @@ public class AssemblyLineTest {
 		assertTrue(eqiDateTime(a, b));
 	}
 	
+	/**
+	 * Given the datetime indicating "now" this method returns the datetime indicating "tomorrow" at 6:00 AM
+	 * @param now
+	 * @return
+	 */
+	private DateTime getNextDayStart(DateTime now){
+		MutableDateTime mu = now.toMutableDateTime();
+		mu.addDays(1);
+		mu.setHourOfDay(6);mu.setMinuteOfHour(0);
+		return mu.toDateTime();
+	}
 	
 	
 	

@@ -389,7 +389,7 @@ public class AssemblyLine {
 			Order order = queue.getFirst();
 			int assemblyTime = 0;
 			assemblyTime += order.getPhaseTime();
-			int maxPhaseWorkstations = 0;
+			int maxPhaseWorkstations = order.getPhaseTime();
 			for(int i = 1; i < getWorkStations().size(); i++){
 				maxPhaseWorkstations = Math.max(maxPhaseWorkstations, firstWorkStation.getPhaseDuration(i));
 				assemblyTime += maxPhaseWorkstations;
