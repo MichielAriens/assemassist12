@@ -387,13 +387,12 @@ public class AssemblyLine {
 		 */
 		private void addOrderToFirstWorkstation(){
 			Order order = queue.getFirst();
-			LinkedList<Order> list = new LinkedList<Order>();
 			int assemblyTime = 0;
-			list.add(order);
-			assemblyTime += calculateMaxPhase(list);
+			assemblyTime += order.getPhaseTime();
+			int maxPhaseWorkstations = 0;
 			for(int i = 1; i < getWorkStations().size(); i++){
-				list.add(getWorkStations().get(i).getCurrentOrder());
-				assemblyTime += calculateMaxPhase(list);
+				maxPhaseWorkstations = Math.max(maxPhaseWorkstations, firstWorkStation.getPhaseDuration(i));
+				assemblyTime += maxPhaseWorkstations;
 			}
 			DateTime estimatedEndTime = new DateTime(currentTime);
 			estimatedEndTime = estimatedEndTime.plusMinutes(assemblyTime);
