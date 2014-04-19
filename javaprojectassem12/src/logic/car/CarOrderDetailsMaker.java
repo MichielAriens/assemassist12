@@ -3,18 +3,40 @@ package logic.car;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class for building the car order's details.
+ */
 public class CarOrderDetailsMaker {
 	
+	/**
+	 * A variable holding the model of the car order.
+	 */
 	private CarModel model;
+	
+	/**
+	 * A list of car parts which the user wants on his car.
+	 */
 	private ArrayList<CarPart> chosenParts;
+	
+	/**
+	 * A list of different type of parts the user wants on his car.
+	 */
 	private ArrayList<CarPartType> chosenTypes;
 	
+	/**
+	 * Initializes this car order details maker with a given model.
+	 * @param model
+	 */
 	public CarOrderDetailsMaker(CarModel model){
 		this.model = model;
 		this.chosenParts = new ArrayList<CarPart>();
 		this.chosenTypes = new ArrayList<CarPartType>();
 	}
 	
+	/**
+	 * Adds a given part to the list of car parts and adds its type to the list of car part types if possible.
+	 * @param part The part that needs to be added
+	 */
 	public void addPart(CarPart part){
 		if(isCompatiblePart(part)){
 			chosenParts.add(part);

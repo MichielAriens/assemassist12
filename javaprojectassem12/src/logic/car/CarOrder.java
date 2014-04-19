@@ -67,6 +67,12 @@ public class CarOrder extends Order{
 		return this.details.getPhaseTime();
 	}
 	
+	/**
+	 * Checks if this object is the same as the given object.
+	 * @param obj	The object against which we need to check.
+	 * @return	True if the given object is the same as this object.
+	 * 			False otherwise
+	 */
 	@Override
 	public boolean equals(Object obj){
 		return super.equals(obj);
@@ -84,6 +90,11 @@ public class CarOrder extends Order{
 		return str;
 	}
 	
+	/**
+	 * Returns information about this car order. 
+	 * The information contains this car order's details and the start, end and est end times.
+	 * @return	A string containing the details, the start time, end time and estimated end time.
+	 */
 	public String getInformation(){
 		String str = "   Specifications:   " + details.toString() + "\n";
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm");
@@ -95,6 +106,10 @@ public class CarOrder extends Order{
 		return str;
 	}
 	
+	/**
+	 * Makes a new car order and sets its detail's field to a copy of this car order's details.
+	 * @return	A new car order with a copy of its details in it.
+	 */
 	@Override
 	public Order getRawCopy(){
 		return new CarOrder(details.getRawCopy());
