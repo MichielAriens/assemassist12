@@ -40,10 +40,18 @@ public class ManagerController extends UserController{
 		return null;
 	}
 	
+	/**
+	 * Returns a string representation of the current statistics.
+	 * @return	a string representation of the current statistics.
+	 */
 	public String getStatistics() {
 		return this.currentManager.getStatistics();		
 	}
 	
+	/**
+	 * Returns a list of available scheduling strategies.
+	 * @return	the list of available scheduling strategies.
+	 */
 	public ArrayList<String> getStrategies() {
 		ArrayList<String> strategies = new ArrayList<String>();
 		for(SchedulingStrategy s : currentManager.getStrategies()){
@@ -52,6 +60,10 @@ public class ManagerController extends UserController{
 		return strategies;
 	}
 
+	/**
+	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy.
+	 * @return	a list of orders that are viable to be used by the batch specification scheduling strategy.
+	 */
 	public ArrayList<String> getBatchList() {
 		currentBatchList = currentManager.getBatchList();
 		if(currentBatchList == null){
@@ -68,6 +80,11 @@ public class ManagerController extends UserController{
 		}
 	}
 	
+	/**
+	 * Returns the options that belong to the given car order.
+	 * @param order	The order for which the options need to be returned.
+	 * @return the options that belong to the given car order.
+	 */
 	private String getCarOptions(Order order) {
 		String options = "";
 		List<Task> tasks = order.getTasks();
@@ -77,7 +94,12 @@ public class ManagerController extends UserController{
 		return options;
 	}
 
-	//TODO
+	/**
+	 * Tries to change the current strategy to the FIFO strategy. Returns true if successful,
+	 * false otherwise.
+	 * @return 	True if the strategy has been changed successful.
+	 * 			False otherwise.
+	 */
 	public boolean changeStrategyToFIFO(){
 		if(!currentManager.getStrategies().get(0).toString().equals("FIFO")){
 			currentManager.changeStrategy(null);
@@ -86,7 +108,11 @@ public class ManagerController extends UserController{
 		return false;
 	}
 	
-	//TODO
+	/**
+	 * Tries to change the current strategy to the batch processing strategy. Returns true if successful,
+	 * false otherwise.
+	 * @param index	The index of the order for batch processing. 
+	 */
 	public void changeStrategyToBatchProcessing(int index){
 			currentManager.changeStrategy(currentBatchList.get(index));
 			currentBatchList.clear();
