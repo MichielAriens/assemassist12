@@ -35,8 +35,8 @@ public class Manager extends User{
 	}
 	
 	/**
-	 * Returns a list of available scheduling strategies.
-	 * @return	the list of available scheduling strategies.
+	 * Returns a list of the current strategies followed by the available scheduling strategies.
+	 * @return a list of the current strategies followed by the available scheduling strategies.
 	 */
 	public List<SchedulingStrategy> getStrategies() {
 		return company.getStrategies();

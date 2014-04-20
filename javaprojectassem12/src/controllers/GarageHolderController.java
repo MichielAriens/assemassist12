@@ -15,6 +15,9 @@ public class GarageHolderController extends UserController{
 	 */
 	private GarageHolder currentGarageHolder;
 	
+	/**
+	 * A maker for car order details.
+	 */
 	private CarOrderDetailsMaker maker;
 	
 	/**
@@ -52,16 +55,36 @@ public class GarageHolderController extends UserController{
 		return pendingOrderStrings;
 	}
 	
+	/**
+	 * Returns the information for the pending order with the given index.
+	 * @param index	The index for the order in the list of pending orders.
+	 * @return	Null if the current garage holder is null or the given index is not valid. 
+	 * 			The information for the pending order with the given index otherwise.
+	 */
 	public String getPendingInfo(int index){
 		if(this.currentGarageHolder == null)
 			return null;
-		return this.currentGarageHolder.getPendingOrders().get(index).getInformation();
+		ArrayList<CarOrder> pendingOrders = this.currentGarageHolder.getPendingOrders();
+		if(index < pendingOrders.size() - 1 && index >= 0)
+			return pendingOrders.get(index).getInformation();
+		else
+			return null;
 	}
 	
+	/**
+	 * Returns the information for the completed order with the given index.
+	 * @param index	The index for the order in the list of completed orders.
+	 * @return 	Null if the current garage holder is null or the given index is not valid. 
+	 * 			The information for the completed order with the given index otherwise.
+	 */
 	public String getCompletedInfo(int index){
 		if(this.currentGarageHolder == null)
 			return null;
-		return this.currentGarageHolder.getCompletedOrders().get(index).getInformation();
+		ArrayList<CarOrder> completedOrders = this.currentGarageHolder.getCompletedOrders();
+		if(index < completedOrders.size() - 1 && index >= 0)
+			return completedOrders.get(index).getInformation();
+		else
+			return null;
 	}
 
 	/**
@@ -112,12 +135,22 @@ public class GarageHolderController extends UserController{
 		return result;
 	}
 	
+	/**
+	 * Creates a new car order's details maker with the given model if the given model is not
+	 * null.
+	 * @param model	The model for the new car order's details maker.
+	 */
 	public void chooseModel(CarModel model){
 		if(model == null)
 			return;
 		this.maker = new CarOrderDetailsMaker(model);
 	}
 	
+	/**
+	 * Adds the car part from the given string to the car order's details maker if the given
+	 * string is not null.
+	 * @param partString	The string representation of the part to be added.
+	 */
 	public void addPart(String partString){
 		if(partString == null)
 			return;

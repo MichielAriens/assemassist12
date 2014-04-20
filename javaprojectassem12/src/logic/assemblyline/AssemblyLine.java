@@ -150,8 +150,8 @@ public class AssemblyLine {
 	}
 	
 	/**
-	 * Returns a list of strategies used by the system.
-	 * @return	A list containing all the strategies.
+	 * Returns a list of the current strategies followed by the available scheduling strategies.
+	 * @return a list of the current strategies followed by the available scheduling strategies.
 	 */
 	public List<SchedulingStrategy> getStrategies(){
 		return schedule.getStrategies();
@@ -544,9 +544,8 @@ public class AssemblyLine {
 		}
 		
 		/**
-		 * Returns a list of strategies used by the system. The first element is the current strategy used.
-		 * It contains the currentstrategy 2 times.
-		 * @return A list containing the different strategies.
+		 * Returns a list of the current strategies followed by the available scheduling strategies.
+		 * @return a list of the current strategies followed by the available scheduling strategies.
 		 */
 		private List<SchedulingStrategy> getStrategies(){
 			LinkedList<SchedulingStrategy> returnList = new LinkedList<SchedulingStrategy>();
@@ -558,8 +557,8 @@ public class AssemblyLine {
 		}
 		
 		/**
-		 * Checks if there are orders in the workstations and the queue for which batch processing can be applied.
-		 * It then returns a list of those.
+		 * Checks if there are orders in the workstations and the queue for which batch 
+		 * processing can be applied. It then returns a list of those.
 		 * @return A list of orders for which batch processing can be used.
 		 */
 		private List<Order> getBatchList(){

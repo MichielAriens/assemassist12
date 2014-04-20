@@ -18,6 +18,10 @@ public class ManagerController extends UserController{
 	 */
 	private Manager currentManager;
 	
+	/**
+	 * The current list of orders that are viable to be used by the batch specification 
+	 * scheduling strategy.
+	 */
 	private List<Order> currentBatchList;
 	
 	/**
@@ -49,8 +53,10 @@ public class ManagerController extends UserController{
 	}
 	
 	/**
-	 * Returns a list of available scheduling strategies.
-	 * @return	the list of available scheduling strategies.
+	 * Returns a list of strings of the current strategy followed by the available scheduling 
+	 * strategies.
+	 * @return a list of strings of the current strategy followed by the available scheduling 
+	 * strategies.
 	 */
 	public ArrayList<String> getStrategies() {
 		ArrayList<String> strategies = new ArrayList<String>();
