@@ -8,9 +8,19 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+/**
+ * A class holding the information about task orders.
+ */
 public class TaskOrder extends Order{
 	
+	/**
+	 * A variable holding the details for this task. 
+	 */
 	private TaskOrderDetails details;
+	
+	/**
+	 * A variable holding the phase duration of this task order.
+	 */
 	private final int PHASE_TIME = 60;
 	
 	public TaskOrder(TaskOrderDetails details){

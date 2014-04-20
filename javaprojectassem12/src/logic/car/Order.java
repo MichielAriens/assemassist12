@@ -112,11 +112,15 @@ public abstract class Order implements Comparable<Order>{
 	public abstract DateTime getDeadLine();
 	
 	/**
-	 * 
-	 * @return
+	 * Returns a list of tasks that are required to complete this order.
+	 * @return	A list containing different tasks which need to be done for this order.
 	 */
 	public abstract List<Task> getTasks();
 	
+	/**
+	 * Returns a copy of this order
+	 * @return	A copy of this order.
+	 */
 	public abstract Order getRawCopy();
 	
 	/**
@@ -126,6 +130,12 @@ public abstract class Order implements Comparable<Order>{
 	 */
 	public abstract boolean done();
 	
+	/**
+	 * Checks if this object is the same as a given object.
+	 * @param	obj	The object against which we want to check equality.
+	 * @return	True if this object is the same as a given object
+	 * 			False if the given object is null or the classes aren't the same or some fields do not have the same values.
+	 */
 	@Override
 	public boolean equals(Object obj){
 		if(obj == null) return false;
@@ -133,10 +143,23 @@ public abstract class Order implements Comparable<Order>{
 		return equals((Order) obj);
 	}
 	
+	/**
+	 * Checks if this order's tasks are the same as a given order's tasks.
+	 * @param other	The other order against which we want to check equality.
+	 * @return	True if this order's tasks are the same as the given order's tasks.
+	 * 			False otherwise.
+	 */
 	private boolean equals(Order other){
 		return this.getTasks().equals(other.getTasks());
 	}
 	
+	/**
+	 * Checks if this order's estimated completion time is bigger than a given order's estimated completion time.
+	 * @param	o The order against which we want to check the estimated completion time.
+	 * @return	-1 if the given order has a bigger estimated completion time than this order's estimated completion time.
+	 * 			0 if both are equal
+	 * 			+1 if this order's estimated completion time is bigger than the given order's estimated completion time.
+	 */
 	@Override
 	public int compareTo(Order o) {
 		if(o == null)
