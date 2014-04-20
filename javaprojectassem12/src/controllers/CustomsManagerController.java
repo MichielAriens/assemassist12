@@ -58,7 +58,7 @@ public class CustomsManagerController extends UserController{
 	public ArrayList<String> getAvailableTypes(){
 		ArrayList<String> types = new ArrayList<String>();
 		int count = 1;
-		for(CarPartType type: maker.getAvailableTypes()){
+		for(CarPartType type: maker.getAvailableTypesOfTasks()){
 			types.add(type.toString() + ": " +  count);
 			count++;
 		}

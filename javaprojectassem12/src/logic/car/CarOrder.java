@@ -19,7 +19,7 @@ public class CarOrder extends Order{
 	private CarOrderDetails details;
 	
 	/**
-	 * Sets the car order details of this class to the given details.
+	 * Initializes the car order details of this class to the given details.
 	 * @param details	The car order details which need to be set.
 	 */
 	public CarOrder(CarOrderDetails details){
