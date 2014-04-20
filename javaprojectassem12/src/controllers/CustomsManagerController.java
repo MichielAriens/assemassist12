@@ -18,11 +18,14 @@ public class CustomsManagerController extends UserController{
 	 */
 	private CustomsManager currentCustomsManager;
 	
+	/**
+	 * A maker for task order details.
+	 */
 	private TaskOrderDetailsMaker maker = new TaskOrderDetailsMaker();
 	
 	/**
 	 * Sets the current customs shop manager to the given customs shop manager.
-	 * @param mechan	The new mechanic.
+	 * @param customsMan	The new mechanic.
 	 */
 	public void setCustomsManager(CustomsManager customsMan) {
 		this.currentCustomsManager = customsMan;
@@ -38,12 +41,20 @@ public class CustomsManagerController extends UserController{
 		return this.currentCustomsManager.getUserName();
 	}
 	
+	/**
+	 * Sets the part of the task order details maker if the given part is not null.
+	 * @param part The part which needs to be set.
+	 */
 	public void choosePart(CarPart part){
 		if(part == null)
 			return;
 		maker.choosePart(part);
 	}
 	
+	/**
+	 * Returns a numbered list of available types of tasks. 
+	 * @return a numbered list of available types of tasks.
+	 */
 	public ArrayList<String> getAvailableTypes(){
 		ArrayList<String> types = new ArrayList<String>();
 		int count = 1;
@@ -54,6 +65,11 @@ public class CustomsManagerController extends UserController{
 		return types;
 	}
 	
+	/**
+	 * Returns a numbered list of available options for the given type of the chosen part.
+	 * @param type	The car part type for which the available options need to be returned.
+	 * @return a numbered list of available options for the given type of the chosen part.
+	 */
 	public ArrayList<String> getAvailableOptions(CarPartType type){
 		ArrayList<String> options = new ArrayList<String>();
 		int count = 1;
@@ -64,6 +80,12 @@ public class CustomsManagerController extends UserController{
 		return options;
 	}
 	
+	/**
+	 * Sets the deadline for the task order details maker if the given deadline is valid.
+	 * @param deadlineStr	The deadline as a string.
+	 * @return 	True if the given deadline string is valid and the deadline is set.
+	 * 			False if the given deadline string is not valid.
+	 */
 	public boolean chooseDeadLine(String deadlineStr){
 		try{
 			DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm");
@@ -75,6 +97,11 @@ public class CustomsManagerController extends UserController{
 		}
 	}
 	
+	/**
+	 * Places the order if the current customs shop manger is not null.
+	 * @return 	The placed order as a string if the current customs manger is not null.
+	 * 			Null otherwise.
+	 */
 	public String placeOrder(){
 		if(currentCustomsManager == null)
 			return null;

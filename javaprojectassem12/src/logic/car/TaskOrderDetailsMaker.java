@@ -8,6 +8,10 @@ public class TaskOrderDetailsMaker {
 	
 	private CarPart chosenPart;
 	private DateTime chosenDeadline = null;
+	
+	/**
+	 * List of available types of tasks.
+	 */
 	private ArrayList<CarPartType> availableTypes;
 	
 	public TaskOrderDetailsMaker(){

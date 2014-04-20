@@ -27,6 +27,7 @@ public class CustomsManager extends User{
 	/**
 	 * Commits a new order with the given task order details if the given task order details are not null.
 	 * @param details The task order details for the new order.
+	 * @return The order as a string.
 	 */
 	public String placeOrder(TaskOrderDetails details){
 		if(details == null)

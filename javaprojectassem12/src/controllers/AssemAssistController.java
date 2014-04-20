@@ -16,7 +16,6 @@ public class AssemAssistController {
 	 */
 	private CarManufacturingCompany company;
 	
-	
 	/**
 	 * The controller for garage holders.
 	 */
