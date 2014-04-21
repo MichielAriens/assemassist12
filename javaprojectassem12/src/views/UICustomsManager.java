@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import logic.car.CarPart;
-import logic.car.CarPartType;
 import controllers.CustomsManagerController;
 
 /**
@@ -54,20 +53,22 @@ public class UICustomsManager {
 				writer.flush();
 				writer.write("Choose the type of task you want to order:\n\n");
 				String tasks = "Available tasks: ";
-				for(String t : cuController.getAvailableTypes()){
+				ArrayList<String> availableTypes = cuController.getAvailableTypes();
+				for(String t : availableTypes){
 					tasks += t + "; ";
 				}
 				writer.write("   " + tasks + "\n");
 				writer.flush();
-				String taskTypeString = checkInput("   Type the number of the desired task type: ", cuController.getAvailableTypes());
+				String taskTypeString = checkInput("   Type the number of the desired task type: ", availableTypes);
 				writer.write("Choose the option of the task you want to order:\n\n");
 				String options = "Available options: ";
-				for(String o : cuController.getAvailableOptions(taskTypeString)){
+				ArrayList<String> availableOptions = cuController.getAvailableOptions(taskTypeString);
+				for(String o : availableOptions){
 					options += o + "; ";
 				}
 				writer.write("   " + options + "\n");
 				writer.flush();
-				String optionString = checkInput("   Type the number of the desired task option: ", cuController.getAvailableOptions(taskTypeString));
+				String optionString = checkInput("   Type the number of the desired task option: ", availableOptions);
 				CarPart taskoption = CarPart.getPartfromString(optionString);
 				placeDeadline();
 				if(!promptYesOrNo("\nDo you want to place this order? (y/n): "))
