@@ -114,7 +114,8 @@ public class UserTest {
 	}
 	
 	private void makeOrderAndAdvance(){
-		GarageHolder g = (GarageHolder) company.logIn("Michiel");
+		
+		GarageHolder g = (GarageHolder) company.logIn("gar");
 		ArrayList<CarPart> carparts = new ArrayList<CarPart>();
 		carparts.add(CarPart.BODY_BREAK);
 		carparts.add(CarPart.COLOUR_BLACK);
@@ -125,26 +126,34 @@ public class UserTest {
 		carparts.add(CarPart.GEARBOX_5AUTO);
 		CarOrderDetails spec = new CarOrderDetails(CarModel.MODELA, carparts);
 		g.placeOrder(spec);
-		Mechanic m = (Mechanic) company.logIn("mec");
+		Mechanic m = (Mechanic) company.logIn("mech");
+		List<String> tasksss = m.getAvailableTaskIdentifiers();
+		assertTrue(tasksss.size()==2);
+		assertTrue(m.doTask(tasksss.get(0), 60));
+		tasksss = m.getAvailableTaskIdentifiers();
+		assertTrue(tasksss.size()==1);
+		assertTrue(m.doTask(tasksss.get(0), 70));
+		tasksss = m.getAvailableTaskIdentifiers();
+		assertTrue(tasksss.size()==2);
+		
 		
 	}
 	
 	@Test
 	public void mechanicTest(){
 		//login with mechanic account
-		Mechanic m = (Mechanic) company.logIn("Joren");
+		Mechanic m = (Mechanic) company.logIn("mech");
 		//check initial values
-		assertEquals("Joren", m.getUserName());
+		assertEquals("mech", m.getUserName());
 		assertEquals(null, m.getActiveWorkstation());
 		assertFalse(m.isPosted());
-		assertEquals(null, m.getAvailableTasks());
+		assertEquals(null, m.getAvailableTaskIdentifiers());
 		//set a workstation
-		m.setActiveWorkstation(m.getAvailableWorkstations().get(0));
+		m.setActiveWorkstation("Car Body Post");
 		assertTrue(m.isPosted());
 		//place a car order and advance the assembly line
 		makeOrderAndAdvance();
-		assertTrue(m.doTask(m.getAvailableTasks().get(0)));
-		assertFalse(m.doTask(new Task(CarPart.AIRCO_AUTO)));
+		
 	}
 	
 	@Test
