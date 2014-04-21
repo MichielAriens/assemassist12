@@ -142,24 +142,6 @@ public class AssemblyLineTest {
 		}
 	}
 	
-	/**
-	 * Try to do every single task in the system. The standard phase durations are used.
-	 */
-	private void tryAllTasks(){
-		for(Workstation ws : cmcMotors.getWorkStations()){
-			tryAllTasks(ws);
-		}
-	}
-	private void tryAllTasks(Workstation ws){tryAllTasks(ws,0);}
-	private void tryAllTasks(Workstation ws, int offset){
-		barry.setActiveWorkstation(ws.toString());
-		for(CarOrder order : orders){
-			for(Task task : order.getTasks()){
-				barry.doTask(task.toString(), order.getPhaseTime() + offset );
-			}
-		}
-	}
-	
 
 	/**
 	 * This test tests the correct propagation of estimated completion times.
@@ -322,28 +304,60 @@ public class AssemblyLineTest {
 	}
 	
 	/**
-	 * A basic test of the assembly line functioning usinf .
+	 * A basic test of the batch scheduling strategy.
+	 * We test correct refactoring of the queue as required. See code for detailed flow.
 	 */
 	@Test
 	public void testPrioritySchedulingEasy(){
 		List<Order> ords = new ArrayList<Order>();
 		ords.add(buildStandardOrderA());ords.add(buildStandardOrderA());ords.add(buildStandardOrderB());ords.add(buildStandardOrderC());
-		//add the orders
+		//add a basic order for models A, B & C
 		for(Order ord : ords){
 			cmcMotors.addOrder(ord);
 		}
 		
 		//SCHED: <stuff in the workstations>|<stuff in the queue>
 		//SCHED: A|A-B-C
+		//		 0|1-2-3
 		
-		//Set all with specification defined by standard order C with priority.
+		//Set priority for specification defined by standard order C.
 		cmcMotors.changeStrategy(buildStandardOrderC());
 		
 		//SCHED: A|C-A-B 
+		//		 0|3-1-2
 		//check that that C is scheduled after ords.get(0). ords.get(0) is automatically added to the assemblyline regardless of scheduling.
 		assertTrue(ords.get(3).getEstimatedEndTime().isBefore(ords.get(1).getEstimatedEndTime()));
 		assertTrue(ords.get(3).getEstimatedEndTime().isBefore(ords.get(2).getEstimatedEndTime()));
 		assertTrue(ords.get(1).getEstimatedEndTime().isBefore(ords.get(2).getEstimatedEndTime()));
+		
+		//Now we'll add another order of type C (priority)
+		ords.add(buildStandardOrderC());
+		cmcMotors.addOrder(ords.get(4));
+		//SCHED: A|C-C-A-B 
+		//		 0|3-4-1-2
+		
+		assertTrue(ords.get(3).getEstimatedEndTime().isBefore(ords.get(1).getEstimatedEndTime()));
+		assertTrue(ords.get(3).getEstimatedEndTime().isBefore(ords.get(2).getEstimatedEndTime()));
+		assertTrue(ords.get(1).getEstimatedEndTime().isBefore(ords.get(2).getEstimatedEndTime()));
+		assertTrue(ords.get(4).getEstimatedEndTime().isBefore(ords.get(2).getEstimatedEndTime()));
+		assertTrue(ords.get(4).getEstimatedEndTime().isBefore(ords.get(1).getEstimatedEndTime()));
+		assertTrue(ords.get(3).getEstimatedEndTime().isBefore(ords.get(4).getEstimatedEndTime()));
+		
+		//Finally we'll add a non priority order.
+		ords.add(buildStandardOrderB());
+		cmcMotors.addOrder(ords.get(5));
+		//SCHED: A|C-C-A-B-B 
+		//		 0|3-4-1-2-5
+		
+		assertTrue(ords.get(3).getEstimatedEndTime().isBefore(ords.get(1).getEstimatedEndTime()));
+		assertTrue(ords.get(3).getEstimatedEndTime().isBefore(ords.get(2).getEstimatedEndTime()));
+		assertTrue(ords.get(1).getEstimatedEndTime().isBefore(ords.get(2).getEstimatedEndTime()));
+		assertTrue(ords.get(4).getEstimatedEndTime().isBefore(ords.get(2).getEstimatedEndTime()));
+		assertTrue(ords.get(4).getEstimatedEndTime().isBefore(ords.get(1).getEstimatedEndTime()));
+		assertTrue(ords.get(3).getEstimatedEndTime().isBefore(ords.get(4).getEstimatedEndTime()));
+		for(int i = 0; i < 5; i++){
+			assertTrue(ords.get(i).getEstimatedEndTime().isBefore(ords.get(5).getEstimatedEndTime()));
+		}
 	}
 	
 	

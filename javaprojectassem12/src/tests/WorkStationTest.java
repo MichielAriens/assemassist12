@@ -11,7 +11,6 @@ import logic.car.CarOrder;
 import logic.car.CarOrderDetailsMaker;
 import logic.car.CarPart;
 import logic.car.CarPartType;
-import logic.car.CarSpecification;
 import logic.users.CarManufacturingCompany;
 import logic.users.GarageHolder;
 import logic.users.Mechanic;
@@ -27,7 +26,6 @@ import org.junit.Test;
 public class WorkStationTest {
 	GarageHolder garageHolder;
 	CarManufacturingCompany carManufacturingCompany;
-	CarSpecification carSpecification;
 	CarOrder carOrder;
 	
 	Workstation universalPost;

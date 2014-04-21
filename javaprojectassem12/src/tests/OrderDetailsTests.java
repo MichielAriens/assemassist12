@@ -9,9 +9,12 @@ import java.util.List;
 import logic.car.CarModel;
 import logic.car.CarPart;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import logic.car.*;
+import logic.users.CarManufacturingCompany;
+import logic.users.CustomsManager;
 import logic.workstation.Task;
 public class OrderDetailsTests {
 
@@ -126,4 +129,16 @@ public class OrderDetailsTests {
 		assertNull(details);
 	}
 	
+	/**
+	 * 
+	 */
+	@Test
+	public void testTaskOrderDetatilsMaker(){
+		TaskOrderDetailsMaker maker = new TaskOrderDetailsMaker();
+		maker.choosePart(maker.getAvailableParts(CarPartType.Colour).get(0));
+		maker.chooseDeadline(DateTime.now().plusHours(5));
+		TaskOrderDetails details = maker.getDetails();
+		assertNotNull(details);
+		assertTrue(details.getPendingTasks().get(0).getCarPart().type == CarPartType.Colour);
+	}
 }
