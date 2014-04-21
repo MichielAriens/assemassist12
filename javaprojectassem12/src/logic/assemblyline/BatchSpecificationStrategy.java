@@ -10,7 +10,7 @@ import logic.car.Order;
 public class BatchSpecificationStrategy extends SchedulingStrategy{
 
 	/**
-	 * A protected empty contructor.
+	 * A protected empty constructor.
 	 */
 	protected BatchSpecificationStrategy(){
 		
