@@ -69,11 +69,10 @@ public class UICustomsManager {
 				writer.write("   " + options + "\n");
 				writer.flush();
 				String optionString = checkInput("   Type the number of the desired task option: ", availableOptions);
-				CarPart taskoption = CarPart.getPartfromString(optionString);
 				placeDeadline();
 				if(!promptYesOrNo("\nDo you want to place this order? (y/n): "))
 					continue;
-				cuController.choosePart(taskoption);
+				cuController.choosePart(optionString);
 				String info = cuController.placeOrder();
 				writer.write("\nOrder placed,\n" + info + "\n\n");
 				writer.flush();
