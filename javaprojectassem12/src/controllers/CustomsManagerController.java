@@ -67,13 +67,14 @@ public class CustomsManagerController extends UserController{
 	
 	/**
 	 * Returns a numbered list of available options for the given type of the chosen part.
-	 * @param type	The car part type for which the available options need to be returned.
+	 * @param TaskTypeString	The car part type for which the available options need to be returned.
 	 * @return a numbered list of available options for the given type of the chosen part.
 	 */
-	public ArrayList<String> getAvailableOptions(CarPartType type){
+	public ArrayList<String> getAvailableOptions(String taskTypeString){
+		CarPartType taskType = CarPartType.getTypefromString(taskTypeString);
 		ArrayList<String> options = new ArrayList<String>();
 		int count = 1;
-		for(CarPart part: maker.getAvailableParts(type)){
+		for(CarPart part: maker.getAvailableParts(taskType)){
 			options.add(part.toString() + ": " + count);
 			count++;
 		}

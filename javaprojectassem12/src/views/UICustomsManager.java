@@ -59,17 +59,15 @@ public class UICustomsManager {
 				}
 				writer.write("   " + tasks + "\n");
 				writer.flush();
-				String taskString = checkInput("   Type the number of the desired task type: ", cuController.getAvailableTypes());
-				CarPartType tasktype = CarPartType.getTypefromString(taskString);
-				
+				String taskTypeString = checkInput("   Type the number of the desired task type: ", cuController.getAvailableTypes());
 				writer.write("Choose the option of the task you want to order:\n\n");
 				String options = "Available options: ";
-				for(String o : cuController.getAvailableOptions(tasktype)){
+				for(String o : cuController.getAvailableOptions(taskTypeString)){
 					options += o + "; ";
 				}
 				writer.write("   " + options + "\n");
 				writer.flush();
-				String optionString = checkInput("   Type the number of the desired task option: ", cuController.getAvailableOptions(tasktype));
+				String optionString = checkInput("   Type the number of the desired task option: ", cuController.getAvailableOptions(taskTypeString));
 				CarPart taskoption = CarPart.getPartfromString(optionString);
 				placeDeadline();
 				if(!promptYesOrNo("\nDo you want to place this order? (y/n): "))
