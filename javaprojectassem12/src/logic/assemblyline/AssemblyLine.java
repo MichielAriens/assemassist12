@@ -402,24 +402,7 @@ public class AssemblyLine {
 			
 		}
 
-		
-		/**
-		 * Calculates the maximum phase duration from a given list of orders.
-		 * @param orders	The list of orders on which we need to calculate the phase duration.
-		 * @return	An integer containing the maximum phase duration.
-		 */
-		private int calculateMaxPhase(List<Order> orders){
-			int max = 0;
-			if(!orders.isEmpty()){
-				for(Order next : orders){
-					if(next!=null){
-						if(next.getPhaseTime()>max)
-							max=next.getPhaseTime();
-					}
-				}
-			}
-			return max;
-		}
+
 		
 		/**
 		 * Sets the current time to the next day at the beginning of the shift, if the time is later than the begin hour of the shift.

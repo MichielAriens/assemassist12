@@ -3,6 +3,7 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import logic.car.CarModel;
 import logic.car.CarOrder;
@@ -10,6 +11,7 @@ import logic.car.CarOrderDetails;
 import logic.car.CarOrderDetailsMaker;
 import logic.car.CarPart;
 import logic.car.CarSpecification;
+import logic.car.Order;
 import logic.users.CarManufacturingCompany;
 import logic.users.GarageHolder;
 import logic.users.Manager;
@@ -73,7 +75,7 @@ public class UserTest {
 	}
 	
 	private void makeAndPlaceOrder(){
-		GarageHolder g = (GarageHolder) company.logIn("Michiel");
+		GarageHolder g = (GarageHolder) company.logIn("gar");
 		ArrayList<CarPart> carparts = new ArrayList<CarPart>();
 		carparts.add(CarPart.BODY_BREAK);
 		carparts.add(CarPart.COLOUR_BLACK);
@@ -82,8 +84,8 @@ public class UserTest {
 		carparts.add(CarPart.WHEELS_COMFORT);
 		carparts.add(CarPart.ENGINE_4);
 		carparts.add(CarPart.GEARBOX_5AUTO);
-		CarSpecification spec = new CarSpecification(CarModel.MODELA, carparts);
-		g.placeOrder(spec);
+		CarOrderDetails det = new CarOrderDetails(CarModel.MODELA, carparts);
+		g.placeOrder(det);
 	}
 	
 	@Test
@@ -92,25 +94,23 @@ public class UserTest {
 		Manager m = (Manager) company.logIn("Wander");
 		//check initial values
 		assertEquals("Wander", m.getUserName());
-		assertEquals(3, m.getWorkstations().size());
+		
 		ArrayList<CarOrder> orders = new ArrayList<CarOrder>();
 		orders.add(null);
 		orders.add(null);
 		orders.add(null);
-		assertEquals(orders, m.askFutureSchedule());
+		assertTrue(m.getBatchList().isEmpty());
 		//check if the assembly line can be moved if there are no car orders present
-		assertEquals(true, m.moveAssemblyLine(60));
+		
 		//add a car order to the assembly line
 		makeAndPlaceOrder();
-		//check if the future schedule now contains a car order
-		assertFalse(orders.equals(m.askFutureSchedule()));
-		//check if the assembly line refuses to move before all tasks are done
-		assertEquals(false, m.moveAssemblyLine(60));
-		//complete all tasks and check if the assembly line moves again
-		CarOrder c = m.getWorkstations().get(0).getCurrentOrder();
-		for(Task t : c.getTasks())
-			t.perform();
-		assertTrue(m.moveAssemblyLine(60));
+		makeAndPlaceOrder();
+		List<Order> bach  = m.getBatchList();
+		assertTrue(bach.isEmpty());
+		makeAndPlaceOrder();
+		bach = m.getBatchList();
+		assertFalse(bach.isEmpty());
+		
 	}
 	
 	private void makeOrderAndAdvance(){
@@ -123,10 +123,10 @@ public class UserTest {
 		carparts.add(CarPart.WHEELS_COMFORT);
 		carparts.add(CarPart.ENGINE_4);
 		carparts.add(CarPart.GEARBOX_5AUTO);
-		CarSpecification spec = new CarSpecification(CarModel.MODELA, carparts);
+		CarOrderDetails spec = new CarOrderDetails(CarModel.MODELA, carparts);
 		g.placeOrder(spec);
-		Manager m = (Manager) company.logIn("Wander");
-		m.moveAssemblyLine(60);
+		Mechanic m = (Mechanic) company.logIn("mec");
+		
 	}
 	
 	@Test

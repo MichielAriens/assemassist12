@@ -80,7 +80,7 @@ public class CarOrder extends Order{
 	
 	/**
 	 * Returns a string representation of this car order.
-	 * @return	The estimated end time followed by the car specification.
+	 * @return	The estimated end time in the form of a string.
 	 */
 	@Override
 	public String toString(){
