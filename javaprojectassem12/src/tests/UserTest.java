@@ -10,7 +10,6 @@ import logic.car.CarOrder;
 import logic.car.CarOrderDetails;
 import logic.car.CarOrderDetailsMaker;
 import logic.car.CarPart;
-import logic.car.CarSpecification;
 import logic.car.Order;
 import logic.users.CarManufacturingCompany;
 import logic.users.GarageHolder;
@@ -126,6 +125,7 @@ public class UserTest {
 		carparts.add(CarPart.GEARBOX_5AUTO);
 		CarOrderDetails spec = new CarOrderDetails(CarModel.MODELA, carparts);
 		g.placeOrder(spec);
+		g.placeOrder(spec.getRawCopy());
 		Mechanic m = (Mechanic) company.logIn("mech");
 		List<String> tasksss = m.getAvailableTaskIdentifiers();
 		assertTrue(tasksss.size()==2);
