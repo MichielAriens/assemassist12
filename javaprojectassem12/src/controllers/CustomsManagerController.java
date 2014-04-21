@@ -43,11 +43,12 @@ public class CustomsManagerController extends UserController{
 	
 	/**
 	 * Sets the part of the task order details maker if the given part is not null.
-	 * @param part The part which needs to be set.
+	 * @param partString The part which needs to be set.
 	 */
-	public void choosePart(CarPart part){
-		if(part == null)
+	public void choosePart(String partString){
+		if(partString == null)
 			return;
+		CarPart part = CarPart.getPartfromString(partString);
 		maker.choosePart(part);
 	}
 	
