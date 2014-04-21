@@ -101,7 +101,7 @@ public class CustomsManagerController extends UserController{
 	
 	/**
 	 * Places the order if the current customs shop manger is not null.
-	 * @return 	The placed order as a string if the current customs manger is not null.
+	 * @return 	The placed order as a string if the current customs manager is not null.
 	 * 			Null otherwise.
 	 */
 	public String placeOrder(){
