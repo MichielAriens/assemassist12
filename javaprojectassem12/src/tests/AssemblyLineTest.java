@@ -173,10 +173,10 @@ public class AssemblyLineTest {
 		assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusMinutes(320)));
 		//Lets to all tasks in workstation 1, thus progressing the line. 
 		//We'll complete this phase 20 minutes early to check that the estimates come forwards too. 
-		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0).toString());
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0));
 		for(Task task : orders.get(0).getTasks()){
 			if(cmcMotors.getWorkStations().get(0).getCapabilities().contains(task.getCarPart().type)){
-				barry.doTask(task.toString(), orders.get(0).getPhaseTime() - 20);
+				barry.doTask(task, orders.get(0).getPhaseTime() - 20);
 			}
 		}
 		//assert that 30 mins have passed.
@@ -222,17 +222,17 @@ public class AssemblyLineTest {
 		//GO to 18:00
 		cmcMotors.moveAssemblyLine(12 * 60);
 		cmcMotors.addOrder(simpleOrders.get(0));
-		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0).toString());
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0));
 		for(Task task : simpleOrders.get(0).getTasks()){
-			barry.doTask(task.toString(), 180);
+			barry.doTask(task, 180);
 		}
-		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(1).toString());
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(1));
 		for(Task task : simpleOrders.get(0).getTasks()){
-			barry.doTask(task.toString(), 180);
+			barry.doTask(task, 180);
 		}
-		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(2).toString());
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(2));
 		for(Task task : simpleOrders.get(0).getTasks()){
-			barry.doTask(task.toString(), 180);
+			barry.doTask(task, 180);
 		}
 		//A new day has started. The overtime is 5 hours. The work day stops on 17:00
 		//goto 13:59 the last moment to post an order
@@ -263,17 +263,17 @@ public class AssemblyLineTest {
 		//GO to 18:00
 		cmcMotors.moveAssemblyLine(12 * 60);
 		cmcMotors.addOrder(simpleOrders.get(0));
-		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0).toString());
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0));
 		for(Task task : simpleOrders.get(0).getTasks()){
-			barry.doTask(task.toString(), 180);
+			barry.doTask(task, 180);
 		}
-		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(1).toString());
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(1));
 		for(Task task : simpleOrders.get(0).getTasks()){
-			barry.doTask(task.toString(), 180);
+			barry.doTask(task, 180);
 		}
-		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(2).toString());
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(2));
 		for(Task task : simpleOrders.get(0).getTasks()){
-			barry.doTask(task.toString(), 180);
+			barry.doTask(task, 180);
 		}
 		//A new day has started. The overtime is 5 hours. The work day stops on 17:00
 		//goto 13:59 like in the previous test. However this time the order can't be completed anymore.
