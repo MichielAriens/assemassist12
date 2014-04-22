@@ -17,12 +17,22 @@ import controllers.*;
  * system in this test case, but this is done in the UseCaseCombinedTest case.
  */
 public class UseCaseGarageHolderTest {
+	
+	
+	@Test
+	public void allGarageHolderTests(){
+		testOrderNewCar();
+		testCheckOrderDetails();
+	}
+	
+
+
 
 	/**
 	 * The main test.
 	 */
 	@Test
-	public void mainSuccesTest() {
+	private void testOrderNewCar() {
 		AssemAssistController controller = new AssemAssistController(new CarManufacturingCompany());
 		
 		GarageHolderController ghCont = (GarageHolderController) controller.logIn("Jeroen");
@@ -63,5 +73,11 @@ public class UseCaseGarageHolderTest {
 		assertEquals(1, ghCont.getPendingOrders().size());
 		assertEquals(new ArrayList<String>(), ghCont.getCompletedOrders());
 		//the user indicates that he doesn't want to place a new order and the use case ends
+	}
+	
+
+	private void testCheckOrderDetails() {
+		// TODO Auto-generated method stub
+		
 	}
 }

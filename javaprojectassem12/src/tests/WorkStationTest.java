@@ -96,12 +96,12 @@ public class WorkStationTest {
 	public void testUniversalPost() {
 		universalPost.setOrder(carOrder);
 		assertFalse(carOrder.done());		
-		universalPost.doTask(carOrder.getTasks().get(0),universalPost);
+		universalPost.doTask(carOrder.getTasks().get(0));
 		assertFalse(carOrder.done());
 		assertFalse(universalPost.done());
 		
 		for(Task task : carOrder.getTasks()){
-			universalPost.doTask(task, universalPost);
+			universalPost.doTask(task);
 		}
 		assertTrue(carOrder.done());
 		assertTrue(universalPost.done());
@@ -122,28 +122,28 @@ public class WorkStationTest {
 		assertFalse(carBodyPost.done());
 		assertFalse(carOrder.done());
 		for(Task task : carOrder.getTasks()){
-			carBodyPost.doTask(task, carBodyPost);
+			carBodyPost.doTask(task);
 		}
 		assertTrue(carBodyPost.done());
 		assertFalse(carOrder.done());
 		assertFalse(driveTrainPost.done());
 		assertFalse(accessoriesPost.done());
 		for(Task task : carOrder.getTasks()){
-			carBodyPost.doTask(task, carBodyPost);
+			carBodyPost.doTask(task);
 		}
 		assertTrue(carBodyPost.done());
 		assertFalse(carOrder.done());
 		assertFalse(driveTrainPost.done());
 		assertFalse(accessoriesPost.done());
 		for(Task task : carOrder.getTasks()){
-			driveTrainPost.doTask(task, driveTrainPost);
+			driveTrainPost.doTask(task);
 		}
 		assertTrue(carBodyPost.done());
 		assertTrue(driveTrainPost.done());
 		assertFalse(accessoriesPost.done());
 		assertFalse(carOrder.done());
 		for(Task task : carOrder.getTasks()){
-			accessoriesPost.doTask(task, accessoriesPost);
+			accessoriesPost.doTask(task);
 		}
 		assertTrue(carBodyPost.done());
 		assertTrue(driveTrainPost.done());
