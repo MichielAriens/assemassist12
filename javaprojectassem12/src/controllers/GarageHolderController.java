@@ -65,7 +65,7 @@ public class GarageHolderController extends UserController{
 		if(this.currentGarageHolder == null)
 			return null;
 		ArrayList<CarOrder> pendingOrders = this.currentGarageHolder.getPendingOrders();
-		if(index < pendingOrders.size() - 1 && index >= 0)
+		if(index < pendingOrders.size() && index >= 0)
 			return pendingOrders.get(index).getInformation();
 		else
 			return null;
@@ -81,7 +81,7 @@ public class GarageHolderController extends UserController{
 		if(this.currentGarageHolder == null)
 			return null;
 		ArrayList<CarOrder> completedOrders = this.currentGarageHolder.getCompletedOrders();
-		if(index < completedOrders.size() - 1 && index >= 0)
+		if(index < completedOrders.size() && index >= 0)
 			return completedOrders.get(index).getInformation();
 		else
 			return null;
