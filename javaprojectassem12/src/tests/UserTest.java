@@ -11,12 +11,15 @@ import logic.car.CarOrderDetails;
 import logic.car.CarOrderDetailsMaker;
 import logic.car.CarPart;
 import logic.car.Order;
+import logic.car.TaskOrderDetailsMaker;
 import logic.users.CarManufacturingCompany;
+import logic.users.CustomsManager;
 import logic.users.GarageHolder;
 import logic.users.Manager;
 import logic.users.Mechanic;
 import logic.workstation.Task;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 /**
@@ -94,6 +97,8 @@ public class UserTest {
 		//check initial values
 		assertEquals("Wander", m.getUserName());
 		
+		assertEquals("FIFO", m.getStrategies().get(0).toString());
+		
 		ArrayList<CarOrder> orders = new ArrayList<CarOrder>();
 		orders.add(null);
 		orders.add(null);
@@ -109,7 +114,9 @@ public class UserTest {
 		makeAndPlaceOrder();
 		bach = m.getBatchList();
 		assertFalse(bach.isEmpty());
-		
+		m.changeStrategy(bach.get(0));
+		assertEquals("Specification Batch", m.getStrategies().get(0).toString());
+		assertEquals("Average number of cars produced: 0\nMean number of cars produced: 0\nExact numbers two last days:\n   No records.\nAverage delay: 0 minutes\nMean delay: 0 minutes\nTwo last delays:\n   No records.\n", m.getStatistics());
 	}
 	
 	private void makeOrderAndAdvance(){
@@ -127,13 +134,13 @@ public class UserTest {
 		g.placeOrder(spec);
 		g.placeOrder(spec.getRawCopy());
 		Mechanic m = (Mechanic) company.logIn("mech");
-		List<String> tasksss = m.getAvailableTaskIdentifiers();
+		List<Task> tasksss = m.getAvailableTasks();
 		assertTrue(tasksss.size()==2);
-		assertTrue(m.doTask(tasksss.get(0), 60));
-		tasksss = m.getAvailableTaskIdentifiers();
+		m.doTask(tasksss.get(0), 60);
+		tasksss = m.getAvailableTasks();
 		assertTrue(tasksss.size()==1);
-		assertTrue(m.doTask(tasksss.get(0), 70));
-		tasksss = m.getAvailableTaskIdentifiers();
+		m.doTask(tasksss.get(0), 70);
+		tasksss = m.getAvailableTasks();
 		assertTrue(tasksss.size()==2);
 		
 		
@@ -147,9 +154,10 @@ public class UserTest {
 		assertEquals("mech", m.getUserName());
 		assertEquals(null, m.getActiveWorkstation());
 		assertFalse(m.isPosted());
-		assertEquals(null, m.getAvailableTaskIdentifiers());
+		assertEquals(null, m.getAvailableTasks());
 		//set a workstation
-		m.setActiveWorkstation("Car Body Post");
+		
+		m.setActiveWorkstation(m.getWorkstations().get(0));
 		assertTrue(m.isPosted());
 		//place a car order and advance the assembly line
 		makeOrderAndAdvance();
@@ -174,7 +182,29 @@ public class UserTest {
 		Manager m2 = (Manager) company.logIn("Wander");
 		assertEquals(m1, m2);
 	}
-	
+	@Test
+	public void testCustomShop(){
+
+		CustomsManager c = (CustomsManager) company.logIn("Michiel");
+		//check initial values
+		assertEquals("Michiel", c.getUserName());
+
+		c.placeOrder(null);
+		//make carspecification to place an order
+		TaskOrderDetailsMaker maker = new TaskOrderDetailsMaker();
+		maker.choosePart(CarPart.getPartfromString("Comfort"));
+
+		maker.chooseDeadline(new DateTime(2014,1,1,17,0));
+
+
+		assertEquals(null,c.placeOrder(maker.getDetails()));
+		
+		maker = new TaskOrderDetailsMaker();
+		maker.choosePart(CarPart.getPartfromString("Red"));
+
+		maker.chooseDeadline(new DateTime(2014,1,1,17,0));
+		assertEquals("Estimated completion: 01-01-2014 09:00",c.placeOrder(maker.getDetails()));
+	}
 	
 
 }
