@@ -9,6 +9,7 @@ import org.joda.time.DateTime;
 import logic.assemblyline.AssemblyLine;
 import logic.assemblyline.SchedulingStrategy;
 import logic.car.Order;
+import logic.workstation.Task;
 import logic.workstation.Workstation;
 
 /**
@@ -180,41 +181,30 @@ public class CarManufacturingCompany {
 	}
 	
 	/**
-	 * completes a task in a certain workstation using the two given identifiers.
-	 * @param taskIdentifier	The identifier for the task that needs to be completed.
-	 * @param workstationIdentifier	The identifier for the workstation that needs to complete a task.
+	 * Completes the task corresponding to the given task.
+	 * @param task	A copy of the task that needs to be completed.
 	 * @return	True if the task is completed successfully
-	 * 			False an identifier is wrong.
+	 * 			False the task could not be completed.
 	 */
-	public boolean doTask(String taskIdentifier, String workstationIdentifier){
-		return assemblyLine.doTask(taskIdentifier, workstationIdentifier);
+	public boolean doTask(Task task){
+		return assemblyLine.doTask(task);
 	}
 	
 	/**
-	 * Returns a list of required task identifiers in the given workstation.
-	 * @param workstationIdentifier	The identifier for the workstation for which we need the required tasks.
-	 * @return	A list of required task identifiers in the form of strings.
+	 * Returns a list of pending tasks at a given workstation.
+	 * @param station	The a copy of the workstation for which the pending tasks are needed.
+	 * @return	A list of tasks that are pending at the given workstation.
 	 */
-	public List<String> getRequiredTaskIdentifiers(String workstationIdentifier){
-		return this.assemblyLine.getRequiredTaskIdentifiers(workstationIdentifier);
+	public List<Task> getRequiredTasks(Workstation station){
+		return this.assemblyLine.getRequiredTasks(station);
 	}
 	
 	/**
-	 * Returns a string which holds the description for a given task in a given workstation.
-	 * @param taskIdentifier	The task for which we need the description.
-	 * @param workstationIdentifier	The workstation in which we find the right task.
-	 * @return	A string of the description of a given task.
+	 * Returns a list of all tasks at a given workstation.
+	 * @param station	The a copy of the workstation for which the tasks are needed.
+	 * @return	A list of tasks at the given workstation.
 	 */
-	public String getTaskDescription(String taskIdentifier, String workstationIdentifier){
-		return this.assemblyLine.getTaskDescription(taskIdentifier, workstationIdentifier);
-	}
-	
-	/**
-	 * Returns a list of strings containing the tasks in the given workstation with its status.
-	 * @param workstationIdentifier	The identifier for the workstation from which we want the task status.
-	 * @return	A list of strings containing the tasks status in one workstation.
-	 */
-	public List<String> getTaskStatus(String workstationIdentifier){
-		return this.assemblyLine.getTaskStatus(workstationIdentifier);
+	public List<Task> getAllTasks(Workstation station){
+		return this.assemblyLine.getAllTasks(station);
 	}
 }

@@ -159,91 +159,60 @@ public abstract class Workstation {
 	public abstract List<CarPartType> getCapabilities();
 	
 	/**
-	 * Lets the chain of workstations perform a task corresponding to the given task identifier, at the
-	 * workstation corresponding workstation identifier.
-	 * @param taskIdentifier		A string that defines a task that needs to be performed.
-	 * @param workstationIdentifier	A string that defines the workstation where the task needs to be performed.
-	 * @return	True 	if the specified task has been successfully performed at the specified workstation.
+	 * Lets the chain of workstations perform a task corresponding to the given task.
+	 * @param task	A copy of the task that needs to be performed.
+	 * @return	True 	if the specified task has been successfully performed.
 	 * 			False	otherwise. 
 	 */
-	public boolean doTask(String taskIdentifier, String workstationIdentifier){
-		if(this.toString().equals(workstationIdentifier)){
-			for(Task t : tasks){
-				if(t.toString().equals(taskIdentifier))
-					t.perform();
+	public boolean doTask(Task task){
+		for(Task t : tasks){
+			if(t.equals(task)){
+				t.perform();
+				return true;
 			}
-			return true;
 		}
 		if(this.nextWorkStation != null)
-			return this.nextWorkStation.doTask(taskIdentifier, workstationIdentifier);
+			return this.nextWorkStation.doTask(task);
 		return false;
 	}
 	
 	/**
-	 * Lets the chain of workstations build a list of task identifiers, that specify all pending task
-	 * at the workstation that corresponds with the given workstation identifier.
-	 * @param workstationIdentifier	A string that defines the workstation whose tasks are needed.
-	 * @return	A list of strings that correspond to the pending tasks of the given workstation identifier.
+	 * Lets the chain of workstations build a list of pending tasks at a given workstation.
+	 * @param station	The a copy of the workstation for which the pending tasks are needed.
+	 * @return	A list of tasks that are pending at the given workstation.
 	 */
-	public List<String> getRequiredTaskIdentifiers(String workstationIdentifier){
-		if(this.toString().equals(workstationIdentifier)){
-			ArrayList<String> returnlist = new ArrayList<String>();
+	public List<Task> getRequiredTasks(Workstation station){
+		if(this.equals(station)){
+			ArrayList<Task> returnlist = new ArrayList<Task>();
 			for(Task t : tasks){
 				if(!t.isComplete())
-					returnlist.add(t.toString());
+					returnlist.add(t.getRawCopy());
 			}
 			return returnlist;
 		}
 		if(this.nextWorkStation != null)
-			return this.nextWorkStation.getRequiredTaskIdentifiers(workstationIdentifier);
-		return null;
-	}
-	
-	
-	/**
-	 * Fetches the task description of the task corresponding to the given task identifier, at the workstation
-	 * corresponding to the given workstation identifier.
-	 * @param workstationIdentifier	A string that defines the workstation that has to be checked.
-	 * @param taskIdentifier		A string that defines the task whose description is needed.
-	 * @return	null	If the task or workstation have been incorrectly specified, or there is no task of that
-	 * 					type currently at the specified workstation.	
-	 * 			The given task's description otherwise.
-	 */
-	public String getTaskDescription(String workstationIdentifier, String taskIdentifier){
-		if(this.toString().equals(workstationIdentifier)){
-			for(Task t : tasks){
-				if(t.toString().equals(taskIdentifier))
-					return t.getDescription();
-			}
-		}
-		if(this.nextWorkStation != null)
-			return this.nextWorkStation.getTaskDescription(workstationIdentifier, taskIdentifier);
+			return this.nextWorkStation.getRequiredTasks(station);
 		return null;
 	}
 	
 	/**
-	 * Lets the chain of workstations build a list of strings, that contains all task identifiers of the
-	 * workstation specified by the given workstation identifier, together with their status: 'Pending' or 'Completed'.
-	 * @param workstationIdentifier	A string that defines a the workstation that has to be checked.
-	 * @return	null	if the workstation was incorrectly specified.
-	 * 			A list of strings with all tasks identifiers with their statuses at that workstation otherwise. 
+	 * Lets the chain of workstations build a list of all tasks at a given workstation.
+	 * @param station	The a copy of the workstation for which the tasks are needed.
+	 * @return	A list of tasks at the given workstation.
 	 */
-	public List<String> getTaskStatus(String workstationIdentifier){
-		if(this.toString().equals(workstationIdentifier)){
-			ArrayList<String> returnlist = new ArrayList<String>();
+	public List<Task> getAllTasks(Workstation station){
+		if(this.equals(station)){
+			ArrayList<Task> returnlist = new ArrayList<Task>();
 			for(Task t : tasks){
-				if(t.isComplete())
-					returnlist.add(t.toString() + ": Completed");
-				else
-					returnlist.add(t.toString() + ": Pending");
+				returnlist.add(t.getRawCopy());
 			}
 			return returnlist;
 		}
 		if(this.nextWorkStation != null)
-			return this.nextWorkStation.getTaskStatus(workstationIdentifier);
+			return this.nextWorkStation.getRequiredTasks(station);
 		return null;
 	}
-	
+	 
 	/**
 	 * Returns a new instance of the type of the implementing classes. 
 	 * @return	A copy of this workstation.
@@ -416,6 +385,19 @@ public abstract class Workstation {
 			return false;
 		if(this.nextWorkStation != null)
 			return this.nextWorkStation.allIdle();
+		return true;
+	}
+	
+	/**
+	 * Checks if this object is the same as a given object.
+	 * @param	obj	The object against which we want to check equality.
+	 * @return	True if this object is the same as a given object
+	 * 			False if the given object is null or the classes aren't the same or some fields do not have the same values.
+	 */
+	@Override
+	public boolean equals(Object obj){
+		if(obj == null) return false;
+		if(this.getClass() != obj.getClass()) return false;
 		return true;
 	}
 }

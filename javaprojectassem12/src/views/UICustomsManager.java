@@ -5,7 +5,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import logic.car.CarPart;
 import controllers.CustomsManagerController;
 
 /**

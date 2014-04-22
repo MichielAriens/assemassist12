@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import logic.users.Mechanic;
+import logic.workstation.Task;
 import logic.workstation.Workstation;
 
 /**
@@ -65,8 +66,8 @@ public class MechanicController extends UserController{
 			return null;
 		ArrayList<String> tasks = new ArrayList<String>();
 		int count = 1;
-		for(String taskStr : this.currentMechanic.getAvailableTaskIdentifiers()){
-			tasks.add(taskStr + ": " + count);
+		for(Task task : this.currentMechanic.getAvailableTasks()){
+			tasks.add(task.toString() + ": " + count);
 			count++;
 		}
 		return tasks;
@@ -83,7 +84,11 @@ public class MechanicController extends UserController{
 	public String getTaskInformation(String taskName){
 		if(this.currentMechanic == null)
 			return null;
-		return this.currentMechanic.getTaskDescription(taskName);
+		for(Task task : this.currentMechanic.getAvailableTasks()){
+			if(task.toString().equals(taskName))
+				return task.getDescription();
+		}
+		return null;
 	}
 	
 	/**
@@ -94,7 +99,10 @@ public class MechanicController extends UserController{
 	public void doTask(String taskName, int duration){
 		if(this.currentMechanic == null)
 			return;
-		this.currentMechanic.doTask(taskName, duration);
+		for(Task task : this.currentMechanic.getAvailableTasks()){
+			if(task.toString().equals(taskName))
+				currentMechanic.doTask(task, duration);
+		}
 	}
 	
 	/**
@@ -104,7 +112,10 @@ public class MechanicController extends UserController{
 	public void setWorkStation(String workstationName){
 		if(this.currentMechanic == null)
 			return;
-		this.currentMechanic.setActiveWorkstation(workstationName);
+		for(Workstation station : this.currentMechanic.getWorkstations()){
+			if(station.toString().equals(workstationName))
+				this.currentMechanic.setActiveWorkstation(station);
+		}
 	}
 
 	/**
@@ -120,11 +131,14 @@ public class MechanicController extends UserController{
 		ArrayList<String> tasks = new ArrayList<String>();
 		for(Workstation stat : workStations){
 			String temp = stat.toString() + ":\n";
-			if(this.currentMechanic.getTaskStatus(stat.toString()).size() == 0)
+			if(this.currentMechanic.getAllTasks(stat).size() == 0)
 				temp += "Inactive.\n";
 			else{
-				for(String taskStr : this.currentMechanic.getTaskStatus(stat.toString())){
-					temp += "   -" + taskStr + "\n";
+				for(Task task : this.currentMechanic.getAllTasks(stat)){
+					if(task.isComplete())
+						temp += "   -" + task.toString() + ": Completed\n";
+					else
+						temp += "   -" + task.toString() + ": Pending\n";
 				}
 			}
 			tasks.add(temp);

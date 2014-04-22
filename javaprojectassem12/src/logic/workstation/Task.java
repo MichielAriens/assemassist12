@@ -26,6 +26,18 @@ public class Task {
 	}
 	
 	/**
+	 * Returns a copy of this task.
+	 * @return	a copy of this task.
+	 */
+	public Task getRawCopy(){
+		Task copy = new Task(this.carPart);
+		if(this.isComplete())
+			copy.perform();
+		return copy;
+		
+	}
+	
+	/**
 	 * Returns the car part corresponding to this task.
 	 * @return the car part corresponding to this task.
 	 */
