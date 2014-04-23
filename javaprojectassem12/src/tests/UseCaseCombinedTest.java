@@ -12,6 +12,7 @@ import logic.users.CarManufacturingCompany;
 import org.junit.Test;
 
 import controllers.AssemAssistController;
+import controllers.CustomsManagerController;
 import controllers.GarageHolderController;
 import controllers.ManagerController;
 import controllers.MechanicController;
@@ -126,7 +127,7 @@ public class UseCaseCombinedTest {
 		gaCont.addPart(null); //should just return
 		gaCont.addPart("Sedan");
 		gaCont.addPart("Red");
-		gaCont.addPart("standard 2l v4");
+		gaCont.addPart("Standard 2l v4");
 		gaCont.addPart("6 speed manual");
 		gaCont.addPart("Leather black");
 		gaCont.addPart("Manual");
@@ -134,125 +135,113 @@ public class UseCaseCombinedTest {
 		gaCont.addPart("No Spoiler");
 		
 		gaCont.placeOrder();
+		ArrayList<String> pending = new ArrayList<String>();
+		pending.add("Pending, est. completion at: 01-01-2014 08:30");
+		assertEquals(pending, gaCont.getPendingOrders());
+		
+		assertEquals(null, gaCont.getPendingInfo(2));
+		assertEquals(null, gaCont.getPendingInfo(-1));
+		assertEquals(null, gaCont.getCompletedInfo(2));
+		assertEquals(null, gaCont.getCompletedInfo(-1));
+		String info = "   Specifications:   Model A; (Sedan, Red, Standard 2l v4, 6 speed manual, Leather black, Manual, Comfort, No Spoiler)\n   Start Time:       01-01-2014 06:00\n   Est. End Time:    01-01-2014 08:30\n";
+		assertEquals(info, gaCont.getPendingInfo(0));
+		gaCont.placeOrder();
+		gaCont.placeOrder();	
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		///////////////////////////END GARAGEHOLDERTEST EMPTY ASSEMBLY LINE/////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		///////////////////////////////////START CUSTOMSHOPMANAGERTEST//////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		CustomsManagerController cuCont = new CustomsManagerController();
+		assertEquals(null, cuCont.getUserName());
+		assertEquals(null, cuCont.placeOrder());
+		cuCont = (CustomsManagerController) controller.logIn("cust");
+		assertEquals("cust", cuCont.getUserName());
+		
+		cuCont.choosePart(null);//should just return
+		ArrayList<String> types = new ArrayList<String>();
+		types.add("Colour: 1");
+		types.add("Seats: 2");
+		assertEquals(types,cuCont.getAvailableTypes());
+		ArrayList<String> customOptions = new ArrayList<String>();
+		customOptions.add("Red: 1");
+		customOptions.add("Blue: 2");
+		customOptions.add("Black: 3");
+		customOptions.add("White: 4");
+		customOptions.add("Green: 5");
+		customOptions.add("Yellow: 6");
+		assertEquals(customOptions,cuCont.getAvailableOptions("Colour"));
+		cuCont.choosePart("Red");
+		assertFalse(cuCont.chooseDeadLine("dur"));
+		assertTrue(cuCont.chooseDeadLine("02-02-2015 17:55"));
+		assertEquals("Estimated completion: 01-01-2014 09:50", cuCont.placeOrder());
 		
 		
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////END CUSTOMSHOPMANAGERTEST///////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
 		
-//		
-//		//The garage holder adds a car order:
-//		//The garage holder logs in
-//		GarageHolderController ghCont = (GarageHolderController) controller.logIn("gar");
-//		assertEquals("Michiel", ghCont.getUserName());
-//		//the system prints the pending and completed orders (both are currently empty)
-//		assertEquals(new ArrayList<String>(), ghCont.getPendingOrders());
-//		assertEquals(new ArrayList<String>(), ghCont.getCompletedOrders());
-//		//if the user does not want to make a new order, the use case ends here (garage holder alternate flow 1)
-//		//the user fills in an ordering form on the user interface:
-//		ArrayList<String> models = new ArrayList<String>();
-//		models.add("Model1: 1");
-//		assertEquals(models, ghCont.getModels());
-//		ArrayList<String> bodyParts = new ArrayList<String>();
-//		bodyParts.add("Sedan: 1");
-//		bodyParts.add("Break: 2");
-//		assertEquals(bodyParts, ghCont.getOptions(CarPartType.Body, CarModel.MODEL1));
-//		ArrayList<String> form = new ArrayList<String>();
-//		form.add("Model1");
-//		form.add("Sedan");
-//		form.add("Red");
-//		form.add("Standard 2l 4 cilinders");
-//		form.add("6 speed manual");
-//		form.add("leather black");
-//		form.add("manual");
-//		form.add("comfort");
-//		//the user places the order:
-//		//if the user does not want to place the newly created order, the use case ends here (garage holder alternate flow 2)
-//		ghCont.placeOrder(form);
-//		//the system prints the pending and completed orders (pending orders is no longer empty)
-//		assertFalse(new ArrayList<String>().equals(ghCont.getPendingOrders()));
-//		assertEquals(1, ghCont.getPendingOrders().size());
-//		assertEquals(new ArrayList<String>(), ghCont.getCompletedOrders());
-//		//the user indicates that he doesn't want to place a new order and the garage holder main use case ends
-//		
-//		//The manager tries to forward the assembly line but it's not possible (manager alternate flow)
-//		//the manager logs in
-//		ManagerController maCont = (ManagerController) controller.logIn("Wander");
-//		assertEquals("Wander", maCont.getUserName());
-//		//the system shows the current and future status of the assembly line
-//		ArrayList<String> tasks = new ArrayList<String>();
-//		tasks.add("Car Body Post:\n   -Install Body= Sedan: Pending\n   -Install Colour= Red: Pending\n");
-//		tasks.add("Drive Train Post:\nInactive.\n");
-//		tasks.add("Accessories Post:\nInactive.\n");
-//		assertEquals(tasks, maCont.getTasksPerWorkstation());
-//		tasks.clear();
-//		tasks.add("Car Body Post:\nInactive.\n");
-//		tasks.add("Drive Train Post:\n   -Install Engine= Standard 2l 4 cilinders: Pending\n   -Install Gearbox= 6 speed manual: Pending\n");
-//		tasks.add("Accessories Post:\nInactive.\n");
-//		assertEquals(tasks, maCont.getFutureStatus());
-//		//the user confirms that he wants to move the assembly line forward.
-//		maCont.moveAssemblyLine(55); //the user enters the time in minutes spent at the current phase.
-//		//There are still pending tasks, so the assembly line can't be moved forward and the system prints the unfinished tasks.
-//		ArrayList<String> unfinished = new ArrayList<String>();
-//		unfinished.add("Car Body Post:\n   -Unfinished task: Install Body= Sedan\n   -Unfinished task: Install Colour= Red\n");
-//		assertEquals(unfinished, maCont.getUnfinishedTasks());
-//		//the user then indicates he wants to leave the overview and the manager use case alternate flow ends here
-//		
-//		//mechanic performs tasks on the car order.
-//		//mechanic logs in
-//		MechanicController mCont = (MechanicController) controller.logIn("Joren");
-//		assertEquals("Joren", mCont.getUserName());
-//		//the system prints out a list of workstations that the mechanic can choose from
-//		ArrayList<String> workstations = new ArrayList<String>();
-//		workstations.add("Car Body Post: 1");
-//		workstations.add("Drive Train Post: 2");
-//		workstations.add("Accessories Post: 3");
-//		assertEquals(workstations, mCont.getWorkStations());
-//		//the mechanic chooses the first work station
-//		mCont.setWorkStation("Car Body Post");
-//		//The system prints out a list of tasks that the mechanic can perform in this workstation
-//		tasks = new ArrayList<String>();
-//		tasks.add("Install Body= Sedan: 1");
-//		tasks.add("Install Colour= Red: 2");
-//		assertEquals(tasks,mCont.getTasks());
-//		//The mechanic chooses to perform the first task
-//		//The system shows information for this task and waits until the user indicates that he is done.
-//		String info = "Task description:\n   -Type of part needed: Body,\n   -Car Part: Sedan\n";
-//		assertEquals(info, mCont.getTaskInformation("Install Body= Sedan"));
-//		mCont.doTask("Install Body= Sedan");
-//		//The system asks if the user wants to perform another task, and the user answers with yes
-//		tasks.clear();
-//		tasks.add("Install Colour= Red: 1"); //now there will be only one available task
-//		assertEquals(tasks,mCont.getTasks());
-//		//The mechanic chooses to perform the first task
-//		//The system shows information for this task and waits until the user indicates that he is done.
-//		info = "Task description:\n   -Type of part needed: Colour,\n   -Car Part: Red\n";
-//		assertEquals(info, mCont.getTaskInformation("Install Colour= Red"));
-//		mCont.doTask("Install Colour= Red");
-//		//The system asks if the user wants to perform another task, and the user answers with no (mechanic alternate flow), the use case ends here
-//		
-//		//the manager successfully moves the assembly line forward
-//		//the manager logs in
-//		maCont = (ManagerController) controller.logIn("Wander");
-//		assertEquals("Wander", maCont.getUserName());
-//		//the system shows the current and future status of the assembly line
-//		tasks = new ArrayList<String>();
-//		tasks.add("Car Body Post:\n   -Install Body= Sedan: Completed\n   -Install Colour= Red: Completed\n");
-//		tasks.add("Drive Train Post:\nInactive.\n");
-//		tasks.add("Accessories Post:\nInactive.\n");
-//		assertEquals(tasks, maCont.getTasksPerWorkstation());
-//		tasks.clear();
-//		tasks.add("Car Body Post:\nInactive.\n");
-//		tasks.add("Drive Train Post:\n   -Install Engine= Standard 2l 4 cilinders: Pending\n   -Install Gearbox= 6 speed manual: Pending\n");
-//		tasks.add("Accessories Post:\nInactive.\n");
-//		assertEquals(tasks, maCont.getFutureStatus());
-//		//the user confirms that he wants to move the assembly line forward.
-//		maCont.moveAssemblyLine(55); //the user enters the time in minutes spent at the current phase.
-//		//The current status now equals the previous future status
-//		assertEquals(tasks, maCont.getTasksPerWorkstation());
-//		//the user then indicates he wants to leave the overview and the use case ends here
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////START MANAGERTEST CHANGE STRATEGY///////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		maCont = (ManagerController) controller.logIn("Wander");
+		strats = new ArrayList<String>();
+		strats.add("FIFO");
+		strats.add("FIFO");
+		strats.add("Specification Batch");
+		assertEquals(strats,maCont.getStrategies());
+		batchList = new ArrayList<String>();
+		batchList.add("   1: Option 1:\n      - Sedan\n      - Red\n      - Standard 2l v4\n      - 6 speed manual\n      - Leather black\n      - Manual\n      - Comfort\n      - No Spoiler\n\n");
+		
+		assertEquals(batchList,maCont.getBatchList());
+		assertFalse(maCont.changeStrategyToFIFO());
+		maCont.changeStrategyToBatchProcessing(0);
+		assertTrue(maCont.changeStrategyToFIFO());
+		
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////END MANAGERTEST CHANGE STRATEGY/////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
+
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////START MECHANICTEST PERFORM TASKS////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
+
+		meCont = (MechanicController) controller.logIn("mech");
+		assertEquals("mech", meCont.getUserName());
+		tasks = new ArrayList<String>();
+		tasks.add("Car Body Post:\n   -Install Body= Sedan: Pending\n   -Install Colour= Red: Pending\n");
+		tasks.add("Drive Train Post:\nInactive.\n");
+		tasks.add("Accessories Post:\nInactive.\n");
+		assertEquals(tasks, meCont.getTasksPerWorkstation());
+		meCont.setWorkStation("Car Body Post");
+		availableTasks = new ArrayList<String>();
+		availableTasks.add("Install Body= Sedan: 1");
+		availableTasks.add("Install Colour= Red: 2");
+		assertEquals(availableTasks, meCont.getTasks());
+		meCont.doTask("Install Body= Sedan", 50);
+		meCont.doTask("Install Colour= Red", 50);
+		meCont.doTask("Install Body= Sedan", 50);
+		meCont.doTask("Install Colour= Red", 50);
+		meCont.setWorkStation("Drive Train Post");
+		availableTasks = new ArrayList<String>();
+		availableTasks.add("Install Engine= Standard 2l v4: 1");
+		availableTasks.add("Install Gearbox= 6 speed manual: 2");
+		assertEquals(availableTasks, meCont.getTasks());
+		meCont.doTask("Install Engine= Standard 2l v4", 50);
+		meCont.doTask("Install Gearbox= 6 speed manual", 50);
+		meCont.doTask("Install Engine= Standard 2l v4", 50);
+		meCont.doTask("Install Gearbox= 6 speed manual", 50);
+		
+		System.out.println(meCont.getTasks());
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////END MECHANICTEST PERFORM TASKS///////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
 		
 	}
 

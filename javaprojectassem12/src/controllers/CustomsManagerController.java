@@ -38,6 +38,8 @@ public class CustomsManagerController extends UserController{
 	 */
 	@Override
 	public String getUserName() {
+		if(this.currentCustomsManager == null)
+			return null;
 		return this.currentCustomsManager.getUserName();
 	}
 	
