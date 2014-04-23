@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 
 import logic.car.CarModel;
-import logic.car.CarPart;
 import logic.car.CarPartType;
 import logic.users.CarManufacturingCompany;
 
@@ -30,6 +29,7 @@ public class UseCaseCombinedTest {
 	public void mainSuccesTest() {
 		
 		AssemAssistController controller = new AssemAssistController(new CarManufacturingCompany());
+		assertEquals(null, controller.logIn("fout"));
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////START MANAGERTEST EMPTY ASSEMBLY LINE/////////////////////////////
@@ -223,7 +223,15 @@ public class UseCaseCombinedTest {
 		availableTasks.add("Install Body= Sedan: 1");
 		availableTasks.add("Install Colour= Red: 2");
 		assertEquals(availableTasks, meCont.getTasks());
+		assertEquals(null, meCont.getTaskInformation("fout"));
+		info = "Task description:\n   -Type of part needed: Body,\n   -Car Part: Sedan\n";
+		assertEquals(info, meCont.getTaskInformation("Install Body= Sedan"));
 		meCont.doTask("Install Body= Sedan", 50);
+		tasks = new ArrayList<String>();
+		tasks.add("Car Body Post:\n   -Install Body= Sedan: Completed\n   -Install Colour= Red: Pending\n");
+		tasks.add("Drive Train Post:\nInactive.\n");
+		tasks.add("Accessories Post:\nInactive.\n");
+		assertEquals(tasks, meCont.getTasksPerWorkstation());
 		meCont.doTask("Install Colour= Red", 50);
 		meCont.doTask("Install Body= Sedan", 50);
 		meCont.doTask("Install Colour= Red", 50);
@@ -236,13 +244,41 @@ public class UseCaseCombinedTest {
 		meCont.doTask("Install Gearbox= 6 speed manual", 50);
 		meCont.doTask("Install Engine= Standard 2l v4", 50);
 		meCont.doTask("Install Gearbox= 6 speed manual", 50);
-		
-		System.out.println(meCont.getTasks());
+		meCont.setWorkStation("Car Body Post");
+		meCont.doTask("Install Body= Sedan", 50);
+		meCont.doTask("Install Colour= Red", 50);
+		meCont.setWorkStation("Accessories Post");
+		availableTasks = new ArrayList<String>();
+		availableTasks.add("Install Seats= Leather black: 1");
+		availableTasks.add("Install Airco= Manual: 2");
+		availableTasks.add("Install Wheels= Comfort: 3");
+		availableTasks.add("Install Spoiler= No Spoiler: 4");
+		assertEquals(availableTasks, meCont.getTasks());
+		meCont.doTask("Install Seats= Leather black", 50);
+		meCont.doTask("Install Airco= Manual", 50);
+		meCont.doTask("Install Wheels= Comfort", 50);
+		meCont.doTask("Install Spoiler= No Spoiler", 50);
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////END MECHANICTEST PERFORM TASKS///////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		///////////////////////////START GARAGEHOLDERTEST COMPLETED ORDER///////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		gaCont = (GarageHolderController) controller.logIn("gar");
+		
+		ArrayList<String> completed = new ArrayList<String>();
+		completed.add("Completed on: 01-01-2014 08:30");
+		assertEquals(completed, gaCont.getCompletedOrders());
+		
+		info = "   Specifications:   Model A; (Sedan, Red, Standard 2l v4, 6 speed manual, Leather black, Manual, Comfort, No Spoiler)\n   Start Time:       01-01-2014 06:00\n   End Time:         01-01-2014 08:30\n";
+		assertEquals(info, gaCont.getCompletedInfo(0));
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////END GARAGEHOLDERTEST COMPLETED ORDER////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
 	}
 
 }
