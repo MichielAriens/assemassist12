@@ -436,7 +436,7 @@ public class AssemblyLine {
 				return true;
 			return false;
 		}
-//TODO
+
 		/**
 		 * If the days between the given time and the current time of the system differ, then it checks 
 		 * if there is time for a new order without considering the overtime. Else checks if there is time
@@ -467,7 +467,7 @@ public class AssemblyLine {
 		
 		/**
 		 * Sets the start time of the given order to the current time, then uses the current 
-		 * strategy to add the order and reschedules the whole queue and workstations.
+		 * strategy to add the order and reschedule the whole queue and workstations.
 		 * @param order	The order that needs to be scheduled.
 		 */
 		private void scheduleOrder(Order order){
@@ -555,7 +555,5 @@ public class AssemblyLine {
 			}
 			return returnList;
 		}
-
 	}
 }
-
