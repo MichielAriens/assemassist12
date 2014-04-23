@@ -114,7 +114,7 @@ public class Mechanic extends User{
 	public List<Workstation> getWorkstations(){
 		return this.company.getWorkStations();
 	}
-	
+
 	/**
 	 * Set the active workstation to the given workstation.
 	 * @param identifier
