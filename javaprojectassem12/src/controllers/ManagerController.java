@@ -71,19 +71,16 @@ public class ManagerController extends UserController{
 	 * @return	a list of orders that are viable to be used by the batch specification scheduling strategy.
 	 */
 	public ArrayList<String> getBatchList() {
-		currentBatchList = currentManager.getBatchList();
-		if(currentBatchList == null){
+		if(currentManager==null)
 			return null;
+		currentBatchList = currentManager.getBatchList();
+		ArrayList<String> carOptions = new ArrayList<String>();
+		for(int i = 0; i < currentBatchList.size(); i++){
+			String carOption = "   " + (i+1) + ": Option " + (i+1) + ":\n";
+			carOption += getCarOptions(currentBatchList.get(i)) + "\n";
+			carOptions.add(carOption);
 		}
-		else{
-			ArrayList<String> carOptions = new ArrayList<String>();
-			for(int i = 0; i < currentBatchList.size(); i++){
-				String carOption = "   " + (i+1) + ": Option " + (i+1) + ":\n";
-				carOption += getCarOptions(currentBatchList.get(i)) + "\n";
-				carOptions.add(carOption);
-			}
-			return carOptions;
-		}
+		return carOptions;
 	}
 	
 	/**
@@ -120,7 +117,9 @@ public class ManagerController extends UserController{
 	 * @param index	The index of the order for batch processing. 
 	 */
 	public void changeStrategyToBatchProcessing(int index){
-			currentManager.changeStrategy(currentBatchList.get(index));
-			currentBatchList.clear();
+		if(index+1>currentBatchList.size() || currentBatchList==null)
+			return;
+		currentManager.changeStrategy(currentBatchList.get(index));
+		currentBatchList.clear();
 	}
 }
