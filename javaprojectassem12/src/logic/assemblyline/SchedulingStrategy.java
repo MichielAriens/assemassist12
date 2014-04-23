@@ -53,14 +53,14 @@ public abstract class SchedulingStrategy{
 	}
 	
 	/**
-	 * Returns a copy of this class.
-	 * @return A copy of this class.
+	 * Returns a raw copy of this scheduling strategy.
+	 * @return A raw copy of this scheduling strategy.
 	 */
 	protected abstract SchedulingStrategy getRawCopy();
 	
 	/**
-	 * Returns a string which represents this class.
-	 * @return	A string which represents this class.
+	 * Returns a string which represents this scheduling strategy.
+	 * @return	A string which represents this scheduling strategy.
 	 */
 	public abstract String toString();
 }

@@ -164,16 +164,10 @@ public class Statistics {
 		statistics += "Mean number of cars produced: " + getMedianCarsProduced() + "\n";
 		statistics += "Exact numbers two last days:\n";
 		statistics += carsProducedXLastDays(2);
-//		statistics += "One day ago: " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-1);
-//		statistics += "Two days ago: " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-2);
-		
 		statistics += "Average delay: " + getAverageDelay() +" minutes\n";
 		statistics += "Mean delay: " + getMedianDelay() + " minutes\n";
 		statistics += "Two last delays:\n";
 		statistics += delayXLastDays(2);
-//		statistics += "1) " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-1);
-//		statistics += "2) " + finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-2);
-				
 		return statistics;
 	}
 	

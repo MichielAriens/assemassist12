@@ -30,7 +30,7 @@ public class AssemblyLine {
 	private int numberOfWorkStations;
 
 	/**
-	 * A list holding the pending orders not on the assemblyline.
+	 * A list holding the pending orders not on the assembly line.
 	 */
 	private LinkedList<Order> queue;
 
@@ -45,7 +45,7 @@ public class AssemblyLine {
 	private Statistics stats;
 	
 	/**
-	 * Asks the current time of the system.
+	 * Returns the current time of the system.
 	 * @return	The current time of the system.
 	 */
 	public DateTime getCurrentTime() {
@@ -92,7 +92,7 @@ public class AssemblyLine {
 	
 	/**
 	 * Returns a string containing the representation of the statistics.
-	 * @return	A string of the statistics.
+	 * @return	A string containing the representation of the statistics.
 	 */
 	public String getStatistics(){
 		return stats.toString();
@@ -101,7 +101,7 @@ public class AssemblyLine {
 	/**
 	 * Completes the task corresponding to the given task.
 	 * @param task	A copy of the task that needs to be completed.
-	 * @return	True if the task is completed successfully
+	 * @return	True if the task is completed successfully.
 	 * 			False the task could not be completed.
 	 */
 	public boolean doTask(Task task){
@@ -127,7 +127,7 @@ public class AssemblyLine {
 	}
 	
 	/**
-	 * If the assembly line can be moved then returns true. false otherwise
+	 * Returns true if the assembly line can be moved, false otherwise.
 	 * @param phaseDuration The largest time needed for this phase to complete.
 	 * @return	True if the assembly line and workstations can be moved.
 	 * 			false otherwise.
@@ -148,15 +148,15 @@ public class AssemblyLine {
 	}
 	
 	/**
-	 * Returns a list of orders which can be used in the batch processing strategy.
-	 * @return	A list of orders which qualify for batch processing.
+	 * Returns a list of orders which qualify for batch processing strategy.
+	 * @return	A list of orders which qualify for batch processing strategy.
 	 */
 	public List<Order> getBachList(){
 		return schedule.getBatchList();
 	}
 
 	/**
-	 * Asks a list of workstations available.
+	 * Asks a list of available workstations.
 	 * @return	The list containing copies of the workstations.
 	 */
 	public List<Workstation> getWorkStations() {
@@ -176,8 +176,8 @@ public class AssemblyLine {
 
 	/**
 	 * Changes the strategy if possible. Doesn't change anything if the manager wants to change to the currently used strategy. 
-	 * @param order null if the manager wants to change to fifo strategy.
-	 * 				the example order used in batch processing otherwise.
+	 * @param order Null if the manager wants to change to FIFO strategy.
+	 * 				The example order used in batch processing otherwise.
 	 */
 	public void changeStrategy(Order order){
 		schedule.changeStrategy(order);
@@ -199,7 +199,7 @@ public class AssemblyLine {
 		LinkedList<SchedulingStrategy> stratList = new LinkedList<SchedulingStrategy>();
 	
 		/**
-		 * A constructor which initializes the used strategies and sets the current strategy to fifo strategy.
+		 * A constructor which initializes the used strategies and sets the current strategy to FIFO strategy.
 		 */
 		private Schedule(){
 			stratList.add(new FifoStrategy());
@@ -222,7 +222,6 @@ public class AssemblyLine {
 		 */
 		int overTime = 0;
 
-
 		/**
 		 * Calculates the overtime made at the end of the day. It is possible that the day ends early,
 		 * in that case the overtime is set to 0.
@@ -239,7 +238,7 @@ public class AssemblyLine {
 		 * First checks if the given phase duration is allowed or not.
 		 * Updates the current time and sets the end time of the order in the last workstation if there is one.
 		 * Also sets the next day and overtime if necessary and updates the statistics. 
-		 * Then checks if the strategy needs to change back to fifo.
+		 * Then checks if the strategy needs to change back to FIFO.
 		 * Reschedules all orders both in the queue and workstations.
 		 * @param phaseDuration	The amount which represents the longest time worked on a certain task.
 		 * @return	True if the workstation has been moved and rescheduled.	
@@ -269,7 +268,7 @@ public class AssemblyLine {
 		}
 		
 		/**
-		 * If the current strategy is using batch specification, then checks if the system can change to fifo strategy,
+		 * Checks if the system can change to FIFO strategy if the current strategy is batch specification and
 		 * if there are no more orders which qualify for batch processing. 
 		 */
 		private void checkStrategy(){
@@ -286,11 +285,11 @@ public class AssemblyLine {
 		}
 		
 		/**
-		 * If the given phase duration does not cause the day to change to the next day after 6 am, then returns true,
-		 * otherwise returns false.
+		 * Returns true if the given phase duration does not cause the day to change to 
+		 * the next day after 6 am, false otherwise.
 		 * @param phaseDuration	The phase duration that needs to be checked.
 		 * @return	True if the given phase duration is allowed.
-		 * 			False if it is too big.
+		 * 			False otherwise.
 		 */
 		private boolean checkPhaseDuration(int phaseDuration){
 			int difference = 0;
@@ -318,8 +317,9 @@ public class AssemblyLine {
 		}
 		
 		/**
-		 * If the first workstation does not have an order in it and the queue is not empty, then tries to add
-		 * an order to the first workstation. After that reschedules the workstations orders and the queue.
+		 * Tries to add an order to the first workstation if the first workstation does not 
+		 * have an order and the queue is not empty. Afterwards reschedules the workstations 
+		 * and the queue.
 		 */
 		private void reschedule(){
 			if(firstWorkStation.getCurrentOrder()==null && !queue.isEmpty()){
@@ -348,8 +348,9 @@ public class AssemblyLine {
 		}
 		
 		/**
-		 * Given the start time, calculates the estimated time of the orders in the queue.
-		 * Every order calculates its own estimated end time using a number of next orders that is equal to the amount of workstations minus one.
+		 * Given the start time, calculates the estimated end times of the orders in the 
+		 * pending queue. Every order calculates its own estimated end time using a number 
+		 * of next orders that is, at most, equal to the amount of workstations minus one.
 		 * @param startTime	The time used for scheduling the queue.
 		 */
 		private void rescheduleQueue(DateTime startTime){
@@ -371,9 +372,9 @@ public class AssemblyLine {
 		}
 		
 		/**
-		 * Adds an order to the first workstation if it can still be scheduled today. It calculates 
-		 * the estimated time to see if the order can be scheduled today, but does not set it, even if
-		 * the order can be scheduled today.
+		 * Adds an order to the first workstation if it can still be scheduled today. 
+		 * It calculates the estimated end time to see if the order can be scheduled today 
+		 * but the end time is not set even if the order can be scheduled today.
 		 */
 		private void addOrderToFirstWorkstation(){
 			Order order = queue.getFirst();
@@ -389,14 +390,12 @@ public class AssemblyLine {
 			if(estimatedEndTime.getMinuteOfDay()<shiftEndHour*60-overTime && estimatedEndTime.getHourOfDay()>=shiftBeginHour){
 				firstWorkStation.setOrder(queue.pop());
 			}
-			
 		}
 
-
-		
 		/**
-		 * Sets the current time to the next day at the beginning of the shift, if the time is later than the begin hour of the shift.
-		 * Else just sets the hour at the beginning of the shift.
+		 * If the hour of the current time is after the hour of the beginning of the shift, 
+		 * the day of the current time is set to the next day, otherwise the day of the current 
+		 * time remains the same. Afterwards, sets the current hour to the beginning of the shift. 
 		 */
 		private void setNextDay() {
 			if(currentTime.getHourOfDay()<shiftBeginHour)
@@ -416,11 +415,10 @@ public class AssemblyLine {
 				overTime = 0;
 			else
 				overTime=overtime;
-
 		}
 
 		/**
-		 * Checks if it is the end of the working day, if it is returns true, else returns false.
+		 * Returns true if it is the end of the working day, false otherwise.
 		 * @return 	True if all workstations are done and it is later than the end hour of the shift 
 		 * 		  	minus the overtime or earlier than the begin hour of the shift.
 		 * 			False otherwise.
@@ -437,19 +435,19 @@ public class AssemblyLine {
 				return true;
 			return false;
 		}
-
+//TODO
 		/**
 		 * If the days between the given time and the current time of the system differ, then it checks 
 		 * if there is time for a new order without considering the overtime. Else checks if there is time
 		 * for a new order considering the overtime. 
 		 * @param time	The time to check against the current time of the system.
-		 * @return True if there is time for a new order on this day, else returns false.
+		 * @return True if there is time for a new order on this day, false otherwise.
 		 */
 		private boolean timeForNewOrder(DateTime time) {
 			if(Days.daysBetween(time, currentTime).getDays()==0){
 				return time.getMinuteOfDay()<(shiftEndHour*60-overTime) && time.getMinuteOfDay()>=shiftBeginHour*60;
 			}else{
-				return  time.getMinuteOfDay()<(shiftEndHour*60) && time.getMinuteOfDay()>=shiftBeginHour*60;
+				return time.getMinuteOfDay()<(shiftEndHour*60) && time.getMinuteOfDay()>=shiftBeginHour*60;
 			}
 		}
 
@@ -467,8 +465,8 @@ public class AssemblyLine {
 		}
 		
 		/**
-		 * Sets the start time of the given order to the current time, then uses the current strategy to add the order
-		 * and reschedules the whole queue and workstations.
+		 * Sets the start time of the given order to the current time, then uses the current 
+		 * strategy to add the order and reschedules the whole queue and workstations.
 		 * @param order	The order that needs to be scheduled.
 		 */
 		private void scheduleOrder(Order order){
@@ -479,9 +477,11 @@ public class AssemblyLine {
 		}
 		
 		/**
-		 * If the given order is null then changes the strategy to fifo. else it changes to batch processing and
-		 * uses the given order as an example order, used to rebuild the queue. Afterwards it reschedules the queue and workstations.
-		 * @param order The possible example order used by batch processing, null if fifostrategy needs to be used.
+		 * Changes the strategy to FIFO if the given order is null. Otherwise, changes to 
+		 * batch processing and uses the given order as an example order to reschedule the
+		 * queue. Afterwards it reschedules the queue and workstations.
+		 * @param order The possible example order used by batch processing or null if 
+		 * 				the strategy needs to be changed to the FIFO strategy.
 		 */
 		private void changeStrategy(Order order){
 			if(order==null){

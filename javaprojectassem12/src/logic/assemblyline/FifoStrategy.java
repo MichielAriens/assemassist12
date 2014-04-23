@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import logic.car.Order;
 
 /**
- * A class that uses fifo strategy to add orders and refactor queues.
+ * A class that uses FIFO strategy to add orders and refactor queues.
  */
 public class FifoStrategy extends SchedulingStrategy{
 
@@ -29,7 +29,7 @@ public class FifoStrategy extends SchedulingStrategy{
 	}
 
 	/**
-	 * Refactors a given queue using fifo strategy. Just copies all orders in the copy queue to the given first queue.
+	 * Refactors a given queue using FIFO strategy. Just copies all orders from the copy queue into the given first queue.
 	 * @param queue	The queue that needs to be refactored.
 	 * @param copy	The copy of the queue that needs to be refactored, used to build the given queue.
 	 */
@@ -41,8 +41,8 @@ public class FifoStrategy extends SchedulingStrategy{
 	}
 	
 	/**
-	 * Returns a string which represents this class.
-	 * @return	A string which represents this class.
+	 * Returns a string which represents this scheduling strategy.
+	 * @return	A string which represents this scheduling strategy.
 	 */
 	@Override
 	public String toString(){
@@ -50,8 +50,8 @@ public class FifoStrategy extends SchedulingStrategy{
 	}
 
 	/**
-	 * Returns a copy of this class or null if an exception occurs.
-	 * @return A copy of this class.
+	 * Returns a copy of this scheduling strategy or null if an exception occurs.
+	 * @return A copy of this scheduling strategy.
 	 * @InstantionException If this class cann't be instantiated.
 	 * @IllegalAccessException	If there is no access.
 	 */
