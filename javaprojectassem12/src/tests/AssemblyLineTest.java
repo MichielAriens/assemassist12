@@ -103,6 +103,16 @@ public class AssemblyLineTest {
 	}
 	
 	/**
+	 * Build a standard task order: duration 60
+	 */
+	private TaskOrder buildStandardTaskOrder(DateTime deadline){
+		TaskOrderDetailsMaker maker = new TaskOrderDetailsMaker();
+		maker.chooseDeadline(deadline);
+		maker.choosePart(CarPart.COLOUR_BLACK);
+		return new TaskOrder(maker.getDetails());
+	}
+	
+	/**
 	 * A quick test to check whether the builders defined above work. (correct specification)
 	 */
 	@Test
@@ -358,6 +368,26 @@ public class AssemblyLineTest {
 		for(int i = 0; i < 5; i++){
 			assertTrue(ords.get(i).getEstimatedEndTime().isBefore(ords.get(5).getEstimatedEndTime()));
 		}
+	}
+	
+	/**
+	 * Test the correct estimated assemblytimes for TaskOrders. Using deadlines
+	 */
+	@Test
+	public void testSingleTasks(){
+		//Fill the schedule with phase 60 orders 
+		for(int i = 0; i < simpleOrders.size(); i++){
+			cmcMotors.addOrder(simpleOrders.get(i));
+		}
+		
+		//Add a taskOrder with a dealine 4 hours after the startup of the system
+		TaskOrder taskOrder = buildStandardTaskOrder(cmcMotors.getCurrentTime().plusHours(4));
+		cmcMotors.addOrder(taskOrder);
+		
+		//simpleOrder 0 was placed on the lane and will be completed first. 
+		assertTrue(simpleOrders.get(0).getEstimatedEndTime().isBefore(taskOrder.getEstimatedEndTime()));
+		assertTrue(taskOrder.getEstimatedEndTime().isBefore(simpleOrders.get(1).getEstimatedEndTime()));
+		assertTrue(simpleOrders.get(1).getEstimatedEndTime().isBefore(simpleOrders.get(2).getEstimatedEndTime()));
 	}
 	
 	

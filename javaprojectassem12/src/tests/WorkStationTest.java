@@ -11,6 +11,8 @@ import logic.car.CarOrder;
 import logic.car.CarOrderDetailsMaker;
 import logic.car.CarPart;
 import logic.car.CarPartType;
+import logic.car.TaskOrder;
+import logic.car.TaskOrderDetailsMaker;
 import logic.users.CarManufacturingCompany;
 import logic.users.GarageHolder;
 import logic.users.Mechanic;
@@ -20,6 +22,7 @@ import logic.workstation.DriveTrainPost;
 import logic.workstation.Task;
 import logic.workstation.Workstation;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -149,6 +152,25 @@ public class WorkStationTest {
 		assertTrue(driveTrainPost.done());
 		assertTrue(accessoriesPost.done());
 		assertTrue(carOrder.done());
+	}
+	
+	/**
+	 * Test that taskorders are completed correctly by the workstations.
+	 */
+	@Test
+	public void testTaskOrder(){
+		TaskOrderDetailsMaker maker = new TaskOrderDetailsMaker();
+		maker.choosePart(CarPart.COLOUR_BLACK);
+		maker.chooseDeadline(new DateTime().plusHours(5));
+		TaskOrder order = new TaskOrder(maker.getDetails());
+		
+		carBodyPost.setOrder(order);
+		for(Task task : order.getTasks()){
+			carBodyPost.doTask(task);
+		}
+		
+		assertTrue(carBodyPost.done());
+		assertTrue(order.done());
 	}
 	
 	/**
