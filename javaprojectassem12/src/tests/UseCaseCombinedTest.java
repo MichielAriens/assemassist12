@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 
 import logic.car.CarModel;
+import logic.car.CarPart;
 import logic.car.CarPartType;
 import logic.users.CarManufacturingCompany;
 
@@ -93,8 +94,47 @@ public class UseCaseCombinedTest {
 		///////////////////////////START GARAGEHOLDERTEST EMPTY ASSEMBLY LINE///////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		
+		GarageHolderController gaCont = new GarageHolderController();
+		assertEquals(null, gaCont.getUserName());
+		assertEquals(null, gaCont.getPendingOrders());
+		assertEquals(null, gaCont.getPendingInfo(0));
+		assertEquals(null, gaCont.getCompletedInfo(0));
+		assertEquals(null, gaCont.getCompletedOrders());
+		gaCont.placeOrder(); //should just return
+		gaCont = (GarageHolderController) controller.logIn("gar");
+		assertEquals("gar", gaCont.getUserName());
 		
+		ArrayList<String> empty = new ArrayList<String>();
+		assertEquals(empty, gaCont.getPendingOrders());
+		assertEquals(empty, gaCont.getCompletedOrders());
 		
+		ArrayList<String> models = new ArrayList<String>();
+		models.add("Model A: 1");
+		models.add("Model B: 2");
+		models.add("Model C: 3");
+		assertEquals(models, gaCont.getModels());
+		
+		gaCont.chooseModel(null); //should just return
+		gaCont.chooseModel(CarModel.MODELA);
+		
+		gaCont.getOptions(null); //should just return
+		ArrayList<String> options = new ArrayList<String>();
+		options.add("Sedan: 1");
+		options.add("Break: 2");
+		assertEquals(options, gaCont.getOptions(CarPartType.Body));
+		
+		gaCont.addPart(null); //should just return
+		gaCont.addPart("Sedan");
+		gaCont.addPart("Red");
+		gaCont.addPart("standard 2l v4");
+		gaCont.addPart("6 speed manual");
+		gaCont.addPart("Leather black");
+		gaCont.addPart("Manual");
+		gaCont.addPart("Comfort");
+		gaCont.addPart("No Spoiler");
+		
+		gaCont.placeOrder();
+
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		///////////////////////////END GARAGEHOLDERTEST EMPTY ASSEMBLY LINE/////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
