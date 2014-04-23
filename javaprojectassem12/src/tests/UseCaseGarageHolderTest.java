@@ -3,11 +3,19 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import logic.car.CarModel;
+import logic.car.CarOrder;
+import logic.car.CarOrderDetailsMaker;
+import logic.car.CarPart;
 import logic.car.CarPartType;
+import logic.car.Order;
 import logic.users.CarManufacturingCompany;
+import logic.users.Mechanic;
+import logic.workstation.Task;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import controllers.*;
@@ -17,14 +25,20 @@ import controllers.*;
  * system in this test case, but this is done in the UseCaseCombinedTest case.
  */
 public class UseCaseGarageHolderTest {
+	CarManufacturingCompany cmc;
+	AssemAssistController controller;
+	GarageHolderController ghCont;
+	List<Mechanic> mechs;
+	List<Order> orders;	
 	
 	
-	@Test
-	public void allGarageHolderTests(){
-		testOrderNewCar();
-		testCheckOrderDetails();
+	@Before
+	public void prequel() {
+		cmc = new CarManufacturingCompany();
+		controller = new AssemAssistController(cmc);
+		ghCont = (GarageHolderController) controller.logIn("Jeroen");
 	}
-	
+
 
 
 
@@ -32,11 +46,10 @@ public class UseCaseGarageHolderTest {
 	 * The main test.
 	 */
 	@Test
-	private void testOrderNewCar() {
-		AssemAssistController controller = new AssemAssistController(new CarManufacturingCompany());
-		
-		GarageHolderController ghCont = (GarageHolderController) controller.logIn("Jeroen");
+	public void testOrderNewCar() {
+		//Precondition: The garage holder is successfully logged into the system.
 		assertEquals("Jeroen", ghCont.getUserName());
+		
 		//The system prints the pending and completed orders (both are currently empty)
 		assertEquals(new ArrayList<String>(), ghCont.getPendingOrders());
 		assertEquals(new ArrayList<String>(), ghCont.getCompletedOrders());
@@ -64,10 +77,10 @@ public class UseCaseGarageHolderTest {
 		ghCont.addPart("Manual");
 		ghCont.addPart("Comfort");
 		ghCont.addPart("No Spoiler");
-//		//user places the order:
-//		//if the user does not want to place the newly created order, the use case ends here (alternate flow 2)
+		//user places the order:
+		//if the user does not want to place the newly created order, the use case ends here (alternate flow 2)
 		ghCont.placeOrder();
-//		//the system prints the pending and completed orders (pending orders is no longer empty)
+		//the system prints the pending and completed orders (pending orders is no longer empty)
 		System.out.println(ghCont.getPendingOrders());
 		assertFalse(new ArrayList<String>().equals(ghCont.getPendingOrders()));
 		assertEquals(1, ghCont.getPendingOrders().size());
@@ -77,7 +90,64 @@ public class UseCaseGarageHolderTest {
 	
 
 	private void testCheckOrderDetails() {
-		// TODO Auto-generated method stub
+		//Start by populating the system with some orders.
+		doSomeWork(10, 5);
+		//The system presents an overview.
+		ghCont.getCompletedOrders();
+	}
+	
+	
+	/**
+	 * Set up an environment where: 
+	 * 		n orders have been submitted
+	 * 		n/2 orders have been done
+	 * 		each order has duration 60.
+	 */
+	public void doSomeWork(int total, int toDo){
+		//initialize the required actors
+		for(int i = 0; i < 3; i++){
+			mechs.add(new Mechanic(cmc, "SuperMech2014"));
+			mechs.get(i).setActiveWorkstation(cmc.getWorkStations().get(i));
+		}
 		
+		//Build n orders
+		Order curr;
+		for(int i = 0; i < total; i++){
+			curr = buildStandardOrderC();
+			orders.add(curr);
+			cmc.addOrder(curr);
+		}
+		
+		//Do all the orders
+		while(!orders.get(toDo-1).done()){
+			for(Mechanic mech : mechs){
+				for(Task task : mech.getAvailableTasks()){
+					mech.doTask(task, 60);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Build a standard order: duration 60
+	 * @return
+	 */
+	private CarOrder buildStandardOrderC(){
+		CarPart[] partsArray = {
+				CarPart.BODY_SPORT, 
+				CarPart.COLOUR_BLACK,
+				CarPart.ENGINE_8,
+				CarPart.GEARBOX_6MANUAL,
+				CarPart.SEATS_LEATHER_WHITE,
+				CarPart.AIRCO_NONE,
+				CarPart.WHEELS_SPORTS,
+				CarPart.SPOILER_LOW
+			};
+		
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELC);
+		for(CarPart part : partsArray){
+			maker.addPart(part);
+		}
+		return new CarOrder(maker.getDetails());
 	}
 }
