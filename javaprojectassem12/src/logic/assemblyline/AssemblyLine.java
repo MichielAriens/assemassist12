@@ -182,6 +182,24 @@ public class AssemblyLine {
 	public void changeStrategy(Order order){
 		schedule.changeStrategy(order);
 	}
+	
+	/**
+	 * Returns true if the given phase duration does not cause the day to change to 
+	 * the next day after 6 am, false otherwise.
+	 * @param phaseDuration	The phase duration that needs to be checked.
+	 * @return	True if the given phase duration is allowed.
+	 * 			False otherwise.
+	 */
+	public boolean checkPhaseDuration(int phaseDuration){
+		int difference = 0;
+		if(firstWorkStation.getTotalEstimatedEndTime() != null)
+			difference = schedule.getTimeDifference(firstWorkStation.getTotalEstimatedEndTime(), currentTime);
+		int diff= schedule.shiftBeginHour*60 - difference - 1;
+		int max = 24*60 - currentTime.getMinuteOfDay()+diff;
+		if(max>= phaseDuration)
+			return true;
+		return false;
+	}
 
 	/**
 	 *A class made to reschedule the assembly line and workstations. Changes the different times from orders appropriately.
@@ -245,8 +263,7 @@ public class AssemblyLine {
 		 * 			False if the given phase duration is too big.
 		 */
 		private boolean moveAndReschedule(int phaseDuration) {
-			if(!checkPhaseDuration(phaseDuration))
-				return false;
+			
 			firstWorkStation.adjustDelays(phaseDuration);
 			currentTime = currentTime.plusMinutes(phaseDuration);
 			Order firstOrder = firstWorkStation.getLastOrder();
@@ -284,23 +301,7 @@ public class AssemblyLine {
 			currentStrategy = stratList.getFirst();
 		}
 		
-		/**
-		 * Returns true if the given phase duration does not cause the day to change to 
-		 * the next day after 6 am, false otherwise.
-		 * @param phaseDuration	The phase duration that needs to be checked.
-		 * @return	True if the given phase duration is allowed.
-		 * 			False otherwise.
-		 */
-		private boolean checkPhaseDuration(int phaseDuration){
-			int difference = 0;
-			if(firstWorkStation.getTotalEstimatedEndTime() != null)
-				difference = getTimeDifference(firstWorkStation.getTotalEstimatedEndTime(), currentTime);
-			int diff= shiftBeginHour*60 - difference - 1;
-			int max = 24*60 - currentTime.getMinuteOfDay()+diff;
-			if(max>= phaseDuration)
-				return true;
-			return false;
-		}
+		
 		
 		/**
 		 * Returns the difference in minutes between two given times.

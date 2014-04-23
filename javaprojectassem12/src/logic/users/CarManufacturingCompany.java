@@ -207,4 +207,14 @@ public class CarManufacturingCompany {
 	public List<Task> getAllTasks(Workstation station){
 		return this.assemblyLine.getAllTasks(station);
 	}
+	
+	/**
+	 * Asks the assembly line to check the given duration, if the duration is allowed it returns true, otherwise false.
+	 * @param duration	The duration that needs to be checked.
+	 * @return 	True if the duration is allowed.
+	 * 			False otherwise
+	 */
+	public boolean checkPhaseDuration(int duration){
+		return this.assemblyLine.checkPhaseDuration(duration);
+	}
 }

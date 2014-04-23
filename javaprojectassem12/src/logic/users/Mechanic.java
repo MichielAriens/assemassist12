@@ -60,11 +60,13 @@ public class Mechanic extends User{
 	 * @param task	A copy of the task that needs to be performed.
 	 */
 	public void doTask(Task task, int duration){
-		boolean performed = company.doTask(task);
-		if(performed){
-			setMaxPhaseDuration(duration);
-			if(company.moveAssemblyLine(maxPhaseDuration))
-				resetMaxPhaseDuration();
+		if(company.checkPhaseDuration(duration)){
+			boolean performed = company.doTask(task);
+			if(performed){
+				setMaxPhaseDuration(duration);
+				if(company.moveAssemblyLine(maxPhaseDuration))
+					resetMaxPhaseDuration();
+			}
 		}
 	}
 
