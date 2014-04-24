@@ -34,7 +34,6 @@ public class Task {
 		if(this.isComplete())
 			copy.perform();
 		return copy;
-		
 	}
 	
 	/**
