@@ -77,5 +77,4 @@ public enum CarPart {
 		}
 		return part;
 	}
-
 }

@@ -25,7 +25,7 @@ public class CarOrderDetailsMaker {
 	
 	/**
 	 * Initializes this car order details maker with a given model.
-	 * @param model
+	 * @param model	The car model of the CarOrderDetails that has to be made by this maker.
 	 */
 	public CarOrderDetailsMaker(CarModel model){
 		this.model = model;
@@ -35,7 +35,7 @@ public class CarOrderDetailsMaker {
 	
 	/**
 	 * Adds a given part to the list of car parts and adds its type to the list of car part types if possible.
-	 * @param part The part that needs to be added
+	 * @param part The part that needs to be added.
 	 */
 	public void addPart(CarPart part){
 		if(isCompatiblePart(part)){

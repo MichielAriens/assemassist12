@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import org.joda.time.DateTime;
 
+/**
+ * A class for building the task order's details.
+ */
 public class TaskOrderDetailsMaker {
 	
 	/**
