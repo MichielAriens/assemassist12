@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import logic.car.Order;
 
 /**
- * A class that uses FIFO strategy to add orders and refactor queues.
+ * A class that uses FIFO strategy to add orders and refactors queues.
  */
 public class FifoStrategy extends SchedulingStrategy{
 
