@@ -1,9 +1,6 @@
 package tests;
 
 import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-
 import logic.users.CarManufacturingCompany;
 
 import org.junit.Test;
