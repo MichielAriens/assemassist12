@@ -3,17 +3,23 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import logic.car.CarModel;
 import logic.car.CarOrder;
+import logic.car.CarOrderDetails;
+import logic.car.CarOrderDetailsMaker;
 import logic.car.CarPart;
-import logic.car.CarSpecification;
+import logic.car.Order;
+import logic.car.TaskOrderDetailsMaker;
 import logic.users.CarManufacturingCompany;
+import logic.users.CustomsManager;
 import logic.users.GarageHolder;
 import logic.users.Manager;
 import logic.users.Mechanic;
 import logic.workstation.Task;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 /**
@@ -29,24 +35,27 @@ public class UserTest {
 	@Test
 	public void garageHolderTest() {
 		//login with garageholder account
-		GarageHolder g = (GarageHolder) company.logIn("Michiel");
+		GarageHolder g = (GarageHolder) company.logIn("Jeroen");
 		//check initial values
-		assertEquals("Michiel", g.getUserName());
+		assertEquals("Jeroen", g.getUserName());
 		assertEquals(0,g.getPendingOrders().size());
 		assertEquals(0,g.getCompletedOrders().size());
 		//try to add a car order with null as carspecification
 		g.placeOrder(null);
 		//make carspecification to place an order
-		ArrayList<CarPart> carparts = new ArrayList<CarPart>();
-		carparts.add(CarPart.BODY_BREAK);
-		carparts.add(CarPart.COLOUR_BLACK);
-		carparts.add(CarPart.SEATS_LEATHER_BLACK);
-		carparts.add(CarPart.AIRCO_AUTO);
-		carparts.add(CarPart.WHEELS_COMFORT);
-		carparts.add(CarPart.ENGINE_4);
-		carparts.add(CarPart.GEARBOX_5AUTO);
-		CarSpecification spec = new CarSpecification(CarModel.MODEL1, carparts);
-		g.placeOrder(spec);
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELA);
+		maker.addPart(CarPart.getPartfromString("Model A"));
+		maker.addPart(CarPart.getPartfromString("Sedan"));
+		maker.addPart(CarPart.getPartfromString("Red"));
+		maker.addPart(CarPart.getPartfromString("Standard 2l v4"));
+		maker.addPart(CarPart.getPartfromString("6 speed manual"));
+		maker.addPart(CarPart.getPartfromString("Leather black"));
+		maker.addPart(CarPart.getPartfromString("Manual"));
+		maker.addPart(CarPart.getPartfromString("Comfort"));
+		maker.addPart(CarPart.getPartfromString("No Spoiler"));
+		
+		//g.placeOrder(spec);
+		g.placeOrder(maker.getDetails());
 		//check for new pending order
 		assertEquals(1,g.getPendingOrders().size());
 		assertEquals(0,g.getCompletedOrders().size());
@@ -58,8 +67,11 @@ public class UserTest {
 		assertEquals(1,g.getCompletedOrders().size());
 	}
 	
+	/**
+	 * Let's the GarageHolder make and place an order.
+	 */
 	private void makeAndPlaceOrder(){
-		GarageHolder g = (GarageHolder) company.logIn("Michiel");
+		GarageHolder g = (GarageHolder) company.logIn("gar");
 		ArrayList<CarPart> carparts = new ArrayList<CarPart>();
 		carparts.add(CarPart.BODY_BREAK);
 		carparts.add(CarPart.COLOUR_BLACK);
@@ -68,39 +80,47 @@ public class UserTest {
 		carparts.add(CarPart.WHEELS_COMFORT);
 		carparts.add(CarPart.ENGINE_4);
 		carparts.add(CarPart.GEARBOX_5AUTO);
-		CarSpecification spec = new CarSpecification(CarModel.MODEL1, carparts);
-		g.placeOrder(spec);
+		CarOrderDetails det = new CarOrderDetails(CarModel.MODELA, carparts);
+		g.placeOrder(det);
 	}
 	
+	/**
+	 * Test the manager class.
+	 */
 	@Test
 	public void managerTest(){
 		//login with manager username
 		Manager m = (Manager) company.logIn("Wander");
 		//check initial values
 		assertEquals("Wander", m.getUserName());
-		assertEquals(3, m.getWorkstations().length);
+		
+		assertEquals("FIFO", m.getStrategies().get(0).toString());
+		
 		ArrayList<CarOrder> orders = new ArrayList<CarOrder>();
 		orders.add(null);
 		orders.add(null);
 		orders.add(null);
-		assertEquals(orders, m.askFutureSchedule());
+		assertTrue(m.getBatchList().isEmpty());
 		//check if the assembly line can be moved if there are no car orders present
-		assertEquals(true, m.moveAssemblyLine(60));
+		
 		//add a car order to the assembly line
 		makeAndPlaceOrder();
-		//check if the future schedule now contains a car order
-		assertFalse(orders.equals(m.askFutureSchedule()));
-		//check if the assembly line refuses to move before all tasks are done
-		assertEquals(false, m.moveAssemblyLine(60));
-		//complete all tasks and check if the assembly line moves again
-		CarOrder c = m.getWorkstations()[0].getCurrentOrder();
-		for(Task t : c.getTasks())
-			t.perform();
-		assertTrue(m.moveAssemblyLine(60));
+		makeAndPlaceOrder();
+		List<Order> bach  = m.getBatchList();
+		assertTrue(bach.isEmpty());
+		makeAndPlaceOrder();
+		bach = m.getBatchList();
+		assertFalse(bach.isEmpty());
+		m.changeStrategy(bach.get(0));
+		assertEquals("Specification Batch", m.getStrategies().get(0).toString());
+		assertEquals("Average number of cars produced: 0\nMean number of cars produced: 0\nExact numbers two last days:\n   No records.\nAverage delay: 0 minutes\nMean delay: 0 minutes\nTwo last delays:\n   No records.\n", m.getStatistics());
 	}
 	
+	/**
+	 * Make an order and advance the assembly line by completing all tasks.
+	 */
 	private void makeOrderAndAdvance(){
-		GarageHolder g = (GarageHolder) company.logIn("Michiel");
+		GarageHolder g = (GarageHolder) company.logIn("gar");
 		ArrayList<CarPart> carparts = new ArrayList<CarPart>();
 		carparts.add(CarPart.BODY_BREAK);
 		carparts.add(CarPart.COLOUR_BLACK);
@@ -109,42 +129,62 @@ public class UserTest {
 		carparts.add(CarPart.WHEELS_COMFORT);
 		carparts.add(CarPart.ENGINE_4);
 		carparts.add(CarPart.GEARBOX_5AUTO);
-		CarSpecification spec = new CarSpecification(CarModel.MODEL1, carparts);
+		CarOrderDetails spec = new CarOrderDetails(CarModel.MODELA, carparts);
 		g.placeOrder(spec);
-		Manager m = (Manager) company.logIn("Wander");
-		m.moveAssemblyLine(60);
+		g.placeOrder(spec.getRawCopy());
+		Mechanic m = (Mechanic) company.logIn("mech");
+		List<Task> tasksss = m.getAvailableTasks();
+		assertTrue(tasksss.size()==2);
+		m.doTask(tasksss.get(0), 60);
+		tasksss = m.getAvailableTasks();
+		assertTrue(tasksss.size()==1);
+		m.doTask(tasksss.get(0), 70);
+		tasksss = m.getAvailableTasks();
+		assertTrue(tasksss.size()==2);
 	}
 	
+	/**
+	 * Test the mechanic class.
+	 */
 	@Test
 	public void mechanicTest(){
 		//login with mechanic account
-		Mechanic m = (Mechanic) company.logIn("Joren");
+		Mechanic m = (Mechanic) company.logIn("mech");
 		//check initial values
-		assertEquals("Joren", m.getUserName());
+		assertEquals("mech", m.getUserName());
 		assertEquals(null, m.getActiveWorkstation());
 		assertFalse(m.isPosted());
 		assertEquals(null, m.getAvailableTasks());
 		//set a workstation
-		m.setActiveWorkstation(m.getAvailableWorkstations()[0]);
+		
+		m.setActiveWorkstation(m.getWorkstations().get(0));
 		assertTrue(m.isPosted());
 		//place a car order and advance the assembly line
 		makeOrderAndAdvance();
-		assertTrue(m.doTask(m.getAvailableTasks().get(0)));
-		assertFalse(m.doTask(new Task(CarPart.AIRCO_AUTO)));
+		
 	}
 	
+	/**
+	 * Test a login with an invalid username.
+	 */
 	@Test
 	public void invalidUserTest(){
 		//login with invalid username
 		assertEquals(null, company.logIn("Jack"));
 	}
 	
+	/**
+	 * Test placing a null order.
+	 */
 	@Test
 	public void nullOrderTest(){
 		//try to place a null order
 		company.addOrder(null);
 	}
 	
+	/**
+	 * Test a relogin.
+	 */
 	@Test
 	public void reloginTest(){
 		Manager m1 = (Manager) company.logIn("Wander");
@@ -152,6 +192,30 @@ public class UserTest {
 		assertEquals(m1, m2);
 	}
 	
+	/**
+	 * Test the customs shop manager class.
+	 */
+	@Test
+	public void testCustomShop(){
+		CustomsManager c = (CustomsManager) company.logIn("Michiel");
+		//check initial values
+		assertEquals("Michiel", c.getUserName());
+
+		c.placeOrder(null);
+		//make carspecification to place an order
+		TaskOrderDetailsMaker maker = new TaskOrderDetailsMaker();
+		maker.choosePart(CarPart.getPartfromString("Comfort"));
+
+		maker.chooseDeadline(new DateTime(2014,1,1,17,0));
+
+		assertEquals(null,c.placeOrder(maker.getDetails()));
+		
+		maker = new TaskOrderDetailsMaker();
+		maker.choosePart(CarPart.getPartfromString("Red"));
+
+		maker.chooseDeadline(new DateTime(2014,1,1,17,0));
+		assertEquals("Estimated completion: 01-01-2014 09:00",c.placeOrder(maker.getDetails()));
+	}
 	
 
 }

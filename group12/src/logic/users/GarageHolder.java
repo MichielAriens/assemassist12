@@ -1,8 +1,10 @@
 package logic.users;
 
 import java.util.ArrayList;
+import java.util.Collections;
+
 import logic.car.CarOrder;
-import logic.car.CarSpecification;
+import logic.car.CarOrderDetails;
 
 /**
  * Class used to describe a garage holder who can order cars from a car manufacturing company.
@@ -45,8 +47,8 @@ public class GarageHolder extends User{
 	}
 	
 	/**
-	 * Returns a list of all committed orders that are completed.
-	 * @return a list of all committed orders that are completed.
+	 * Returns a list of all committed orders that are completed sorted on end time.
+	 * @return a list of all committed orders that are completed sorted on end time.
 	 */
 	public ArrayList<CarOrder> getCompletedOrders(){
 		ArrayList<CarOrder> completedOrders = new ArrayList<CarOrder>();
@@ -54,18 +56,18 @@ public class GarageHolder extends User{
 			if(o.done())
 				completedOrders.add(o);
 		}
+		Collections.sort(completedOrders);
 		return completedOrders;
 	}
 	
 	/**
-	 * Commits a new order with the given car specification if the given car specifications
-	 * are not null.
-	 * @param specification	The car specification for the new order.
+	 * Commits a new order with the given car order details if the given car order details are not null.
+	 * @param details The car order details for the new order.
 	 */
-	public void placeOrder(CarSpecification specification){
-		if(specification == null)
+	public void placeOrder(CarOrderDetails details){
+		if(details == null)
 			return;
-		CarOrder order = new CarOrder(specification);
+		CarOrder order = new CarOrder(details);
 		company.addOrder(order);
 		this.committedOrders.add(order);
 	}

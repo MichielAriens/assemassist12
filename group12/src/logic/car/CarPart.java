@@ -6,21 +6,31 @@ package logic.car;
 public enum CarPart {
 	BODY_SEDAN 			(CarPartType.Body, 		"Sedan"),
 	BODY_BREAK			(CarPartType.Body, 		"Break"),
+	BODY_SPORT			(CarPartType.Body,		"Sport"),
 	COLOUR_RED			(CarPartType.Colour, 	"Red"),							
 	COLOUR_BLUE			(CarPartType.Colour, 	"Blue"),
 	COLOUR_BLACK		(CarPartType.Colour, 	"Black"),
 	COLOUR_WHITE		(CarPartType.Colour, 	"White"),
-	ENGINE_4			(CarPartType.Engine, 	"Standard 2l 4 cilinders"),
-	ENGINE_6			(CarPartType.Engine, 	"performance 2.5l 6 cilinders"),
+	COLOUR_GREEN		(CarPartType.Colour, 	"Green"),
+	COLOUR_YELLOW		(CarPartType.Colour, 	"Yellow"),
+	ENGINE_4			(CarPartType.Engine, 	"Standard 2l v4"),
+	ENGINE_6			(CarPartType.Engine, 	"Performance 2.5l v6"),
+	ENGINE_8			(CarPartType.Engine,	"Ultra 3l v8"),	
 	GEARBOX_6MANUAL		(CarPartType.Gearbox, 	"6 speed manual"),
+	GEARBOX_5MANUAL		(CarPartType.Gearbox, 	"5 speed manual"),
 	GEARBOX_5AUTO		(CarPartType.Gearbox, 	"5 speed automatic"),
-	SEATS_LEATHER_BLACK	(CarPartType.Seats, 	"leather black"),
-	SEATS_LEATHER_WHITE	(CarPartType.Seats,		"leather white"),
-	SEATS_VINYL_GRAY	(CarPartType.Seats, 	"vinyl grey"),
-	AIRCO_MANUAL		(CarPartType.Airco,		"manual"),	
-	AIRCO_AUTO			(CarPartType.Airco,		"automatic climate control"),
-	WHEELS_COMFORT		(CarPartType.Wheels,	"comfort"), 
-	WHEELS_SPORTS		(CarPartType.Wheels, 	"sports (low profile)");
+	SEATS_LEATHER_BLACK	(CarPartType.Seats, 	"Leather black"),
+	SEATS_LEATHER_WHITE	(CarPartType.Seats,		"Leather white"),
+	SEATS_VINYL_GRAY	(CarPartType.Seats, 	"Vinyl grey"),
+	AIRCO_MANUAL		(CarPartType.Airco,		"Manual"),	
+	AIRCO_AUTO			(CarPartType.Airco,		"Automatic"),
+	AIRCO_NONE			(CarPartType.Airco,		"No Airco"),	
+	WHEELS_COMFORT		(CarPartType.Wheels,	"Comfort"),
+	WHEELS_WINTER		(CarPartType.Wheels,	"Winter"), 
+	WHEELS_SPORTS		(CarPartType.Wheels, 	"Sports"),
+	SPOILER_LOW			(CarPartType.Spoiler,	"Low"),
+	SPOILER_NONE		(CarPartType.Spoiler,	"No Spoiler"),
+	SPOILER_HIGH		(CarPartType.Spoiler,	"High");
 	
 	
 	/**
@@ -67,5 +77,4 @@ public enum CarPart {
 		}
 		return part;
 	}
-
 }

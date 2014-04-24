@@ -1,34 +1,129 @@
 package tests;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import logic.assemblyline.AssemblyLine;
 import logic.car.CarModel;
 import logic.car.CarOrder;
+import logic.car.CarOrderDetailsMaker;
 import logic.car.CarPart;
-import logic.car.CarSpecification;
+import logic.car.Order;
+import logic.car.TaskOrder;
+import logic.car.TaskOrderDetailsMaker;
 import logic.users.CarManufacturingCompany;
 import logic.users.Mechanic;
 import logic.workstation.Task;
-import logic.workstation.Workstation;
 
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * A test case to fully test the assembly line class.
+ */
 public class AssemblyLineTest {
 	private CarManufacturingCompany cmcMotors;
-	private AssemblyLine assemblyLine;
-	private CarSpecification carSpecification;
 	private List<CarOrder> orders = new ArrayList<CarOrder>();
 	private Mechanic barry;
+	private List<CarOrder> simpleOrders;
+	
+	/**
+	 * Build a standard order: duration 50
+	 * @return	A standard order with a duration of 50 minutes.
+	 */
+	private CarOrder buildStandardOrderA(){
+		CarPart[] partsArray = {
+				CarPart.BODY_BREAK, 
+				CarPart.COLOUR_RED,
+				CarPart.ENGINE_4,
+				CarPart.GEARBOX_5AUTO,
+				CarPart.SEATS_LEATHER_WHITE,
+				CarPart.AIRCO_MANUAL,
+				CarPart.WHEELS_COMFORT,
+				CarPart.SPOILER_NONE
+			};
+		
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELA);
+		for(CarPart part : partsArray){
+			maker.addPart(part);
+		}
+		return new CarOrder(maker.getDetails());
+	}
+	
+	/**
+	 * Build a standard order: duration 70
+	 * @return	A standard order with a duration of 70 minutes.
+	 */
+	private CarOrder buildStandardOrderB(){
+		CarPart[] partsArray = {
+				CarPart.BODY_BREAK, 
+				CarPart.COLOUR_RED,
+				CarPart.ENGINE_4,
+				CarPart.GEARBOX_5AUTO,
+				CarPart.SEATS_LEATHER_WHITE,
+				CarPart.AIRCO_MANUAL,
+				CarPart.WHEELS_COMFORT,
+				CarPart.SPOILER_NONE
+			};
+		
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELB);
+		for(CarPart part : partsArray){
+			maker.addPart(part);
+		}
+		return new CarOrder(maker.getDetails());
+	}
+	
+	/**
+	 * Build a standard order: duration 60
+	 * @return	A standard order with a duration of 60 minutes.
+	 */
+	private CarOrder buildStandardOrderC(){
+		CarPart[] partsArray = {
+				CarPart.BODY_SPORT, 
+				CarPart.COLOUR_BLACK,
+				CarPart.ENGINE_8,
+				CarPart.GEARBOX_6MANUAL,
+				CarPart.SEATS_LEATHER_WHITE,
+				CarPart.AIRCO_NONE,
+				CarPart.WHEELS_SPORTS,
+				CarPart.SPOILER_LOW
+			};
+		
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELC);
+		for(CarPart part : partsArray){
+			maker.addPart(part);
+		}
+		return new CarOrder(maker.getDetails());
+	}
+	
+	/**
+	 * Build a standard task order: duration 60
+	 * @return	A standard task order with a duration of 60 minutes.
+	 */
+	private TaskOrder buildStandardTaskOrder(DateTime deadline){
+		TaskOrderDetailsMaker maker = new TaskOrderDetailsMaker();
+		maker.chooseDeadline(deadline);
+		maker.choosePart(CarPart.COLOUR_BLACK);
+		return new TaskOrder(maker.getDetails());
+	}
+	
+	/**
+	 * A quick test to check whether the builders defined above work. (correct specification)
+	 */
+	@Test
+	public void testOrdersValid(){
+		CarOrder order;
+		order = buildStandardOrderA();
+		assertFalse(order.getTasks().isEmpty());
+		order = buildStandardOrderB();
+		assertFalse(order.getTasks().isEmpty());
+		order = buildStandardOrderC();
+		assertFalse(order.getTasks().isEmpty());
+	}
 	
 	/**
 	 * We start by setting up an environment with assets commonly used by the test suite in the prequel.
@@ -39,251 +134,262 @@ public class AssemblyLineTest {
 	public void prequel(){
 		cmcMotors = new CarManufacturingCompany();
 		barry = new Mechanic(cmcMotors, "Barry");
-		
-		assemblyLine = new AssemblyLine();
-		CarPart[] partsArray = {
-				CarPart.AIRCO_AUTO, 
-				CarPart.BODY_BREAK, 
-				CarPart.COLOUR_BLACK, 
-				CarPart.ENGINE_4, 
-				CarPart.GEARBOX_5AUTO, 
-				CarPart.SEATS_LEATHER_BLACK, 
-				CarPart.WHEELS_COMFORT
-			};
-		
-		List<CarPart> parts = (List<CarPart>) Arrays.asList(partsArray);
-		carSpecification = new CarSpecification(CarModel.MODEL1,parts);
 		for(int i = 0; i < 10; i++){
-			orders.add(new CarOrder(carSpecification));
-		}
-	}
-	
-	
-	/**
-	 * This test simulates a single CarOrder object propagating through the assemblyline.
-	 * This is a really in depth test, constantly checking the states of all involved actors.
-	 */
-	@Test
-	public void singleCarOrderPropagation(){
-		DateTime startTime = assemblyLine.getCurrentTime();
-		assertFalse(orders.get(0).done());
-		assemblyLine.addCarOrder(orders.get(0));
-		/* Now we progress the line */
-		assemblyLine.moveAssemblyLine(0);
-		assertFalse(orders.get(0).done());
-		assertFalse(assemblyLine.moveAssemblyLine(60));
-		assertTrue(assemblyLine.getWorkStations()[0].getCurrentOrder().equals(orders.get(0)));
-		assertNull(assemblyLine.getWorkStations()[1].getCurrentOrder());
-		assertNull(assemblyLine.getWorkStations()[2].getCurrentOrder());
-		
-		/* Now we progress the line */
-		barry.setActiveWorkstation(assemblyLine.getWorkStations()[0]);
-		assertFalse(assemblyLine.getWorkStations()[0].done());
-		for(Task task : assemblyLine.getWorkStations()[0].getRequiredTasks()){
-			barry.doTask(task);
-		}
-		assertTrue(assemblyLine.getWorkStations()[0].done());
-		
-		assertTrue(assemblyLine.moveAssemblyLine(60));
-		assertNull(assemblyLine.getWorkStations()[0].getCurrentOrder());
-		
-		/* Now we progress the line */
-		barry.setActiveWorkstation(assemblyLine.getWorkStations()[1]);
-		assertFalse(assemblyLine.getWorkStations()[1].done());
-		assertFalse(orders.get(0).done());
-		for(Task task : assemblyLine.getWorkStations()[1].getRequiredTasks()){
-			barry.doTask(task);
-		}
-		assertTrue(assemblyLine.getWorkStations()[1].done());
-		assertTrue(assemblyLine.moveAssemblyLine(60));
-		assertFalse(assemblyLine.moveAssemblyLine(60));
-		assertNull(assemblyLine.getWorkStations()[0].getCurrentOrder());
-		assertNull(assemblyLine.getWorkStations()[1].getCurrentOrder());
-		
-		barry.setActiveWorkstation(assemblyLine.getWorkStations()[2]);
-		assertFalse(assemblyLine.getWorkStations()[2].done());
-		assertFalse(orders.get(0).done());
-		for(Task task : assemblyLine.getWorkStations()[2].getRequiredTasks()){
-			barry.doTask(task);
-		}
-		assertTrue(assemblyLine.getWorkStations()[2].done());
-		assertTrue(orders.get(0).done());
-		assertTrue(assemblyLine.moveAssemblyLine(60));
-		assertTrue(orders.get(0).done());
-		
-		assertTrue(assemblyLine.getCurrentTime().equals(startTime.plusMinutes(180)));
-	}
-	
-	/**
-	 * This tests the scheduling of 10 Orders in one infinite shift.
-	 */
-	@Test
-	public void tenOrdersTest(){
-		for(CarOrder order : orders){
-			assemblyLine.addCarOrder(order);
-			assertFalse(order.done());
-		}
-		for(int i = 0; i < 10; i++){
-			for(Workstation station : assemblyLine.getWorkStations()){
-				barry.setActiveWorkstation(station);
-				for(Task task : station.getRequiredTasks()){
-					barry.doTask(task);
-				}
-			}
-			assemblyLine.moveAssemblyLine(60);
-		}
-		for(int i = 0; i < 10; i++){
-			if(i < 8){
-				assertTrue(orders.get(i).done());
+			if((i % 3) == 0){
+				orders.add(buildStandardOrderA());
+			} else if((i % 3) == 1){
+				orders.add(buildStandardOrderB());
 			}else{
-				assertFalse(orders.get(i).done());
+				orders.add(buildStandardOrderC());
 			}
+		}
+		
+		//Build a list of orders of duration 60.
+		simpleOrders = new ArrayList<CarOrder>();
+		for(int i = 0; i < 10; i++){
+			simpleOrders.add(buildStandardOrderC());
 		}
 	}
 	
-	
+
 	/**
 	 * This test tests the correct propagation of estimated completion times.
+	 * 50 - 70 - 60 - 50 - 70 - 60 - ...
 	 */
 	@Test
 	public void testEstimatesEasy(){
-		// The day starts at 6:00. Let's pretend time passes to 14:45 without any orders.
+		// The day starts at 6:00.
 		DateTime now = cmcMotors.getCurrentTime();
-		cmcMotors.progressTime(9 * 60 - 15);
-		now = now.plusMinutes(9 * 60 - 15);
-		assertTrue(eqiDateTime(cmcMotors.getCurrentTime(),now));
 		
 		//Lets start adding orders.
 		cmcMotors.addOrder(orders.get(0));
-		//the first car order is automatically added to the assemblyline. The estimated completion date should be in 3 hours.
-		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusHours(3)));//17:45
-		//Let's keep adding
+		//the first car order is automatically added to the assemblyline. The estimated completion date should be in 150 minutes.
+		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusMinutes(150)));
+		
+		//Let's add the second order (70 mins cycle): this will have a total duration of 210. 
 		cmcMotors.addOrder(orders.get(1));
-		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusHours(4)));//18:45
+		//This means that the first order will have to wait 20 minutes extra on two of the workstations inducing a total duration of 190 minutes.
+		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusMinutes(190)));
+		//the second order is comleted after 50 + 3* 70 mins
+		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusMinutes(260)));
+		
+		//Let's add the third order (60 mins cycle):
 		cmcMotors.addOrder(orders.get(2));
-		assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusHours(5)));//19:45
-		cmcMotors.addOrder(orders.get(3));
-		assertTrue(eqiDateTime(orders.get(3).getEstimatedEndTime(), now.plusHours(6)));//20:45
-		cmcMotors.addOrder(orders.get(4));
-		assertTrue(eqiDateTime(orders.get(4).getEstimatedEndTime(), now.plusHours(7)));//21:45
-		cmcMotors.addOrder(orders.get(5));
-		MutableDateTime mu = now.toMutableDateTime();
-		mu.addDays(1);
-		mu.setHourOfDay(9);mu.setMinuteOfHour(0);
-		assertTrue(eqiDateTime(orders.get(5).getEstimatedEndTime(), mu.toDateTime()));//9:00 the next day.
-	
-		cmcMotors.addOrder(orders.get(6));
-		assertTrue(eqiDateTime(orders.get(6).getEstimatedEndTime(), mu.toDateTime().plusHours(1)));//10:00 the next day.
-		
-
-		/**
-		 * Now we'll test what happens when the shifts move up without 
-		 */
-		for(Task task : cmcMotors.getWorkStations()[0].getRequiredTasks()){
-			barry.setActiveWorkstation(cmcMotors.getWorkStations()[0]);
-			barry.doTask(task);
-		}
-		//The cycle took shorter than expected. We'll test whether this is reflected in the estimates.
-		cmcMotors.moveAssemblyLine(45);
-		now = cmcMotors.getCurrentTime();
-		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusHours(2)));
-		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusHours(3)));
-		// orders for the next day should not have moved.
-		assertTrue(eqiDateTime(orders.get(5).getEstimatedEndTime(), mu.toDateTime()));
-		
-		/**
-		 * If a cycle is very short an order from the next day can 'jump forwards'
-		 */
-		// Do all tasks
-		for(int i = 0; i < cmcMotors.getWorkStations().length; i++){
-			Workstation ws = cmcMotors.getWorkStations()[i];
-			barry.setActiveWorkstation(ws);
-			for(Task task : ws.getRequiredTasks()){
-				barry.doTask(task);
+		//The first & second order should be unaffected.
+		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusMinutes(190)));
+		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusMinutes(260)));
+		//The thirs order will be done after 50 + 70 + 70 + 70 + 60 mins = 320 mins
+		assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusMinutes(320)));
+		//Lets to all tasks in workstation 1, thus progressing the line. 
+		//We'll complete this phase 20 minutes early to check that the estimates come forwards too. 
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0));
+		for(Task task : orders.get(0).getTasks()){
+			if(cmcMotors.getWorkStations().get(0).getCapabilities().contains(task.getCarPart().type)){
+				barry.doTask(task, orders.get(0).getPhaseTime() - 20);
 			}
 		}
-		//Progress the line
-		cmcMotors.moveAssemblyLine(29);
-		now = cmcMotors.getCurrentTime();
-		assertTrue(eqiDateTime(orders.get(5).getEstimatedEndTime(), now.plusHours(6)));
-		
-		
+		//assert that 30 mins have passed.
+		assertTrue(eqiDateTime(now.plusMinutes(30), cmcMotors.getCurrentTime()));
+		//assert that the estimates cascade as expected.
+		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusMinutes(170)));
+		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusMinutes(240)));
+		assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusMinutes(300)));
+
 	}
 	
 	/**
-	 * 
+	 * This test tests whether orders are correctly scheduled to the next day, when they can't be completed
+	 * on the first day anymore.
 	 */
 	@Test
-	public void testOvertime(){
-		DateTime start = cmcMotors.getCurrentTime();
-		cmcMotors.progressTime(14 * 60); // Should induce one hour of overtime & will set the time to the next day.
-		cmcMotors.moveAssemblyLine(3 * 60);
-		assertTrue(eqiDateTime(start.plusDays(1), cmcMotors.getCurrentTime()));
-		//Today should end at 21:00 instead of 22:00. We'll set the time to 17:45 and plan two orders. The first can be completed today, the second tomorrow.
-		cmcMotors.progressTime(11 * 60 + 45);
+	public void testDayOverflow(){
+		//The day takes from 6:00 to 22:00
+		// The day starts at 6:00. Let's pretend time passes to 151 minutes before closing time. This allows us to produce one order of model A
 		DateTime now = cmcMotors.getCurrentTime();
+		cmcMotors.moveAssemblyLine(16*60 - 151);
+		now = now.plusMinutes(16 * 60 - 151);
+		assertTrue(eqiDateTime(cmcMotors.getCurrentTime(),now));
 		
+		now = cmcMotors.getCurrentTime();
+		
+		//Lets start adding orders.
 		cmcMotors.addOrder(orders.get(0));
+		//the first car order is automatically added to the assemblyline. The estimated completion date should be in 1 minute before closing time.
+		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusMinutes(150)));//17:45
+		//Adding order 2 (phase duration 70) should only start tomorrow.
 		cmcMotors.addOrder(orders.get(1));
-		
-		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusHours(3)));
-		assertFalse(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusHours(4)));
+		MutableDateTime mu = now.toMutableDateTime();
+		mu.addDays(1);
+		mu.setHourOfDay(6);mu.setMinuteOfHour(0);
+		mu.addMinutes(210);
+		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), mu.toDateTime()));//210 mins after 6:00 the next day.
 	}
 	
 	/**
-	 * 
+	 * Test the correct calculation of estimated completion times in case of overtime. 
+	 * The overtime is set to 5 hours and the orders on the line have a phase duration of 60 minutes
 	 */
 	@Test
 	public void testOvertimeOver2Hours(){
 		//GO to 18:00
-		cmcMotors.progressTime(12 * 60);
-		cmcMotors.addOrder(orders.get(0));
-		barry.setActiveWorkstation(cmcMotors.getWorkStations()[0]);
-		for(Task task : orders.get(0).getTasks()){
-			barry.doTask(task);
+		cmcMotors.moveAssemblyLine(12 * 60);
+		cmcMotors.addOrder(simpleOrders.get(0));
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0));
+		for(Task task : simpleOrders.get(0).getTasks()){
+			barry.doTask(task, 180);
 		}
-		cmcMotors.moveAssemblyLine(180);
-		barry.setActiveWorkstation(cmcMotors.getWorkStations()[1]);
-		for(Task task : orders.get(0).getTasks()){
-			barry.doTask(task);
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(1));
+		for(Task task : simpleOrders.get(0).getTasks()){
+			barry.doTask(task, 180);
 		}
-		cmcMotors.moveAssemblyLine(180);
-		barry.setActiveWorkstation(cmcMotors.getWorkStations()[2]);
-		for(Task task : orders.get(0).getTasks()){
-			barry.doTask(task);
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(2));
+		for(Task task : simpleOrders.get(0).getTasks()){
+			barry.doTask(task, 180);
 		}
-		cmcMotors.moveAssemblyLine(180);
 		//A new day has started. The overtime is 5 hours. The work day stops on 17:00
-		//goto 13:59 the last moment to post an order.
-		cmcMotors.progressTime(7 * 60 + 59);
+		//goto 13:59 the last moment to post an order
+		assertTrue(cmcMotors.getCurrentTime().getHourOfDay() == 6 && cmcMotors.getCurrentTime().getMinuteOfHour() == 00);
+		cmcMotors.moveAssemblyLine(7 * 60 + 59);
 		DateTime now = cmcMotors.getCurrentTime();
-		cmcMotors.addOrder(orders.get(1));
-		cmcMotors.addOrder(orders.get(2));
 		
-		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusHours(3)));
-		assertFalse(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusHours(4)));
+		//Add 2 orders.
+		cmcMotors.addOrder(simpleOrders.get(1));
+		cmcMotors.addOrder(simpleOrders.get(2));
+		
+		assertTrue(eqiDateTime(simpleOrders.get(1).getEstimatedEndTime(), now.plusHours(3)));
+		assertFalse(eqiDateTime(simpleOrders.get(2).getEstimatedEndTime(), now.plusHours(4)));
 	}
 	
 	/**
-	 * Tests whether progressTime() starts a new day when the invokation would result in a time outside working hours.
+	 * Test the correct calculation of estimated completion times in case of overtime. 
+	 * The overtime is set to 5 hours and the orders on the line have a phase duration of 70 minutes
 	 */
 	@Test
-	public void testProgressTime(){
-		DateTime now = cmcMotors.getCurrentTime();
-		cmcMotors.progressTime(22 * 60);
-		assertTrue(eqiDateTime(cmcMotors.getCurrentTime(), now.plusDays(1)));
+	public void testOvertimeOver2HoursPhase70(){
+		//Build a list of orders of duration 60.
+		List<CarOrder> simpleOrders = new ArrayList<CarOrder>();
+		for(int i = 0; i < 10; i++){
+			simpleOrders.add(buildStandardOrderB());
+		}
+		
+		//GO to 18:00
+		cmcMotors.moveAssemblyLine(12 * 60);
+		cmcMotors.addOrder(simpleOrders.get(0));
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0));
+		for(Task task : simpleOrders.get(0).getTasks()){
+			barry.doTask(task, 180);
+		}
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(1));
+		for(Task task : simpleOrders.get(0).getTasks()){
+			barry.doTask(task, 180);
+		}
+		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(2));
+		for(Task task : simpleOrders.get(0).getTasks()){
+			barry.doTask(task, 180);
+		}
+		//A new day has started. The overtime is 5 hours. The work day stops on 17:00
+		//goto 13:59 like in the previous test. However this time the order can't be completed anymore.
+		assertTrue(cmcMotors.getCurrentTime().getHourOfDay() == 6 && cmcMotors.getCurrentTime().getMinuteOfHour() == 00);
+		cmcMotors.moveAssemblyLine(7 * 60 + 59);
+		DateTime tomorrow = getNextDayStart(cmcMotors.getCurrentTime());
+		
+		//Add 2 orders.
+		cmcMotors.addOrder(simpleOrders.get(1));
+		cmcMotors.addOrder(simpleOrders.get(2));
+		
+		assertTrue(eqiDateTime(simpleOrders.get(1).getEstimatedEndTime(), tomorrow.plusMinutes(3 * 70)));
+		assertTrue(eqiDateTime(simpleOrders.get(2).getEstimatedEndTime(), tomorrow.plusMinutes(4 * 70)));
 	}
 	
 	/**
-	 * 
+	 * Test the effect of negative overtime on the system. It should reset overtime to zero if a day ends early.
 	 */
 	@Test
 	public void testNegativeOvertime(){
 		int day1 = cmcMotors.getCurrentTime().getDayOfYear();
-		cmcMotors.progressTime(12 * 60 + 30); //18:30
+		cmcMotors.moveAssemblyLine(12 * 60 + 30); //18:30
 		cmcMotors.moveAssemblyLine(60);//This will end the day and result in a theoretical overtime of -30. The overtime will be set to 0.
 		//We can't access the overtime directly, however progressing time to 21:59 should not result in a day switch.
 		assertTrue(cmcMotors.getCurrentTime().getDayOfYear() == day1 + 1);
+		cmcMotors.moveAssemblyLine(16 * 60 - 151);
+		assertFalse(cmcMotors.getCurrentTime().getDayOfYear() == day1 + 2);
+	}
+	
+	/**
+	 * A basic test of the batch scheduling strategy.
+	 * We test correct refactoring of the queue as required. See code for detailed flow.
+	 */
+	@Test
+	public void testPrioritySchedulingEasy(){
+		List<Order> ords = new ArrayList<Order>();
+		ords.add(buildStandardOrderA());ords.add(buildStandardOrderA());ords.add(buildStandardOrderB());ords.add(buildStandardOrderC());
+		//add a basic order for models A, B & C
+		for(Order ord : ords){
+			cmcMotors.addOrder(ord);
+		}
+		
+		//SCHED: <stuff in the workstations>|<stuff in the queue>
+		//SCHED: A|A-B-C
+		//		 0|1-2-3
+		
+		//Set priority for specification defined by standard order C.
+		cmcMotors.changeStrategy(buildStandardOrderC());
+		
+		//SCHED: A|C-A-B 
+		//		 0|3-1-2
+		//check that that C is scheduled after ords.get(0). ords.get(0) is automatically added to the assemblyline regardless of scheduling.
+		assertTrue(ords.get(3).getEstimatedEndTime().isBefore(ords.get(1).getEstimatedEndTime()));
+		assertTrue(ords.get(3).getEstimatedEndTime().isBefore(ords.get(2).getEstimatedEndTime()));
+		assertTrue(ords.get(1).getEstimatedEndTime().isBefore(ords.get(2).getEstimatedEndTime()));
+		
+		//Now we'll add another order of type C (priority)
+		ords.add(buildStandardOrderC());
+		cmcMotors.addOrder(ords.get(4));
+		//SCHED: A|C-C-A-B 
+		//		 0|3-4-1-2
+		
+		assertTrue(ords.get(3).getEstimatedEndTime().isBefore(ords.get(1).getEstimatedEndTime()));
+		assertTrue(ords.get(3).getEstimatedEndTime().isBefore(ords.get(2).getEstimatedEndTime()));
+		assertTrue(ords.get(1).getEstimatedEndTime().isBefore(ords.get(2).getEstimatedEndTime()));
+		assertTrue(ords.get(4).getEstimatedEndTime().isBefore(ords.get(2).getEstimatedEndTime()));
+		assertTrue(ords.get(4).getEstimatedEndTime().isBefore(ords.get(1).getEstimatedEndTime()));
+		assertTrue(ords.get(3).getEstimatedEndTime().isBefore(ords.get(4).getEstimatedEndTime()));
+		
+		//Finally we'll add a non priority order.
+		ords.add(buildStandardOrderB());
+		cmcMotors.addOrder(ords.get(5));
+		//SCHED: A|C-C-A-B-B 
+		//		 0|3-4-1-2-5
+		
+		assertTrue(ords.get(3).getEstimatedEndTime().isBefore(ords.get(1).getEstimatedEndTime()));
+		assertTrue(ords.get(3).getEstimatedEndTime().isBefore(ords.get(2).getEstimatedEndTime()));
+		assertTrue(ords.get(1).getEstimatedEndTime().isBefore(ords.get(2).getEstimatedEndTime()));
+		assertTrue(ords.get(4).getEstimatedEndTime().isBefore(ords.get(2).getEstimatedEndTime()));
+		assertTrue(ords.get(4).getEstimatedEndTime().isBefore(ords.get(1).getEstimatedEndTime()));
+		assertTrue(ords.get(3).getEstimatedEndTime().isBefore(ords.get(4).getEstimatedEndTime()));
+		for(int i = 0; i < 5; i++){
+			assertTrue(ords.get(i).getEstimatedEndTime().isBefore(ords.get(5).getEstimatedEndTime()));
+		}
+	}
+	
+	/**
+	 * Test the correct estimated assemblytimes for TaskOrders. Using deadlines
+	 */
+	@Test
+	public void testSingleTasks(){
+		//Fill the schedule with phase 60 orders 
+		for(int i = 0; i < simpleOrders.size(); i++){
+			cmcMotors.addOrder(simpleOrders.get(i));
+		}
+		
+		//Add a taskOrder with a dealine 4 hours after the startup of the system
+		TaskOrder taskOrder = buildStandardTaskOrder(cmcMotors.getCurrentTime().plusHours(4));
+		cmcMotors.addOrder(taskOrder);
+		
+		//simpleOrder 0 was placed on the lane and will be completed first. 
+		assertTrue(simpleOrders.get(0).getEstimatedEndTime().isBefore(taskOrder.getEstimatedEndTime()));
+		assertTrue(taskOrder.getEstimatedEndTime().isBefore(simpleOrders.get(1).getEstimatedEndTime()));
+		assertTrue(simpleOrders.get(1).getEstimatedEndTime().isBefore(simpleOrders.get(2).getEstimatedEndTime()));
 	}
 	
 	
@@ -314,7 +420,17 @@ public class AssemblyLineTest {
 		assertTrue(eqiDateTime(a, b));
 	}
 	
-	
+	/**
+	 * Given the datetime indicating "now" this method returns the datetime indicating "tomorrow" at 6:00 AM
+	 * @param now	The current time.
+	 * @return		The datetime indicating "tomorrow" at 6:00 AM
+	 */
+	private DateTime getNextDayStart(DateTime now){
+		MutableDateTime mu = now.toMutableDateTime();
+		mu.addDays(1);
+		mu.setHourOfDay(6);mu.setMinuteOfHour(0);
+		return mu.toDateTime();
+	}
 	
 	
 }

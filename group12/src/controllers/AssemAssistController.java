@@ -1,6 +1,7 @@
 package controllers;
 
 import logic.users.CarManufacturingCompany;
+import logic.users.CustomsManager;
 import logic.users.GarageHolder;
 import logic.users.Manager;
 import logic.users.Mechanic;
@@ -14,7 +15,6 @@ public class AssemAssistController {
 	 * The car manufacturing company.
 	 */
 	private CarManufacturingCompany company;
-	
 	
 	/**
 	 * The controller for garage holders.
@@ -32,6 +32,11 @@ public class AssemAssistController {
 	private MechanicController meController;
 	
 	/**
+	 * The controller for customs shop managers.
+	 */
+	private CustomsManagerController cuController;
+	
+	/**
 	 * Creates a new AssemAssistController with the given car manufacturing company.
 	 * @param company	A car manufacturing company. 
 	 */
@@ -40,6 +45,7 @@ public class AssemAssistController {
 		this.ghController = new GarageHolderController();
 		this.maController = new ManagerController();
 		this.meController = new MechanicController();
+		this.cuController = new CustomsManagerController();
 	}
 
 	/**
@@ -62,6 +68,10 @@ public class AssemAssistController {
 		else if(user instanceof Mechanic){
 			this.meController.setMechanic((Mechanic)user);
 			return this.meController;
+		}
+		else if(user instanceof CustomsManager){
+			this.cuController.setCustomsManager((CustomsManager)user);
+			return this.cuController;
 		}
 		return null;
 	}

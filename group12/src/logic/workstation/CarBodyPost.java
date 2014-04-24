@@ -13,7 +13,7 @@ public class CarBodyPost extends Workstation {
 	/**
 	 * Initializes the compatible tasks for this car body post.
 	 */
-	private static List<CarPartType> compatibleTasks;
+	private List<CarPartType> compatibleTasks;
 	{
 		CarPartType[] array= {CarPartType.Body, CarPartType.Colour};
 		compatibleTasks = (List<CarPartType>) Arrays.asList(array);
@@ -26,9 +26,16 @@ public class CarBodyPost extends Workstation {
 	 * 				({CarPartType.Body, CarPartType.Colour})
 	 */
 	@Override
-	public
-	List<CarPartType> getCapabilities(){
-		return CarBodyPost.compatibleTasks;
+	public List<CarPartType> getCapabilities(){
+		return this.compatibleTasks;
+	}
+	
+	/**
+	 * Get a new instance of CarBodyPost.
+	 */
+	@Override
+	protected Workstation getRawCopy(){
+		return new CarBodyPost();
 	}
 	
 	/**

@@ -3,15 +3,16 @@ package tests;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import logic.car.CarModel;
 import logic.car.CarOrder;
+import logic.car.CarOrderDetailsMaker;
 import logic.car.CarPart;
 import logic.car.CarPartType;
-import logic.car.CarSpecification;
+import logic.car.TaskOrder;
+import logic.car.TaskOrderDetailsMaker;
 import logic.users.CarManufacturingCompany;
 import logic.users.GarageHolder;
 import logic.users.Mechanic;
@@ -21,13 +22,13 @@ import logic.workstation.DriveTrainPost;
 import logic.workstation.Task;
 import logic.workstation.Workstation;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
 public class WorkStationTest {
 	GarageHolder garageHolder;
 	CarManufacturingCompany carManufacturingCompany;
-	CarSpecification carSpecification;
 	CarOrder carOrder;
 	
 	Workstation universalPost;
@@ -51,24 +52,32 @@ public class WorkStationTest {
 		garageHolder = new GarageHolder(carManufacturingCompany, "Lando");//new GarageHolder(carManufacturingCompany);
 		
 		CarPart[] partsArray = {
-				CarPart.AIRCO_AUTO, 
 				CarPart.BODY_BREAK, 
-				CarPart.COLOUR_BLACK, 
-				CarPart.ENGINE_4, 
-				CarPart.GEARBOX_5AUTO, 
-				CarPart.SEATS_LEATHER_BLACK, 
-				CarPart.WHEELS_COMFORT
+				CarPart.COLOUR_RED,
+				CarPart.ENGINE_4,
+				CarPart.GEARBOX_5AUTO,
+				CarPart.SEATS_LEATHER_WHITE,
+				CarPart.AIRCO_MANUAL,
+				CarPart.WHEELS_COMFORT,
+				CarPart.SPOILER_NONE
 			};
 		
-		List<CarPart> parts = (List<CarPart>) Arrays.asList(partsArray);
-		carSpecification = new CarSpecification(CarModel.MODEL1,new ArrayList<CarPart>(parts));
-		carOrder = new CarOrder(carSpecification);
-		
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELA);
+		for(CarPart part : partsArray){
+			maker.addPart(part);
+		}
+		carOrder = new CarOrder(maker.getDetails());
 		
 		universalPost = new Workstation() {
 			@Override
 			public List<CarPartType> getCapabilities() {
 				return Arrays.asList(CarPartType.values());
+			}
+
+			@Override
+			protected Workstation getRawCopy() {
+				//This method is not needed for these tests.
+				return null;
 			}
 		};
 		
@@ -94,7 +103,7 @@ public class WorkStationTest {
 		assertFalse(carOrder.done());
 		assertFalse(universalPost.done());
 		
-		for(Task task : universalPost.getRequiredTasks()){
+		for(Task task : carOrder.getTasks()){
 			universalPost.doTask(task);
 		}
 		assertTrue(carOrder.done());
@@ -146,6 +155,25 @@ public class WorkStationTest {
 	}
 	
 	/**
+	 * Test that taskorders are completed correctly by the workstations.
+	 */
+	@Test
+	public void testTaskOrder(){
+		TaskOrderDetailsMaker maker = new TaskOrderDetailsMaker();
+		maker.choosePart(CarPart.COLOUR_BLACK);
+		maker.chooseDeadline(new DateTime().plusHours(5));
+		TaskOrder order = new TaskOrder(maker.getDetails());
+		
+		carBodyPost.setOrder(order);
+		for(Task task : order.getTasks()){
+			carBodyPost.doTask(task);
+		}
+		
+		assertTrue(carBodyPost.done());
+		assertTrue(order.done());
+	}
+	
+	/**
 	 * Test idle(). A workstation is idle if it isn't currently working on a car order. We can add a car order by using .setOrder(...)
 	 * When calling .setOrder(null) we need to assert that the workstation is idle and also that the list of required tasks is empty.
 	 * No link may remain to the order previously on the workstation or any of it's elements. 
@@ -158,7 +186,6 @@ public class WorkStationTest {
 		
 		universalPost.setOrder(null);
 		assertTrue(universalPost.idle());
-		assertTrue(universalPost.getRequiredTasks().size() == 0);
 	}
 
 }

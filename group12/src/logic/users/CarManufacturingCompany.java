@@ -7,7 +7,9 @@ import java.util.List;
 import org.joda.time.DateTime;
 
 import logic.assemblyline.AssemblyLine;
-import logic.car.CarOrder;
+import logic.assemblyline.SchedulingStrategy;
+import logic.car.Order;
+import logic.workstation.Task;
 import logic.workstation.Workstation;
 
 /**
@@ -36,6 +38,11 @@ public class CarManufacturingCompany {
 	private ArrayList<String> validNamesMechanic = new ArrayList<String>();
 	
 	/**
+	 * List of all valid names for customs shop managers.
+	 */
+	private ArrayList<String> validNamesCustomsManager = new ArrayList<String>();
+	
+	/**
 	 * Variable holding the assembly line of this car manufacturing company.
 	 */
 	private AssemblyLine assemblyLine;
@@ -60,7 +67,8 @@ public class CarManufacturingCompany {
 		validNamesManager.add("man");
 		validNamesMechanic.add("Joren");
 		validNamesMechanic.add("mech");
-		validNamesGarageHolders.add("Michiel");
+		validNamesCustomsManager.add("Michiel");
+		validNamesCustomsManager.add("cust");
 	}
 
 	/**
@@ -74,6 +82,7 @@ public class CarManufacturingCompany {
 	 * 			- the list of valid manager names contains the given user name,
 	 * 			- the list of valid garage holders names contains the given user name or
 	 * 			- the list of valid mechanic names contains the given user name.
+	 * 			- the list of valid customs shop manager names contains the given user name.
 	 * 			Returns null otherwise.
 	 */
 	public User logIn(String userName){
@@ -95,6 +104,11 @@ public class CarManufacturingCompany {
 			users.put(userName, user);
 			return user;
 		}
+		if(validNamesCustomsManager.contains(userName)){
+			CustomsManager user = new CustomsManager(this, userName);
+			users.put(userName, user);
+			return user;
+		}
 		return null;
 	}
 	
@@ -102,9 +116,9 @@ public class CarManufacturingCompany {
 	 * Adds the given order to the assembly line if the given order is not null.
 	 * @param order	The order which needs to be added to the assembly line.
 	 */
-	public void addOrder(CarOrder order) {
+	public void addOrder(Order order) {
 		if(order != null)
-			this.assemblyLine.addCarOrder(order);
+			this.assemblyLine.addOrder(order);
 	}
 	
 	/**
@@ -112,46 +126,95 @@ public class CarManufacturingCompany {
 	 * of this car manufacturing company.
 	 * @return	The workstations of the assembly line.
 	 */
-	public Workstation[] getWorkStations(){
+	public List<Workstation> getWorkStations(){
 		return this.assemblyLine.getWorkStations();
 	}
 	
 	/**
 	 * Moves the assembly line forward if every work station is ready and 
 	 * sets the end time of the first order to the given end time.
-	 * @return 	True if the assembly line can be moved.
+	 * @return 	True if the assembly line has been moved.
 	 * 			False if the assembly line can not be moved.
 	 */
 	public boolean moveAssemblyLine(int shiftDuration){
-		return this.assemblyLine.moveAssemblyLine(shiftDuration);
+		return this.assemblyLine.tryMoveAssemblyLine(shiftDuration);
 	}
 	
 	/**
-	 * Returns the car orders that would be on the assembly line if the assembly line was progressed.
-	 * @return The list of car orders.
-	 */
-	public List<CarOrder> askFutureSchedule(){
-		return this.assemblyLine.askFutureSchedule();
-	}
-	
-	/**
-	 * Returns the current time in this factory.
-	 * @return	The current time (immutable)
+	 * Returns the current time.
+	 * @return	The current time.
 	 */
 	public DateTime getCurrentTime(){
 		return this.assemblyLine.getCurrentTime();
 	}
 	
 	/**
-	 * Progresses the time without moving the assembly line 
-	 * 
-	 * Progresses time without progressing the companies assembly line. 
-	 * Does no checks as to the state of the line or overtime. As such this method can simulate prolonged idle time on the assemblylin, 
-	 * for example when handling emergency situations or during testing.
-	 * Overtime will be carried to the next day if the invocation results in a moment between shifts.
-	 * @param mins		The duration of idle time in minutes.
+	 * Returns a string representation of the current statistics.
+	 * @return	A string representation of the current statistics.
 	 */
-	public void progressTime(int mins){
-		this.assemblyLine.progressTime(mins);
+	public String getStatistics() {
+		return assemblyLine.getStatistics();
+	}
+	
+	/**
+	 * Returns a list of the current strategies followed by the available scheduling strategies.
+	 * @return a list of the current strategies followed by the available scheduling strategies.
+	 */
+	public List<SchedulingStrategy> getStrategies() {
+		return assemblyLine.getStrategies();
+	}
+	
+	/**
+	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy.
+	 * @return	a list of orders that are viable to be used by the batch specification scheduling strategy.
+	 */
+	public List<Order> getBatchList() {
+		return assemblyLine.getBachList();
+	}
+	
+	/**
+	 * Changes the strategy according to the given order.
+	 * @param order	The order that has to be used as a template for the strategy.
+	 */
+	public void changeStrategy(Order order) {
+		assemblyLine.changeStrategy(order);
+	}
+	
+	/**
+	 * Completes the task corresponding to the given task.
+	 * @param task	A copy of the task that needs to be completed.
+	 * @return	True if the task is completed successfully
+	 * 			False the task could not be completed.
+	 */
+	public boolean doTask(Task task){
+		return assemblyLine.doTask(task);
+	}
+	
+	/**
+	 * Returns a list of pending tasks at a given workstation.
+	 * @param station	The a copy of the workstation for which the pending tasks are needed.
+	 * @return	A list of tasks that are pending at the given workstation.
+	 */
+	public List<Task> getRequiredTasks(Workstation station){
+		return this.assemblyLine.getRequiredTasks(station);
+	}
+	
+	/**
+	 * Returns a list of all tasks at a given workstation.
+	 * @param station	The a copy of the workstation for which the tasks are needed.
+	 * @return	A list of tasks at the given workstation.
+	 */
+	public List<Task> getAllTasks(Workstation station){
+		return this.assemblyLine.getAllTasks(station);
+	}
+	
+	/**
+	 * Asks the assembly line to check the given duration, if the duration is allowed it returns true, otherwise false.
+	 * @param duration	The duration that needs to be checked.
+	 * @return 	True if the duration is allowed.
+	 * 			False otherwise
+	 */
+	public boolean checkPhaseDuration(int duration){
+		return this.assemblyLine.checkPhaseDuration(duration);
 	}
 }

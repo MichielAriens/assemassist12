@@ -26,6 +26,17 @@ public class Task {
 	}
 	
 	/**
+	 * Returns a copy of this task.
+	 * @return	a copy of this task.
+	 */
+	public Task getRawCopy(){
+		Task copy = new Task(this.carPart);
+		if(this.isComplete())
+			copy.perform();
+		return copy;
+	}
+	
+	/**
 	 * Returns the car part corresponding to this task.
 	 * @return the car part corresponding to this task.
 	 */
@@ -66,4 +77,26 @@ public class Task {
 		return "Task description:\n   -Type of part needed: " + this.getCarPart().type.toString() + ",\n   -Car Part: " + this.getCarPart().toString() + "\n";
 	}
 	
+	/**
+	 * Checks if this Task is equal to a given object.
+	 * @return	False	if the given object is null, or if the given object is not an instance of the Task class,
+	 * 					Or if the given object does not have the same CarPart as this Task.
+	 * 			True 	otherwise.
+	 */
+	@Override
+	public boolean equals(Object obj){
+		if(obj == null) return false;
+		if(this.getClass() != obj.getClass()) return false;
+		return equals((Task) obj);
+	}
+	
+	/**
+	 * Checks if this Task is equal to a given Task.
+	 * @param other	The other Task that needs to be checked.
+	 * @return	True	if the CarPart of this Task is the same as the CarPart of the other Task.
+	 * 			False	otherwise.
+	 */
+	private boolean equals(Task other){
+		return this.carPart == other.carPart;
+	}
 }

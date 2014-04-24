@@ -2,8 +2,8 @@ package logic.users;
 
 import java.util.List;
 
-import logic.car.CarOrder;
-import logic.workstation.Workstation;
+import logic.assemblyline.SchedulingStrategy;
+import logic.car.Order;
 
 /**
  * Class used to describe a manager working for a car manufacturing company.
@@ -27,28 +27,34 @@ public class Manager extends User{
 	}
 	
 	/**
-	 * Returns the workstations of the car manufacturing company.
-	 * @return The workstations of the car manufacturing company.
+	 * Returns a string representation of the current statistics.
+	 * @return	a string representation of the current statistics.
 	 */
-	public Workstation[] getWorkstations(){
-		return this.company.getWorkStations();
+	public String getStatistics() {
+		return company.getStatistics();
 	}
 	
 	/**
-	 * Moves the assembly line.
-	 * @param phaseDuration	The duration spent on the current phase.
-	 * @return 	True if the assembly line has been moved.
-	 * 			False if the assembly line can not be moved.
+	 * Returns a list of the current strategies followed by the available scheduling strategies.
+	 * @return a list of the current strategies followed by the available scheduling strategies.
 	 */
-	public boolean moveAssemblyLine(int phaseDuration){
-		return this.company.moveAssemblyLine(phaseDuration);
+	public List<SchedulingStrategy> getStrategies() {
+		return company.getStrategies();
 	}
 	
 	/**
-	 * Returns the list of car orders in the schedule as it would be if the assembly line has been moved once.
-	 * @return the list of car orders in the schedule as it would be if the assembly line has been moved once.
+	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy.
+	 * @return	a list of orders that are viable to be used by the batch specification scheduling strategy.
 	 */
-	public List<CarOrder> askFutureSchedule(){
-		return this.company.askFutureSchedule();
+	public List<Order> getBatchList() {
+		return company.getBatchList();
+	}
+	
+	/**
+	 * Changes the strategy according to the given order.
+	 * @param order	The order that has to be used as a template for the strategy.
+	 */
+	public void changeStrategy(Order order) {
+		company.changeStrategy(order);
 	}
 }

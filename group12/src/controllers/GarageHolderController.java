@@ -16,6 +16,11 @@ public class GarageHolderController extends UserController{
 	private GarageHolder currentGarageHolder;
 	
 	/**
+	 * A maker for car order details.
+	 */
+	private CarOrderDetailsMaker maker;
+	
+	/**
 	 * Sets the current garage holder to the given garage holder.
 	 * @param garageHolder	The new garage holder.
 	 */
@@ -45,9 +50,41 @@ public class GarageHolderController extends UserController{
 			return null;
 		ArrayList<String> pendingOrderStrings = new ArrayList<String>();
 		for(CarOrder order : this.currentGarageHolder.getPendingOrders()){
-			pendingOrderStrings.add(order.toString());
+			pendingOrderStrings.add("Pending, est. completion at: " + order.toString());
 		}
 		return pendingOrderStrings;
+	}
+	
+	/**
+	 * Returns the information for the pending order with the given index.
+	 * @param index	The index for the order in the list of pending orders.
+	 * @return	Null if the current garage holder is null or the given index is not valid. 
+	 * 			The information for the pending order with the given index otherwise.
+	 */
+	public String getPendingInfo(int index){
+		if(this.currentGarageHolder == null)
+			return null;
+		ArrayList<CarOrder> pendingOrders = this.currentGarageHolder.getPendingOrders();
+		if(index < pendingOrders.size() && index >= 0)
+			return pendingOrders.get(index).getInformation();
+		else
+			return null;
+	}
+	
+	/**
+	 * Returns the information for the completed order with the given index.
+	 * @param index	The index for the order in the list of completed orders.
+	 * @return 	Null if the current garage holder is null or the given index is not valid. 
+	 * 			The information for the completed order with the given index otherwise.
+	 */
+	public String getCompletedInfo(int index){
+		if(this.currentGarageHolder == null)
+			return null;
+		ArrayList<CarOrder> completedOrders = this.currentGarageHolder.getCompletedOrders();
+		if(index < completedOrders.size() && index >= 0)
+			return completedOrders.get(index).getInformation();
+		else
+			return null;
 	}
 
 	/**
@@ -60,7 +97,7 @@ public class GarageHolderController extends UserController{
 			return null;
 		ArrayList<String> completedOrderStrings = new ArrayList<String>();
 		for(CarOrder order : this.currentGarageHolder.getCompletedOrders()){
-			completedOrderStrings.add(order.toString());
+			completedOrderStrings.add("Completed on: " + order.toString());
 		}
 		return completedOrderStrings;
 	}
@@ -80,40 +117,52 @@ public class GarageHolderController extends UserController{
 	}
 	
 	/**
-	 * Returns the list of options for the given car part type and model with numbering.
+	 * Returns the list of options for the given car part type and model defined in the maker with numbering.
 	 * @param type	The car part type for which the options need to be returned.
-	 * @param model	The car model for which the options need to be returned.
 	 * @return Null if the given type or model is null.
 	 * @return The list of options for the given car part type and model with numbering.
 	 */
-	public ArrayList<String> getOptions(CarPartType type, CarModel model){
-		if(type == null || model == null)
+	public ArrayList<String> getOptions(CarPartType type){
+		if(type == null)
 			return null;
-		ArrayList<String> options = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<String>();
 		int count = 1;
-		for(CarPart opt : CarPart.values()){
-			if(opt.type == type && model.validPart(opt)){
-				options.add(opt.toString() + ": " + count);
-				count++;
-			}
+		for(CarPart opt : maker.getAvailableParts(type)){
+			result.add(opt.toString() + ": " + count);
+			count++;
 		}
-		return options;
+		return result;
+	}
+	
+	/**
+	 * Creates a new car order's details maker with the given model if the given model is not
+	 * null.
+	 * @param model	The model for the new car order's details maker.
+	 */
+	public void chooseModel(CarModel model){
+		if(model == null)
+			return;
+		this.maker = new CarOrderDetailsMaker(model);
+	}
+	
+	/**
+	 * Adds the car part from the given string to the car order's details maker if the given
+	 * string is not null.
+	 * @param partString	The string representation of the part to be added.
+	 */
+	public void addPart(String partString){
+		if(partString == null)
+			return;
+		this.maker.addPart(CarPart.getPartfromString(partString));
 	}
 	
 	/**
 	 * Places a car order with the given specifications for the current garage holder if the
 	 * given specifications and the current garage holder are not null. 
-	 * @param spec	The specifications for the car order to be placed.
 	 */
-	public void placeOrder(ArrayList<String> spec){
-		if(spec == null || currentGarageHolder == null)
+	public void placeOrder(){
+		if(currentGarageHolder == null)
 			return;
-		CarModel model = CarModel.getModelFromString(spec.get(0));
-		ArrayList<CarPart> parts = new ArrayList<CarPart>();
-		for(int i = 1; i < spec.size(); i++){
-			parts.add(CarPart.getPartfromString(spec.get(i)));
-		}
-		CarSpecification specification = new CarSpecification(model, parts);
-		this.currentGarageHolder.placeOrder(specification);
+		this.currentGarageHolder.placeOrder(maker.getDetails());
 	}
 }

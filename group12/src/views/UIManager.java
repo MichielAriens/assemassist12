@@ -3,12 +3,13 @@ package views;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import controllers.ManagerController;
 
 /**
  * A command line interface class used to represent the manager's UI, which is used by managers
- * to look up the status of the assembly line and advance it if possible.
+ * to look up the current statistics and change scheduling strategies.
  */
 public class UIManager {
 	
@@ -23,7 +24,7 @@ public class UIManager {
 	private BufferedWriter writer;
 	
 	/**
-	 * The controller that offers this UI the methods to let the current manager check and advance the assembly line.
+	 * The controller that offers this UI methods to check statistics and change scheduling strategies.
 	 */
 	private ManagerController maController;
 	
@@ -39,45 +40,24 @@ public class UIManager {
 	
 	/**
 	 * A method that is called by the main UI, when a manager has successfully logged in.
-	 * @param maController	The ManagerController that offers this UI methods to check and advance the assembly line.
+	 * @param maController	The ManagerController that offers this UI methods to check statistics and change
+	 * 						scheduling strategies.
 	 */
 	public void run(ManagerController maController){
 		this.maController = maController;
 		try {
-			writer.write("Manager " + maController.getUserName()+ " has logged in.\n\n");
-			writer.write("Current status:\n\n");
-			for(String s : maController.getTasksPerWorkstation()){
-				writer.write(s + "\n");
-			}
-			writer.write("\n");
-			writer.flush();
-
-			writer.write("Future status:\n\n");
-			for(String s : maController.getFutureStatus()){
-				writer.write(s + "\n");
-			}
-			writer.write("\n");
-			writer.flush();
-			
-			int time = getTimeSpent();
-			if(this.maController.moveAssemblyLine(time)){
-				writer.write("Assembly line moved forward successfully.\n\n");
-				writer.write("Current status:\n\n");
-				for(String s : maController.getTasksPerWorkstation()){
-					writer.write(s + "\n");
+			writer.write("Manager " + maController.getUserName()+ " has logged in.\n\n");			
+			while(true){				
+				int answer = chooseAction("Select your action:\n   1: Check statistics\n   2: Select alternative scheduling algorithm\n   3: Leave overview\nAnswer: ", 3);
+				if(answer == 1){
+					writeStatistics();
 				}
-				writer.flush();
-				waitForCompletion("Press enter to finish. ");
-				return;
-			}
-			else{
-				writer.write("Assembly line could not be moved forward successfully.\n\n");
-				writer.write("Unfinished tasks:\n\n");
-				for(String s : maController.getUnfinishedTasks()){
-					writer.write(s + "\n");
+				else if(answer == 2){
+					newSchedulingAlgorithm();
 				}
-				writer.flush();
-				waitForCompletion("Press enter to finish.\n");
+				else if(answer == 3){
+					return;
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -85,34 +65,106 @@ public class UIManager {
 	}
 	
 	/**
-	 * A method that prompts the user for the time spent in minutes in the current phase.
-	 * @return	An int that holds the time in minutes spent in the current phase according to the current manager.
+	 * Writes the current statistics to the screen.
+	 * @throws IOException	When IO fails.
 	 */
-	private int getTimeSpent(){
-		try{
-			writer.write("Enter the time (in minutes) spent during the current phase: ");
-			writer.flush();
-			while(true){
-				String answer = reader.readLine();
-				try{
-					int time = Integer.parseInt(answer);
-					if(time < 0 || time > 180){
-						writer.write("\nInvalid input, try again. ");
-						writer.flush();
-						continue;
-					}
-					writer.write("\n");
-					writer.flush();
-					return time;
-				} catch(NumberFormatException e){
-					writer.write("\nInvalid input, try again. ");
-					writer.flush();
-					continue;
-				}
+	private void writeStatistics()throws IOException {
+		writer.write("===STATISTICS===\n");
+		writer.flush();
+		writer.write(maController.getStatistics() + "\n");
+		writer.flush();
+	}
+	
+	/**
+	 * Lets the user choose an alternate scheduling algorithm.
+	 * @throws IOException	When IO fails.
+	 */
+	private void newSchedulingAlgorithm() throws IOException {
+		writer.write("===ALTERNATE SCHEDULING MECHANISM===\n");
+		writer.flush();
+		ArrayList<String> strategies = maController.getStrategies();
+		writer.write("Current algorithm:\n   " + strategies.get(0) + "\n");
+		
+		String query = "Select your algorithm:\n";
+		for(int i = 1; i < strategies.size(); i++){
+			query += "   " + (i) + ": " + strategies.get(i) + "\n";
+		}
+		query += "   " + (strategies.size()) + ": Cancel\nAnswer: ";
+		int algorithm = chooseAction(query, strategies.size());
+		int indexOfCancel = strategies.size(); 
+		if(algorithm != indexOfCancel){
+			String chosenStrategy = strategies.get(algorithm);
+			if(chosenStrategy.equals("FIFO")){
+				chooseFIFO();
 			}
-		} catch(IOException e){
+			else if(chosenStrategy.equals("Specification Batch")){
+				chooseSpecificationBatch();
+			}
+		}
+	}
+	
+	/**
+	 * Changes the strategy to FIFO and notifies the user of what happened.
+	 */
+	private void chooseFIFO() {
+		if(maController.changeStrategyToFIFO()){
+			waitForCompletion("Chosen strategy has been applied. Press enter to continue.\n");
+		}
+		else{
+			waitForCompletion("Chosen strategy is the current strategy, nothing has changed. Press enter to continue.\n");
+		}
+	}
+	
+	/**
+	 * Lets the user choose which set of options to use for the batch specifications strategy,
+	 * and applies this strategy if possible.
+	 */
+	private void chooseSpecificationBatch() {
+		String query;
+		ArrayList<String> listCarOptions = maController.getBatchList();
+		if(listCarOptions.size() < 1){
+			waitForCompletion("No available sets of car options. Press enter to continue.\n");
+		}
+		else{
+			query = "===Select desired set===\n";
+			for(int i = 0; i < listCarOptions.size(); i++){
+				query += listCarOptions.get(i);
+			}
+			query += "   " + (listCarOptions.size()+1) + ": Cancel\n";
+			int carOption = chooseAction(query, listCarOptions.size()+1);
+			if(carOption != listCarOptions.size()+1){
+				maController.changeStrategyToBatchProcessing(carOption-1);
+				waitForCompletion("Chosen strategy has been applied. Press enter to continue.\n");
+			}
+		}
+	}
+	
+	/**
+	 * Lets the user choose an option from a given query.
+	 * @param query	The query that has to be printed out to the user.
+	 * @param max	The greatest acceptable answer.
+	 * @return	-1	If an IO exception occurs.
+	 * 			The users answer otherwise.
+	 */
+	private int chooseAction(String query, int max){
+		try{
+			while(true){
+				writer.write(query);
+				writer.flush();
+				String answer = reader.readLine();
+				writer.write("\n");
+				writer.flush();
+				try{
+					int result = Integer.parseInt(answer);
+					if(result > 0 && result <= max)
+						return result;
+				}
+				catch(NumberFormatException e){};
+			}
+		}
+		catch(IOException e){
 			e.printStackTrace();
-			return 0;
+			return -1;
 		}
 	}
 	
@@ -129,5 +181,4 @@ public class UIManager {
 			e.printStackTrace();
 		}
 	}
-
 }

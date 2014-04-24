@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 import controllers.AssemAssistController;
+import controllers.CustomsManagerController;
 import controllers.GarageHolderController;
 import controllers.ManagerController;
 import controllers.MechanicController;
@@ -50,6 +51,11 @@ public class UI {
 	private UIMechanic mechanicUI;
 	
 	/**
+	 * A command line interface that is used by customs shop managers to interact with the AssemAssist system.
+	 */
+	private UICustomsManager customsUI;
+	
+	/**
 	 * Make a new UI with a given AssemAssistController.
 	 * @param controller	The AssemAssistController that will be used by this UI to let users log into the 
 	 * 						AssemAssist system.
@@ -61,6 +67,7 @@ public class UI {
 		this.garageHolderUI = new UIGarageHolder(this.reader, this.writer);
 		this.managerUI = new UIManager(this.reader, this.writer);
 		this.mechanicUI = new UIMechanic(this.reader, this.writer);
+		this.customsUI = new UICustomsManager(this.reader, this.writer);
 		this.run();
 	}
 	
@@ -88,6 +95,9 @@ public class UI {
 			else if(userCont instanceof MechanicController){
 				mechanicUI.run((MechanicController)userCont);
 			}
+			else if(userCont instanceof CustomsManagerController){
+				customsUI.run((CustomsManagerController)userCont);
+			}
 			try {
 				writer.write("\n\n");
 				writer.flush();
@@ -106,7 +116,7 @@ public class UI {
 	 */
 	private UserController login(){
 		try{
-			writer.write("====LOGIN====\nEnter username (Valid names: man, mech, gar): ");
+			writer.write("====LOGIN====\nEnter username (Valid names: man, mech, gar, cust): ");
 			writer.flush();
 			String userName = reader.readLine();
 			return controller.logIn(userName);

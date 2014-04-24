@@ -1,6 +1,7 @@
 package logic.users;
 
 import java.util.List; 
+
 import logic.workstation.Task;
 import logic.workstation.Workstation;
 
@@ -10,7 +11,7 @@ import logic.workstation.Workstation;
 public class Mechanic extends User{
 	
 	/**
-	 * The workstation this mechanic is currently working on.
+	 * The string identifier of the workstation this mechanic is currently working on.
 	 */
 	private Workstation activeStation = null;
 	
@@ -18,6 +19,12 @@ public class Mechanic extends User{
 	 * The manufacturing company for which the mechanic works.
 	 */
 	private CarManufacturingCompany company;
+	
+	/**
+	 * The maximum time it took to perform a task and so the maximum duration of
+	 * a phase in the assembly line. Supposed that every task can be performed parallel.
+	 */
+	private int maxPhaseDuration = 0;
 	
 	/**
 	 * Constructs a new mechanic initializing its company and user name with the given 
@@ -48,43 +55,71 @@ public class Mechanic extends User{
 	}
 	
 	/**
-	 * Performs a task if the task is compatible with the active workstation of the mechanic.
-	 * @param task	The task that needs to be performed.
-	 * @return 	True if the task is compatible with the active workstation.
-	 * 			False otherwise.
+	 * Performs a task if the task is compatible with the active workstation of the mechanic
+	 * and tries to move the assembly line.
+	 * @param task	A copy of the task that needs to be performed.
 	 */
-	public boolean doTask(Task task){
-		if (getActiveWorkstation().isCompatibleTask(task)){
-			task.perform();
-			return true;
+	public void doTask(Task task, int duration){
+		if(company.checkPhaseDuration(duration)){
+			boolean performed = company.doTask(task);
+			if(performed){
+				setMaxPhaseDuration(duration);
+				if(company.moveAssemblyLine(maxPhaseDuration))
+					resetMaxPhaseDuration();
+			}
 		}
-		return false;
+	}
+
+	/**
+	 * Sets the maximum phase duration to the given duration if the given duration
+	 * is greater than the maximum phase duration.
+	 * @param duration	The duration that has to be checked and saved if it's greater than the current
+	 * 					maximum.
+	 */
+	private void setMaxPhaseDuration(int duration) {
+		if(duration > maxPhaseDuration){
+			maxPhaseDuration = duration;
+		}
 	}
 	
 	/**
-	 * Returns the list of tasks that need to be performed at the active workstation or null
-	 * if the mechanic has no active workstation.
-	 * @return	The list of tasks that need to be performed at the active workstation 
-	 * 			if the active workstation is not null.
-	 * 			Null otherwise.
+	 * Resets the maximum phase duration to zero.
+	 */
+	private void resetMaxPhaseDuration() {
+		maxPhaseDuration = 0;
+	}
+	
+	/**
+	 * Returns a list tasks that are currently pending at this mechanic's active workstation.
+	 * @return	null	if the mechanic is not currently posted.
+	 * 			The list of tasks otherwise.
 	 */
 	public List<Task> getAvailableTasks(){
 		if(!isPosted())
 			return null;
-		return this.activeStation.getRequiredTasks();
+		return this.company.getRequiredTasks(this.activeStation);
+	}
+	
+	/**
+	 * Returns a list of all tasks at a given workstation.
+	 * @param station	The a copy of the workstation for which the tasks are needed.
+	 * @return	A list of tasks at the given workstation.
+	 */
+	public List<Task> getAllTasks(Workstation station){
+		return this.company.getAllTasks(station);
 	}
 	
 	/**
 	 * Returns the list of workstations from the assembly line of the car manufacturing company.
 	 * @return the list of workstations from the assembly line of the car manufacturing company.
 	 */
-	public Workstation[] getAvailableWorkstations(){
+	public List<Workstation> getWorkstations(){
 		return this.company.getWorkStations();
 	}
-	
+
 	/**
-	 * Sets the active workstation to the given workstation.
-	 * @param station	The new active workstation.
+	 * Set the active workstation to the given workstation.
+	 * @param workstation
 	 */
 	public void setActiveWorkstation(Workstation station){
 		this.activeStation = station;

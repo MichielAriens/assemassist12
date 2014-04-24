@@ -4,23 +4,67 @@ package logic.car;
  * An enum used to represent the possible car models.
  */
 public enum CarModel {
-		MODEL1 ("Model1", new CarPart[]{	CarPart.BODY_SEDAN,
-										  	CarPart.AIRCO_AUTO,
-										  	CarPart.AIRCO_MANUAL,
-										  	CarPart.BODY_BREAK,
-										  	CarPart.COLOUR_BLACK,
-										  	CarPart.COLOUR_BLUE,
-										  	CarPart.COLOUR_RED,
-										  	CarPart.COLOUR_WHITE,
-										  	CarPart.ENGINE_4,
-										  	CarPart.ENGINE_6,
-										  	CarPart.GEARBOX_5AUTO,
-										  	CarPart.GEARBOX_6MANUAL,
-										  	CarPart.SEATS_LEATHER_BLACK,
-										  	CarPart.SEATS_LEATHER_WHITE,
-										  	CarPart.SEATS_VINYL_GRAY,
-										  	CarPart.WHEELS_COMFORT,
-										  	CarPart.WHEELS_SPORTS});
+		MODELA ("Model A", 50, new CarPart[]{	CarPart.BODY_SEDAN,
+												CarPart.BODY_BREAK,
+											  	CarPart.COLOUR_RED,
+											  	CarPart.COLOUR_BLUE,
+											  	CarPart.COLOUR_BLACK,
+											  	CarPart.COLOUR_WHITE,
+											  	CarPart.ENGINE_4,
+											  	CarPart.ENGINE_6,
+											  	CarPart.GEARBOX_6MANUAL,
+											  	CarPart.GEARBOX_5MANUAL,
+											  	CarPart.GEARBOX_5AUTO,
+											  	CarPart.SEATS_LEATHER_WHITE,
+											  	CarPart.SEATS_LEATHER_BLACK,
+											  	CarPart.SEATS_VINYL_GRAY,
+											  	CarPart.AIRCO_MANUAL,
+											  	CarPart.AIRCO_AUTO,
+											  	CarPart.AIRCO_NONE,
+											  	CarPart.WHEELS_WINTER,
+											  	CarPart.WHEELS_COMFORT,
+											  	CarPart.WHEELS_SPORTS,
+											  	CarPart.SPOILER_NONE}),
+											  	
+		MODELB ("Model B", 70, new CarPart[]{	CarPart.BODY_SEDAN,
+												CarPart.BODY_BREAK,
+												CarPart.BODY_SPORT,
+											  	CarPart.COLOUR_RED,
+											  	CarPart.COLOUR_BLUE,
+											  	CarPart.COLOUR_GREEN,
+											  	CarPart.COLOUR_YELLOW,
+											  	CarPart.ENGINE_4,
+											  	CarPart.ENGINE_6,
+											  	CarPart.ENGINE_8,
+											  	CarPart.GEARBOX_6MANUAL,
+											  	CarPart.GEARBOX_5AUTO,
+											  	CarPart.SEATS_LEATHER_WHITE,
+											  	CarPart.SEATS_LEATHER_BLACK,
+											  	CarPart.SEATS_VINYL_GRAY,
+											  	CarPart.AIRCO_MANUAL,
+											  	CarPart.AIRCO_AUTO,
+											  	CarPart.AIRCO_NONE,
+											  	CarPart.WHEELS_WINTER,
+											  	CarPart.WHEELS_COMFORT,
+											  	CarPart.WHEELS_SPORTS,
+											  	CarPart.SPOILER_LOW,
+											  	CarPart.SPOILER_NONE}),
+											  	
+	  	MODELC ("Model C", 60, new CarPart[]{	CarPart.BODY_SPORT,
+											  	CarPart.COLOUR_BLACK,
+											  	CarPart.COLOUR_WHITE,
+											  	CarPart.ENGINE_6,
+											  	CarPart.ENGINE_8,
+											  	CarPart.GEARBOX_6MANUAL,
+											  	CarPart.SEATS_LEATHER_WHITE,
+											  	CarPart.SEATS_LEATHER_BLACK,
+											  	CarPart.AIRCO_MANUAL,
+											  	CarPart.AIRCO_AUTO,
+											  	CarPart.AIRCO_NONE,
+											  	CarPart.WHEELS_WINTER,
+											  	CarPart.WHEELS_SPORTS,
+											  	CarPart.SPOILER_HIGH,
+											  	CarPart.SPOILER_LOW});
 		
 		/**
 		 * The name of this car model.
@@ -33,12 +77,19 @@ public enum CarModel {
 		public CarPart[] possibleParts;
 		
 		/**
+		 * The default time it takes to install parts on this model.
+		 */
+		public final int phaseDuration;
+		
+		/**
 		 * Make a car model with given name and list of valid car parts.
 		 * @param name	The name of this car model.
-		 * @param parts	The list of valid car parts of this car model.
+		 * @param phaseDuration  The default time it takes to install parts on this model.
+		 * @param parts	 The list of valid car parts of this car model.
 		 */
-		private CarModel(String name, CarPart[] parts){
+		private CarModel(String name, int phaseDuration, CarPart[] parts){
 			this.name = name;
+			this.phaseDuration = phaseDuration;
 			this.possibleParts = parts;
 		}
 		

@@ -2,6 +2,7 @@ package logic.workstation;
 
 import java.util.Arrays;
 import java.util.List;
+
 import logic.car.CarPartType;
 
 /**
@@ -12,7 +13,7 @@ public class DriveTrainPost extends Workstation {
 	/**
 	 * Initializes the compatible tasks for this drive train post.
 	 */
-	private static List<CarPartType> compatibleTasks;
+	private List<CarPartType> compatibleTasks;
 	{
 		CarPartType[] array= {CarPartType.Engine, CarPartType.Gearbox};
 		compatibleTasks = (List<CarPartType>) Arrays.asList(array);
@@ -25,9 +26,16 @@ public class DriveTrainPost extends Workstation {
 	 * 				({CarPartType.Engine, CarPartType.Gearbox})
 	 */
 	@Override
-	public
-	List<CarPartType> getCapabilities() {
-		return DriveTrainPost.compatibleTasks;
+	public List<CarPartType> getCapabilities() {
+		return this.compatibleTasks;
+	}
+	
+	/**
+	 * Get a new instance of DriveTrainPost.
+	 */
+	@Override
+	protected Workstation getRawCopy(){
+		return new DriveTrainPost();
 	}
 	
 	/**

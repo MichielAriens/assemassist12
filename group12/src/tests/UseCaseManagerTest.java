@@ -1,9 +1,6 @@
 package tests;
 
 import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-
 import logic.users.CarManufacturingCompany;
 
 import org.junit.Test;
@@ -18,27 +15,31 @@ import controllers.ManagerController;
 public class UseCaseManagerTest {
 	
 	/**
-	 * The main test.
+	 * 4.5 Use Case: Check Production Statistics
 	 */
 	@Test
 	public void mainSuccesTest() {
 		AssemAssistController controller = new AssemAssistController(new CarManufacturingCompany());
-		//the manager logs in
+		//Precondition: The manager is logged in
 		ManagerController maCont = (ManagerController) controller.logIn("Wander");
 		assertEquals("Wander", maCont.getUserName());
-		//the system shows the current and future status of the assembly line
-		ArrayList<String> tasks = new ArrayList<String>();
-		tasks.add("Car Body Post:\nInactive.\n");
-		tasks.add("Drive Train Post:\nInactive.\n");
-		tasks.add("Accessories Post:\nInactive.\n");
-		assertEquals(tasks, maCont.getTasksPerWorkstation());
-		assertEquals(tasks, maCont.getFutureStatus());
-		//the user confirms that he wants to move the assembly line forward.
-		maCont.moveAssemblyLine(55); //the user enters the time in minutes spent at the current phase.
-		//since there were no car orders, the status hasn't changed.
-		assertEquals(tasks, maCont.getTasksPerWorkstation());
-		assertEquals(tasks, maCont.getFutureStatus());
-		//the user then indicates he wants to leave the overview and the use case ends here
+		//1. The user wants to check statistics about the production
+		//2. The system shows a set of available statistics
+		String stats = "";
+		stats += "Average number of cars produced: 0\n";
+		stats += "Mean number of cars produced: 0\n";
+		stats += "Exact numbers two last days:\n";
+		stats += "   No records.\n";
+		
+		stats += "Average delay: 0 minutes\n";
+		stats += "Mean delay: 0 minutes\n";
+		stats += "Two last delays:\n";
+		stats += "   No records.\n";
+		assertEquals(stats, maCont.getStatistics());
+		//3. The user then indicates he wants to leave the overview and the use case ends here
 	}
-
+	
+	/**
+	 * The test for use-case 4.6: Adapt Scheduling Algorithm is covered in UseCaseCombinedTest.java
+	 */
 }

@@ -51,17 +51,83 @@ public class UIGarageHolder {
 			writer.write("Garage holder " + ghController.getUserName()+ " has logged in.\n\n");
 			writer.flush();
 			while(true){
-				printOrders("Pending Orders: ", ghController.getPendingOrders());
-				printOrders("Completed Orders: ", ghController.getCompletedOrders());
-				if(!promptYesOrNo("Do you want to place a new order? (y/n): "))
+				writer.write("==ORDER OVERVIEW==\n");
+				writer.flush();
+				ArrayList<String> pending = ghController.getPendingOrders();
+				ArrayList<String> completed = ghController.getCompletedOrders();
+				int nbOfOrders = pending.size() + completed.size();
+				printOrders("Pending Orders: ", pending,1);
+				printOrders("Completed Orders: ", completed,pending.size()+1);
+				int answer = chooseAction("Select your action:\n   1: Place a new order\n   2: View order details\n   3: Leave the overview\nAnswer: ", 3);
+				if(answer == 1){
+					writer.write("==ORDERING FORM==\n");
+					writer.flush();
+					orderingForm();
+					if(promptYesOrNo("Do you want to submit this car order? (y/n): ")){
+						ghController.placeOrder();
+						String info = ghController.getPendingInfo(ghController.getPendingOrders().size()-1);
+						writer.write("New Order placed:\n");
+						writer.write(info + "\n");
+						writer.flush();
+					}
+					if(!promptYesOrNo("Do you want to place another car order? (y/n): "))
+						return;
+				}
+				else if(answer == 2){
+					writer.write("==ORDER DETAILS==\n");
+					if(nbOfOrders < 1){
+						writer.write("There are no orders available to review.\n\n");
+						writer.flush();
+					}
+					else{
+						writer.flush();
+						int ordernr = chooseAction("Choose the order you want to review: ", nbOfOrders);
+						String info = "";
+						if(ordernr > pending.size())
+							info = ghController.getCompletedInfo(ordernr-pending.size()-1);
+						else
+							info = ghController.getPendingInfo(ordernr-1);
+						writer.write(info + "\n");
+						writer.flush();
+					}
+					if(!promptYesOrNo("Do you want to review another car order? (y/n): "))
+						return;
+				}
+				else if(answer == 3){
 					return;
-				ArrayList<String> spec = orderingForm();
-				if(!promptYesOrNo("Do you want to submit this car order? (y/n): "))
-					continue;
-				ghController.placeOrder(spec);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Lets the user choose an option from a given query.
+	 * @param query	The query that has to be printed out to the user.
+	 * @param max	The greatest acceptable answer.
+	 * @return	-1	If an IO exception occurs.
+	 * 			The users answer otherwise.
+	 */
+	private int chooseAction(String query, int max){
+		try{
+			while(true){
+				writer.write(query);
+				writer.flush();
+				String answer = reader.readLine();
+				writer.write("\n");
+				writer.flush();
+				try{
+					int result = Integer.parseInt(answer);
+					if(result > 0 && result <= max)
+						return result;
+				}
+				catch(NumberFormatException e){};
+			}
+		}
+		catch(IOException e){
+			e.printStackTrace();
+			return -1;
 		}
 	}
 	
@@ -93,32 +159,32 @@ public class UIGarageHolder {
 	
 	/**
 	 * A method that lets the current garage holder fill out an ordering form for a new car order.
-	 * @return	An ArrayList containing all the information about the new car order in String format.
 	 */
-	private ArrayList<String> orderingForm(){
-		ArrayList<String> spec = new ArrayList<String>();
+	private void orderingForm(){
 		try{
 			writer.write("Fill in the Car details:\n\n");
 			String models = "Available models: ";
 			for(String mod : ghController.getModels()){
 				models += mod + "; ";
 			}
-			writer.write(models + "\n");
+			writer.write("   " + models + "\n");
 			writer.flush();
-			spec.add(checkInput("Type the number of the desired car model: ", ghController.getModels()));
+			String modelString = checkInput("   Type the number of the desired car model: ", ghController.getModels());
 			
-			CarModel  model = CarModel.getModelFromString(spec.get(0));
+			CarModel  model = CarModel.getModelFromString(modelString);
+			ghController.chooseModel(model);
 			for(CarPartType partType : CarPartType.values()){
 				String typeString = "Select " + partType.toString() + "-type: ";
-				for(String part : ghController.getOptions(partType, model))
+				for(String part : ghController.getOptions(partType))
 					typeString += part + "; ";
-				writer.write(typeString+"\n");
-				spec.add(checkInput("Type the number of the desired car part: ", ghController.getOptions(partType, model))); 
+				writer.write("   " + typeString+"\n");
+				
+				String partString = checkInput("   Type the number of the desired car part: ", ghController.getOptions(partType));
+				ghController.addPart(partString);
 			}
 		} catch(IOException e){
 			e.printStackTrace();
 		}
-		return spec;
 	}
 	
 	/**
@@ -140,7 +206,7 @@ public class UIGarageHolder {
 					if(s.endsWith(answer))
 						return s.substring(0, s.indexOf(":"));
 				}
-				writer.write("Invalid input, try again.\n");
+				writer.write("   Invalid input, try again.\n");
 			}
 		}
 		catch(IOException e){
@@ -155,15 +221,17 @@ public class UIGarageHolder {
 	 * @param title		The title that has to be printed out at the top.
 	 * @param orders	The list of orders that has to be printed out.
 	 */
-	private void printOrders(String title, ArrayList<String> orders){
+	private void printOrders(String title, ArrayList<String> orders, int start){
+		int count = start;
 		try {
-			writer.write(title + "\n");
+			writer.write("   " + title + "\n");
 			if(orders.size() == 0){
-				writer.write("None. \n");
+				writer.write("      None. \n");
 			}
 			else{
 				for(String order : orders){
-					writer.write("   - " + order + "; \n");
+					writer.write("      -" + count + ": " + order + "; \n");
+					count++;
 				}
 			}
 			writer.write("\n");
