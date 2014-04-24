@@ -18,15 +18,16 @@ import controllers.ManagerController;
 public class UseCaseManagerTest {
 	
 	/**
-	 * The main test.
+	 * 4.5 Use Case: Check Production Statistics
 	 */
 	@Test
 	public void mainSuccesTest() {
 		AssemAssistController controller = new AssemAssistController(new CarManufacturingCompany());
-		//the manager logs in
+		//Precondition: The manager is logged in
 		ManagerController maCont = (ManagerController) controller.logIn("Wander");
 		assertEquals("Wander", maCont.getUserName());
-		//the user wants to check statistics about the production
+		//1. The user wants to check statistics about the production
+		//2. The system shows a set of available statistics
 		String stats = "";
 		stats += "Average number of cars produced: 0\n";
 		stats += "Mean number of cars produced: 0\n";
@@ -38,6 +39,10 @@ public class UseCaseManagerTest {
 		stats += "Two last delays:\n";
 		stats += "   No records.\n";
 		assertEquals(stats, maCont.getStatistics());
-		//the user then indicates he wants to leave the overview and the use case ends here
+		//3. The user then indicates he wants to leave the overview and the use case ends here
 	}
+	
+	/**
+	 * The test for use-case 4.6: Adapt Scheduling Algorithm is covered in UseCaseCombinedTest.java
+	 */
 }
