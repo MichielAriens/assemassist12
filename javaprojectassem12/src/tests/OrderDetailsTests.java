@@ -13,9 +13,11 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import logic.car.*;
-import logic.users.CarManufacturingCompany;
-import logic.users.CustomsManager;
 import logic.workstation.Task;
+
+/**
+ * A class that tests the order details from top to bottom.
+ */
 public class OrderDetailsTests {
 
 	/**
@@ -130,7 +132,7 @@ public class OrderDetailsTests {
 	}
 	
 	/**
-	 * 
+	 * Tests the builder of the task orders and the task details.
 	 */
 	@Test
 	public void testTaskOrderDetatilsMaker(){

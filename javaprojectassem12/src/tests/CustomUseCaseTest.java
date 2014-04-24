@@ -2,15 +2,19 @@ package tests;
 
 import static org.junit.Assert.*;
 import logic.users.CarManufacturingCompany;
-import logic.users.CustomsManager;
-
 import org.junit.Test;
 
 import controllers.AssemAssistController;
 import controllers.CustomsManagerController;
 
+/**
+ * A class for testing the use case of the custom shop manager.
+ */
 public class CustomUseCaseTest {
 
+	/**
+	 * A test case that follows the use case of the custom shop manager. The custom shop manager receives a list of things he can order and then orders something and sets the deadline.
+	 */
 	@Test
 	public void mainSuccessScenario() {
 		AssemAssistController controller = new AssemAssistController(new CarManufacturingCompany());

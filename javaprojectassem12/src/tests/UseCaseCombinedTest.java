@@ -23,7 +23,7 @@ import controllers.MechanicController;
 public class UseCaseCombinedTest {
 	
 	/**
-	 * The main test.
+	 * A test that tries to cover a whole scenario involving all kinds of users and different sort of inputs.
 	 */
 	@Test
 	public void mainSuccesTest() {
@@ -63,6 +63,7 @@ public class UseCaseCombinedTest {
 		//////////////////////////////START MECHANICTEST EMPTY ASSEMBLY LINE////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		
+		//tries to do stuff with a mechanic that is not logged in.
 		MechanicController meCont = new MechanicController();
 		assertEquals(null,meCont.getUserName());
 		assertEquals(null,meCont.getTasksPerWorkstation());
@@ -71,6 +72,8 @@ public class UseCaseCombinedTest {
 		assertEquals(null,meCont.getTaskInformation(""));
 		meCont.doTask("", 0); //should just return
 		meCont.setWorkStation(""); //should just return
+		
+		//Logs in the proper mechanic and asks for tasks.
 		meCont = (MechanicController) controller.logIn("mech");
 		assertEquals("mech", meCont.getUserName());
 		ArrayList<String> tasks = new ArrayList<String>();
@@ -78,6 +81,8 @@ public class UseCaseCombinedTest {
 		tasks.add("Drive Train Post:\nInactive.\n");
 		tasks.add("Accessories Post:\nInactive.\n");
 		assertEquals(tasks, meCont.getTasksPerWorkstation());
+		
+		//Sets the active workstation of the logged in mechanic.
 		ArrayList<String> stations = new ArrayList<String>();
 		stations.add("Car Body Post: 1");
 		stations.add("Drive Train Post: 2");
@@ -95,6 +100,7 @@ public class UseCaseCombinedTest {
 		///////////////////////////START GARAGEHOLDERTEST EMPTY ASSEMBLY LINE///////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		
+		//Tries to do things with a not logged in garage holder.
 		GarageHolderController gaCont = new GarageHolderController();
 		assertEquals(null, gaCont.getUserName());
 		assertEquals(null, gaCont.getPendingOrders());
@@ -102,6 +108,8 @@ public class UseCaseCombinedTest {
 		assertEquals(null, gaCont.getCompletedInfo(0));
 		assertEquals(null, gaCont.getCompletedOrders());
 		gaCont.placeOrder(); //should just return
+		
+		//Logs in the proper garage holder and asks for information.
 		gaCont = (GarageHolderController) controller.logIn("gar");
 		assertEquals("gar", gaCont.getUserName());
 		
@@ -109,6 +117,7 @@ public class UseCaseCombinedTest {
 		assertEquals(empty, gaCont.getPendingOrders());
 		assertEquals(empty, gaCont.getCompletedOrders());
 		
+		//Start building an order.
 		ArrayList<String> models = new ArrayList<String>();
 		models.add("Model A: 1");
 		models.add("Model B: 2");
@@ -156,12 +165,16 @@ public class UseCaseCombinedTest {
 		///////////////////////////////////START CUSTOMSHOPMANAGERTEST//////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		
+		//Tries to do things with a not logged in custom shop manager 
 		CustomsManagerController cuCont = new CustomsManagerController();
 		assertEquals(null, cuCont.getUserName());
 		assertEquals(null, cuCont.placeOrder());
+		
+		//Logs in the proper custom shop manager.
 		cuCont = (CustomsManagerController) controller.logIn("cust");
 		assertEquals("cust", cuCont.getUserName());
 		
+		// Asks for information and then builds a task order.
 		cuCont.choosePart(null);//should just return
 		ArrayList<String> types = new ArrayList<String>();
 		types.add("Colour: 1");
@@ -188,12 +201,16 @@ public class UseCaseCombinedTest {
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////START MANAGERTEST CHANGE STRATEGY///////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		//Logs in the proper manager and asks for strategy information.
 		maCont = (ManagerController) controller.logIn("Wander");
 		strats = new ArrayList<String>();
 		strats.add("FIFO");
 		strats.add("FIFO");
 		strats.add("Specification Batch");
 		assertEquals(strats,maCont.getStrategies());
+		
+		//Asks for orders which can be selected for batch processing.
 		batchList = new ArrayList<String>();
 		batchList.add("   1: Option 1:\n      - Sedan\n      - Red\n      - Standard 2l v4\n      - 6 speed manual\n      - Leather black\n      - Manual\n      - Comfort\n      - No Spoiler\n\n");
 		
@@ -211,6 +228,7 @@ public class UseCaseCombinedTest {
 		////////////////////////////////START MECHANICTEST PERFORM TASKS////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
 
+		//Logs in the proper mechanic and asks for tasks in workstations.
 		meCont = (MechanicController) controller.logIn("mech");
 		assertEquals("mech", meCont.getUserName());
 		tasks = new ArrayList<String>();
@@ -218,6 +236,8 @@ public class UseCaseCombinedTest {
 		tasks.add("Drive Train Post:\nInactive.\n");
 		tasks.add("Accessories Post:\nInactive.\n");
 		assertEquals(tasks, meCont.getTasksPerWorkstation());
+		
+		//Sets his active workstation to the car body post and then performs tasks.
 		meCont.setWorkStation("Car Body Post");
 		availableTasks = new ArrayList<String>();
 		availableTasks.add("Install Body= Sedan: 1");
@@ -235,6 +255,8 @@ public class UseCaseCombinedTest {
 		meCont.doTask("Install Colour= Red", 50);
 		meCont.doTask("Install Body= Sedan", 50);
 		meCont.doTask("Install Colour= Red", 50);
+		
+		//Sets his active workstation and does the tasks.
 		meCont.setWorkStation("Drive Train Post");
 		availableTasks = new ArrayList<String>();
 		availableTasks.add("Install Engine= Standard 2l v4: 1");
@@ -247,6 +269,8 @@ public class UseCaseCombinedTest {
 		meCont.setWorkStation("Car Body Post");
 		meCont.doTask("Install Body= Sedan", 50);
 		meCont.doTask("Install Colour= Red", 50);
+		
+		//Sets his active workstation to the accessories post and performs the tasks. 
 		meCont.setWorkStation("Accessories Post");
 		availableTasks = new ArrayList<String>();
 		availableTasks.add("Install Seats= Leather black: 1");
@@ -267,6 +291,7 @@ public class UseCaseCombinedTest {
 		///////////////////////////START GARAGEHOLDERTEST COMPLETED ORDER///////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		
+		//Checks his completed orders after everything should be done.
 		gaCont = (GarageHolderController) controller.logIn("gar");
 		
 		ArrayList<String> completed = new ArrayList<String>();
