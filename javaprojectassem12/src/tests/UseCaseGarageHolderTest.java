@@ -1,16 +1,14 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import logic.car.CarModel;
-import logic.car.CarOrder;
-import logic.car.CarOrderDetailsMaker;
-import logic.car.CarPart;
 import logic.car.CarPartType;
-import logic.car.Order;
 import logic.users.CarManufacturingCompany;
 import logic.users.Mechanic;
 import logic.workstation.Task;
@@ -19,7 +17,8 @@ import logic.workstation.Workstation;
 import org.junit.Before;
 import org.junit.Test;
 
-import controllers.*;
+import controllers.AssemAssistController;
+import controllers.GarageHolderController;
 
 /**
  * A test case to test the use case of the garage holder. The other actors don't interact with the
@@ -30,7 +29,10 @@ public class UseCaseGarageHolderTest {
 	AssemAssistController controller;
 	GarageHolderController ghCont;
 	
-	
+	/**
+	 * We start by setting up an environment with assets commonly used by the test suite in the prequel.
+	 * This contains a CarManufacturingCompany, an AssemAssistController and a GarageHolderController.
+	 */
 	@Before
 	public void prequel() {
 		cmc = new CarManufacturingCompany();
@@ -38,7 +40,9 @@ public class UseCaseGarageHolderTest {
 		ghCont = (GarageHolderController) controller.logIn("Jeroen");
 	}
 	
-	
+	/**
+	 * The main test.
+	 */
 	@Test
 	public void mainTest(){
 		testOrderNewCar();
@@ -47,7 +51,7 @@ public class UseCaseGarageHolderTest {
 	}
 
 	/**
-	 * The main test.
+	 * Test making and placing an order.
 	 */
 	private void testOrderNewCar() {
 		//Precondition: The garage holder is successfully logged into the system.
@@ -90,6 +94,9 @@ public class UseCaseGarageHolderTest {
 		//the user indicates that he doesn't want to place a new order and the use case ends
 	}
 	
+	/**
+	 * Test the checking of the order details.
+	 */
 	private void testCheckOrderDetails() {
 		//1. The system presents an overview of the orders placed by the user...
 		List<String> pendingList = ghCont.getPendingOrders();
@@ -130,6 +137,9 @@ public class UseCaseGarageHolderTest {
 		ghCont.placeOrder();
 	}
 	
+	/**
+	 * Complete an order.
+	 */
 	private void completeOneOrder(){
 		Mechanic mech = new Mechanic(cmc, "AutoMech2014");
 		//Do all the orders

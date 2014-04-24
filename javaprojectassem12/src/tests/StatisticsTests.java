@@ -1,16 +1,10 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PreDestroy;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import sun.font.CreatedFontTracker;
 import logic.car.CarModel;
 import logic.car.CarOrder;
 import logic.car.CarOrderDetailsMaker;
@@ -20,6 +14,12 @@ import logic.users.CarManufacturingCompany;
 import logic.users.Mechanic;
 import logic.workstation.Task;
 
+import org.junit.Before;
+import org.junit.Test;
+
+/**
+ * A test case to test the statistics.
+ */
 public class StatisticsTests {
 	
 	private CarManufacturingCompany cmc;
@@ -28,7 +28,7 @@ public class StatisticsTests {
 	
 	/**
 	 * Build a standard order: duration 60
-	 * @return
+	 * @return	A standard order with a duration of 60 minutes.
 	 */
 	private CarOrder buildStandardOrderC(){
 		CarPart[] partsArray = {
@@ -84,6 +84,9 @@ public class StatisticsTests {
 	}
 	
 	
+	/**
+	 * The main test.
+	 */
 	@Test
 	public void testStat1(){
 		String stats = cmc.getStatistics();

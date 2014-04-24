@@ -1,41 +1,39 @@
 package tests;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import javax.smartcardio.CardException;
-
-import logic.assemblyline.AssemblyLine;
-import logic.car.*;
+import logic.car.CarModel;
+import logic.car.CarOrder;
+import logic.car.CarOrderDetailsMaker;
+import logic.car.CarPart;
+import logic.car.Order;
+import logic.car.TaskOrder;
+import logic.car.TaskOrderDetailsMaker;
 import logic.users.CarManufacturingCompany;
-import logic.users.GarageHolder;
-import logic.users.Manager;
 import logic.users.Mechanic;
 import logic.workstation.Task;
-import logic.workstation.Workstation;
 
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 import org.junit.Before;
 import org.junit.Test;
 
-import sun.security.acl.WorldGroupImpl;
-
+/**
+ * A test case to fully test the assembly line class.
+ */
 public class AssemblyLineTest {
 	private CarManufacturingCompany cmcMotors;
-	//private AssemblyLine assemblyLine;
 	private List<CarOrder> orders = new ArrayList<CarOrder>();
 	private Mechanic barry;
 	private List<CarOrder> simpleOrders;
 	
 	/**
 	 * Build a standard order: duration 50
-	 * @return
+	 * @return	A standard order with a duration of 50 minutes.
 	 */
 	private CarOrder buildStandardOrderA(){
 		CarPart[] partsArray = {
@@ -58,7 +56,7 @@ public class AssemblyLineTest {
 	
 	/**
 	 * Build a standard order: duration 70
-	 * @return
+	 * @return	A standard order with a duration of 70 minutes.
 	 */
 	private CarOrder buildStandardOrderB(){
 		CarPart[] partsArray = {
@@ -81,7 +79,7 @@ public class AssemblyLineTest {
 	
 	/**
 	 * Build a standard order: duration 60
-	 * @return
+	 * @return	A standard order with a duration of 60 minutes.
 	 */
 	private CarOrder buildStandardOrderC(){
 		CarPart[] partsArray = {
@@ -104,6 +102,7 @@ public class AssemblyLineTest {
 	
 	/**
 	 * Build a standard task order: duration 60
+	 * @return	A standard task order with a duration of 60 minutes.
 	 */
 	private TaskOrder buildStandardTaskOrder(DateTime deadline){
 		TaskOrderDetailsMaker maker = new TaskOrderDetailsMaker();
@@ -198,7 +197,10 @@ public class AssemblyLineTest {
 
 	}
 	
-	
+	/**
+	 * This test tests whether orders are correctly scheduled to the next day, when they can't be completed
+	 * on the first day anymore.
+	 */
 	@Test
 	public void testDayOverflow(){
 		//The day takes from 6:00 to 22:00
@@ -420,8 +422,8 @@ public class AssemblyLineTest {
 	
 	/**
 	 * Given the datetime indicating "now" this method returns the datetime indicating "tomorrow" at 6:00 AM
-	 * @param now
-	 * @return
+	 * @param now	The current time.
+	 * @return		The datetime indicating "tomorrow" at 6:00 AM
 	 */
 	private DateTime getNextDayStart(DateTime now){
 		MutableDateTime mu = now.toMutableDateTime();
