@@ -53,16 +53,7 @@ public class UserTest {
 		maker.addPart(CarPart.getPartfromString("Manual"));
 		maker.addPart(CarPart.getPartfromString("Comfort"));
 		maker.addPart(CarPart.getPartfromString("No Spoiler"));
-
-//		ArrayList<CarPart> carparts = new ArrayList<CarPart>();
-//		carparts.add(CarPart.BODY_BREAK);
-//		carparts.add(CarPart.COLOUR_BLACK);
-//		carparts.add(CarPart.SEATS_LEATHER_BLACK);
-//		carparts.add(CarPart.AIRCO_AUTO);
-//		carparts.add(CarPart.WHEELS_COMFORT);
-//		carparts.add(CarPart.ENGINE_4);
-//		carparts.add(CarPart.GEARBOX_5AUTO);
-//		CarSpecification spec = new CarSpecification(CarModel.MODELA, carparts);
+		
 		//g.placeOrder(spec);
 		g.placeOrder(maker.getDetails());
 		//check for new pending order
@@ -76,6 +67,9 @@ public class UserTest {
 		assertEquals(1,g.getCompletedOrders().size());
 	}
 	
+	/**
+	 * Let's the GarageHolder make and place an order.
+	 */
 	private void makeAndPlaceOrder(){
 		GarageHolder g = (GarageHolder) company.logIn("gar");
 		ArrayList<CarPart> carparts = new ArrayList<CarPart>();
@@ -90,6 +84,9 @@ public class UserTest {
 		g.placeOrder(det);
 	}
 	
+	/**
+	 * Test the manager class.
+	 */
 	@Test
 	public void managerTest(){
 		//login with manager username
@@ -119,8 +116,10 @@ public class UserTest {
 		assertEquals("Average number of cars produced: 0\nMean number of cars produced: 0\nExact numbers two last days:\n   No records.\nAverage delay: 0 minutes\nMean delay: 0 minutes\nTwo last delays:\n   No records.\n", m.getStatistics());
 	}
 	
+	/**
+	 * Make an order and advance the assembly line by completing all tasks.
+	 */
 	private void makeOrderAndAdvance(){
-		
 		GarageHolder g = (GarageHolder) company.logIn("gar");
 		ArrayList<CarPart> carparts = new ArrayList<CarPart>();
 		carparts.add(CarPart.BODY_BREAK);
@@ -142,10 +141,11 @@ public class UserTest {
 		m.doTask(tasksss.get(0), 70);
 		tasksss = m.getAvailableTasks();
 		assertTrue(tasksss.size()==2);
-		
-		
 	}
 	
+	/**
+	 * Test the mechanic class.
+	 */
 	@Test
 	public void mechanicTest(){
 		//login with mechanic account
@@ -164,27 +164,39 @@ public class UserTest {
 		
 	}
 	
+	/**
+	 * Test a login with an invalid username.
+	 */
 	@Test
 	public void invalidUserTest(){
 		//login with invalid username
 		assertEquals(null, company.logIn("Jack"));
 	}
 	
+	/**
+	 * Test placing a null order.
+	 */
 	@Test
 	public void nullOrderTest(){
 		//try to place a null order
 		company.addOrder(null);
 	}
 	
+	/**
+	 * Test a relogin.
+	 */
 	@Test
 	public void reloginTest(){
 		Manager m1 = (Manager) company.logIn("Wander");
 		Manager m2 = (Manager) company.logIn("Wander");
 		assertEquals(m1, m2);
 	}
+	
+	/**
+	 * Test the customs shop manager class.
+	 */
 	@Test
 	public void testCustomShop(){
-
 		CustomsManager c = (CustomsManager) company.logIn("Michiel");
 		//check initial values
 		assertEquals("Michiel", c.getUserName());
@@ -195,7 +207,6 @@ public class UserTest {
 		maker.choosePart(CarPart.getPartfromString("Comfort"));
 
 		maker.chooseDeadline(new DateTime(2014,1,1,17,0));
-
 
 		assertEquals(null,c.placeOrder(maker.getDetails()));
 		
