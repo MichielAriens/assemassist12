@@ -1,5 +1,8 @@
 controllers
+init
 logic.assemblyline
 logic.car
 logic.users
 logic.workstation
+tests
+views

@@ -117,9 +117,8 @@ public class GarageHolderController extends UserController{
 	}
 	
 	/**
-	 * Returns the list of options for the given car part type and model with numbering.
+	 * Returns the list of options for the given car part type and model defined in the maker with numbering.
 	 * @param type	The car part type for which the options need to be returned.
-	 * @param model	The car model for which the options need to be returned.
 	 * @return Null if the given type or model is null.
 	 * @return The list of options for the given car part type and model with numbering.
 	 */
@@ -160,7 +159,6 @@ public class GarageHolderController extends UserController{
 	/**
 	 * Places a car order with the given specifications for the current garage holder if the
 	 * given specifications and the current garage holder are not null. 
-	 * @param spec	The specifications for the car order to be placed.
 	 */
 	public void placeOrder(){
 		if(currentGarageHolder == null)

@@ -119,7 +119,7 @@ public class Mechanic extends User{
 
 	/**
 	 * Set the active workstation to the given workstation.
-	 * @param identifier
+	 * @param workstation
 	 */
 	public void setActiveWorkstation(Workstation station){
 		this.activeStation = station;
