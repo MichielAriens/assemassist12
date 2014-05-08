@@ -1,6 +1,6 @@
 package logic.workstation;
 
-import logic.car.CarPart;
+import logic.car.VehiclePart;
 
 /**
  * Class used to describe a task that needs to be performed in order to complete a car order.
@@ -15,13 +15,13 @@ public class Task {
 	/**
 	 * The car part where upon the task needs to be performed.
 	 */
-	private final CarPart carPart;
+	private final VehiclePart carPart;
 	
 	/**
 	 * Creates a task corresponding with the given car part.
 	 * @param part	The car part to perform the task on.
 	 */
-	public Task(CarPart part){
+	public Task(VehiclePart part){
 		this.carPart = part;
 	}
 	
@@ -40,7 +40,7 @@ public class Task {
 	 * Returns the car part corresponding to this task.
 	 * @return the car part corresponding to this task.
 	 */
-	public CarPart getCarPart(){
+	public VehiclePart getCarPart(){
 		return carPart;
 	}
 	

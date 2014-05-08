@@ -4,8 +4,8 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
-import logic.car.CarModel;
-import logic.car.CarPartType;
+import logic.car.VehicleModel;
+import logic.car.VehiclePartType;
 import logic.users.CarManufacturingCompany;
 
 import org.junit.Test;
@@ -125,13 +125,13 @@ public class UseCaseCombinedTest {
 		assertEquals(models, gaCont.getModels());
 		
 		gaCont.chooseModel(null); //should just return
-		gaCont.chooseModel(CarModel.MODELA);
+		gaCont.chooseModel(VehicleModel.CARMODELA);
 		
 		gaCont.getOptions(null); //should just return
 		ArrayList<String> options = new ArrayList<String>();
 		options.add("Sedan: 1");
 		options.add("Break: 2");
-		assertEquals(options, gaCont.getOptions(CarPartType.Body));
+		assertEquals(options, gaCont.getOptions(VehiclePartType.Body));
 		
 		gaCont.addPart(null); //should just return
 		gaCont.addPart("Sedan");

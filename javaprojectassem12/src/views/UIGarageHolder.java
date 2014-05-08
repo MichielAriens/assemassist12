@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import controllers.GarageHolderController;
-import logic.car.CarModel;
-import logic.car.CarPartType;
+import logic.car.VehicleModel;
+import logic.car.VehiclePartType;
 
 /**
  * A command line interface class used to represent the garage holder's UI, which is used by garage holders
@@ -171,9 +171,9 @@ public class UIGarageHolder {
 			writer.flush();
 			String modelString = checkInput("   Type the number of the desired car model: ", ghController.getModels());
 			
-			CarModel  model = CarModel.getModelFromString(modelString);
+			VehicleModel  model = VehicleModel.getModelFromString(modelString);
 			ghController.chooseModel(model);
-			for(CarPartType partType : CarPartType.values()){
+			for(VehiclePartType partType : VehiclePartType.values()){
 				String typeString = "Select " + partType.toString() + "-type: ";
 				for(String part : ghController.getOptions(partType))
 					typeString += part + "; ";

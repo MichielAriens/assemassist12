@@ -5,11 +5,11 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import logic.car.CarModel;
-import logic.car.CarOrder;
+import logic.car.VehicleModel;
+import logic.car.VehicleOrder;
 import logic.car.CarOrderDetails;
 import logic.car.CarOrderDetailsMaker;
-import logic.car.CarPart;
+import logic.car.VehiclePart;
 import logic.car.Order;
 import logic.car.TaskOrderDetailsMaker;
 import logic.users.CarManufacturingCompany;
@@ -43,16 +43,16 @@ public class UserTest {
 		//try to add a car order with null as carspecification
 		g.placeOrder(null);
 		//make carspecification to place an order
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELA);
-		maker.addPart(CarPart.getPartfromString("Model A"));
-		maker.addPart(CarPart.getPartfromString("Sedan"));
-		maker.addPart(CarPart.getPartfromString("Red"));
-		maker.addPart(CarPart.getPartfromString("Standard 2l v4"));
-		maker.addPart(CarPart.getPartfromString("6 speed manual"));
-		maker.addPart(CarPart.getPartfromString("Leather black"));
-		maker.addPart(CarPart.getPartfromString("Manual"));
-		maker.addPart(CarPart.getPartfromString("Comfort"));
-		maker.addPart(CarPart.getPartfromString("No Spoiler"));
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELA);
+		maker.addPart(VehiclePart.getPartfromString("Model A"));
+		maker.addPart(VehiclePart.getPartfromString("Sedan"));
+		maker.addPart(VehiclePart.getPartfromString("Red"));
+		maker.addPart(VehiclePart.getPartfromString("Standard 2l v4"));
+		maker.addPart(VehiclePart.getPartfromString("6 speed manual"));
+		maker.addPart(VehiclePart.getPartfromString("Leather black"));
+		maker.addPart(VehiclePart.getPartfromString("Manual"));
+		maker.addPart(VehiclePart.getPartfromString("Comfort"));
+		maker.addPart(VehiclePart.getPartfromString("No Spoiler"));
 		
 		//g.placeOrder(spec);
 		g.placeOrder(maker.getDetails());
@@ -72,15 +72,15 @@ public class UserTest {
 	 */
 	private void makeAndPlaceOrder(){
 		GarageHolder g = (GarageHolder) company.logIn("gar");
-		ArrayList<CarPart> carparts = new ArrayList<CarPart>();
-		carparts.add(CarPart.BODY_BREAK);
-		carparts.add(CarPart.COLOUR_BLACK);
-		carparts.add(CarPart.SEATS_LEATHER_BLACK);
-		carparts.add(CarPart.AIRCO_AUTO);
-		carparts.add(CarPart.WHEELS_COMFORT);
-		carparts.add(CarPart.ENGINE_4);
-		carparts.add(CarPart.GEARBOX_5AUTO);
-		CarOrderDetails det = new CarOrderDetails(CarModel.MODELA, carparts);
+		ArrayList<VehiclePart> carparts = new ArrayList<VehiclePart>();
+		carparts.add(VehiclePart.BODY_BREAK);
+		carparts.add(VehiclePart.COLOUR_BLACK);
+		carparts.add(VehiclePart.SEATS_LEATHER_BLACK);
+		carparts.add(VehiclePart.AIRCO_AUTO);
+		carparts.add(VehiclePart.WHEELS_COMFORT);
+		carparts.add(VehiclePart.ENGINE_4);
+		carparts.add(VehiclePart.GEARBOX_5AUTO);
+		CarOrderDetails det = new CarOrderDetails(VehicleModel.CARMODELA, carparts);
 		g.placeOrder(det);
 	}
 	
@@ -96,7 +96,7 @@ public class UserTest {
 		
 		assertEquals("FIFO", m.getStrategies().get(0).toString());
 		
-		ArrayList<CarOrder> orders = new ArrayList<CarOrder>();
+		ArrayList<VehicleOrder> orders = new ArrayList<VehicleOrder>();
 		orders.add(null);
 		orders.add(null);
 		orders.add(null);
@@ -121,15 +121,15 @@ public class UserTest {
 	 */
 	private void makeOrderAndAdvance(){
 		GarageHolder g = (GarageHolder) company.logIn("gar");
-		ArrayList<CarPart> carparts = new ArrayList<CarPart>();
-		carparts.add(CarPart.BODY_BREAK);
-		carparts.add(CarPart.COLOUR_BLACK);
-		carparts.add(CarPart.SEATS_LEATHER_BLACK);
-		carparts.add(CarPart.AIRCO_AUTO);
-		carparts.add(CarPart.WHEELS_COMFORT);
-		carparts.add(CarPart.ENGINE_4);
-		carparts.add(CarPart.GEARBOX_5AUTO);
-		CarOrderDetails spec = new CarOrderDetails(CarModel.MODELA, carparts);
+		ArrayList<VehiclePart> carparts = new ArrayList<VehiclePart>();
+		carparts.add(VehiclePart.BODY_BREAK);
+		carparts.add(VehiclePart.COLOUR_BLACK);
+		carparts.add(VehiclePart.SEATS_LEATHER_BLACK);
+		carparts.add(VehiclePart.AIRCO_AUTO);
+		carparts.add(VehiclePart.WHEELS_COMFORT);
+		carparts.add(VehiclePart.ENGINE_4);
+		carparts.add(VehiclePart.GEARBOX_5AUTO);
+		CarOrderDetails spec = new CarOrderDetails(VehicleModel.CARMODELA, carparts);
 		g.placeOrder(spec);
 		g.placeOrder(spec.getRawCopy());
 		Mechanic m = (Mechanic) company.logIn("mech");
@@ -204,14 +204,14 @@ public class UserTest {
 		c.placeOrder(null);
 		//make carspecification to place an order
 		TaskOrderDetailsMaker maker = new TaskOrderDetailsMaker();
-		maker.choosePart(CarPart.getPartfromString("Comfort"));
+		maker.choosePart(VehiclePart.getPartfromString("Comfort"));
 
 		maker.chooseDeadline(new DateTime(2014,1,1,17,0));
 
 		assertEquals(null,c.placeOrder(maker.getDetails()));
 		
 		maker = new TaskOrderDetailsMaker();
-		maker.choosePart(CarPart.getPartfromString("Red"));
+		maker.choosePart(VehiclePart.getPartfromString("Red"));
 
 		maker.chooseDeadline(new DateTime(2014,1,1,17,0));
 		assertEquals("Estimated completion: 01-01-2014 09:00",c.placeOrder(maker.getDetails()));

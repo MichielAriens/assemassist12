@@ -49,7 +49,7 @@ public class GarageHolderController extends UserController{
 		if(this.currentGarageHolder == null)
 			return null;
 		ArrayList<String> pendingOrderStrings = new ArrayList<String>();
-		for(CarOrder order : this.currentGarageHolder.getPendingOrders()){
+		for(VehicleOrder order : this.currentGarageHolder.getPendingOrders()){
 			pendingOrderStrings.add("Pending, est. completion at: " + order.toString());
 		}
 		return pendingOrderStrings;
@@ -64,7 +64,7 @@ public class GarageHolderController extends UserController{
 	public String getPendingInfo(int index){
 		if(this.currentGarageHolder == null)
 			return null;
-		ArrayList<CarOrder> pendingOrders = this.currentGarageHolder.getPendingOrders();
+		ArrayList<VehicleOrder> pendingOrders = this.currentGarageHolder.getPendingOrders();
 		if(index < pendingOrders.size() && index >= 0)
 			return pendingOrders.get(index).getInformation();
 		else
@@ -80,7 +80,7 @@ public class GarageHolderController extends UserController{
 	public String getCompletedInfo(int index){
 		if(this.currentGarageHolder == null)
 			return null;
-		ArrayList<CarOrder> completedOrders = this.currentGarageHolder.getCompletedOrders();
+		ArrayList<VehicleOrder> completedOrders = this.currentGarageHolder.getCompletedOrders();
 		if(index < completedOrders.size() && index >= 0)
 			return completedOrders.get(index).getInformation();
 		else
@@ -96,7 +96,7 @@ public class GarageHolderController extends UserController{
 		if(this.currentGarageHolder == null)
 			return null;
 		ArrayList<String> completedOrderStrings = new ArrayList<String>();
-		for(CarOrder order : this.currentGarageHolder.getCompletedOrders()){
+		for(VehicleOrder order : this.currentGarageHolder.getCompletedOrders()){
 			completedOrderStrings.add("Completed on: " + order.toString());
 		}
 		return completedOrderStrings;
@@ -109,7 +109,7 @@ public class GarageHolderController extends UserController{
 	public ArrayList<String> getModels(){
 		ArrayList<String> models = new ArrayList<String>();
 		int count = 1;
-		for(CarModel mod : CarModel.values()){
+		for(VehicleModel mod : VehicleModel.values()){
 			models.add(mod.toString() + ": " +  count);
 			count++;
 		}
@@ -122,12 +122,12 @@ public class GarageHolderController extends UserController{
 	 * @return Null if the given type or model is null.
 	 * @return The list of options for the given car part type and model with numbering.
 	 */
-	public ArrayList<String> getOptions(CarPartType type){
+	public ArrayList<String> getOptions(VehiclePartType type){
 		if(type == null)
 			return null;
 		ArrayList<String> result = new ArrayList<String>();
 		int count = 1;
-		for(CarPart opt : maker.getAvailableParts(type)){
+		for(VehiclePart opt : maker.getAvailableParts(type)){
 			result.add(opt.toString() + ": " + count);
 			count++;
 		}
@@ -139,7 +139,7 @@ public class GarageHolderController extends UserController{
 	 * null.
 	 * @param model	The model for the new car order's details maker.
 	 */
-	public void chooseModel(CarModel model){
+	public void chooseModel(VehicleModel model){
 		if(model == null)
 			return;
 		this.maker = new CarOrderDetailsMaker(model);
@@ -153,7 +153,7 @@ public class GarageHolderController extends UserController{
 	public void addPart(String partString){
 		if(partString == null)
 			return;
-		this.maker.addPart(CarPart.getPartfromString(partString));
+		this.maker.addPart(VehiclePart.getPartfromString(partString));
 	}
 	
 	/**

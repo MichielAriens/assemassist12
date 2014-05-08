@@ -7,8 +7,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import logic.car.CarModel;
-import logic.car.CarPartType;
+import logic.car.VehicleModel;
+import logic.car.VehiclePartType;
 import logic.users.CarManufacturingCompany;
 import logic.users.Mechanic;
 import logic.workstation.Task;
@@ -66,14 +66,14 @@ public class UseCaseGarageHolderTest {
 		models.add("Model A: 1");
 		models.add("Model B: 2");
 		models.add("Model C: 3");
-		CarModel  model = CarModel.getModelFromString("Model A");
+		VehicleModel  model = VehicleModel.getModelFromString("Model A");
 		ghCont.chooseModel(model);
 		assertEquals(models, ghCont.getModels());
 		ArrayList<String> bodyParts = new ArrayList<String>();
 		bodyParts.add("Sedan: 1");
 		bodyParts.add("Break: 2");
 		
-		assertEquals(bodyParts, ghCont.getOptions(CarPartType.Body));
+		assertEquals(bodyParts, ghCont.getOptions(VehiclePartType.Body));
 		
 		ghCont.addPart("Model A");
 		ghCont.addPart("Sedan");
@@ -123,7 +123,7 @@ public class UseCaseGarageHolderTest {
 	 * Add one order for Model A
 	 */
 	private void addOrder(){
-		CarModel  model = CarModel.getModelFromString("Model A");
+		VehicleModel  model = VehicleModel.getModelFromString("Model A");
 		ghCont.chooseModel(model);
 		ghCont.addPart("Model A");
 		ghCont.addPart("Sedan");

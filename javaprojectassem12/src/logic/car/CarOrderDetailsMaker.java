@@ -11,33 +11,33 @@ public class CarOrderDetailsMaker {
 	/**
 	 * A variable holding the model of the car order.
 	 */
-	private CarModel model;
+	private VehicleModel model;
 	
 	/**
 	 * A list of car parts which the user wants on his car.
 	 */
-	private ArrayList<CarPart> chosenParts;
+	private ArrayList<VehiclePart> chosenParts;
 	
 	/**
 	 * A list of different type of parts the user wants on his car.
 	 */
-	private ArrayList<CarPartType> chosenTypes;
+	private ArrayList<VehiclePartType> chosenTypes;
 	
 	/**
 	 * Initializes this car order details maker with a given model.
 	 * @param model	The car model of the CarOrderDetails that has to be made by this maker.
 	 */
-	public CarOrderDetailsMaker(CarModel model){
+	public CarOrderDetailsMaker(VehicleModel model){
 		this.model = model;
-		this.chosenParts = new ArrayList<CarPart>();
-		this.chosenTypes = new ArrayList<CarPartType>();
+		this.chosenParts = new ArrayList<VehiclePart>();
+		this.chosenTypes = new ArrayList<VehiclePartType>();
 	}
 	
 	/**
 	 * Adds a given part to the list of car parts and adds its type to the list of car part types if possible.
 	 * @param part The part that needs to be added.
 	 */
-	public void addPart(CarPart part){
+	public void addPart(VehiclePart part){
 		if(isCompatiblePart(part)){
 			chosenParts.add(part);
 			chosenTypes.add(part.type);
@@ -50,23 +50,23 @@ public class CarOrderDetailsMaker {
 	 * @return	True if the part is allowed in the model and is present in the list of chosen types and in the list of present car parts.
 	 * 			False if it's not present and some requirements are not met.
 	 */
-	private boolean isCompatiblePart(CarPart part){
+	private boolean isCompatiblePart(VehiclePart part){
 		if(!model.validPart(part))
 			return false;
 		if(chosenTypes.contains(part.type))
 			return false;
-		if(part.type != CarPartType.Airco && part.type != CarPartType.Engine && part.type != CarPartType.Spoiler)
+		if(part.type != VehiclePartType.Airco && part.type != VehiclePartType.Engine && part.type != VehiclePartType.Spoiler)
 			return true;
-		if(part.type == CarPartType.Airco){
-			if(chosenParts.contains(CarPart.ENGINE_8) && part == CarPart.AIRCO_AUTO)
+		if(part.type == VehiclePartType.Airco){
+			if(chosenParts.contains(VehiclePart.ENGINE_8) && part == VehiclePart.AIRCO_AUTO)
 				return false;
 		}
-		if(part.type == CarPartType.Engine){
-			if(chosenParts.contains(CarPart.BODY_SPORT) && part == CarPart.ENGINE_4)
+		if(part.type == VehiclePartType.Engine){
+			if(chosenParts.contains(VehiclePart.BODY_SPORT) && part == VehiclePart.ENGINE_4)
 				return false;
 		}
-		if(part.type == CarPartType.Spoiler){
-			if(chosenParts.contains(CarPart.BODY_SPORT) && part == CarPart.SPOILER_NONE)
+		if(part.type == VehiclePartType.Spoiler){
+			if(chosenParts.contains(VehiclePart.BODY_SPORT) && part == VehiclePart.SPOILER_NONE)
 				return false;
 		}
 		return true;
@@ -77,9 +77,9 @@ public class CarOrderDetailsMaker {
 	 * @param type	The type for which we want the parts.
 	 * @return	A list containing all the parts who have the given type and which are in the possible parts list of this object's model.
 	 */
-	public List<CarPart> getAvailableParts(CarPartType type){
-		ArrayList<CarPart> result = new ArrayList<CarPart>();
-		for(CarPart part: model.possibleParts){
+	public List<VehiclePart> getAvailableParts(VehiclePartType type){
+		ArrayList<VehiclePart> result = new ArrayList<VehiclePart>();
+		for(VehiclePart part: model.possibleParts){
 			if(part.type == type && isCompatiblePart(part))
 				result.add(part);
 		}

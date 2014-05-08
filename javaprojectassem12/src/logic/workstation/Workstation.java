@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
-import logic.car.CarPartType;
+import logic.car.VehiclePartType;
 import logic.car.Order;
 
 /**
@@ -156,7 +156,7 @@ public abstract class Workstation {
 	 * @return		A List of CarPartType elements defining the capabilities of 
 	 * 				the implementation.
 	 */
-	public abstract List<CarPartType> getCapabilities();
+	public abstract List<VehiclePartType> getCapabilities();
 	
 	/**
 	 * Lets the chain of workstations perform a task corresponding to the given task.

@@ -13,7 +13,7 @@ public class CarOrderDetails{
 	/**
 	 * A variable holding the type of car model this is.
 	 */
-	private CarModel model;
+	private VehicleModel model;
 	
 	/**
 	 * A variable holding a list of tasks that need to be done for this car order's detail.
@@ -25,7 +25,7 @@ public class CarOrderDetails{
 	 * @param model	The model of this car order's detail.
 	 * @param parts	The parts required for specific tasks that need to be completed for this car order's detail.
 	 */
-	public CarOrderDetails(CarModel model, List<CarPart> parts){
+	public CarOrderDetails(VehicleModel model, List<VehiclePart> parts){
 		this.model = model;
 		buildTasks(parts);		
 	}
@@ -34,9 +34,9 @@ public class CarOrderDetails{
 	 * Builds the tasks of this car order's detail with the given car parts.
 	 * @param parts	The list of car parts that need to be on this car.
 	 */
-	private void buildTasks(List<CarPart> parts){
+	private void buildTasks(List<VehiclePart> parts){
 		this.tasks = new ArrayList<Task>();
-		for(CarPart p: parts){
+		for(VehiclePart p: parts){
 			this.tasks.add(new Task(p));
 		}
 	}
@@ -62,7 +62,7 @@ public class CarOrderDetails{
 	 * @return	A copy of this object with the parts and model copied into it.
 	 */
 	public CarOrderDetails getRawCopy(){
-		ArrayList<CarPart> parts = new ArrayList<CarPart>();
+		ArrayList<VehiclePart> parts = new ArrayList<VehiclePart>();
 		for(Task t : tasks){
 			parts.add(t.getCarPart());
 		}

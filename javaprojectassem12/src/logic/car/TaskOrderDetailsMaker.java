@@ -12,7 +12,7 @@ public class TaskOrderDetailsMaker {
 	/**
 	 * The chosen part for the task order's details.
 	 */
-	private CarPart chosenPart;
+	private VehiclePart chosenPart;
 	
 	/**
 	 * The chosen dead line for the task order's details.
@@ -22,22 +22,22 @@ public class TaskOrderDetailsMaker {
 	/**
 	 * List of available types of tasks.
 	 */
-	private ArrayList<CarPartType> availableTypesOfTasks;
+	private ArrayList<VehiclePartType> availableTypesOfTasks;
 	
 	/**
 	 * Creates a new task order detail by initializing the available types of tasks.
 	 */
 	public TaskOrderDetailsMaker(){
-		this.availableTypesOfTasks = new ArrayList<CarPartType>();
-		this.availableTypesOfTasks.add(CarPartType.Colour);
-		this.availableTypesOfTasks.add(CarPartType.Seats);
+		this.availableTypesOfTasks = new ArrayList<VehiclePartType>();
+		this.availableTypesOfTasks.add(VehiclePartType.Colour);
+		this.availableTypesOfTasks.add(VehiclePartType.Seats);
 	}
 	
 	/**
 	 * Returns the list of available types of tasks.
 	 * @return the list of available types of tasks.
 	 */
-	public List<CarPartType> getAvailableTypesOfTasks(){
+	public List<VehiclePartType> getAvailableTypesOfTasks(){
 		return availableTypesOfTasks;
 	}
 	
@@ -46,9 +46,9 @@ public class TaskOrderDetailsMaker {
 	 * @param type The car part type for which the available parts need to be returned.
 	 * @return the available parts for the given car part type.
 	 */
-	public List<CarPart> getAvailableParts(CarPartType type){
-		ArrayList<CarPart> parts = new ArrayList<CarPart>();
-		for(CarPart part : CarPart.values()){
+	public List<VehiclePart> getAvailableParts(VehiclePartType type){
+		ArrayList<VehiclePart> parts = new ArrayList<VehiclePart>();
+		for(VehiclePart part : VehiclePart.values()){
 			if(part.type == type)
 				parts.add(part);
 		}
@@ -61,8 +61,8 @@ public class TaskOrderDetailsMaker {
 	 * @return 	True if the given part is a valid part.
 	 * 			False if the given part is not a valid part.
 	 */
-	private boolean isValidPart(CarPart part){
-		for(CarPartType type: availableTypesOfTasks){
+	private boolean isValidPart(VehiclePart part){
+		for(VehiclePartType type: availableTypesOfTasks){
 			if(type == part.type)
 				return true;
 		}
@@ -73,7 +73,7 @@ public class TaskOrderDetailsMaker {
 	 * Checks if the given part is valid and if so sets the chosen part to the given part.
 	 * @param part	The part that the chosenPart needs to be set to.
 	 */
-	public void choosePart(CarPart part){
+	public void choosePart(VehiclePart part){
 		if(isValidPart(part))
 			this.chosenPart = part;
 	}

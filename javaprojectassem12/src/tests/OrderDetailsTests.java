@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import logic.car.CarModel;
-import logic.car.CarPart;
+import logic.car.VehicleModel;
+import logic.car.VehiclePart;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -25,25 +25,25 @@ public class OrderDetailsTests {
 	 */
 	@Test
 	public void testValidEasy() {
-		CarPart[] partsArray = {
-				CarPart.BODY_BREAK, 
-				CarPart.COLOUR_RED,
-				CarPart.ENGINE_4,
-				CarPart.GEARBOX_5AUTO,
-				CarPart.SEATS_LEATHER_WHITE,
-				CarPart.AIRCO_MANUAL,
-				CarPart.WHEELS_COMFORT,
-				CarPart.SPOILER_NONE
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_BREAK, 
+				VehiclePart.COLOUR_RED,
+				VehiclePart.ENGINE_4,
+				VehiclePart.GEARBOX_5AUTO,
+				VehiclePart.SEATS_LEATHER_WHITE,
+				VehiclePart.AIRCO_MANUAL,
+				VehiclePart.WHEELS_COMFORT,
+				VehiclePart.SPOILER_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELA);
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELA);
 		
-		for(CarPart cp : partsArray){
+		for(VehiclePart cp : partsArray){
 			maker.addPart(cp);
 		}
 		
 		CarOrderDetails details = maker.getDetails();
-		List<CarPart> detailsParts = new ArrayList<CarPart>();
+		List<VehiclePart> detailsParts = new ArrayList<VehiclePart>();
 		for(Task task : details.getPendingTasks()){
 			detailsParts.add(task.getCarPart());
 		}
@@ -55,18 +55,18 @@ public class OrderDetailsTests {
 	 */
 	@Test
 	public void testINValidEasy() {
-		CarPart[] partsArray = {
-				CarPart.BODY_BREAK, 
-				CarPart.COLOUR_RED,
-				CarPart.ENGINE_4,
-				CarPart.AIRCO_MANUAL,
-				CarPart.WHEELS_COMFORT,
-				CarPart.SPOILER_NONE
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_BREAK, 
+				VehiclePart.COLOUR_RED,
+				VehiclePart.ENGINE_4,
+				VehiclePart.AIRCO_MANUAL,
+				VehiclePart.WHEELS_COMFORT,
+				VehiclePart.SPOILER_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELA);
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELA);
 		
-		for(CarPart cp : partsArray){
+		for(VehiclePart cp : partsArray){
 			maker.addPart(cp);
 		}
 		
@@ -79,25 +79,25 @@ public class OrderDetailsTests {
 	 */
 	@Test
 	public void testSportsBodyWithSpoiler() {
-		CarPart[] partsArray = {
-				CarPart.BODY_SPORT, 
-				CarPart.COLOUR_BLACK,
-				CarPart.ENGINE_8,
-				CarPart.GEARBOX_6MANUAL,
-				CarPart.SEATS_LEATHER_WHITE,
-				CarPart.AIRCO_NONE,
-				CarPart.WHEELS_SPORTS,
-				CarPart.SPOILER_LOW
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_SPORT, 
+				VehiclePart.COLOUR_BLACK,
+				VehiclePart.ENGINE_8,
+				VehiclePart.GEARBOX_6MANUAL,
+				VehiclePart.SEATS_LEATHER_WHITE,
+				VehiclePart.AIRCO_NONE,
+				VehiclePart.WHEELS_SPORTS,
+				VehiclePart.SPOILER_LOW
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELC);
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELC);
 		
-		for(CarPart cp : partsArray){
+		for(VehiclePart cp : partsArray){
 			maker.addPart(cp);
 		}
 		
 		CarOrderDetails details = maker.getDetails();
-		List<CarPart> detailsParts = new ArrayList<CarPart>();
+		List<VehiclePart> detailsParts = new ArrayList<VehiclePart>();
 		for(Task task : details.getPendingTasks()){
 			detailsParts.add(task.getCarPart());
 		}
@@ -110,20 +110,20 @@ public class OrderDetailsTests {
 	 */
 	@Test
 	public void testSportsBodyWithoutSpoiler() {
-		CarPart[] partsArray = {
-				CarPart.BODY_SPORT, 
-				CarPart.COLOUR_RED,
-				CarPart.ENGINE_8,
-				CarPart.GEARBOX_6MANUAL,
-				CarPart.SEATS_LEATHER_WHITE,
-				CarPart.AIRCO_NONE,
-				CarPart.WHEELS_SPORTS,
-				CarPart.SPOILER_NONE
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_SPORT, 
+				VehiclePart.COLOUR_RED,
+				VehiclePart.ENGINE_8,
+				VehiclePart.GEARBOX_6MANUAL,
+				VehiclePart.SEATS_LEATHER_WHITE,
+				VehiclePart.AIRCO_NONE,
+				VehiclePart.WHEELS_SPORTS,
+				VehiclePart.SPOILER_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELC);
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELC);
 		
-		for(CarPart cp : partsArray){
+		for(VehiclePart cp : partsArray){
 			maker.addPart(cp);
 		}
 		
@@ -137,10 +137,10 @@ public class OrderDetailsTests {
 	@Test
 	public void testTaskOrderDetatilsMaker(){
 		TaskOrderDetailsMaker maker = new TaskOrderDetailsMaker();
-		maker.choosePart(maker.getAvailableParts(CarPartType.Colour).get(0));
+		maker.choosePart(maker.getAvailableParts(VehiclePartType.Colour).get(0));
 		maker.chooseDeadline(DateTime.now().plusHours(5));
 		TaskOrderDetails details = maker.getDetails();
 		assertNotNull(details);
-		assertTrue(details.getPendingTasks().get(0).getCarPart().type == CarPartType.Colour);
+		assertTrue(details.getPendingTasks().get(0).getCarPart().type == VehiclePartType.Colour);
 	}
 }

@@ -3,7 +3,7 @@ package logic.workstation;
 import java.util.Arrays;
 import java.util.List;
 
-import logic.car.CarPartType;
+import logic.car.VehiclePartType;
 
 /**
  * Class used to describe a car body post of an assembly line.
@@ -13,10 +13,10 @@ public class CarBodyPost extends Workstation {
 	/**
 	 * Initializes the compatible tasks for this car body post.
 	 */
-	private List<CarPartType> compatibleTasks;
+	private List<VehiclePartType> compatibleTasks;
 	{
-		CarPartType[] array= {CarPartType.Body, CarPartType.Colour};
-		compatibleTasks = (List<CarPartType>) Arrays.asList(array);
+		VehiclePartType[] array= {VehiclePartType.Body, VehiclePartType.Colour};
+		compatibleTasks = (List<VehiclePartType>) Arrays.asList(array);
 	}
 
 	/**
@@ -26,7 +26,7 @@ public class CarBodyPost extends Workstation {
 	 * 				({CarPartType.Body, CarPartType.Colour})
 	 */
 	@Override
-	public List<CarPartType> getCapabilities(){
+	public List<VehiclePartType> getCapabilities(){
 		return this.compatibleTasks;
 	}
 	

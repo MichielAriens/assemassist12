@@ -5,10 +5,10 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import logic.car.CarModel;
-import logic.car.CarOrder;
+import logic.car.VehicleModel;
+import logic.car.VehicleOrder;
 import logic.car.CarOrderDetailsMaker;
-import logic.car.CarPart;
+import logic.car.VehiclePart;
 import logic.car.Order;
 import logic.users.CarManufacturingCompany;
 import logic.users.Mechanic;
@@ -30,23 +30,23 @@ public class StatisticsTests {
 	 * Build a standard order: duration 60
 	 * @return	A standard order with a duration of 60 minutes.
 	 */
-	private CarOrder buildStandardOrderC(){
-		CarPart[] partsArray = {
-				CarPart.BODY_SPORT, 
-				CarPart.COLOUR_BLACK,
-				CarPart.ENGINE_8,
-				CarPart.GEARBOX_6MANUAL,
-				CarPart.SEATS_LEATHER_WHITE,
-				CarPart.AIRCO_NONE,
-				CarPart.WHEELS_SPORTS,
-				CarPart.SPOILER_LOW
+	private VehicleOrder buildStandardOrderC(){
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_SPORT, 
+				VehiclePart.COLOUR_BLACK,
+				VehiclePart.ENGINE_8,
+				VehiclePart.GEARBOX_6MANUAL,
+				VehiclePart.SEATS_LEATHER_WHITE,
+				VehiclePart.AIRCO_NONE,
+				VehiclePart.WHEELS_SPORTS,
+				VehiclePart.SPOILER_LOW
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELC);
-		for(CarPart part : partsArray){
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELC);
+		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}
-		return new CarOrder(maker.getDetails());
+		return new VehicleOrder(maker.getDetails());
 	}
 
 	/**

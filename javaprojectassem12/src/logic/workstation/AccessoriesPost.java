@@ -3,7 +3,7 @@ package logic.workstation;
 import java.util.Arrays;
 import java.util.List;
 
-import logic.car.CarPartType;
+import logic.car.VehiclePartType;
 
 /**
  * Class used to describe an accessories post of an assembly line.
@@ -13,10 +13,10 @@ public class AccessoriesPost extends Workstation {
 	/**
 	 * Initializes the compatible tasks for this accessories post.
 	 */
-	private List<CarPartType> compatibleTasks;
+	private List<VehiclePartType> compatibleTasks;
 	{
-		CarPartType[] array= {CarPartType.Seats, CarPartType.Airco, CarPartType.Wheels, CarPartType.Spoiler};
-		compatibleTasks = (List<CarPartType>) Arrays.asList(array);
+		VehiclePartType[] array= {VehiclePartType.Seats, VehiclePartType.Airco, VehiclePartType.Wheels, VehiclePartType.Spoiler};
+		compatibleTasks = (List<VehiclePartType>) Arrays.asList(array);
 	}
 
 	/**
@@ -26,7 +26,7 @@ public class AccessoriesPost extends Workstation {
 	 * 				({CarPartType.Seats, CarPartType.Airco, CarPartType.Wheels})
 	 */
 	@Override
-	public List<CarPartType> getCapabilities() {
+	public List<VehiclePartType> getCapabilities() {
 		return this.compatibleTasks;
 	}
 	

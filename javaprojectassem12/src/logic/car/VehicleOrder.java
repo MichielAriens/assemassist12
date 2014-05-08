@@ -8,10 +8,11 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+
 /**
  * A class representing a car order and all its requirements. 
  */
-public class CarOrder extends Order{
+public class VehicleOrder extends Order{
 	
 	/**
 	 * A variable holding the car order details. 
@@ -22,7 +23,7 @@ public class CarOrder extends Order{
 	 * Initializes the car order details of this class to the given details.
 	 * @param details	The car order details which need to be set.
 	 */
-	public CarOrder(CarOrderDetails details){
+	public VehicleOrder(CarOrderDetails details){
 		this.details = details;
 	}
 
@@ -112,7 +113,7 @@ public class CarOrder extends Order{
 	 */
 	@Override
 	public Order getRawCopy(){
-		return new CarOrder(details.getRawCopy());
+		return new VehicleOrder(details.getRawCopy());
 	}
 
 }

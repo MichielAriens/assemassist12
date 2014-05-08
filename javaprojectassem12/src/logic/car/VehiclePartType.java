@@ -3,7 +3,7 @@ package logic.car;
 /**
  * An enum to represent the possible car part types.
  */
-public enum CarPartType {
+public enum VehiclePartType {
 	Body("Body"),
 	Colour("Colour"),
 	Engine("Engine"),
@@ -22,7 +22,7 @@ public enum CarPartType {
 	 * Make a car part type with a given name.
 	 * @param name
 	 */
-	CarPartType(String name){
+	VehiclePartType(String name){
 		this.name = name;
 	}
 	
@@ -40,9 +40,9 @@ public enum CarPartType {
 	 * @return	Null if the given name does not correspond with the full name of any car part type.
 	 * 			The car part type whose full name corresponds with the given name otherwise.
 	 */
-	public static CarPartType getTypefromString(String name){
-		CarPartType type = null;
-		for(CarPartType t : CarPartType.values()){
+	public static VehiclePartType getTypefromString(String name){
+		VehiclePartType type = null;
+		for(VehiclePartType t : VehiclePartType.values()){
 			if(t.toString().equals(name)){
 				type = t;
 				break;

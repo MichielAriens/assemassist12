@@ -3,7 +3,7 @@ package logic.users;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import logic.car.CarOrder;
+import logic.car.VehicleOrder;
 import logic.car.CarOrderDetails;
 
 /**
@@ -19,7 +19,7 @@ public class GarageHolder extends User{
 	/**
 	 * List of all the orders committed by this garage holder.
 	 */
-	private ArrayList<CarOrder> committedOrders;
+	private ArrayList<VehicleOrder> committedOrders;
 	
 	/**
 	 * Constructs a new garage holder initializing its company and user name with the given 
@@ -30,16 +30,16 @@ public class GarageHolder extends User{
 	public GarageHolder(CarManufacturingCompany company, String userName){
 		super(userName);
 		this.company = company;
-		this.committedOrders = new ArrayList<CarOrder>();
+		this.committedOrders = new ArrayList<VehicleOrder>();
 	}
 	
 	/**
 	 * Returns a list of all committed orders that are not yet completed.
 	 * @return a list of all committed orders that are not yet completed.
 	 */
-	public ArrayList<CarOrder> getPendingOrders(){
-		ArrayList<CarOrder> pendingOrders = new ArrayList<CarOrder>();
-		for(CarOrder o : this.committedOrders){
+	public ArrayList<VehicleOrder> getPendingOrders(){
+		ArrayList<VehicleOrder> pendingOrders = new ArrayList<VehicleOrder>();
+		for(VehicleOrder o : this.committedOrders){
 			if(!o.done())
 				pendingOrders.add(o);
 		}
@@ -50,9 +50,9 @@ public class GarageHolder extends User{
 	 * Returns a list of all committed orders that are completed sorted on end time.
 	 * @return a list of all committed orders that are completed sorted on end time.
 	 */
-	public ArrayList<CarOrder> getCompletedOrders(){
-		ArrayList<CarOrder> completedOrders = new ArrayList<CarOrder>();
-		for(CarOrder o : this.committedOrders){
+	public ArrayList<VehicleOrder> getCompletedOrders(){
+		ArrayList<VehicleOrder> completedOrders = new ArrayList<VehicleOrder>();
+		for(VehicleOrder o : this.committedOrders){
 			if(o.done())
 				completedOrders.add(o);
 		}
@@ -67,7 +67,7 @@ public class GarageHolder extends User{
 	public void placeOrder(CarOrderDetails details){
 		if(details == null)
 			return;
-		CarOrder order = new CarOrder(details);
+		VehicleOrder order = new VehicleOrder(details);
 		company.addOrder(order);
 		this.committedOrders.add(order);
 	}

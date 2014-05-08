@@ -6,11 +6,11 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
-import logic.car.CarModel;
-import logic.car.CarOrder;
+import logic.car.VehicleModel;
+import logic.car.VehicleOrder;
 import logic.car.CarOrderDetailsMaker;
-import logic.car.CarPart;
-import logic.car.CarPartType;
+import logic.car.VehiclePart;
+import logic.car.VehiclePartType;
 import logic.car.TaskOrder;
 import logic.car.TaskOrderDetailsMaker;
 import logic.users.CarManufacturingCompany;
@@ -29,7 +29,7 @@ import org.junit.Test;
 public class WorkStationTest {
 	GarageHolder garageHolder;
 	CarManufacturingCompany carManufacturingCompany;
-	CarOrder carOrder;
+	VehicleOrder carOrder;
 	
 	Workstation universalPost;
 	Mechanic mechanic;
@@ -51,27 +51,27 @@ public class WorkStationTest {
 		mechanic = new Mechanic(carManufacturingCompany, "Barry");
 		garageHolder = new GarageHolder(carManufacturingCompany, "Lando");//new GarageHolder(carManufacturingCompany);
 		
-		CarPart[] partsArray = {
-				CarPart.BODY_BREAK, 
-				CarPart.COLOUR_RED,
-				CarPart.ENGINE_4,
-				CarPart.GEARBOX_5AUTO,
-				CarPart.SEATS_LEATHER_WHITE,
-				CarPart.AIRCO_MANUAL,
-				CarPart.WHEELS_COMFORT,
-				CarPart.SPOILER_NONE
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_BREAK, 
+				VehiclePart.COLOUR_RED,
+				VehiclePart.ENGINE_4,
+				VehiclePart.GEARBOX_5AUTO,
+				VehiclePart.SEATS_LEATHER_WHITE,
+				VehiclePart.AIRCO_MANUAL,
+				VehiclePart.WHEELS_COMFORT,
+				VehiclePart.SPOILER_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELA);
-		for(CarPart part : partsArray){
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELA);
+		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}
-		carOrder = new CarOrder(maker.getDetails());
+		carOrder = new VehicleOrder(maker.getDetails());
 		
 		universalPost = new Workstation() {
 			@Override
-			public List<CarPartType> getCapabilities() {
-				return Arrays.asList(CarPartType.values());
+			public List<VehiclePartType> getCapabilities() {
+				return Arrays.asList(VehiclePartType.values());
 			}
 
 			@Override
@@ -160,7 +160,7 @@ public class WorkStationTest {
 	@Test
 	public void testTaskOrder(){
 		TaskOrderDetailsMaker maker = new TaskOrderDetailsMaker();
-		maker.choosePart(CarPart.COLOUR_BLACK);
+		maker.choosePart(VehiclePart.COLOUR_BLACK);
 		maker.chooseDeadline(new DateTime().plusHours(5));
 		TaskOrder order = new TaskOrder(maker.getDetails());
 		

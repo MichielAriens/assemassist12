@@ -3,7 +3,7 @@ package logic.workstation;
 import java.util.Arrays;
 import java.util.List;
 
-import logic.car.CarPartType;
+import logic.car.VehiclePartType;
 
 /**
  * Class used to describe a drive train post of an assembly line.
@@ -13,10 +13,10 @@ public class DriveTrainPost extends Workstation {
 	/**
 	 * Initializes the compatible tasks for this drive train post.
 	 */
-	private List<CarPartType> compatibleTasks;
+	private List<VehiclePartType> compatibleTasks;
 	{
-		CarPartType[] array= {CarPartType.Engine, CarPartType.Gearbox};
-		compatibleTasks = (List<CarPartType>) Arrays.asList(array);
+		VehiclePartType[] array= {VehiclePartType.Engine, VehiclePartType.Gearbox};
+		compatibleTasks = (List<VehiclePartType>) Arrays.asList(array);
 	}
 
 	/**
@@ -26,7 +26,7 @@ public class DriveTrainPost extends Workstation {
 	 * 				({CarPartType.Engine, CarPartType.Gearbox})
 	 */
 	@Override
-	public List<CarPartType> getCapabilities() {
+	public List<VehiclePartType> getCapabilities() {
 		return this.compatibleTasks;
 	}
 	

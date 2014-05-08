@@ -28,7 +28,7 @@ public class TaskOrderDetails{
 	 * @param part	The part of this task order detail.
 	 * @param deadLine	The absolute end time for this task order.
 	 */
-	public TaskOrderDetails(CarPart part, DateTime deadLine){
+	public TaskOrderDetails(VehiclePart part, DateTime deadLine){
 		this.deadLine = deadLine;
 		buildTasks(part);
 	}
@@ -38,7 +38,7 @@ public class TaskOrderDetails{
 	 * order's details.
 	 * @param part The part for which the tasks need to be build.
 	 */
-	private void buildTasks(CarPart part){
+	private void buildTasks(VehiclePart part){
 		tasks = new ArrayList<Task>();
 		tasks.add(new Task(part));
 	}

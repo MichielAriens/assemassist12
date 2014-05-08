@@ -6,10 +6,10 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import logic.car.CarModel;
-import logic.car.CarOrder;
+import logic.car.VehicleModel;
+import logic.car.VehicleOrder;
 import logic.car.CarOrderDetailsMaker;
-import logic.car.CarPart;
+import logic.car.VehiclePart;
 import logic.car.Order;
 import logic.car.TaskOrder;
 import logic.car.TaskOrderDetailsMaker;
@@ -27,77 +27,77 @@ import org.junit.Test;
  */
 public class AssemblyLineTest {
 	private CarManufacturingCompany cmcMotors;
-	private List<CarOrder> orders = new ArrayList<CarOrder>();
+	private List<VehicleOrder> orders = new ArrayList<VehicleOrder>();
 	private Mechanic barry;
-	private List<CarOrder> simpleOrders;
+	private List<VehicleOrder> simpleOrders;
 	
 	/**
 	 * Build a standard order: duration 50
 	 * @return	A standard order with a duration of 50 minutes.
 	 */
-	private CarOrder buildStandardOrderA(){
-		CarPart[] partsArray = {
-				CarPart.BODY_BREAK, 
-				CarPart.COLOUR_RED,
-				CarPart.ENGINE_4,
-				CarPart.GEARBOX_5AUTO,
-				CarPart.SEATS_LEATHER_WHITE,
-				CarPart.AIRCO_MANUAL,
-				CarPart.WHEELS_COMFORT,
-				CarPart.SPOILER_NONE
+	private VehicleOrder buildStandardOrderA(){
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_BREAK, 
+				VehiclePart.COLOUR_RED,
+				VehiclePart.ENGINE_4,
+				VehiclePart.GEARBOX_5AUTO,
+				VehiclePart.SEATS_LEATHER_WHITE,
+				VehiclePart.AIRCO_MANUAL,
+				VehiclePart.WHEELS_COMFORT,
+				VehiclePart.SPOILER_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELA);
-		for(CarPart part : partsArray){
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELA);
+		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}
-		return new CarOrder(maker.getDetails());
+		return new VehicleOrder(maker.getDetails());
 	}
 	
 	/**
 	 * Build a standard order: duration 70
 	 * @return	A standard order with a duration of 70 minutes.
 	 */
-	private CarOrder buildStandardOrderB(){
-		CarPart[] partsArray = {
-				CarPart.BODY_BREAK, 
-				CarPart.COLOUR_RED,
-				CarPart.ENGINE_4,
-				CarPart.GEARBOX_5AUTO,
-				CarPart.SEATS_LEATHER_WHITE,
-				CarPart.AIRCO_MANUAL,
-				CarPart.WHEELS_COMFORT,
-				CarPart.SPOILER_NONE
+	private VehicleOrder buildStandardOrderB(){
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_BREAK, 
+				VehiclePart.COLOUR_RED,
+				VehiclePart.ENGINE_4,
+				VehiclePart.GEARBOX_5AUTO,
+				VehiclePart.SEATS_LEATHER_WHITE,
+				VehiclePart.AIRCO_MANUAL,
+				VehiclePart.WHEELS_COMFORT,
+				VehiclePart.SPOILER_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELB);
-		for(CarPart part : partsArray){
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.MODELB);
+		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}
-		return new CarOrder(maker.getDetails());
+		return new VehicleOrder(maker.getDetails());
 	}
 	
 	/**
 	 * Build a standard order: duration 60
 	 * @return	A standard order with a duration of 60 minutes.
 	 */
-	private CarOrder buildStandardOrderC(){
-		CarPart[] partsArray = {
-				CarPart.BODY_SPORT, 
-				CarPart.COLOUR_BLACK,
-				CarPart.ENGINE_8,
-				CarPart.GEARBOX_6MANUAL,
-				CarPart.SEATS_LEATHER_WHITE,
-				CarPart.AIRCO_NONE,
-				CarPart.WHEELS_SPORTS,
-				CarPart.SPOILER_LOW
+	private VehicleOrder buildStandardOrderC(){
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_SPORT, 
+				VehiclePart.COLOUR_BLACK,
+				VehiclePart.ENGINE_8,
+				VehiclePart.GEARBOX_6MANUAL,
+				VehiclePart.SEATS_LEATHER_WHITE,
+				VehiclePart.AIRCO_NONE,
+				VehiclePart.WHEELS_SPORTS,
+				VehiclePart.SPOILER_LOW
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(CarModel.MODELC);
-		for(CarPart part : partsArray){
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELC);
+		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}
-		return new CarOrder(maker.getDetails());
+		return new VehicleOrder(maker.getDetails());
 	}
 	
 	/**
@@ -107,7 +107,7 @@ public class AssemblyLineTest {
 	private TaskOrder buildStandardTaskOrder(DateTime deadline){
 		TaskOrderDetailsMaker maker = new TaskOrderDetailsMaker();
 		maker.chooseDeadline(deadline);
-		maker.choosePart(CarPart.COLOUR_BLACK);
+		maker.choosePart(VehiclePart.COLOUR_BLACK);
 		return new TaskOrder(maker.getDetails());
 	}
 	
@@ -116,7 +116,7 @@ public class AssemblyLineTest {
 	 */
 	@Test
 	public void testOrdersValid(){
-		CarOrder order;
+		VehicleOrder order;
 		order = buildStandardOrderA();
 		assertFalse(order.getTasks().isEmpty());
 		order = buildStandardOrderB();
@@ -145,7 +145,7 @@ public class AssemblyLineTest {
 		}
 		
 		//Build a list of orders of duration 60.
-		simpleOrders = new ArrayList<CarOrder>();
+		simpleOrders = new ArrayList<VehicleOrder>();
 		for(int i = 0; i < 10; i++){
 			simpleOrders.add(buildStandardOrderC());
 		}
@@ -267,7 +267,7 @@ public class AssemblyLineTest {
 	@Test
 	public void testOvertimeOver2HoursPhase70(){
 		//Build a list of orders of duration 60.
-		List<CarOrder> simpleOrders = new ArrayList<CarOrder>();
+		List<VehicleOrder> simpleOrders = new ArrayList<VehicleOrder>();
 		for(int i = 0; i < 10; i++){
 			simpleOrders.add(buildStandardOrderB());
 		}

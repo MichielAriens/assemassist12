@@ -6,8 +6,8 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import logic.car.CarPart;
-import logic.car.CarPartType;
+import logic.car.VehiclePart;
+import logic.car.VehiclePartType;
 import logic.car.TaskOrderDetailsMaker;
 import logic.users.CustomsManager;
 
@@ -50,7 +50,7 @@ public class CustomsManagerController extends UserController{
 	public void choosePart(String partString){
 		if(partString == null)
 			return;
-		CarPart part = CarPart.getPartfromString(partString);
+		VehiclePart part = VehiclePart.getPartfromString(partString);
 		maker.choosePart(part);
 	}
 	
@@ -61,7 +61,7 @@ public class CustomsManagerController extends UserController{
 	public ArrayList<String> getAvailableTypes(){
 		ArrayList<String> types = new ArrayList<String>();
 		int count = 1;
-		for(CarPartType type: maker.getAvailableTypesOfTasks()){
+		for(VehiclePartType type: maker.getAvailableTypesOfTasks()){
 			types.add(type.toString() + ": " +  count);
 			count++;
 		}
@@ -74,10 +74,10 @@ public class CustomsManagerController extends UserController{
 	 * @return a numbered list of available options for the given type of the chosen part.
 	 */
 	public ArrayList<String> getAvailableOptions(String taskTypeString){
-		CarPartType taskType = CarPartType.getTypefromString(taskTypeString);
+		VehiclePartType taskType = VehiclePartType.getTypefromString(taskTypeString);
 		ArrayList<String> options = new ArrayList<String>();
 		int count = 1;
-		for(CarPart part: maker.getAvailableParts(taskType)){
+		for(VehiclePart part: maker.getAvailableParts(taskType)){
 			options.add(part.toString() + ": " + count);
 			count++;
 		}
