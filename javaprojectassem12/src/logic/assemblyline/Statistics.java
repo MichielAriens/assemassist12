@@ -9,9 +9,9 @@ import logic.car.Order;
  */
 public class Statistics {
 	/**
-	 * List of finished orders.
+	 * List of delays of the orders.
 	 */
-	private ArrayList<Order> finishedOrders = new ArrayList<Order>();
+	private ArrayList<Integer> delays = new ArrayList<Integer>();
 	
 	/**
 	 * List of the number of finished cars per day.
@@ -34,10 +34,10 @@ public class Statistics {
 	/**
 	 * Adds the given order to the list of finished orders and adds one to the number
 	 * of finished car orders for today.
-	 * @param order	The finished car order that needs to be added.
+	 * @param delay	The delay of the finished order.
 	 */
-	public void finishedCarOrder(Order order){
-		finishedOrders.add(order);
+	public void finishedCarOrder(int delay){
+		delays.add(delay);
 		finishedCarOrdersToday++;
 	}
 	
@@ -71,7 +71,6 @@ public class Statistics {
 	 * @return the average delay on an order.
 	 */
 	private int getAverageDelay(){
-		ArrayList<Integer> delays = getAllDelays();
 		return getAverage(delays);
 	}
 	
@@ -80,20 +79,7 @@ public class Statistics {
 	 * @return the median delay on an order.
 	 */
 	private int getMedianDelay(){
-		ArrayList<Integer> delays = getAllDelays();
 		return getMedian(delays);
-	}
-
-	/**
-	 * Returns a new ArrayList with the delays of all orders.
-	 * @return a new ArrayList with the delays of all orders.
-	 */
-	private ArrayList<Integer> getAllDelays(){
-		ArrayList<Integer> delays = new ArrayList<Integer>();
-		for(Order o : finishedOrders){
-			delays.add(o.getDelay());
-		}
-		return delays;
 	}
 	
 	/**
@@ -204,13 +190,13 @@ public class Statistics {
 	 */
 	private String delayXLastDays(int days){
 		String statistics = "";
-		int maxIndex = finishedOrders.size()-1;
+		int maxIndex = delays.size()-1;
 		if(maxIndex >= 0){
-			int delay = finishedOrders.get(finishedOrders.size()-1).getDelay();
+			int delay = delays.get(delays.size()-1);
 			statistics += "   1) " + delay + " minutes\n";
 			for(int i = 2; i <= days; i ++){
 				if(i <= maxIndex){
-					delay = finishedOrders.get(finishedOrders.size()-i).getDelay();
+					delay = delays.get(delays.size()-i);
 					statistics += "   " + i + ") " + delay + " minuts\n";
 				}
 				else{

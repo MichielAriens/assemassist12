@@ -269,7 +269,7 @@ public class AssemblyLine {
 			Order firstOrder = firstWorkStation.getLastOrder();
 			if(firstOrder!=null){
 				firstOrder.setEndTime(currentTime);
-				stats.finishedCarOrder(firstOrder);
+				stats.finishedCarOrder(firstOrder.getDelay());
 			}
 			firstWorkStation.advanceWorkstations(null);
 			if(checkEndOfDay()){
