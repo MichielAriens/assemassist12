@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import logic.car.VehicleModel;
 import logic.car.VehiclePart;
@@ -142,5 +144,20 @@ public class OrderDetailsTests {
 		TaskOrderDetails details = maker.getDetails();
 		assertNotNull(details);
 		assertTrue(details.getPendingTasks().get(0).getCarPart().type == VehiclePartType.Colour);
+	}
+	
+	/**
+	 * Test whether all string representations for parts are unique
+	 */
+	@Test
+	public void testUniqueStringsVehicleParts(){
+		Set<String> strings = new HashSet<String>();
+		for(VehiclePart vp : VehiclePart.values()){
+			String s = vp.toString();
+			if(strings.contains(s)){
+				fail(s + " does not have a unique toString");
+			}
+			strings.add(s);
+		}
 	}
 }

@@ -70,7 +70,7 @@ public class AssemblyLineTest {
 				VehiclePart.SPOILER_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.MODELB);
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELB);
 		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}
