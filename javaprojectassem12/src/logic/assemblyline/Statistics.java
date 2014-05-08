@@ -2,7 +2,6 @@ package logic.assemblyline;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import logic.car.Order;
 
 /**
  * Class handling the statistics of a car manufacturing company.
