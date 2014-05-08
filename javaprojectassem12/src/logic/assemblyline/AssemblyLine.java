@@ -266,12 +266,10 @@ public class AssemblyLine {
 			
 			firstWorkStation.adjustDelays(phaseDuration);
 			currentTime = currentTime.plusMinutes(phaseDuration);
-			Order firstOrder = firstWorkStation.getLastOrder();
-			if(firstOrder!=null){
-				firstOrder.setEndTime(currentTime);
-				stats.finishedCarOrder(firstOrder.getDelay());
-			}
-			firstWorkStation.advanceWorkstations(null);
+			Integer delayLastOrder= firstWorkStation.getDelayLastOrder();
+			if(delayLastOrder != null)
+				stats.finishedCarOrder(delayLastOrder);
+			firstWorkStation.advanceOrders(null, currentTime);
 			if(checkEndOfDay()){
 				calculateOverTime();
 				setNextDay();

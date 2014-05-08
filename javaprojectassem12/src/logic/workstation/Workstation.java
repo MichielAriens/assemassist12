@@ -51,16 +51,22 @@ public abstract class Workstation {
 	/**
 	 * Moves the assembly line forward, if possible, by moving all orders in the chain to the next 
 	 * workstation in the chain, and adding the given order to the first workstation in the chain.
+	 * Sets the end time of the current order if the next work station is null and the current order
+	 * is not null.
 	 * @param order	The new order that has to be added to the first workstation of the chain.
+	 * @param endTime The end time for the order in the last work station of the assembly line.
 	 */
-	public void advanceWorkstations(Order order){
+	public void advanceOrders(Order order, DateTime endTime){
 		if(canMoveAssemblyLine()){
 			if(nextWorkStation!=null)
-				nextWorkStation.advanceWorkstations(currentOrder);
+				nextWorkStation.advanceOrders(currentOrder, endTime);
+			else
+				if(currentOrder != null){
+						currentOrder.setEndTime(endTime);
+				}
 			this.setOrder(order);
 		}
-	}
-	
+	}	
 	
 	/**
 	 * A list of tasks that can be performed at this workstation.
@@ -399,5 +405,22 @@ public abstract class Workstation {
 		if(obj == null) return false;
 		if(this.getClass() != obj.getClass()) return false;
 		return true;
+	}
+
+	/**
+	 * Returns the delay of the order in the last work station of the
+	 * assembly line.
+	 * @return the delay of the current order if the next workstation is null
+	 * 			and the current order is not null.
+	 * @return null if the current order is null.
+	 */
+	public Integer getDelayLastOrder() {
+		if(nextWorkStation != null)
+			return nextWorkStation.getDelayLastOrder();
+		else
+			if(currentOrder != null)
+				return currentOrder.getDelay();
+			else
+				return null;
 	}
 }
