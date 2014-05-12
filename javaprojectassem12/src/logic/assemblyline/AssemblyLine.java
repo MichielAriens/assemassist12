@@ -1,16 +1,18 @@
 package logic.assemblyline;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
+
+import logic.car.Order;
+import logic.car.VehicleModel;
+import logic.workstation.Task;
+import logic.workstation.Workstation;
+import logic.workstation.WorkstationChainBuilder;
+import logic.workstation.WorkstationDirector;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-
-import logic.car.Order;
-import logic.workstation.Task;
-import logic.workstation.WorkstationChainBuilder;
-import logic.workstation.Workstation;
-import logic.workstation.WorkstationDirector;
 
 /**
  * Class handling an assembly line of a car manufacturing company.
@@ -56,15 +58,18 @@ public class AssemblyLine {
 	 * A variable containing the schedule, which is used for scheduling orders.
 	 */
 	private Schedule schedule;
+	
+	private Collection<VehicleModel> capabilities;
 
 	/**
 	 * Initializes the workstations, the schedule, the statistics and the queue containing the orders.
 	 * Also sets the current time to January first 2014 at the beginning of the shift. 
 	 */
-	public AssemblyLine(){
+	public AssemblyLine(Collection<VehicleModel> capabilities, Workstation rootWorkstation){
+		this.capabilities = capabilities;
 		queue= new LinkedList<Order>();
 		schedule = new Schedule();
-		initialiseWorkstations();
+		this.firstWorkStation = rootWorkstation;
 		this.numberOfWorkStations = firstWorkStation.countWorkStations();
 		this.currentTime = new DateTime(2014, 1, 1, 6, 0);
 		stats = new Statistics();
