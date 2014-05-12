@@ -191,6 +191,16 @@ public class AssemblyLine implements Printable {
 			schedule.scheduleOrder(order);
 	}
 
+	/**
+	 * Returns an estimate for an order if scheduled on this line without mutation of either the order or this line.
+	 * @param order
+	 * @return
+	 * @stateless
+	 */
+	public DateTime getEstimate(Order order) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	/**
 	 * Changes the strategy if possible. Doesn't change anything if the manager wants to change to the currently used strategy. 
@@ -584,14 +594,5 @@ public class AssemblyLine implements Printable {
 			}
 			return returnList;
 		}
-	}
-
-	/**
-	 * Returns a scheduling heuristic for the order. A lower value is better.
-	 * @param order
-	 * @return
-	 */
-	public int getHeuristicFor(Order order) {
-		return this.queue.size();
 	}
 }

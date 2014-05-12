@@ -35,11 +35,11 @@ public class AssemblyLineScheduler {
 	 */
 	public void addOrder(Order order){
 		
-		Map<AssemblyLine, Integer> estimates = new HashMap<>();
+		Map<AssemblyLine, DateTime> estimates = new HashMap<>();
 		//Map every al to its estimate
 		for(AssemblyLine al : assemblyLines){
 			if(al.accepts(order));
-			estimates.put(al, al.getHeuristicFor(order));
+			estimates.put(al, al.getEstimate(order));
 		}
 		
 		//chose the best estimate
@@ -48,7 +48,7 @@ public class AssemblyLineScheduler {
 			if(best == null){
 				best = is;
 			}else{
-				if(estimates.get(is).compareTo(estimates.get(best)) <= 0){
+				if(estimates.get(is).befor(estimates.get(best))){
 					best = is;
 				}
 			}
