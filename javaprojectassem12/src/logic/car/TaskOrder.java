@@ -102,7 +102,23 @@ public class TaskOrder extends Order{
 	}
 
 	@Override
-	public VehicleModel getModel() {
+	public VehicleModel getModel(){
+		return null;
+	}
+	
+	/**
+	 * Returns a string representation for the estimated completion time for this task order.
+	 * @return a string representation for the estimated completion time for this task order.
+	 */
+	@Override
+	public String getStringRepresentation() {
+		return this.toString();
+	}
+	
+	//TODO: docushit
+	@Override
+	public String getExtraInformation() {
+
 		return null;
 	}
 }

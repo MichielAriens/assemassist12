@@ -55,6 +55,8 @@ public class GarageHolderController extends UserController{
 		return pendingOrderStrings;
 	}
 	
+	//TODO: make better use of the interface here
+	
 	/**
 	 * Returns the information for the pending order with the given index.
 	 * @param index	The index for the order in the list of pending orders.
@@ -66,7 +68,7 @@ public class GarageHolderController extends UserController{
 			return null;
 		ArrayList<VehicleOrder> pendingOrders = this.currentGarageHolder.getPendingOrders();
 		if(index < pendingOrders.size() && index >= 0)
-			return pendingOrders.get(index).getInformation();
+			return pendingOrders.get(index).getExtraInformation();
 		else
 			return null;
 	}
@@ -82,7 +84,7 @@ public class GarageHolderController extends UserController{
 			return null;
 		ArrayList<VehicleOrder> completedOrders = this.currentGarageHolder.getCompletedOrders();
 		if(index < completedOrders.size() && index >= 0)
-			return completedOrders.get(index).getInformation();
+			return completedOrders.get(index).getExtraInformation();
 		else
 			return null;
 	}

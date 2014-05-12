@@ -1,11 +1,12 @@
 package logic.workstation;
 
+import interfaces.Printable;
 import logic.car.VehiclePart;
 
 /**
  * Class used to describe a task that needs to be performed in order to complete a car order.
  */
-public class Task {
+public class Task implements Printable{
 	
 	/**
 	 * Flag keeping track of the completion of the task. 
@@ -73,7 +74,7 @@ public class Task {
 	 * Returns the string representation of the description of this task.
 	 * @return The string representation of the description of this task.
 	 */
-	public String getDescription(){
+	private String getDescription(){
 		return "Task description:\n   -Type of part needed: " + this.getCarPart().type.toString() + ",\n   -Car Part: " + this.getCarPart().toString() + "\n";
 	}
 	
@@ -98,5 +99,17 @@ public class Task {
 	 */
 	private boolean equals(Task other){
 		return this.carPart == other.carPart;
+	}
+
+	@Override
+	public String getStringRepresentation() {
+		return this.toString();
+	}
+	
+	//TODO: fix this up
+	
+	@Override
+	public String getExtraInformation() {
+		return this.getDescription();
 	}
 }

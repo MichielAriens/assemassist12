@@ -45,5 +45,19 @@ public class AccessoriesPost extends Workstation {
 	public String toString(){
 		return "Accessories Post";
 	}
+	
+	/**
+	 * Returns a string representation of an accessories post.
+	 */
+	@Override
+	public String getStringRepresentation() {
+		return this.toString();
+	}
+
+	//TODO fix this
+	@Override
+	public String getExtraInformation() {
+		return null;
+	}
 
 }

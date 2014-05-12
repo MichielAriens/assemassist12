@@ -1,5 +1,7 @@
 package logic.workstation;
 
+import interfaces.Printable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +13,7 @@ import logic.car.Order;
 /**
  * Class used to describe a work station of an assembly line.
  */
-public abstract class Workstation {
+public abstract class Workstation implements Printable{
 	
 	/**
 	 * The current order this workstation is working on.
