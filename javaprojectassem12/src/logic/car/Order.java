@@ -166,4 +166,6 @@ public abstract class Order implements Comparable<Order>{
 			return -1;
 		return this.estimatedEndTime.compareTo(o.estimatedEndTime);
 	}
+	
+	public abstract VehicleModel getModel();
 }

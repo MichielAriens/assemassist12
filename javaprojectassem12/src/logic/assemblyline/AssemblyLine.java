@@ -75,6 +75,16 @@ public class AssemblyLine {
 		stats = new Statistics();
 	}
 	
+	public boolean accepts(Order order){
+		VehicleModel model = order.getModel();
+		if(model == null){
+			return true;
+		}
+		if(this.capabilities.contains(model)){
+			return true;
+		}return false;
+	}
+	
 	/**
 	 * Initializes the workstation using a builder.
 	 */

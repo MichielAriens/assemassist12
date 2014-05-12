@@ -116,4 +116,9 @@ public class VehicleOrder extends Order{
 		return new VehicleOrder(details.getRawCopy());
 	}
 
+	@Override
+	public VehicleModel getModel() {
+		return this.details.getModel();
+	}
+
 }

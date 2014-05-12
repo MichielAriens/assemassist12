@@ -100,4 +100,9 @@ public class TaskOrder extends Order{
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm");
 		return "Estimated completion: " + fmt.print(super.getEstimatedEndTime());
 	}
+
+	@Override
+	public VehicleModel getModel() {
+		return null;
+	}
 }

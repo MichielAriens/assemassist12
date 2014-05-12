@@ -83,5 +83,9 @@ public class CarOrderDetails{
 		str += ")";
 		return str;
 	}
+	
+	public VehicleModel getModel(){
+		return this.model;
+	}
 
 }
