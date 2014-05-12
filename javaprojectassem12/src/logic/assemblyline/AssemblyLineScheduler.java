@@ -12,7 +12,7 @@ import org.joda.time.DateTime;
 
 public class AssemblyLineScheduler {
 	
-	private Set<AssemblyLine> assemblyLines;
+	private Collection<AssemblyLine> assemblyLines;
 	
 	/**
 	 * 
@@ -30,15 +30,31 @@ public class AssemblyLineScheduler {
 	}
 	
 	/**
-	 * Accepts an order and distributes it to the best assemblyline.
+	 * Accepts an order and distributes it to the best assemblyline. 
+	 * All elegible assemblylines will calculate an estimated completiontime
 	 */
 	public void addOrder(Order order){
-		Map<AssemblyLine, DateTime> estimates = new HashMap<>();
+		
+		Map<AssemblyLine, Integer> estimates = new HashMap<>();
 		//Map every al to its estimate
 		for(AssemblyLine al : assemblyLines){
-			estimates.put(al, al.getEstimateFor(order));
+			if(al.accepts(order));
+			estimates.put(al, al.getHeuristicFor(order));
 		}
+		
 		//chose the best estimate
+		AssemblyLine best = null;
+		for(AssemblyLine is : estimates.keySet()){
+			if(best == null){
+				best = is;
+			}else{
+				if(estimates.get(is).compareTo(estimates.get(best)) <= 0){
+					best = is;
+				}
+			}
+		}
+		
+		best.addOrder(order);
 	}
 	
 	

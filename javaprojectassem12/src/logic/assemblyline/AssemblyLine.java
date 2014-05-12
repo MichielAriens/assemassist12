@@ -1,4 +1,6 @@
 package logic.assemblyline;
+import interfaces.Printable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -18,7 +20,7 @@ import org.joda.time.Days;
  * Class handling an assembly line of a car manufacturing company.
  */
 
-public class AssemblyLine {
+public class AssemblyLine implements Printable {
 
 	
 	/**
@@ -189,6 +191,7 @@ public class AssemblyLine {
 			schedule.scheduleOrder(order);
 	}
 
+
 	/**
 	 * Changes the strategy if possible. Doesn't change anything if the manager wants to change to the currently used strategy. 
 	 * @param order Null if the manager wants to change to FIFO strategy.
@@ -216,6 +219,18 @@ public class AssemblyLine {
 		return false;
 	}
 
+	@Override
+	public String getStringRepresentation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getExtraInformation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	/**
 	 *A class made to reschedule the assembly line and workstations. Changes the different times from orders appropriately.
 	 */
@@ -231,6 +246,7 @@ public class AssemblyLine {
 		 */
 		LinkedList<SchedulingStrategy> stratList = new LinkedList<SchedulingStrategy>();
 	
+
 		/**
 		 * A constructor which initializes the used strategies and sets the current strategy to FIFO strategy.
 		 */
@@ -568,5 +584,14 @@ public class AssemblyLine {
 			}
 			return returnList;
 		}
+	}
+
+	/**
+	 * Returns a scheduling heuristic for the order. A lower value is better.
+	 * @param order
+	 * @return
+	 */
+	public int getHeuristicFor(Order order) {
+		return this.queue.size();
 	}
 }
