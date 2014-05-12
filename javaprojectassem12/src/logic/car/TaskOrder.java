@@ -100,4 +100,19 @@ public class TaskOrder extends Order{
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm");
 		return "Estimated completion: " + fmt.print(super.getEstimatedEndTime());
 	}
+	
+	/**
+	 * Returns a string representation for the estimated completion time for this task order.
+	 * @return a string representation for the estimated completion time for this task order.
+	 */
+	@Override
+	public String getStringRepresentation() {
+		return this.toString();
+	}
+	
+	//TODO: docushit
+	@Override
+	public String getExtraInformation() {
+		return null;
+	}
 }

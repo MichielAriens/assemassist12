@@ -46,4 +46,15 @@ public class DriveTrainPost extends Workstation {
 		return "Drive Train Post";
 	}
 
+	@Override
+	public String getStringRepresentation() {
+		return this.toString();
+	}
+
+	@Override
+	public String getExtraInformation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

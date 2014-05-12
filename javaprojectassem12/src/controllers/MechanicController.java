@@ -86,7 +86,7 @@ public class MechanicController extends UserController{
 			return null;
 		for(Task task : this.currentMechanic.getAvailableTasks()){
 			if(task.toString().equals(taskName))
-				return task.getDescription();
+				return task.getExtraInformation();
 		}
 		return null;
 	}

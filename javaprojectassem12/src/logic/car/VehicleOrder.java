@@ -92,11 +92,30 @@ public class VehicleOrder extends Order{
 	}
 	
 	/**
+	 * Makes a new car order and sets its detail's field to a copy of this car order's details.
+	 * @return	A new car order with a copy of its details in it.
+	 */
+	@Override
+	public Order getRawCopy(){
+		return new VehicleOrder(details.getRawCopy());
+	}
+	
+	/**
+	 * Returns a string representation of this car order.
+	 * @return	The estimated end time in the form of a string.
+	 */
+	@Override
+	public String getStringRepresentation() {
+		return this.toString();
+	}
+	
+	/**
 	 * Returns information about this car order. 
 	 * The information contains this car order's details and the start, end and est end times.
 	 * @return	A string containing the details, the start time, end time and estimated end time.
 	 */
-	public String getInformation(){
+	@Override
+	public String getExtraInformation() {
 		String str = "   Specifications:   " + details.toString() + "\n";
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm");
 		str +=       "   Start Time:       " + fmt.print(super.getStartTime()) + "\n";
@@ -105,15 +124,6 @@ public class VehicleOrder extends Order{
 		else
 			str +=   "   Est. End Time:    " + fmt.print(super.getEstimatedEndTime()) + "\n";
 		return str;
-	}
-	
-	/**
-	 * Makes a new car order and sets its detail's field to a copy of this car order's details.
-	 * @return	A new car order with a copy of its details in it.
-	 */
-	@Override
-	public Order getRawCopy(){
-		return new VehicleOrder(details.getRawCopy());
 	}
 
 }
