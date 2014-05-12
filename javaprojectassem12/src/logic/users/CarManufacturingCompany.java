@@ -217,4 +217,14 @@ public class CarManufacturingCompany {
 	public boolean checkPhaseDuration(int duration){
 		return this.assemblyLine.checkPhaseDuration(duration);
 	}
+
+	public List<String> getAssemblyLines() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<String> getAssemblyLinesStatuses() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

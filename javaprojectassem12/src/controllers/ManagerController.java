@@ -122,4 +122,20 @@ public class ManagerController extends UserController{
 		currentManager.changeStrategy(currentBatchList.get(index));
 		currentBatchList.clear();
 	}
+
+	public ArrayList<String> getAssemblyLines() {
+		ArrayList<String> assemblyLines = new ArrayList<String>();
+		for(String s : currentManager.getAssemblyLines()){
+			assemblyLines.add(s.toString());
+		}		
+		return assemblyLines;
+	}
+	
+	public ArrayList<String> getAssemblyLinesStatuses() {
+		ArrayList<String> statuses = new ArrayList<String>();
+		for(String s : currentManager.getAssemblyLinesStatuses()){
+			statuses.add(s.toString());
+		}		
+		return statuses;
+	}
 }

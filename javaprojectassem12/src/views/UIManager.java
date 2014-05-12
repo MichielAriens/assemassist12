@@ -48,7 +48,7 @@ public class UIManager {
 		try {
 			writer.write("Manager " + maController.getUserName()+ " has logged in.\n\n");			
 			while(true){				
-				int answer = chooseAction("Select your action:\n   1: Check statistics\n   2: Select alternative scheduling algorithm\n   3: Leave overview\nAnswer: ", 3);
+				int answer = chooseAction("Select your action:\n   1: Check statistics\n   2: Select alternative scheduling algorithm\n   3: Change Assembly Line's Operational Status\n   4: Leave overview\nAnswer: ", 4);
 				if(answer == 1){
 					writeStatistics();
 				}
@@ -56,6 +56,9 @@ public class UIManager {
 					newSchedulingAlgorithm();
 				}
 				else if(answer == 3){
+					changeAssemblyLineStatus();
+				}
+				else if(answer == 4){
 					return;
 				}
 			}
@@ -63,7 +66,7 @@ public class UIManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Writes the current statistics to the screen.
 	 * @throws IOException	When IO fails.
@@ -75,6 +78,19 @@ public class UIManager {
 		writer.flush();
 	}
 	
+	private void changeAssemblyLineStatus() throws IOException{
+		writer.write("===CHANGE ASSEMBLY LINE STATUS===\n");
+		writer.flush();
+		ArrayList<String> assemblyLines = maController.getAssemblyLines();
+		ArrayList<String> statuses = maController.getAssemblyLinesStatuses();
+		//TODO: available statuses moeten nog opgehaald worden van ergens.
+		
+		String query = "Select assembly line to change status:\n";
+		for(int i = 1; i < assemblyLines.size(); i++){
+			query += "   " + (i) + ": " + assemblyLines.get(i) + "\n";
+		}
+	}
+	
 	/**
 	 * Lets the user choose an alternate scheduling algorithm.
 	 * @throws IOException	When IO fails.
@@ -84,6 +100,7 @@ public class UIManager {
 		writer.flush();
 		ArrayList<String> strategies = maController.getStrategies();
 		writer.write("Current algorithm:\n   " + strategies.get(0) + "\n");
+		writer.flush();
 		
 		String query = "Select your algorithm:\n";
 		for(int i = 1; i < strategies.size(); i++){

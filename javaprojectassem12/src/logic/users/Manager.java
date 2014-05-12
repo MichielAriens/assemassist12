@@ -57,4 +57,12 @@ public class Manager extends User{
 	public void changeStrategy(Order order) {
 		company.changeStrategy(order);
 	}
+
+	public List<String> getAssemblyLines() {
+		return company.getAssemblyLines();
+	}
+	
+	public List<String> getAssemblyLinesStatuses() {
+		return company.getAssemblyLinesStatuses();
+	}
 }
