@@ -84,6 +84,7 @@ public class UIManager {
 		ArrayList<String> assemblyLines = maController.getAssemblyLines();
 		ArrayList<String> statuses = maController.getAssemblyLinesStatuses();
 		//TODO: available statuses moeten nog opgehaald worden van ergens.
+		ArrayList<String> availableStatuses;
 		
 		String query = "Select assembly line to change status:\n";
 		for(int i = 1; i < assemblyLines.size(); i++){
@@ -184,7 +185,7 @@ public class UIManager {
 			return -1;
 		}
 	}
-	
+
 	/**
 	 * A method that prints out the given query and waits until the user presses enter to continue.
 	 * @param query	The query that has to be printed out.
