@@ -154,6 +154,7 @@ public class AssemblyLine implements Printable {
 		if(firstWorkStation.canMoveAssemblyLine()){
 			cycleTime = firstWorkStation.getMaxElapsedTime();
 		}
+		return work;
 	}
 
 	/**
