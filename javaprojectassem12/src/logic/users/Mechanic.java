@@ -15,6 +15,11 @@ public class Mechanic extends User{
 	private Printable activeStation = null;
 	
 	/**
+	 * The printable instance of the assembly line this mechanic is currently working on.
+	 */
+	private Printable activeAssemblyLine = null;
+	
+	/**
 	 * The manufacturing company for which the mechanic works.
 	 */
 	private CarManufacturingCompany company;
@@ -96,7 +101,7 @@ public class Mechanic extends User{
 	public List<Printable> getAvailableTasks(){
 		if(!isPosted())
 			return null;
-		return this.company.getRequiredTasks(this.activeStation);
+		return this.company.getRequiredTasks(this.activeStation, this.activeAssemblyLine);
 	}
 	
 	/**
@@ -109,19 +114,42 @@ public class Mechanic extends User{
 	}
 	
 	/**
-	 * Returns the list of workstations from the assembly line of the car manufacturing company.
-	 * @return the list of workstations from the assembly line of the car manufacturing company.
+	 * Returns the list of workstations from the active assembly line of the car manufacturing company.
+	 * @return the list of workstations from the active assembly line of the car manufacturing company.
 	 */
-	public List<Printable> getWorkstations(){
+	public List<Printable> getWorkstationsFromAssemblyLine(){
+		return this.company.getWorkStationsFromAssemblyLine(activeAssemblyLine);
+	}
+	
+	/**
+	 * Returns the list of all workstations from all assembly lines of the car manufacturing company.
+	 * @return the list of all workstations from all assembly lines of the car manufacturing company.
+	 */
+	public List<Printable> getWorkstations() {
 		return this.company.getWorkStations();
+	}
+	
+	/**
+	 * Returns the printable list of assembly lines of the car manufacturing company.
+	 * @return the printable list of assembly lines of the car manufacturing company.
+	 */
+	public List<Printable> getAssemblyLines() {
+		return this.company.getAssemblyLines();
 	}
 
 	/**
 	 * Set the active workstation to the given workstation.
-	 * @param workstation
+	 * @param workstation	The new active workstation.
 	 */
 	public void setActiveWorkstation(Printable station){
 		this.activeStation = station;
 	}
-
+	
+	/**
+	 * Set the active assembly line to the given assembly line.
+	 * @param line	The new active assembly line.
+	 */
+	public void setActiveAssemblyLine(Printable line){
+		this.activeAssemblyLine = line;
+	}
 }

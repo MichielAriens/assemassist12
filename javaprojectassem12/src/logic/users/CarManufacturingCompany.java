@@ -9,10 +9,7 @@ import java.util.List;
 import org.joda.time.DateTime;
 
 import logic.assemblyline.AssemblyLine;
-import logic.assemblyline.SchedulingStrategy;
 import logic.car.Order;
-import logic.workstation.Task;
-import logic.workstation.Workstation;
 
 /**
  * Class used to describe a car manufacturing company.
@@ -127,10 +124,22 @@ public class CarManufacturingCompany {
 	/**
 	 * Method to return the list of workstations of the assembly line 
 	 * of this car manufacturing company.
+	 * @param assemblyLine
 	 * @return	The workstations of the assembly line.
 	 */
-	public List<Printable> getWorkStations(){
-		return this.assemblyLine.getWorkStations();
+	//TODO aanpassen want deze moet de workstations terug geven van de mee gegeven assemblyline
+	public List<Printable> getWorkStationsFromAssemblyLine(Printable assemblyLine){
+		//return this.assemblyLine.getWorkStations();
+		return null;
+	}
+	
+	/**
+	 * Returns the list of all workstations from all assembly lines of the car manufacturing company.
+	 * @return the list of all workstations from all assembly lines of the car manufacturing company.
+	 */
+	public List<Printable> getWorkStations() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	/**
@@ -195,10 +204,11 @@ public class CarManufacturingCompany {
 	
 	/**
 	 * Returns a list of pending tasks at a given workstation.
-	 * @param station	The a copy of the workstation for which the pending tasks are needed.
+	 * @param station	The workstation for which the pending tasks are needed.
+	 * @param line 		The assembly line of the workstation for which the pending tasks are needed.
 	 * @return	A list of tasks that are pending at the given workstation.
 	 */
-	public List<Printable> getRequiredTasks(Printable station){
+	public List<Printable> getRequiredTasks(Printable station, Printable line){
 		return this.assemblyLine.getRequiredTasks(station);
 	}
 	
@@ -221,12 +231,12 @@ public class CarManufacturingCompany {
 		return this.assemblyLine.checkPhaseDuration(duration);
 	}
 
-	public List<String> getAssemblyLines() {
+	public List<Printable> getAssemblyLines() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public List<String> getAssemblyLinesStatuses() {
+	public List<Printable> getAssemblyLinesStatuses() {
 		// TODO Auto-generated method stub
 		return null;
 	}

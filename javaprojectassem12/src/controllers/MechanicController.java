@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import logic.users.Mechanic;
-import logic.workstation.Task;
-import logic.workstation.Workstation;
 
 /**
  * Class used to form a link between the user interface and the Mechanic class.
@@ -40,22 +38,41 @@ public class MechanicController extends UserController{
 	}
 	
 	/**
-	 * Returns the list of workstations from the assembly line with numbering if the current
+	 * Returns the list of workstations from the current assembly line with numbering if the current
 	 * mechanic is not null.
 	 * @return 	Null if the current mechanic is null.
 	 * 			The list of workstations from the assembly line with numbering otherwise.
 	 */
-	public ArrayList<String> getWorkStations(){
+	public ArrayList<String> getWorkStationsFromAssemblyLine(){
 		if(this.currentMechanic == null)
 			return null;
 		ArrayList<String> workstations = new ArrayList<String>();
-		List<Printable> stations = this.currentMechanic.getWorkstations();
+		List<Printable> stations = this.currentMechanic.getWorkstationsFromAssemblyLine();
 		int count = 1;
 		for(Printable w : stations){
 			workstations.add(w.getStringRepresentation() + ": " + count);
 			count++;
 		}
 		return workstations;
+	}
+	
+	/**
+	 * Returns the list of assembly lines from the assembly line with numbering if the current
+	 * mechanic is not null.
+	 * @return 	Null if the current mechanic is null.
+	 * 			The list of workstations from the assembly line with numbering otherwise.
+	 */
+	public ArrayList<String> getAssemblyLines() {
+		if(this.currentMechanic == null)
+			return null;
+		ArrayList<String> assemblyLines = new ArrayList<String>();
+		List<Printable> lines = this.currentMechanic.getAssemblyLines();
+		int count = 1;
+		for(Printable w : lines){
+			assemblyLines.add(w.getStringRepresentation() + ": " + count);
+			count++;
+		}
+		return assemblyLines;
 	}
 	
 	/**
@@ -108,13 +125,26 @@ public class MechanicController extends UserController{
 	}
 	
 	/**
+	 * Sets the assembly line for the current mechanic to the given assembly line.
+	 * @param assemblyLine		The new assembly line for the current mechanic.
+	 */
+	public void setAssemblyLine(String assemblyLine) {
+		if(this.currentMechanic == null)
+			return;
+		for(Printable line : this.currentMechanic.getAssemblyLines()){
+			if(line.getStringRepresentation().equals(assemblyLine))
+				this.currentMechanic.setActiveAssemblyLine(line);
+		}	
+	}
+	
+	/**
 	 * Sets the workstation for the current mechanic to the given workstation.
 	 * @param workstationName	The new workstation for the current mechanic.
 	 */
 	public void setWorkStation(String workstationName){
 		if(this.currentMechanic == null)
 			return;
-		for(Printable station : this.currentMechanic.getWorkstations()){
+		for(Printable station : this.currentMechanic.getWorkstationsFromAssemblyLine()){
 			if(station.getStringRepresentation().equals(workstationName))
 				this.currentMechanic.setActiveWorkstation(station);
 		}
@@ -144,5 +174,4 @@ public class MechanicController extends UserController{
 		}
 		return tasks;
 	}
-
 }

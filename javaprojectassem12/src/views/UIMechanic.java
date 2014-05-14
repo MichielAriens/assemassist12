@@ -59,13 +59,23 @@ public class UIMechanic {
 					writer.flush();
 				}
 				if(answer == 2){
+					String lines = "Available assembly lines: ";
+					for(String line : meController.getAssemblyLines()){
+						line += line + "; ";
+					}
+					writer.write(lines + "\n");
+					writer.flush();
+					String assemblyLine = checkInput("Type the number of your current work station: ", this.meController.getAssemblyLines());
+					this.meController.setAssemblyLine(assemblyLine);
+					writer.flush();
+					
 					String stat = "Available work stations: ";
-					for(String station : meController.getWorkStations()){
+					for(String station : meController.getWorkStationsFromAssemblyLine()){
 						stat += station + "; ";
 					}
 					writer.write(stat + "\n");
 					writer.flush();
-					String workStation = checkInput("Type the number of your current work station: ", this.meController.getWorkStations());
+					String workStation = checkInput("Type the number of your current work station: ", this.meController.getWorkStationsFromAssemblyLine());
 					this.meController.setWorkStation(workStation);
 					writer.flush();
 					while(true){
