@@ -138,4 +138,10 @@ public class ManagerController extends UserController{
 		}		
 		return statuses;
 	}
+
+	public void changeAssemblyLineStatus(int assemblyLineIndex, int statusIndex) {
+		// TODO nog zo doen als in changeStrategyTo...() dus ook best een currentAssemblyLinesList() maken
+		// en een currentAssemblyLinesStatusesList() maken...
+		
+	}
 }

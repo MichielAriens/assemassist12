@@ -51,7 +51,8 @@ public class CarManufacturingCompany {
 	 * Makes a new car manufacturing company.
 	 */
 	public CarManufacturingCompany(){
-		this.assemblyLine = new AssemblyLine();
+		//TODO assembly lines maken hé mannen
+		//this.assemblyLine = new AssemblyLine();
 		this.users = new HashMap<String,User>();
 		this.initialise();
 		
