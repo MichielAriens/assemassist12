@@ -3,6 +3,8 @@ package logic.assemblyline;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.joda.time.DateTime;
+
 /**
  * Class handling the statistics of a car manufacturing company.
  */
@@ -10,7 +12,8 @@ public class Statistics {
 	/**
 	 * List of delays of the orders.
 	 */
-	private ArrayList<Integer> delays = new ArrayList<Integer>();
+	//private ArrayList<Integer> delays = new ArrayList<Integer>();
+	private ArrayList<Delay> delays = new ArrayList<Delay>();
 	
 	/**
 	 * List of the number of finished cars per day.
@@ -35,8 +38,8 @@ public class Statistics {
 	 * of finished car orders for today.
 	 * @param delay	The delay of the finished order.
 	 */
-	public void finishedCarOrder(int delay){
-		delays.add(delay);
+	public void finishedCarOrder(int delay, DateTime dateOfDelay){
+		delays.add(new Delay(delay, dateOfDelay));
 		finishedCarOrdersToday++;
 	}
 	
@@ -70,7 +73,8 @@ public class Statistics {
 	 * @return the average delay on an order.
 	 */
 	private int getAverageDelay(){
-		return getAverage(delays);
+		ArrayList<Integer> delaysTimes = getDelaysTimes();
+		return getAverage(delaysTimes);
 	}
 	
 	/**
@@ -78,7 +82,16 @@ public class Statistics {
 	 * @return the median delay on an order.
 	 */
 	private int getMedianDelay(){
-		return getMedian(delays);
+		ArrayList<Integer> delaysTimes = getDelaysTimes();
+		return getMedian(delaysTimes);
+	}
+	
+	private ArrayList<Integer> getDelaysTimes() {
+		ArrayList<Integer> delaysTimes = new ArrayList<Integer>();
+		for(Delay d : delays){
+			delaysTimes.add(d.getDelay());
+		}
+		return delaysTimes;
 	}
 	
 	/**
@@ -183,6 +196,7 @@ public class Statistics {
 		return statistics;
 	}
 	
+	//TODO zien dat de x laatste delays genomen worden
 	/**
 	 * Returns a string representation of the last X delays and the day they occurred.
 	 * @return a string representation of the last X delays and the day they occurred.
@@ -191,11 +205,12 @@ public class Statistics {
 		String statistics = "";
 		int maxIndex = delays.size()-1;
 		if(maxIndex >= 0){
-			int delay = delays.get(delays.size()-1);
-			statistics += "   1) " + delay + " minutes\n";
+			int delay = delays.get(delays.size()-1).getDelay();
+			DateTime dateOfDelay = delays.get(delays.size()-1).getDateOfDelay();
+			statistics += "   1) " + delay + " minutes on " + dateOfDelay + "\n";
 			for(int i = 2; i <= days; i ++){
 				if(i <= maxIndex){
-					delay = delays.get(delays.size()-i);
+					delay = delays.get(delays.size()-i).getDelay();
 					statistics += "   " + i + ") " + delay + " minuts\n";
 				}
 				else{
@@ -209,4 +224,13 @@ public class Statistics {
 		}
 		return statistics;
 	}
+	
+//	Collections.sort(delays, new Comparator<Delay>() {
+//        @Override
+//        public int compare(Delay  delay1, Delay  delay2)
+//        {
+//
+//            return  delay1.getDateOfDelay().compareTo(delay2.getDateOfDelay());
+//        }
+//    });
 }
