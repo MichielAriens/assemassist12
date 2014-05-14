@@ -9,6 +9,7 @@ import java.util.Set;
 import logic.car.Order;
 import logic.workstation.WorkstationChainBuilder;
 import logic.workstation.WorkstationDirector;
+import logic.workstation.WorkstationDirectorA;
 
 import org.joda.time.DateTime;
 
@@ -29,6 +30,10 @@ public class AssemblyLineScheduler {
 	 */
 	public void addAllLines(Collection<AssemblyLine> lines){
 		assemblyLines.addAll(lines);
+	}
+	
+	private void addLine(AssemblyLine line){
+		assemblyLines.add(line);
 	}
 	
 	/**
@@ -62,6 +67,12 @@ public class AssemblyLineScheduler {
 	
 	
 	private void initializeAssemblylines(){
+		WorkstationDirector director = new WorkstationDirectorA(new WorkstationChainBuilder());
+		this.addLine(new AssemblyLine(capabilities, director));
+		
+		
+		
+		
 		WorkstationChainBuilder builder = new WorkstationChainBuilder();
 		WorkstationDirector director = new WorkstationDirector(builder);
 		director.construct();

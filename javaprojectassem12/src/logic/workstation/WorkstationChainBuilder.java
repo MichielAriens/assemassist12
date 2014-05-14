@@ -15,45 +15,16 @@ public class WorkstationChainBuilder extends WorkstationBuilder{
 	 */
 	private Workstation lastAdded;
 	
-	/**
-	 * Add a CarBodyPost to the end of the chain.
-	 */
-	@Override
-	public void buildCarBodyPost() {
+	private void build(Workstation ws){
 		Workstation temp = lastAdded;
-		this.lastAdded = new CarBodyPost(); 
+		this.lastAdded = ws;
 		if(result == null)
 			result = lastAdded;
 		if(temp != null)
 			temp.setWorkStation(lastAdded);
 	}
-	
-	/**
-	 * Add a DriveTrainPost to the end of the chain.
-	 */
-	@Override
-	public void buildDriveTrainPost() {
-		Workstation temp = lastAdded;
-		this.lastAdded = new DriveTrainPost(); 
-		if(result == null)
-			result = lastAdded;
-		if(temp != null)
-			temp.setWorkStation(lastAdded);
-	}
-	
-	/**
-	 * Add an AccessoriesPost to the end of the chain.
-	 */
-	@Override
-	public void buildAccessoriesPost() {
-		Workstation temp = lastAdded;
-		this.lastAdded = new AccessoriesPost(); 
-		if(result == null)
-			result = lastAdded;
-		if(temp != null)
-			temp.setWorkStation(lastAdded);
-	}
-	
+
+
 	/**
 	 * Return the result, which is the first workstation of the chain.
 	 * @return	The first workstation of the chain.
@@ -61,6 +32,50 @@ public class WorkstationChainBuilder extends WorkstationBuilder{
 	@Override
 	public Workstation getResult() {
 		return this.result;
+	}
+
+
+	/**
+	 * Add a CarBodyPost to the end of the chain.
+	 */
+	@Override
+	public void buildCarBodyPost() {
+		build(new CarBodyPost());
+	}
+	
+	
+	/**
+	 * Add a DriveTrainPost to the end of the chain.
+	 */
+	@Override
+	public void buildDriveTrainPost() {
+		build(new DriveTrainPost());
+	}
+	
+	/**
+	 * Add an AccessoriesPost to the end of the chain.
+	 */
+	@Override
+	public void buildAccessoriesPost() {
+		build(new AccessoriesPost());
+	}
+	
+	/**
+	 * Add a CargoPost to the end of the chain.
+	 */
+	@Override
+	public void buildCargoPost() {
+		build(new CargoPost());
+		
+	}
+	
+	/**
+	 * Add a CertificationPost to the end of the chain.
+	 */
+	@Override
+	public void buildCertificationPost() {
+		build(new CertificationPost());
+		
 	}
 	
 }
