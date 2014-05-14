@@ -102,12 +102,6 @@ public abstract class Order implements Comparable<Order>, Printable{
 	}
 	
 	/**
-	 * Returns the default time it takes to install parts on this order.
-	 * @return The default time it takes to install parts on this order.
-	 */
-	public abstract int getPhaseTime();
-	
-	/**
 	 * Returns the time this order needs to be finished.
 	 * @return	The time which is the absolute end time of this order.
 	 */

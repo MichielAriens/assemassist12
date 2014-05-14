@@ -58,15 +58,6 @@ public class VehicleOrder extends Order{
 		}
 		return true;
 	}
-
-	/**
-	 * Returns the phase duration of this car order's detail.
-	 * @return	An integer holding the phase duration of this car order's details.
-	 */
-	@Override
-	public int getPhaseTime() {
-		return this.details.getPhaseTime();
-	}
 	
 	/**
 	 * Checks if this object is the same as the given object.

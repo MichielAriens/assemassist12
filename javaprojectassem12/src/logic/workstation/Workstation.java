@@ -287,12 +287,12 @@ public abstract class Workstation implements Printable{
 			if(currentOrder == null)
 				prePhaseDurations.add(0);
 			else
-				prePhaseDurations.add(currentOrder.getPhaseTime());
+				prePhaseDurations.add(this.getEstimatedPhaseDuration());
 			nextStationEET = nextWorkStation.reschedule(prePhaseDurations, NbOfWorkstations, currentTime);
 		}	
 		int maxPre = 0;
 		if(currentOrder != null)
-			maxPre = currentOrder.getPhaseTime();
+			maxPre = this.getEstimatedPhaseDuration();
 		int j = 0;
 		for(int i = prePhaseDurations.size()-1; i >=0; i--){
 			if(j >= NbOfWorkstations-1)
@@ -366,11 +366,21 @@ public abstract class Workstation implements Printable{
 		if(workstationNumber == 0){
 			if(this.currentOrder == null)
 				return 0;
-			return this.currentOrder.getPhaseTime();
+			return this.getEstimatedPhaseDuration();
 		}
 		if(this.nextWorkStation == null)
 			return 0;
 		return nextWorkStation.getPhaseDuration(workstationNumber-1);
+	}
+	
+	//TODO DOCU
+	private int getEstimatedPhaseDuration(){
+		int temp = 0;
+		for(Task t : tasks){
+			if(t.getEstimatedPhaseDuration() > temp)
+				temp = t.getEstimatedPhaseDuration();
+		}
+		return temp;
 	}
 	
 	/**
@@ -382,11 +392,11 @@ public abstract class Workstation implements Printable{
 		if(this.nextWorkStation == null){
 			if(this.currentOrder == null)
 				return 0;
-			return this.currentOrder.getPhaseTime();
+			return this.getEstimatedPhaseDuration();
 		}
 		if(this.currentOrder == null)
 			return this.nextWorkStation.getTotalMaxPhaseTime();
-		return Math.max(this.currentOrder.getPhaseTime(), this.nextWorkStation.getTotalMaxPhaseTime());
+		return Math.max(this.getEstimatedPhaseDuration(), this.nextWorkStation.getTotalMaxPhaseTime());
 	}
 	
 	/**

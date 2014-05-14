@@ -37,7 +37,7 @@ public class CarOrderDetails{
 	private void buildTasks(List<VehiclePart> parts){
 		this.tasks = new ArrayList<Task>();
 		for(VehiclePart p: parts){
-			this.tasks.add(new Task(p));
+			this.tasks.add(new Task(p, model.getPartPhaseDuration(p)));
 		}
 	}
 
@@ -53,8 +53,8 @@ public class CarOrderDetails{
 	 * Returns the phase duration of this object's model.
 	 * @return	An integer containing the phase duration of this detail's model.
 	 */
-	public int getPhaseTime() {
-		return model.phaseDuration;
+	public int getPhaseTime() { //TODO verwijderen maybe
+		return model.standardPhaseDur;
 	}
 	
 	/**

@@ -19,11 +19,6 @@ public class TaskOrder extends Order{
 	private TaskOrderDetails details;
 	
 	/**
-	 * A variable holding the phase duration of this task order.
-	 */
-	private final int PHASE_TIME = 60;
-	
-	/**
 	 * Creates a new task order by initializing the task order details with the given details.
 	 * @param details	The details for this task order.
 	 */
@@ -61,15 +56,6 @@ public class TaskOrder extends Order{
 				return false;
 		}
 		return true;
-	}
-
-	/**
-	 * Returns the default time it takes to install parts on this task order.
-	 * @return The default time it takes to install parts on this task order.
-	 */
-	@Override
-	public int getPhaseTime() {
-		return this.PHASE_TIME;
 	}
 	
 	/**

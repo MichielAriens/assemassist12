@@ -16,6 +16,8 @@ public class Task implements Printable{
 	//TODO DOCU
 	private int elapsedTime = -1;
 	
+	private final int estimatedPhaseDuration;
+	
 	/**
 	 * The car part where upon the task needs to be performed.
 	 */
@@ -23,10 +25,11 @@ public class Task implements Printable{
 	
 	/**
 	 * Creates a task corresponding with the given car part.
-	 * @param part	The car part to perform the task on.
+	 * @param part	The car part to perform the task on. //TODO docu
 	 */
-	public Task(VehiclePart part){
+	public Task(VehiclePart part, int estimDur){
 		this.carPart = part;
+		this.estimatedPhaseDuration = estimDur;
 	}
 	
 	/**
@@ -34,7 +37,7 @@ public class Task implements Printable{
 	 * @return	a copy of this task.
 	 */
 	public Task getRawCopy(){
-		Task copy = new Task(this.carPart);
+		Task copy = new Task(this.carPart, 0);
 		if(this.isComplete())
 			copy.perform(0);
 		return copy;
@@ -61,6 +64,11 @@ public class Task implements Printable{
 	//TODO docu
 	public int getElapsedTime(){
 		return this.elapsedTime;
+	}
+	
+	//TODO DOCU
+	public int getEstimatedPhaseDuration(){
+		return this.estimatedPhaseDuration;
 	}
 	
 	/**

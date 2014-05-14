@@ -18,6 +18,11 @@ public class TaskOrderDetails{
 	private DateTime deadLine;
 	
 	/**
+	 * A variable holding the phase duration of this task order's details.
+	 */
+	private final int PHASE_TIME = 60;
+	
+	/**
 	 * A list of tasks that need to be performed for the part involving this task order's details.
 	 */
 	private ArrayList<Task> tasks;
@@ -40,7 +45,7 @@ public class TaskOrderDetails{
 	 */
 	private void buildTasks(VehiclePart part){
 		tasks = new ArrayList<Task>();
-		tasks.add(new Task(part));
+		tasks.add(new Task(part, this.PHASE_TIME));
 	}
 
 	/**

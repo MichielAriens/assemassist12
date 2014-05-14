@@ -167,6 +167,15 @@ public enum VehicleModel {
 			return false;
 		}
 		
+		//TODO DOCU
+		public int getPartPhaseDuration(VehiclePart part){
+			if(part.type == VehiclePartType.Body || part.type == VehiclePartType.Colour)
+				return this.bodyPhaseDur;
+			if(part.type == VehiclePartType.Certification)
+				return this.certPhaseDur;
+			return this.standardPhaseDur;
+		}
+		
 		/**
 		 * Returns a string representation of this car model.
 		 */
