@@ -112,10 +112,7 @@ public enum VehicleModel {
 																	VehiclePart.SPOILER_NONE,
 																	VehiclePart.TOOLSTORAGE_STANDARD,
 																  	VehiclePart.CARGO_STANDARD,
-																  	VehiclePart.CERTIFICATION_STANDARD});
-											  										  	
-											  	
-										
+																  	VehiclePart.CERTIFICATION_STANDARD});									
 		
 		/**
 		 * The name of this car model.

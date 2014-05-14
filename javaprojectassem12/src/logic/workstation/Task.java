@@ -13,6 +13,9 @@ public class Task implements Printable{
 	 */
 	private boolean completed = false;
 	
+	//TODO DOCU
+	private int elapsedTime = -1;
+	
 	/**
 	 * The car part where upon the task needs to be performed.
 	 */
@@ -33,7 +36,7 @@ public class Task implements Printable{
 	public Task getRawCopy(){
 		Task copy = new Task(this.carPart);
 		if(this.isComplete())
-			copy.perform();
+			copy.perform(0);
 		return copy;
 	}
 	
@@ -46,11 +49,19 @@ public class Task implements Printable{
 	}
 	
 	/**
-	 * Sets completed to true.
+	 * Sets completed to true. //TODO docu
 	 */
-	public void perform(){
+	public void perform(int elapsedTime){
+		if(this.completed)
+			return;
 		this.completed = true;
+		this.elapsedTime = elapsedTime;
 	}	
+	
+	//TODO docu
+	public int getElapsedTime(){
+		return this.elapsedTime;
+	}
 	
 	/**
 	 * Checks whether the task is completed.

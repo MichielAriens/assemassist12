@@ -172,16 +172,35 @@ public abstract class Workstation implements Printable{
 	 * @return	True 	if the specified task has been successfully performed.
 	 * 			False	otherwise. 
 	 */
-	public boolean doTask(Printable task){
+	public boolean doTask(Printable task, int elapsedTime){
 		for(Task t : tasks){
 			if(t.equals(task)){
-				t.perform();
+				t.perform(elapsedTime);
 				return true;
 			}
 		}
 		if(this.nextWorkStation != null)
-			return this.nextWorkStation.doTask(task);
+			return this.nextWorkStation.doTask(task, elapsedTime);
 		return false;
+	}
+	
+	//TODO docu
+	public int getMaxElapsedTime(){
+		int temp = -1;
+		if(this.nextWorkStation != null){
+			temp = this.nextWorkStation.getMaxElapsedTime();
+		}
+		return Math.max(temp, this.getElapsedTaskTime());
+	}
+	
+	//TODO docu
+	private int getElapsedTaskTime(){
+		int temp = 0;
+		for(Task t : tasks){
+			if(t.getElapsedTime() > temp)
+				temp = t.getElapsedTime();
+		}
+		return temp;
 	}
 	
 	/**
