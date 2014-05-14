@@ -16,6 +16,8 @@ import logic.workstation.WorkstationDirector;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
+import com.sun.corba.se.spi.ior.MakeImmutable;
+
 /**
  * Class handling an assembly line of a car manufacturing company.
  */
@@ -23,6 +25,10 @@ import org.joda.time.Days;
 public class AssemblyLine implements Printable {
 
 
+	private OperationalStatus status = OperationalStatus.OPERATIONAL;
+	
+	private int cycleTime=0;
+	
 	/**
 	 * The first workstation in a line of workstations.
 	 */
@@ -41,7 +47,7 @@ public class AssemblyLine implements Printable {
 	/**
 	 * A dateTime object holding the current time of the system. 
 	 */
-	private DateTime currentTime;
+	private DateTime cycleStartTime;
 
 	/**
 	 * A variable holding the statistics of the assembly line.
@@ -53,7 +59,7 @@ public class AssemblyLine implements Printable {
 	 * @return	The current time of the system.
 	 */
 	public DateTime getCurrentTime() {
-		return currentTime;
+		return cycleStartTime;
 	}
 
 	/**
@@ -73,7 +79,7 @@ public class AssemblyLine implements Printable {
 		schedule = new Schedule();
 		this.firstWorkStation = builder.getResult();
 		this.numberOfWorkStations = firstWorkStation.countWorkStations();
-		this.currentTime = new DateTime(2014, 1, 1, 6, 0);
+		this.cycleStartTime = new DateTime(2014, 1, 1, 6, 0);
 		stats = new Statistics();
 	}
 
@@ -96,6 +102,21 @@ public class AssemblyLine implements Printable {
 		director.construct();
 		this.firstWorkStation = builder.getResult();
 	}
+	
+	public int getCycleTime(){
+		return this.cycleTime;
+	}
+	
+	public List<Order> setStatus(OperationalStatus status){
+		this.status=status;
+		LinkedList<Order> returnList = new LinkedList<Order>();
+		if(status != OperationalStatus.OPERATIONAL){
+			returnList = schedule.makeCopyOfQueue();
+			queue.clear();
+		}
+		return returnList;
+			
+	}
 
 	/**
 	 * Returns true if the assembly line can be moved.
@@ -103,8 +124,15 @@ public class AssemblyLine implements Printable {
 	 * @return	True if the assembly line can be moved
 	 * 			False otherwise.
 	 */
-	private boolean moveAssemblyLine(int phaseDuration){
-		return schedule.moveAndReschedule(phaseDuration);
+	public boolean moveAssemblyLine(DateTime realTime){
+		if(tryMoveAssemblyLine()){
+			boolean done = schedule.moveAndReschedule(cycleTime);
+			cycleTime = 0;
+			cycleStartTime = realTime;
+			return done;
+		}
+
+		return false;
 	}
 
 	/**
@@ -121,8 +149,11 @@ public class AssemblyLine implements Printable {
 	 * @return	True if the task is completed successfully.
 	 * 			False the task could not be completed.
 	 */
-	public boolean doTask(Printable task){
-		return firstWorkStation.doTask(task);
+	public boolean doTask(Printable task, int timeTaken){
+		boolean work = firstWorkStation.doTask(task, timeTaken);
+		if(firstWorkStation.canMoveAssemblyLine()){
+			cycleTime = firstWorkStation.getMaxElapsedTime();
+		}
 	}
 
 	/**
@@ -149,11 +180,9 @@ public class AssemblyLine implements Printable {
 	 * @return	True if the assembly line and workstations can be moved.
 	 * 			false otherwise.
 	 */
-	public boolean tryMoveAssemblyLine(int phaseDuration){
-		if(firstWorkStation.canMoveAssemblyLine())
-			return moveAssemblyLine(phaseDuration);
-		else
-			return false;
+	public boolean tryMoveAssemblyLine(){
+		return firstWorkStation.canMoveAssemblyLine();
+			
 	}
 
 	/**
@@ -221,9 +250,9 @@ public class AssemblyLine implements Printable {
 	public boolean checkPhaseDuration(int phaseDuration){
 		int difference = 0;
 		if(firstWorkStation.getTotalEstimatedEndTime() != null)
-			difference = schedule.getTimeDifference(firstWorkStation.getTotalEstimatedEndTime(), currentTime);
+			difference = schedule.getTimeDifference(firstWorkStation.getTotalEstimatedEndTime(), cycleStartTime);
 		int diff= schedule.shiftBeginHour*60 - difference - 1;
-		int max = 24*60 - currentTime.getMinuteOfDay()+diff;
+		int max = 24*60 - cycleStartTime.getMinuteOfDay()+diff;
 		if(max>= phaseDuration)
 			return true;
 		return false;
@@ -297,10 +326,10 @@ public class AssemblyLine implements Printable {
 		 * in that case the overtime is set to 0.
 		 */
 		private void calculateOverTime() {
-			if(currentTime.getHourOfDay()<shiftBeginHour){
-				overTime = (24-shiftEndHour) * 60 + currentTime.getMinuteOfDay();
+			if(cycleStartTime.getHourOfDay()<shiftBeginHour){
+				overTime = (24-shiftEndHour) * 60 + cycleStartTime.getMinuteOfDay();
 			}else{
-				setOverTime((currentTime.getMinuteOfDay()-(shiftEndHour*60)));
+				setOverTime((cycleStartTime.getMinuteOfDay()-(shiftEndHour*60)));
 			}
 		}
 
@@ -317,11 +346,11 @@ public class AssemblyLine implements Printable {
 		private boolean moveAndReschedule(int phaseDuration) {
 
 			firstWorkStation.adjustDelays(phaseDuration);
-			currentTime = currentTime.plusMinutes(phaseDuration);
+			cycleStartTime = cycleStartTime.plusMinutes(phaseDuration);
 			Integer delayLastOrder= firstWorkStation.getDelayLastOrder();
 			if(delayLastOrder != null)
-				stats.finishedCarOrder(delayLastOrder, currentTime);
-			firstWorkStation.advanceOrders(null, currentTime);
+				stats.finishedCarOrder(delayLastOrder, cycleStartTime);
+			firstWorkStation.advanceOrders(null, cycleStartTime);
 			if(checkEndOfDay()){
 				calculateOverTime();
 				setNextDay();
@@ -376,7 +405,7 @@ public class AssemblyLine implements Printable {
 			if(firstWorkStation.getCurrentOrder()==null && !queue.isEmpty()){
 				addOrderToFirstWorkstation();
 			}
-			DateTime workstationEET = firstWorkStation.reschedule(getPhaseDurations(), numberOfWorkStations, currentTime);
+			DateTime workstationEET = firstWorkStation.reschedule(getPhaseDurations(), numberOfWorkStations, cycleStartTime);
 			rescheduleQueue(workstationEET);
 		}
 
@@ -415,7 +444,7 @@ public class AssemblyLine implements Printable {
 					if(queue.get(j).getPhaseTime() > maxPhase)
 						maxPhase = queue.get(j).getPhaseTime();
 				}
-				startTime = startTime.plusMinutes(maxPhase);
+				startTime = startTime.plusMinutes(maxPhase+status.getTime());
 				if(startTime.getHourOfDay()<shiftBeginHour || startTime.getMinuteOfDay()>=shiftEndHour*60-overTime)
 					startTime = getEstimatedTime(startTime, queue.get(i));
 				queue.get(i).setEstimatedEndTime(startTime);
@@ -431,7 +460,7 @@ public class AssemblyLine implements Printable {
 			Order order = queue.getFirst();
 			DateTime estimatedEndTime;
 			estimatedEndTime = firstOrderEstimate(order);
-			if(estimatedEndTime.getMinuteOfDay()<shiftEndHour*60-overTime && estimatedEndTime.getHourOfDay()>=shiftBeginHour){
+			if(estimatedEndTime.getMinuteOfDay()<shiftEndHour*60-overTime && estimatedEndTime.getHourOfDay()>=shiftBeginHour && status == OperationalStatus.OPERATIONAL){
 				firstWorkStation.setOrder(queue.pop());
 			}
 		}
@@ -442,11 +471,11 @@ public class AssemblyLine implements Printable {
 		 * time remains the same. Afterwards, sets the current hour to the beginning of the shift. 
 		 */
 		private void setNextDay() {
-			if(currentTime.getHourOfDay()<shiftBeginHour)
-				currentTime = new DateTime(currentTime.getYear(),currentTime.getMonthOfYear(),currentTime.getDayOfMonth(),shiftBeginHour,0);
+			if(cycleStartTime.getHourOfDay()<shiftBeginHour)
+				cycleStartTime = new DateTime(cycleStartTime.getYear(),cycleStartTime.getMonthOfYear(),cycleStartTime.getDayOfMonth(),shiftBeginHour,0);
 			else{
-				currentTime = currentTime.plusDays(1);
-				currentTime = new DateTime(currentTime.getYear(),currentTime.getMonthOfYear(),currentTime.getDayOfMonth(),shiftBeginHour,0);
+				cycleStartTime = cycleStartTime.plusDays(1);
+				cycleStartTime = new DateTime(cycleStartTime.getYear(),cycleStartTime.getMonthOfYear(),cycleStartTime.getDayOfMonth(),shiftBeginHour,0);
 			}
 		}
 
@@ -475,7 +504,7 @@ public class AssemblyLine implements Printable {
 			if(!queue.isEmpty()){
 				assemblyTime = queue.getFirst().getPhaseTime()*numberOfWorkStations;
 			}
-			if(currentTime.getMinuteOfDay()>=(shiftEndHour * 60-overTime - assemblyTime) || currentTime.getMinuteOfDay()<shiftBeginHour*60)
+			if(cycleStartTime.getMinuteOfDay()>=(shiftEndHour * 60-overTime - assemblyTime) || cycleStartTime.getMinuteOfDay()<shiftBeginHour*60)
 				return true;
 			return false;
 		}
@@ -488,7 +517,7 @@ public class AssemblyLine implements Printable {
 		 * @return True if there is time for a new order on this day, false otherwise.
 		 */
 		private boolean timeForNewOrder(DateTime time) {
-			if(Days.daysBetween(time, currentTime).getDays()==0){
+			if(Days.daysBetween(time, cycleStartTime).getDays()==0){
 				return time.getMinuteOfDay()<(shiftEndHour*60-overTime) && time.getMinuteOfDay()>=shiftBeginHour*60;
 			}else{
 				return time.getMinuteOfDay()<(shiftEndHour*60) && time.getMinuteOfDay()>=shiftBeginHour*60;
@@ -627,7 +656,7 @@ public class AssemblyLine implements Printable {
 				maxPhaseWorkstations = Math.max(maxPhaseWorkstations, firstWorkStation.getPhaseDuration(i));
 				assemblyTime += maxPhaseWorkstations;
 			}
-			DateTime estimatedEndTime = new DateTime(currentTime);
+			DateTime estimatedEndTime = new DateTime(cycleStartTime);
 			return estimatedEndTime.plusMinutes(assemblyTime);
 		}
 

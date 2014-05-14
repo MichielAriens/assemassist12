@@ -1,7 +1,7 @@
 package logic.assemblyline;
 
 public enum OperationalStatus {
-	OPERATIANAL("Operational",0), 
+	OPERATIONAL("Operational",0), 
 	MAINTENANCE("Maintenance",240), 
 	BROKEN("Broken",0);
 	
