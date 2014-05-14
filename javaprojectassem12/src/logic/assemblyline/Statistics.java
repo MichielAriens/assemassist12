@@ -2,7 +2,6 @@ package logic.assemblyline;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
 import org.joda.time.DateTime;
 
 /**
@@ -12,9 +11,7 @@ public class Statistics {
 	/**
 	 * List of delays of the orders.
 	 */
-	//private ArrayList<Integer> delays = new ArrayList<Integer>();
 	private ArrayList<Delay> delays = new ArrayList<Delay>();
-	
 	/**
 	 * List of the number of finished cars per day.
 	 */

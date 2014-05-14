@@ -5,7 +5,7 @@ import org.joda.time.DateTime;
 /**
  *
  */
-public class Delay {
+public class Delay implements Comparable<Delay> {
 	/**
 	 * 
 	 */
@@ -41,6 +41,12 @@ public class Delay {
 	public DateTime getDateOfDelay() {
 		return dateOfDelay;
 	}
-	
-	
+
+	@Override
+	public int compareTo(Delay other) {
+		if(other == null){
+			return -1;
+		}
+		return this.dateOfDelay.compareTo(other.dateOfDelay);
+	}
 }
