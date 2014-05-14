@@ -78,6 +78,15 @@ public class AssemblyLineScheduler {
 		}
 	}
 	
+	
+	/**
+	 * Checks whether all non blocked lines 
+	 * @return
+	 */
+	private boolean linesReadyToMove(){
+		
+	}
+	
 	/**
 	 * Will get the correct assemblyline matching the one encapsulated within the parameter or null 
 	 * @param line
