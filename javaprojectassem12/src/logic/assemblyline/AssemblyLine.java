@@ -193,8 +193,8 @@ public class AssemblyLine implements Printable {
 
 	/**
 	 * Returns an estimate for an order if scheduled on this line without mutation of either the order or this line.
-	 * @param order
-	 * @return
+	 * @param 		order		The order to schedule.
+	 * @return		A estimated assembly time or null if the order cannot be scheduled on this line.
 	 * @stateless
 	 */
 	public DateTime getEstimate(Order order) {
