@@ -121,7 +121,7 @@ public class AssemblyLine implements Printable {
 	 * @return	True if the task is completed successfully.
 	 * 			False the task could not be completed.
 	 */
-	public boolean doTask(Task task){
+	public boolean doTask(Printable task){
 		return firstWorkStation.doTask(task);
 	}
 	
@@ -130,7 +130,7 @@ public class AssemblyLine implements Printable {
 	 * @param station	The a copy of the workstation for which the pending tasks are needed.
 	 * @return	A list of tasks that are pending at the given workstation.
 	 */
-	public List<Task> getRequiredTasks(Workstation station){
+	public List<Printable> getRequiredTasks(Printable station){
 		return this.firstWorkStation.getRequiredTasks(station);
 	}
 	
@@ -139,7 +139,7 @@ public class AssemblyLine implements Printable {
 	 * @param station	The a copy of the workstation for which the tasks are needed.
 	 * @return	A list of tasks at the given workstation.
 	 */
-	public List<Task> getAllTasks(Workstation station){
+	public List<Printable> getAllTasks(Printable station){
 		return this.firstWorkStation.getAllTasks(station);
 	}
 	
@@ -160,7 +160,7 @@ public class AssemblyLine implements Printable {
 	 * Returns a list of the current strategies followed by the available scheduling strategies.
 	 * @return a list of the current strategies followed by the available scheduling strategies.
 	 */
-	public List<SchedulingStrategy> getStrategies(){
+	public List<Printable> getStrategies(){
 		return schedule.getStrategies();
 	}
 	
@@ -176,8 +176,8 @@ public class AssemblyLine implements Printable {
 	 * Asks a list of available workstations.
 	 * @return	The list containing copies of the workstations.
 	 */
-	public List<Workstation> getWorkStations() {
-		LinkedList<Workstation> workStations = new LinkedList<Workstation>();
+	public List<Printable> getWorkStations() {
+		LinkedList<Printable> workStations = new LinkedList<>();
 		firstWorkStation.buildWorkstationList(workStations,numberOfWorkStations);
 		return workStations;
 	}
@@ -237,6 +237,12 @@ public class AssemblyLine implements Printable {
 
 	@Override
 	public String getExtraInformation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public String getStatus() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -560,8 +566,8 @@ public class AssemblyLine implements Printable {
 		 * Returns a list of the current strategies followed by the available scheduling strategies.
 		 * @return a list of the current strategies followed by the available scheduling strategies.
 		 */
-		private List<SchedulingStrategy> getStrategies(){
-			LinkedList<SchedulingStrategy> returnList = new LinkedList<SchedulingStrategy>();
+		private List<Printable> getStrategies(){
+			LinkedList<Printable> returnList = new LinkedList<>();
 			returnList.add(currentStrategy.getRawCopy());
 			for(SchedulingStrategy next : stratList){
 				returnList.add(next.getRawCopy());

@@ -59,5 +59,4 @@ public class AccessoriesPost extends Workstation {
 	public String getExtraInformation() {
 		return null;
 	}
-
 }

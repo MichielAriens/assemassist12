@@ -112,4 +112,11 @@ public class Task implements Printable{
 	public String getExtraInformation() {
 		return this.getDescription();
 	}
+
+	@Override
+	public String getStatus() {
+		if(this.isComplete())
+			return "Completed";
+		return "Pending";
+	}
 }

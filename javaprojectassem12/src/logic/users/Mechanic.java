@@ -1,9 +1,8 @@
 package logic.users;
 
-import java.util.List; 
+import interfaces.Printable;
 
-import logic.workstation.Task;
-import logic.workstation.Workstation;
+import java.util.List; 
 
 /**
  * Class used to describe a mechanic working on an assembly line in a car manufacturing company.
@@ -11,9 +10,9 @@ import logic.workstation.Workstation;
 public class Mechanic extends User{
 	
 	/**
-	 * The string identifier of the workstation this mechanic is currently working on.
+	 * The printable instance of the workstation this mechanic is currently working on.
 	 */
-	private Workstation activeStation = null;
+	private Printable activeStation = null;
 	
 	/**
 	 * The manufacturing company for which the mechanic works.
@@ -41,7 +40,7 @@ public class Mechanic extends User{
 	 * Returns the workstation the mechanic is currently working on.
 	 * @return The workstation the mechanic is currently working on.
 	 */
-	public Workstation getActiveWorkstation(){
+	public Printable getActiveWorkstation(){
 		return this.activeStation;
 	}
 	
@@ -59,7 +58,7 @@ public class Mechanic extends User{
 	 * and tries to move the assembly line.
 	 * @param task	A copy of the task that needs to be performed.
 	 */
-	public void doTask(Task task, int duration){
+	public void doTask(Printable task, int duration){
 		if(company.checkPhaseDuration(duration)){
 			boolean performed = company.doTask(task);
 			if(performed){
@@ -94,7 +93,7 @@ public class Mechanic extends User{
 	 * @return	null	if the mechanic is not currently posted.
 	 * 			The list of tasks otherwise.
 	 */
-	public List<Task> getAvailableTasks(){
+	public List<Printable> getAvailableTasks(){
 		if(!isPosted())
 			return null;
 		return this.company.getRequiredTasks(this.activeStation);
@@ -105,7 +104,7 @@ public class Mechanic extends User{
 	 * @param station	The a copy of the workstation for which the tasks are needed.
 	 * @return	A list of tasks at the given workstation.
 	 */
-	public List<Task> getAllTasks(Workstation station){
+	public List<Printable> getAllTasks(Printable station){
 		return this.company.getAllTasks(station);
 	}
 	
@@ -113,7 +112,7 @@ public class Mechanic extends User{
 	 * Returns the list of workstations from the assembly line of the car manufacturing company.
 	 * @return the list of workstations from the assembly line of the car manufacturing company.
 	 */
-	public List<Workstation> getWorkstations(){
+	public List<Printable> getWorkstations(){
 		return this.company.getWorkStations();
 	}
 
@@ -121,7 +120,7 @@ public class Mechanic extends User{
 	 * Set the active workstation to the given workstation.
 	 * @param workstation
 	 */
-	public void setActiveWorkstation(Workstation station){
+	public void setActiveWorkstation(Printable station){
 		this.activeStation = station;
 	}
 

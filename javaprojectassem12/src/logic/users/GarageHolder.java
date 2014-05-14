@@ -1,5 +1,7 @@
 package logic.users;
 
+import interfaces.Printable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -37,8 +39,8 @@ public class GarageHolder extends User{
 	 * Returns a list of all committed orders that are not yet completed.
 	 * @return a list of all committed orders that are not yet completed.
 	 */
-	public ArrayList<VehicleOrder> getPendingOrders(){
-		ArrayList<VehicleOrder> pendingOrders = new ArrayList<VehicleOrder>();
+	public ArrayList<Printable> getPendingOrders(){
+		ArrayList<Printable> pendingOrders = new ArrayList<>();
 		for(VehicleOrder o : this.committedOrders){
 			if(!o.done())
 				pendingOrders.add(o);
@@ -50,14 +52,14 @@ public class GarageHolder extends User{
 	 * Returns a list of all committed orders that are completed sorted on end time.
 	 * @return a list of all committed orders that are completed sorted on end time.
 	 */
-	public ArrayList<VehicleOrder> getCompletedOrders(){
+	public ArrayList<Printable> getCompletedOrders(){
 		ArrayList<VehicleOrder> completedOrders = new ArrayList<VehicleOrder>();
 		for(VehicleOrder o : this.committedOrders){
 			if(o.done())
 				completedOrders.add(o);
 		}
 		Collections.sort(completedOrders);
-		return completedOrders;
+		return new ArrayList<Printable>(completedOrders);
 	}
 	
 	/**

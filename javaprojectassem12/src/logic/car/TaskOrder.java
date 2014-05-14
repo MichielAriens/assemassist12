@@ -121,4 +121,11 @@ public class TaskOrder extends Order{
 
 		return null;
 	}
+
+	@Override
+	public String getStatus() {
+		if(this.done())
+			return "Completed";
+		return "Pending";
+	}
 }

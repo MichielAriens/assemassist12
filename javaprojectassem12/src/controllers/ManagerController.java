@@ -1,5 +1,7 @@
 package controllers;
 
+import interfaces.Printable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,8 +62,8 @@ public class ManagerController extends UserController{
 	 */
 	public ArrayList<String> getStrategies() {
 		ArrayList<String> strategies = new ArrayList<String>();
-		for(SchedulingStrategy s : currentManager.getStrategies()){
-			strategies.add(s.toString());
+		for(Printable s : currentManager.getStrategies()){
+			strategies.add(s.getStringRepresentation());
 		}
 		return strategies;
 	}

@@ -131,4 +131,11 @@ public class VehicleOrder extends Order{
 		return this.details.getModel();
 	}
 
+	@Override
+	public String getStatus() {
+		if(this.done())
+			return "Completed";
+		return "Pending";
+	}
+
 }
