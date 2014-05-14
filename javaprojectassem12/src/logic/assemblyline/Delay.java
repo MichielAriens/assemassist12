@@ -9,7 +9,7 @@ public class Delay implements Comparable<Delay> {
 	/**
 	 * 
 	 */
-	int delay;
+	int delayTime;
 	
 	/**
 	 * 
@@ -22,7 +22,7 @@ public class Delay implements Comparable<Delay> {
 	 * @param dateOfDelay
 	 */
 	public Delay (int delay, DateTime dateOfDelay){
-		this.delay = delay;
+		this.delayTime = delay;
 		this.dateOfDelay = dateOfDelay;
 	}
 
@@ -30,8 +30,8 @@ public class Delay implements Comparable<Delay> {
 	 * 
 	 * @return
 	 */
-	public int getDelay(){
-		return delay;
+	public int getDelayTime(){
+		return delayTime;
 	}
 	
 	/**
