@@ -320,7 +320,7 @@ public class AssemblyLine implements Printable {
 			currentTime = currentTime.plusMinutes(phaseDuration);
 			Integer delayLastOrder= firstWorkStation.getDelayLastOrder();
 			if(delayLastOrder != null)
-				stats.finishedCarOrder(delayLastOrder);
+				stats.finishedCarOrder(delayLastOrder, currentTime);
 			firstWorkStation.advanceOrders(null, currentTime);
 			if(checkEndOfDay()){
 				calculateOverTime();
