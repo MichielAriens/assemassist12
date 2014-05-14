@@ -3,12 +3,12 @@ package logic.workstation;
 /**
  * A class used to represent a director used to build a structure of workstations.
  */
-public class WorkstationDirector {
+public abstract class WorkstationDirector {
 	
 	/**
 	 * The builder that this director uses to build the structure of workstations.
 	 */
-	private WorkstationBuilder builder;
+	protected WorkstationBuilder builder;
 	
 	/**
 	 * Construct a new WorkstationDirector with a given WorkstationBuilder.
@@ -21,9 +21,5 @@ public class WorkstationDirector {
 	/**
 	 * Build the structure of workstations.
 	 */
-	public void construct(){
-		builder.buildCarBodyPost();
-		builder.buildDriveTrainPost();
-		builder.buildAccessoriesPost();
-	}
+	public abstract void construct();
 }

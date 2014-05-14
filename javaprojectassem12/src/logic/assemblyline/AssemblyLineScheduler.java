@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Set;
 
 import logic.car.Order;
+import logic.workstation.WorkstationChainBuilder;
+import logic.workstation.WorkstationDirector;
+import logic.workstation.WorkstationDirectorA;
 
 import org.joda.time.DateTime;
 
@@ -29,9 +32,14 @@ public class AssemblyLineScheduler {
 		assemblyLines.addAll(lines);
 	}
 	
+	private void addLine(AssemblyLine line){
+		assemblyLines.add(line);
+	}
+	
 	/**
 	 * Accepts an order and distributes it to the best assemblyline. 
 	 * All elegible assemblylines will calculate an estimated completiontime
+	 * @param	order	...
 	 */
 	public void addOrder(Order order){
 		
@@ -48,13 +56,27 @@ public class AssemblyLineScheduler {
 			if(best == null){
 				best = is;
 			}else{
-				if(estimates.get(is).befor(estimates.get(best))){
+				if(estimates.get(is).isBefore(estimates.get(best))){
 					best = is;
 				}
 			}
 		}
 		
 		best.addOrder(order);
+	}
+	
+	
+	private void initializeAssemblylines(){
+		WorkstationDirector director = new WorkstationDirectorA(new WorkstationChainBuilder());
+		this.addLine(new AssemblyLine(capabilities, director));
+		
+		
+		
+		
+		WorkstationChainBuilder builder = new WorkstationChainBuilder();
+		WorkstationDirector director = new WorkstationDirector(builder);
+		director.construct();
+		this.firstWorkStation = builder.getResult();
 	}
 	
 	

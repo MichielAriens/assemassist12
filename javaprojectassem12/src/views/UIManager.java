@@ -77,19 +77,38 @@ public class UIManager {
 		writer.write(maController.getStatistics() + "\n");
 		writer.flush();
 	}
-	
+	//TODO in changeAssemblyLineStatus() en newSchedulingAlgorithm() kunnen 3 stukken vervangen
+	// worden door 1 methode
 	private void changeAssemblyLineStatus() throws IOException{
 		writer.write("===CHANGE ASSEMBLY LINE STATUS===\n");
 		writer.flush();
 		ArrayList<String> assemblyLines = maController.getAssemblyLines();
 		ArrayList<String> statuses = maController.getAssemblyLinesStatuses();
 		//TODO: available statuses moeten nog opgehaald worden van ergens.
-		ArrayList<String> availableStatuses;
+		ArrayList<String> availableStatuses = null;
 		
 		String query = "Select assembly line to change status:\n";
-		for(int i = 1; i < assemblyLines.size(); i++){
+		for(int i = 0; i < assemblyLines.size(); i++){
 			query += "   " + (i) + ": " + assemblyLines.get(i) + "\n";
 		}
+		query += "   " + (assemblyLines.size()) + ": Cancel\nAnswer: ";
+		int assemblyLineIndex = chooseAction(query, assemblyLines.size());
+		int cancelIndex = assemblyLines.size(); 
+		if(assemblyLineIndex != cancelIndex){
+			query = "Select the new status for " + assemblyLines.get(assemblyLineIndex) + ":\n";
+			for(int i = 0; i < availableStatuses.size(); i++){
+				query += "   " + (i) + ": " + availableStatuses.get(i) + "\n";
+			}
+			query += "   " + (availableStatuses.size()) + ": Cancel\nAnswer: ";
+			int statusIndex = chooseAction(query, assemblyLines.size());
+			cancelIndex = assemblyLines.size(); 
+			if(statusIndex != cancelIndex){
+				maController.changeAssemblyLineStatus(assemblyLineIndex, statusIndex);
+				waitForCompletion("Status has been changed. Press enter to continue.\n");
+			}
+		}
+
+		
 	}
 	
 	/**
@@ -109,8 +128,8 @@ public class UIManager {
 		}
 		query += "   " + (strategies.size()) + ": Cancel\nAnswer: ";
 		int algorithm = chooseAction(query, strategies.size());
-		int indexOfCancel = strategies.size(); 
-		if(algorithm != indexOfCancel){
+		int cancelIndex = strategies.size(); 
+		if(algorithm != cancelIndex){
 			String chosenStrategy = strategies.get(algorithm);
 			if(chosenStrategy.equals("FIFO")){
 				chooseFIFO();

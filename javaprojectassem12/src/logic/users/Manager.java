@@ -1,5 +1,7 @@
 package logic.users;
 
+import interfaces.Printable;
+
 import java.util.List;
 
 import logic.assemblyline.SchedulingStrategy;
@@ -38,7 +40,7 @@ public class Manager extends User{
 	 * Returns a list of the current strategies followed by the available scheduling strategies.
 	 * @return a list of the current strategies followed by the available scheduling strategies.
 	 */
-	public List<SchedulingStrategy> getStrategies() {
+	public List<Printable> getStrategies() {
 		return company.getStrategies();
 	}
 	

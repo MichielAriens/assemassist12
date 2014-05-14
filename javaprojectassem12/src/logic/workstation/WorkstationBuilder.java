@@ -21,6 +21,16 @@ public abstract class WorkstationBuilder {
 	public abstract void buildAccessoriesPost();
 	
 	/**
+	 * Add a CargoPost to the stucture.
+	 */
+	public abstract void buildCargoPost();
+	
+	/**
+	 * Add a CertificationPost to the structure.
+	 */
+	public abstract void buildCertificationPost();
+	
+	/**
 	 * Get the resulting structure.
 	 * @return	The resulting structure.
 	 */

@@ -172,7 +172,7 @@ public abstract class Workstation implements Printable{
 	 * @return	True 	if the specified task has been successfully performed.
 	 * 			False	otherwise. 
 	 */
-	public boolean doTask(Task task){
+	public boolean doTask(Printable task){
 		for(Task t : tasks){
 			if(t.equals(task)){
 				t.perform();
@@ -189,9 +189,9 @@ public abstract class Workstation implements Printable{
 	 * @param station	The a copy of the workstation for which the pending tasks are needed.
 	 * @return	A list of tasks that are pending at the given workstation.
 	 */
-	public List<Task> getRequiredTasks(Workstation station){
+	public List<Printable> getRequiredTasks(Printable station){
 		if(this.equals(station)){
-			ArrayList<Task> returnlist = new ArrayList<Task>();
+			ArrayList<Printable> returnlist = new ArrayList<>();
 			for(Task t : tasks){
 				if(!t.isComplete())
 					returnlist.add(t.getRawCopy());
@@ -208,16 +208,16 @@ public abstract class Workstation implements Printable{
 	 * @param station	The a copy of the workstation for which the tasks are needed.
 	 * @return	A list of tasks at the given workstation.
 	 */
-	public List<Task> getAllTasks(Workstation station){
+	public List<Printable> getAllTasks(Printable station){
 		if(this.equals(station)){
-			ArrayList<Task> returnlist = new ArrayList<Task>();
+			ArrayList<Printable> returnlist = new ArrayList<>();
 			for(Task t : tasks){
 				returnlist.add(t.getRawCopy());
 			}
 			return returnlist;
 		}
 		if(this.nextWorkStation != null)
-			return this.nextWorkStation.getRequiredTasks(station);
+			return this.nextWorkStation.getAllTasks(station);
 		return null;
 	}
 	 
@@ -233,7 +233,7 @@ public abstract class Workstation implements Printable{
 	 * @param workstations			The list of workstations, to which the chain has to be added.
 	 * @param numberOfWorkstations	The amount of workstations that has to be added to the chain.
 	 */
-	public void buildWorkstationList(List<Workstation> workstations, int numberOfWorkstations){
+	public void buildWorkstationList(List<Printable> workstations, int numberOfWorkstations){
 		if(numberOfWorkstations > 0){
 			workstations.add(this.getRawCopy());
 		}
@@ -424,5 +424,12 @@ public abstract class Workstation implements Printable{
 				return currentOrder.getDelay();
 			else
 				return null;
+	}
+	
+	@Override //TODO DOCU
+	public String getStatus() {
+		if(this.idle())
+			return "Idle";
+		return "Working";
 	}
 }

@@ -1,5 +1,7 @@
 package controllers;
 
+import interfaces.Printable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,10 +49,10 @@ public class MechanicController extends UserController{
 		if(this.currentMechanic == null)
 			return null;
 		ArrayList<String> workstations = new ArrayList<String>();
-		List<Workstation> stations = this.currentMechanic.getWorkstations();
+		List<Printable> stations = this.currentMechanic.getWorkstations();
 		int count = 1;
-		for(Workstation w : stations){
-			workstations.add(w.toString() + ": " + count);
+		for(Printable w : stations){
+			workstations.add(w.getStringRepresentation() + ": " + count);
 			count++;
 		}
 		return workstations;
@@ -66,8 +68,8 @@ public class MechanicController extends UserController{
 			return null;
 		ArrayList<String> tasks = new ArrayList<String>();
 		int count = 1;
-		for(Task task : this.currentMechanic.getAvailableTasks()){
-			tasks.add(task.toString() + ": " + count);
+		for(Printable task : this.currentMechanic.getAvailableTasks()){
+			tasks.add(task.getStringRepresentation() + ": " + count);
 			count++;
 		}
 		return tasks;
@@ -84,8 +86,8 @@ public class MechanicController extends UserController{
 	public String getTaskInformation(String taskName){
 		if(this.currentMechanic == null)
 			return null;
-		for(Task task : this.currentMechanic.getAvailableTasks()){
-			if(task.toString().equals(taskName))
+		for(Printable task : this.currentMechanic.getAvailableTasks()){
+			if(task.getStringRepresentation().equals(taskName))
 				return task.getExtraInformation();
 		}
 		return null;
@@ -99,8 +101,8 @@ public class MechanicController extends UserController{
 	public void doTask(String taskName, int duration){
 		if(this.currentMechanic == null)
 			return;
-		for(Task task : this.currentMechanic.getAvailableTasks()){
-			if(task.toString().equals(taskName))
+		for(Printable task : this.currentMechanic.getAvailableTasks()){
+			if(task.getStringRepresentation().equals(taskName))
 				currentMechanic.doTask(task, duration);
 		}
 	}
@@ -112,8 +114,8 @@ public class MechanicController extends UserController{
 	public void setWorkStation(String workstationName){
 		if(this.currentMechanic == null)
 			return;
-		for(Workstation station : this.currentMechanic.getWorkstations()){
-			if(station.toString().equals(workstationName))
+		for(Printable station : this.currentMechanic.getWorkstations()){
+			if(station.getStringRepresentation().equals(workstationName))
 				this.currentMechanic.setActiveWorkstation(station);
 		}
 	}
@@ -127,18 +129,15 @@ public class MechanicController extends UserController{
 	public List<String> getTasksPerWorkstation(){
 		if(this.currentMechanic == null)
 			return null;
-		List<Workstation> workStations = this.currentMechanic.getWorkstations();
+		List<Printable> workStations = this.currentMechanic.getWorkstations();
 		ArrayList<String> tasks = new ArrayList<String>();
-		for(Workstation stat : workStations){
+		for(Printable stat : workStations){
 			String temp = stat.toString() + ":\n";
 			if(this.currentMechanic.getAllTasks(stat).size() == 0)
 				temp += "Inactive.\n";
 			else{
-				for(Task task : this.currentMechanic.getAllTasks(stat)){
-					if(task.isComplete())
-						temp += "   -" + task.toString() + ": Completed\n";
-					else
-						temp += "   -" + task.toString() + ": Pending\n";
+				for(Printable task : this.currentMechanic.getAllTasks(stat)){
+					temp += "   -" + task.toString() + ": " + task.getStatus() + "\n";
 				}
 			}
 			tasks.add(temp);

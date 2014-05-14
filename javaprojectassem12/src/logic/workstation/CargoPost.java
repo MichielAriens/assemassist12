@@ -6,16 +6,16 @@ import java.util.List;
 import logic.car.VehiclePartType;
 
 /**
- * Class used to describe an accessories post of an assembly line.
+ * Class used to describe a drive train post of an assembly line.
  */
-public class AccessoriesPost extends Workstation {
-
+public class CargoPost extends Workstation {
+	
 	/**
-	 * Initializes the compatible tasks for this accessories post.
+	 * Initializes the compatible tasks for this drive train post.
 	 */
 	private List<VehiclePartType> compatibleTasks;
 	{
-		VehiclePartType[] array= {VehiclePartType.Seats, VehiclePartType.Airco, VehiclePartType.Wheels, VehiclePartType.Spoiler};
+		VehiclePartType[] array= {VehiclePartType.ToolStorage, VehiclePartType.CargoProtection};
 		compatibleTasks = (List<VehiclePartType>) Arrays.asList(array);
 	}
 
@@ -23,7 +23,7 @@ public class AccessoriesPost extends Workstation {
 	 * Get the types of tasks this workstation can perform. This methods completely 
 	 * defines the capabilities of an implementing class.
 	 * @return		A List of CarPartType elements defining the capabilities of the implementation. 
-	 * 				({CarPartType.Seats, CarPartType.Airco, CarPartType.Wheels})
+	 * 				({CarPartType.Engine, CarPartType.Gearbox})
 	 */
 	@Override
 	public List<VehiclePartType> getCapabilities() {
@@ -31,32 +31,30 @@ public class AccessoriesPost extends Workstation {
 	}
 	
 	/**
-	 * Get a new instance of AccesoriesPost
+	 * Get a new instance of DriveTrainPost.
 	 */
 	@Override
 	protected Workstation getRawCopy(){
-		return new AccessoriesPost();
+		return new CargoPost();
 	}
 	
 	/**
-	 * Returns a string representation of an accessories post.
+	 * Returns a string representation of a drive train post.
 	 */
 	@Override
 	public String toString(){
-		return "Accessories Post";
+		return "Drive Train Post";
 	}
-	
-	/**
-	 * Returns a string representation of an accessories post.
-	 */
+
 	@Override
 	public String getStringRepresentation() {
 		return this.toString();
 	}
 
-	//TODO fix this
 	@Override
 	public String getExtraInformation() {
+		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

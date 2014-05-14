@@ -1,5 +1,7 @@
 package logic.assemblyline;
 
+import interfaces.Printable;
+
 import java.util.LinkedList;
 
 import logic.car.Order;
@@ -7,7 +9,7 @@ import logic.car.Order;
 /**
  * A class which adds an order to a queue in a specific way and refactors queue in some way.
  */
-public abstract class SchedulingStrategy{
+public abstract class SchedulingStrategy implements Printable{
 	
 	/**
 	 * The example order used for batch processing, null if batch processing is not used.

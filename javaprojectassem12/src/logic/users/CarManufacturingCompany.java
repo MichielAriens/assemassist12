@@ -1,5 +1,7 @@
 package logic.users;
 
+import interfaces.Printable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +53,8 @@ public class CarManufacturingCompany {
 	 * Makes a new car manufacturing company.
 	 */
 	public CarManufacturingCompany(){
-		this.assemblyLine = new AssemblyLine();
+		//TODO assembly lines maken hé mannen
+		//this.assemblyLine = new AssemblyLine();
 		this.users = new HashMap<String,User>();
 		this.initialise();
 		
@@ -126,7 +129,7 @@ public class CarManufacturingCompany {
 	 * of this car manufacturing company.
 	 * @return	The workstations of the assembly line.
 	 */
-	public List<Workstation> getWorkStations(){
+	public List<Printable> getWorkStations(){
 		return this.assemblyLine.getWorkStations();
 	}
 	
@@ -160,7 +163,7 @@ public class CarManufacturingCompany {
 	 * Returns a list of the current strategies followed by the available scheduling strategies.
 	 * @return a list of the current strategies followed by the available scheduling strategies.
 	 */
-	public List<SchedulingStrategy> getStrategies() {
+	public List<Printable> getStrategies() {
 		return assemblyLine.getStrategies();
 	}
 	
@@ -186,7 +189,7 @@ public class CarManufacturingCompany {
 	 * @return	True if the task is completed successfully
 	 * 			False the task could not be completed.
 	 */
-	public boolean doTask(Task task){
+	public boolean doTask(Printable task){
 		return assemblyLine.doTask(task);
 	}
 	
@@ -195,7 +198,7 @@ public class CarManufacturingCompany {
 	 * @param station	The a copy of the workstation for which the pending tasks are needed.
 	 * @return	A list of tasks that are pending at the given workstation.
 	 */
-	public List<Task> getRequiredTasks(Workstation station){
+	public List<Printable> getRequiredTasks(Printable station){
 		return this.assemblyLine.getRequiredTasks(station);
 	}
 	
@@ -204,7 +207,7 @@ public class CarManufacturingCompany {
 	 * @param station	The a copy of the workstation for which the tasks are needed.
 	 * @return	A list of tasks at the given workstation.
 	 */
-	public List<Task> getAllTasks(Workstation station){
+	public List<Printable> getAllTasks(Printable station){
 		return this.assemblyLine.getAllTasks(station);
 	}
 	

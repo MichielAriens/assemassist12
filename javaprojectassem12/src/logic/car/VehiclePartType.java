@@ -11,7 +11,10 @@ public enum VehiclePartType {
 	Seats("Seats"),
 	Airco("Airco"),
 	Wheels("Wheels"),
-	Spoiler("Spoiler");
+	Spoiler("Spoiler"),
+	ToolStorage("Tool Storage"),
+	CargoProtection("Cargo Protection"),
+	Certification("Maximum cargo load certification");
 	
 	/**
 	 * The name of this car part type.
