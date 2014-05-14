@@ -52,7 +52,7 @@ public class AssemblyLine implements Printable {
 	/**
 	 * A variable holding the statistics of the assembly line.
 	 */
-	private Statistics stats;
+	private StatisticsAssemblyLine stats;
 
 	/**
 	 * Returns the current time of the system.
@@ -80,7 +80,7 @@ public class AssemblyLine implements Printable {
 		this.firstWorkStation = builder.getResult();
 		this.numberOfWorkStations = firstWorkStation.countWorkStations();
 		this.cycleStartTime = new DateTime(2014, 1, 1, 6, 0);
-		stats = new Statistics();
+		stats = new StatisticsAssemblyLine(this.getStringRepresentation());
 	}
 
 	public boolean accepts(Order order){
