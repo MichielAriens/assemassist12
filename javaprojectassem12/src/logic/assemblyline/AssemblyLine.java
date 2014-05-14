@@ -22,7 +22,7 @@ import org.joda.time.Days;
 
 public class AssemblyLine implements Printable {
 
-	
+
 	/**
 	 * The first workstation in a line of workstations.
 	 */
@@ -47,7 +47,7 @@ public class AssemblyLine implements Printable {
 	 * A variable holding the statistics of the assembly line.
 	 */
 	private Statistics stats;
-	
+
 	/**
 	 * Returns the current time of the system.
 	 * @return	The current time of the system.
@@ -60,7 +60,7 @@ public class AssemblyLine implements Printable {
 	 * A variable containing the schedule, which is used for scheduling orders.
 	 */
 	private Schedule schedule;
-	
+
 	private Collection<VehicleModel> capabilities;
 
 	/**
@@ -76,7 +76,7 @@ public class AssemblyLine implements Printable {
 		this.currentTime = new DateTime(2014, 1, 1, 6, 0);
 		stats = new Statistics();
 	}
-	
+
 	public boolean accepts(Order order){
 		VehicleModel model = order.getModel();
 		if(model == null){
@@ -86,7 +86,7 @@ public class AssemblyLine implements Printable {
 			return true;
 		}return false;
 	}
-	
+
 	/**
 	 * Initializes the workstation using a builder.
 	 */
@@ -96,7 +96,7 @@ public class AssemblyLine implements Printable {
 		director.construct();
 		this.firstWorkStation = builder.getResult();
 	}
-	
+
 	/**
 	 * Returns true if the assembly line can be moved.
 	 * @param phaseDuration	The longest time needed to complete this phase.
@@ -104,9 +104,9 @@ public class AssemblyLine implements Printable {
 	 * 			False otherwise.
 	 */
 	private boolean moveAssemblyLine(int phaseDuration){
-			return schedule.moveAndReschedule(phaseDuration);
+		return schedule.moveAndReschedule(phaseDuration);
 	}
-	
+
 	/**
 	 * Returns a string containing the representation of the statistics.
 	 * @return	A string containing the representation of the statistics.
@@ -114,7 +114,7 @@ public class AssemblyLine implements Printable {
 	public String getStatistics(){
 		return stats.toString();
 	}
-	
+
 	/**
 	 * Completes the task corresponding to the given task.
 	 * @param task	A copy of the task that needs to be completed.
@@ -124,7 +124,7 @@ public class AssemblyLine implements Printable {
 	public boolean doTask(Task task){
 		return firstWorkStation.doTask(task);
 	}
-	
+
 	/**
 	 * Returns a list of pending tasks at a given workstation.
 	 * @param station	The a copy of the workstation for which the pending tasks are needed.
@@ -133,7 +133,7 @@ public class AssemblyLine implements Printable {
 	public List<Task> getRequiredTasks(Workstation station){
 		return this.firstWorkStation.getRequiredTasks(station);
 	}
-	
+
 	/**
 	 * Returns a list of all tasks at a given workstation.
 	 * @param station	The a copy of the workstation for which the tasks are needed.
@@ -142,7 +142,7 @@ public class AssemblyLine implements Printable {
 	public List<Task> getAllTasks(Workstation station){
 		return this.firstWorkStation.getAllTasks(station);
 	}
-	
+
 	/**
 	 * Returns true if the assembly line can be moved, false otherwise.
 	 * @param phaseDuration The largest time needed for this phase to complete.
@@ -155,7 +155,7 @@ public class AssemblyLine implements Printable {
 		else
 			return false;
 	}
-	
+
 	/**
 	 * Returns a list of the current strategies followed by the available scheduling strategies.
 	 * @return a list of the current strategies followed by the available scheduling strategies.
@@ -163,7 +163,7 @@ public class AssemblyLine implements Printable {
 	public List<SchedulingStrategy> getStrategies(){
 		return schedule.getStrategies();
 	}
-	
+
 	/**
 	 * Returns a list of orders which qualify for batch processing strategy.
 	 * @return	A list of orders which qualify for batch processing strategy.
@@ -181,7 +181,7 @@ public class AssemblyLine implements Printable {
 		firstWorkStation.buildWorkstationList(workStations,numberOfWorkStations);
 		return workStations;
 	}
-	
+
 	/**
 	 * Calls the schedule and asks to schedule the given car order.
 	 * @param order The car order to be scheduled.
@@ -210,7 +210,7 @@ public class AssemblyLine implements Printable {
 	public void changeStrategy(Order order){
 		schedule.changeStrategy(order);
 	}
-	
+
 	/**
 	 * Returns true if the given phase duration does not cause the day to change to 
 	 * the next day after 6 am, false otherwise.
@@ -240,6 +240,10 @@ public class AssemblyLine implements Printable {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public DateTime getEstimate(Order order, DateTime realTime){
+		return schedule.getEstimate(order, realTime);
+	}
 
 	/**
 	 *A class made to reschedule the assembly line and workstations. Changes the different times from orders appropriately.
@@ -250,12 +254,12 @@ public class AssemblyLine implements Printable {
 		 * The currently used strategy.
 		 */
 		SchedulingStrategy currentStrategy; 
-		
+
 		/**
 		 * A list containing the different strategies used by the system.
 		 */
 		LinkedList<SchedulingStrategy> stratList = new LinkedList<SchedulingStrategy>();
-	
+
 
 		/**
 		 * A constructor which initializes the used strategies and sets the current strategy to FIFO strategy.
@@ -265,7 +269,7 @@ public class AssemblyLine implements Printable {
 			stratList.add(new BatchSpecificationStrategy());
 			currentStrategy = stratList.getFirst();
 		}
-		
+
 		/**
 		 * The begin time of the shift, represented in hours.
 		 */
@@ -304,7 +308,7 @@ public class AssemblyLine implements Printable {
 		 * 			False if the given phase duration is too big.
 		 */
 		private boolean moveAndReschedule(int phaseDuration) {
-			
+
 			firstWorkStation.adjustDelays(phaseDuration);
 			currentTime = currentTime.plusMinutes(phaseDuration);
 			Integer delayLastOrder= firstWorkStation.getDelayLastOrder();
@@ -316,13 +320,13 @@ public class AssemblyLine implements Printable {
 				setNextDay();
 				stats.setNextDay();
 			}
-			
+
 			checkStrategy();
-			
+
 			reschedule();
 			return true;
 		}
-		
+
 		/**
 		 * Checks if the system can change to FIFO strategy if the current strategy is batch specification and
 		 * if there are no more orders which qualify for batch processing. 
@@ -339,9 +343,9 @@ public class AssemblyLine implements Printable {
 			}
 			currentStrategy = stratList.getFirst();
 		}
-		
-		
-		
+
+
+
 		/**
 		 * Returns the difference in minutes between two given times.
 		 * @param estimate	The time for which we need the difference.
@@ -355,7 +359,7 @@ public class AssemblyLine implements Printable {
 				return estimate.getMinuteOfDay()+ 24*60 -current.getMinuteOfDay();
 			}
 		}
-		
+
 		/**
 		 * Tries to add an order to the first workstation if the first workstation does not 
 		 * have an order and the queue is not empty. Afterwards reschedules the workstations 
@@ -368,8 +372,8 @@ public class AssemblyLine implements Printable {
 			DateTime workstationEET = firstWorkStation.reschedule(getPhaseDurations(), numberOfWorkStations, currentTime);
 			rescheduleQueue(workstationEET);
 		}
-		
-		
+
+
 		/**
 		 * Builds a list of phase durations from the orders in the queue. The length of the returned list is either
 		 * the amount of workstations or the number of orders in the queue, if there are less orders than workstations.
@@ -386,7 +390,7 @@ public class AssemblyLine implements Printable {
 			}
 			return prePhaseDurations;
 		}
-		
+
 		/**
 		 * Given the start time, calculates the estimated end times of the orders in the 
 		 * pending queue. Every order calculates its own estimated end time using a number 
@@ -410,7 +414,7 @@ public class AssemblyLine implements Printable {
 				queue.get(i).setEstimatedEndTime(startTime);
 			}
 		}
-		
+
 		/**
 		 * Adds an order to the first workstation if it can still be scheduled today. 
 		 * It calculates the estimated end time to see if the order can be scheduled today 
@@ -418,15 +422,8 @@ public class AssemblyLine implements Printable {
 		 */
 		private void addOrderToFirstWorkstation(){
 			Order order = queue.getFirst();
-			int assemblyTime = 0;
-			assemblyTime += order.getPhaseTime();
-			int maxPhaseWorkstations = order.getPhaseTime();
-			for(int i = 1; i < getWorkStations().size(); i++){
-				maxPhaseWorkstations = Math.max(maxPhaseWorkstations, firstWorkStation.getPhaseDuration(i));
-				assemblyTime += maxPhaseWorkstations;
-			}
-			DateTime estimatedEndTime = new DateTime(currentTime);
-			estimatedEndTime = estimatedEndTime.plusMinutes(assemblyTime);
+			DateTime estimatedEndTime;
+			estimatedEndTime = firstOrderEstimate(order);
 			if(estimatedEndTime.getMinuteOfDay()<shiftEndHour*60-overTime && estimatedEndTime.getHourOfDay()>=shiftBeginHour){
 				firstWorkStation.setOrder(queue.pop());
 			}
@@ -503,19 +500,17 @@ public class AssemblyLine implements Printable {
 			}
 			return returnList;
 		}
-		
+
 		/**
 		 * Sets the start time of the given order to the current time, then uses the current 
 		 * strategy to add the order and reschedule the whole queue and workstations.
 		 * @param order	The order that needs to be scheduled.
 		 */
 		private void scheduleOrder(Order order){
-			DateTime startTime = new DateTime(currentTime);
-			order.setStartTime(startTime);
 			currentStrategy.addOrder(order, queue);
 			reschedule();
 		}
-		
+
 		/**
 		 * Changes the strategy to FIFO if the given order is null. Otherwise, changes to 
 		 * batch processing and uses the given order as an example order to reschedule the
@@ -535,7 +530,7 @@ public class AssemblyLine implements Printable {
 			currentStrategy.refactorQueue(queue,copy);
 			reschedule();
 		}
-		
+
 		/**
 		 * Returns the right estimated end time from the given possibly wrong estimated end time.
 		 * @param estimatedEndTime The estimated end time that needs to be scheduled.
@@ -555,7 +550,7 @@ public class AssemblyLine implements Printable {
 				return estimatedEndTime;
 			}
 		}
-		
+
 		/**
 		 * Returns a list of the current strategies followed by the available scheduling strategies.
 		 * @return a list of the current strategies followed by the available scheduling strategies.
@@ -568,7 +563,7 @@ public class AssemblyLine implements Printable {
 			}
 			return returnList;
 		}
-		
+
 		/**
 		 * Checks if there are orders in the workstations and the queue for which batch 
 		 * processing can be applied. It then returns a list of those.
@@ -593,6 +588,48 @@ public class AssemblyLine implements Printable {
 				allOrdersList2.removeFirst();
 			}
 			return returnList;
+		}
+
+		private DateTime getEstimate(Order order, DateTime realTime){
+			DateTime returnTime = null;
+			LinkedList<Order> copyqueue = makeCopyOfQueue();
+			order.setStartTime(realTime);
+			if(firstWorkStation.getCurrentOrder()==null && queue.isEmpty()){
+				returnTime = firstOrderEstimate(order);
+
+			}else{
+				if(queue.getFirst().equals(order) && currentStrategy.example.equals(order) && queue.getFirst().getPhaseTime()>order.getPhaseTime() && !checkDeadline(queue.getFirst(), order)){
+					returnTime = firstOrderEstimate(order);
+
+				}else{
+					scheduleOrder(order);
+					returnTime = order.getEstimatedEndTime();
+					queue = copyqueue;
+					reschedule();
+				}
+			}
+			return returnTime;
+
+		}
+		
+		private DateTime firstOrderEstimate(Order order){
+			int assemblyTime = 0;
+			assemblyTime += order.getPhaseTime();
+			int maxPhaseWorkstations = order.getPhaseTime();
+			for(int i = 1; i < getWorkStations().size(); i++){
+				maxPhaseWorkstations = Math.max(maxPhaseWorkstations, firstWorkStation.getPhaseDuration(i));
+				assemblyTime += maxPhaseWorkstations;
+			}
+			DateTime estimatedEndTime = new DateTime(currentTime);
+			return estimatedEndTime.plusMinutes(assemblyTime);
+		}
+
+		private boolean checkDeadline(Order order, Order next) {
+			if(order.getDeadLine()==null)
+				return false;
+			if(next.getDeadLine()==null)
+				return true;
+			return order.getDeadLine().isBefore(next.getDeadLine());
 		}
 	}
 }
