@@ -78,6 +78,7 @@ public class UIMechanic {
 					String workStation = checkInput("Type the number of your current work station: ", this.meController.getWorkStationsFromAssemblyLine());
 					this.meController.setWorkStation(workStation);
 					writer.flush();
+					
 					while(true){
 						selectTask();
 						if(!promptYesOrNo("Do you want to perform another task? (y/n): "))

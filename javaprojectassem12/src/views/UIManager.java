@@ -3,8 +3,10 @@ package views;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.rmi.server.Operation;
 import java.util.ArrayList;
 
+import logic.assemblyline.OperationalStatus;
 import controllers.ManagerController;
 
 /**
@@ -77,51 +79,43 @@ public class UIManager {
 		writer.write(maController.getStatistics() + "\n");
 		writer.flush();
 	}
-	//TODO in changeAssemblyLineStatus() en newSchedulingAlgorithm() kunnen 3 stukken vervangen
-	// worden door 1 methode dus beter zoals in mechanic werken peinsek...
-	//TODO
-	//TODO
-	//TODO
+
+	/**
+	 * Lets the user choose an alternate assembly line status for an assembly line.
+	 * @throws IOException	When IO fails.
+	 */
 	private void changeAssemblyLineStatus() throws IOException{
 		writer.write("===CHANGE ASSEMBLY LINE STATUS===\n");
 		writer.flush();
-		ArrayList<String> assemblyLines = maController.getAssemblyLines();
-		ArrayList<String> statuses = maController.getAssemblyLinesStatuses();
-		//TODO: available statuses moeten nog opgehaald worden van ergens.
-		ArrayList<String> availableStatuses = null;
 		
-		String query = "Select assembly line to change status:\n";
-		for(int i = 0; i < assemblyLines.size(); i++){
-			query += "   " + (i) + ": " + assemblyLines.get(i) + "\n";
-		}
-		query += "   " + (assemblyLines.size()) + ": Cancel\nAnswer: ";
-		int assemblyLineIndex = chooseAction(query, assemblyLines.size());
-		int cancelIndex = assemblyLines.size(); 
-		if(assemblyLineIndex != cancelIndex){
-			query = "Select the new status for " + assemblyLines.get(assemblyLineIndex) + ":\n";
-			for(int i = 0; i < availableStatuses.size(); i++){
-				query += "   " + (i) + ": " + availableStatuses.get(i) + "\n";
-			}
-			query += "   " + (availableStatuses.size()) + ": Cancel\nAnswer: ";
-			int statusIndex = chooseAction(query, assemblyLines.size());
-			cancelIndex = assemblyLines.size(); 
-			if(statusIndex != cancelIndex){
-				maController.changeAssemblyLineStatus(assemblyLineIndex, statusIndex);
-				waitForCompletion("Status has been changed. Press enter to continue.\n");
-			}
-		}
-
+		String assemblyLine = chooseAssemblyLine();
 		
-	}
-	
-	/**
-	 * Lets the user choose an alternate scheduling algorithm.
-	 * @throws IOException	When IO fails.
-	 */
-	private void newSchedulingAlgorithm() throws IOException {
-		writer.write("===ALTERNATE SCHEDULING MECHANISM===\n");
+		String currentAssemblyLineStatus = maController.getCurrentAssemblyLineStatus();
+		writer.write("Current status of " + assemblyLine + ": \n   " + currentAssemblyLineStatus);
 		writer.flush();
 		
+		String query = "Available statuses:\n";	
+		OperationalStatus[] availableStatuses = OperationalStatus.values();
+		int count = 1;
+		for(OperationalStatus o : availableStatuses){
+			query += "   " + count + ": " + o.getStringRepresentation() + "\n";
+			count++;
+		}
+		query += "   " + count + ": Cancel\nAnswer: ";
+		int statusIndex = chooseAction(query, count);
+		String chosenStatus = availableStatuses[statusIndex-1].toString();
+		if(statusIndex != count){
+			maController.changeAssemblyLineStatus(chosenStatus);
+			waitForCompletion("Status has been changed. Press enter to continue.\n");
+		}
+	}
+
+	/**
+	 * Lets the user choose the assembly line it wants to perform actions on.
+	 * @return	String representation of the chosen assembly line.
+	 * @throws IOException	When IO fails.
+	 */
+	private String chooseAssemblyLine() throws IOException {
 		String lines = "Available assembly lines: ";
 		for(String line : maController.getAssemblyLines()){
 			lines += line + "; ";
@@ -131,6 +125,18 @@ public class UIManager {
 		String assemblyLine = checkInput("Type the number of your current assembly line: ", this.maController.getAssemblyLines());
 		this.maController.setAssemblyLine(assemblyLine);
 		writer.flush();
+		return assemblyLine;
+	}
+	
+	/**
+	 * Lets the user choose an alternate scheduling algorithm for an assembly line.
+	 * @throws IOException	When IO fails.
+	 */
+	private void newSchedulingAlgorithm() throws IOException {
+		writer.write("===ALTERNATE SCHEDULING MECHANISM===\n");
+		writer.flush();
+		
+		String assemblyLine = chooseAssemblyLine();
 		
 		//TODO hier verder gaan
 		//TODO getStrategies aanpassen zodat die current assemblyline vraagt

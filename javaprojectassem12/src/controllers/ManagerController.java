@@ -4,10 +4,14 @@ import interfaces.Printable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import logic.assemblyline.OperationalStatus;
 import logic.car.Order;
 import logic.users.Manager;
+import logic.workstation.AccessoriesPost;
 import logic.workstation.Task;
+import logic.workstation.Workstation;
 
 /**
  * Class used to form a link between the user interface and the Manager class.
@@ -60,6 +64,8 @@ public class ManagerController extends UserController{
 	 * strategies.
 	 */
 	public ArrayList<String> getStrategies() {
+		if(currentManager == null)
+			return null;
 		ArrayList<String> strategies = new ArrayList<String>();
 		for(Printable s : currentManager.getStrategies()){
 			strategies.add(s.getStringRepresentation());
@@ -143,12 +149,12 @@ public class ManagerController extends UserController{
 		return assemblyLines;
 	}
 	
-	public ArrayList<String> getAssemblyLinesStatuses() {
-		ArrayList<String> statuses = new ArrayList<String>();
-		for(Printable status : currentManager.getAssemblyLinesStatuses()){
-			statuses.add(status.getStringRepresentation());
-		}		
-		return statuses;
+	public String getCurrentAssemblyLineStatus() {
+		if(this.currentManager == null || this.currentManager.getActiveAssemblyLine() == null)
+			return null;
+		Map<Printable, Printable> assemblyLineStatuses = currentManager.getAssemblyLinesStatuses();
+		Printable currentAssemblyLine = assemblyLineStatuses.get(currentManager.getActiveAssemblyLine());
+		return currentAssemblyLine + "";
 	}
 
 	/**
@@ -164,7 +170,13 @@ public class ManagerController extends UserController{
 		}	
 	}
 	
-	public void changeAssemblyLineStatus(int assemblyLineIndex, int statusIndex) {
-		//TODO auto generated
+	//TODO: is dit goed?
+	public void changeAssemblyLineStatus(String newStatus) {
+		OperationalStatus[] availableStatuses = OperationalStatus.values();
+		for(OperationalStatus s : availableStatuses){
+			if(s.toString().equals(newStatus)){
+				currentManager.changeAssemblyLineStatus(s);
+			}
+		}
 	}
 }

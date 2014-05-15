@@ -254,4 +254,9 @@ public class CarManufacturingCompany {
 	public Map<Printable,Printable> getAssemblyLinesStatuses() {
 		return assemblyLineScheduler.getAssemblyLinesStatuses();
 	}
+
+	public void changeAssemblyLineStatus(Printable activeAssemblyLine,
+			Printable newStatus) {
+		assemblyLineScheduler.changeAssemblyLineStatus(activeAssemblyLine, newStatus);
+	}
 }

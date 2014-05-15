@@ -3,6 +3,7 @@ package logic.users;
 import interfaces.Printable;
 
 import java.util.List;
+import java.util.Map;
 
 import logic.car.Order;
 
@@ -68,7 +69,7 @@ public class Manager extends User{
 		return company.getAssemblyLines();
 	}
 	
-	public List<Printable> getAssemblyLinesStatuses() {
+	public Map<Printable, Printable> getAssemblyLinesStatuses() {
 		return company.getAssemblyLinesStatuses();
 	}
 	
@@ -78,5 +79,13 @@ public class Manager extends User{
 	 */
 	public void setActiveAssemblyLine(Printable line){
 		this.activeAssemblyLine = line;
+	}
+
+	public Printable getActiveAssemblyLine() {
+		return activeAssemblyLine;
+	}
+
+	public void changeAssemblyLineStatus(Printable newStatus) {
+		company.changeAssemblyLineStatus(activeAssemblyLine, newStatus);
 	}
 }
