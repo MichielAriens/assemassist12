@@ -100,6 +100,7 @@ public class AssemblyLineScheduler {
 				retval.add(al);
 			}
 		}
+		return retval;
 	}
 	
 	/**
@@ -108,9 +109,9 @@ public class AssemblyLineScheduler {
 	 * @param assemblyLine		The assemblyline that the task is on wrapped in the printable interface.
 	 * @return
 	 */
-	public boolean doTask(Printable Task, Printable assemblyLine){
+	public boolean doTask(Printable Task, Printable assemblyLine, int minutes){
 		AssemblyLine line = this.get(assemblyLine);
-		return line.doTask(Task);
+		return line.doTask(Task, minutes);
 	}
 	
 	
