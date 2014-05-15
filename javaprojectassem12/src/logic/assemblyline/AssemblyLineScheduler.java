@@ -2,6 +2,7 @@ package logic.assemblyline;
 
 import interfaces.Printable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,7 +22,7 @@ import org.joda.time.DateTime;
 
 public class AssemblyLineScheduler {
 	
-	private Set<AssemblyLine> assemblyLines;
+	private List<AssemblyLine> assemblyLines;
 	private DateTime currentTime;
 	private LinkedList<Order> overflowQueue;
 	
@@ -29,7 +30,7 @@ public class AssemblyLineScheduler {
 	 * 
 	 */
 	public AssemblyLineScheduler(){
-		assemblyLines = new HashSet<>();
+		assemblyLines = new ArrayList<>();
 		overflowQueue = new LinkedList<>();
 		initializeAssemblylines();
 	}
@@ -227,6 +228,50 @@ public class AssemblyLineScheduler {
 		}
 		return retval;
 	}
+
+	public List<Printable> getAssemblyLines() {
+		List<Printable> retval = new LinkedList<Printable>();
+		for(AssemblyLine al : assemblyLines){
+			retval.add(al);
+		}
+		return retval;
+	}
+
+	
+	/**
+	 * Asks the assembly line to check the given duration, if the duration is allowed it returns true, otherwise false.
+	 * @param duration	The duration that needs to be checked.
+	 * @return 	True if the duration is allowed.
+	 * 			False otherwise
+	 */
+	public boolean checkPhaseDuration(int duration, Printable assemblyLine) {
+		AssemblyLine al = this.get(assemblyLine);
+		return al.checkPhaseDuration(duration);
+	}
+
+	/**
+	 * returns a map mapping each assembly line to it's status.
+	 * @return
+	 */
+	public Map<Printable, Printable> getAssemblyLinesStatuses() {
+		Map<Printable,Printable> retval = new HashMap<>();
+		for(AssemblyLine al : this.assemblyLines){
+			retval.put(al, al.getOperationalStatus());
+		}
+		return retval;
+	}
+
+	/**
+	 * Returns a list of all tasks at a given workstation.
+	 * @param station			The a copy of the workstation for which the tasks are needed.
+	 * @param assemblyLine		The assemblyline of the workstation. 
+	 * @return	A list of tasks at the given workstation.
+	 */
+	public List<Printable> getAllTasksAt(Printable station, Printable assemblyLine) {
+		return this.get(assemblyLine).getAllTasks(station);
+	}
+	
+	
 	
 	
 

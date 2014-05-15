@@ -1,6 +1,8 @@
 package logic.assemblyline;
 
-public enum OperationalStatus {
+import interfaces.Printable;
+
+public enum OperationalStatus implements Printable {
 	OPERATIONAL("Operational",0), 
 	MAINTENANCE("Maintenance",240), 
 	BROKEN("Broken",0);
@@ -28,5 +30,23 @@ public enum OperationalStatus {
 	@Override
 	public String toString(){
 		return this.fullName;
+	}
+
+
+	@Override
+	public String getStringRepresentation() {
+		return this.toString();
+	}
+
+
+	@Override
+	public String getExtraInformation() {
+		return this.toString();
+	}
+
+
+	@Override
+	public String getStatus() {
+		return this.toString();
 	}
 }

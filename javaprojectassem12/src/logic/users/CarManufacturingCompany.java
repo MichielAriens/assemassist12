@@ -5,6 +5,7 @@ import interfaces.Printable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 
@@ -224,8 +225,8 @@ public class CarManufacturingCompany {
 	 * @param station	The a copy of the workstation for which the tasks are needed.
 	 * @return	A list of tasks at the given workstation.
 	 */
-	public List<Printable> getAllTasks(Printable station, Printable assemblyLine){
-		return this.assemblyLineScheduler.getAllTasks(station, assemblyLine);
+	public List<Printable> getAllTasksAt(Printable station, Printable assemblyLine){
+		return this.assemblyLineScheduler.getAllTasksAt(station, assemblyLine);
 	}
 	
 	/**
@@ -238,11 +239,19 @@ public class CarManufacturingCompany {
 		return this.assemblyLineScheduler.checkPhaseDuration(duration, assemblyLine);
 	}
 
+	/**
+	 * Returns the assemblylines of the system in order.
+	 * @return
+	 */
 	public List<Printable> getAssemblyLines() {
 		return assemblyLineScheduler.getAssemblyLines();
 	}
 
-	public List<Printable> getAssemblyLinesStatuses() {
+	/**
+	 * returns a map mapping each assembly line to it's status.
+	 * @return
+	 */
+	public Map<Printable,Printable> getAssemblyLinesStatuses() {
 		return assemblyLineScheduler.getAssemblyLinesStatuses();
 	}
 }
