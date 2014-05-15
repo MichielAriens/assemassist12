@@ -5,7 +5,7 @@ import interfaces.Printable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,18 +18,18 @@ import logic.workstation.WorkstationDirectorB;
 
 import org.joda.time.DateTime;
 
-import com.sun.xml.internal.bind.v2.model.core.Adapter;
-
 public class AssemblyLineScheduler {
 	
 	private Set<AssemblyLine> assemblyLines;
 	private DateTime currentTime;
+	private LinkedList<Order> overflowQueue;
 	
 	/**
 	 * 
 	 */
 	public AssemblyLineScheduler(){
 		assemblyLines = new HashSet<>();
+		overflowQueue = new LinkedList<>();
 		initializeAssemblylines();
 	}
 	
@@ -40,17 +40,16 @@ public class AssemblyLineScheduler {
 	/**
 	 * Accepts an order and distributes it to the best assemblyline. 
 	 * All elegible assemblylines will calculate an estimated completiontime
+	 * If no assemblylines are available for queueing then the order is placed on the overflow queue.
 	 * @param	order	...
 	 */
 	public void addOrder(Order order){
-		
 		Map<AssemblyLine, DateTime> estimates = new HashMap<>();
 		//Map every al to its estimate
-		for(AssemblyLine al : assemblyLines){
+		for(AssemblyLine al : getNonBrokenLines()){
 			if(al.accepts(order));
 			estimates.put(al, al.getEstimate(order));
 		}
-		
 		//chose the best estimate
 		AssemblyLine best = null;
 		for(AssemblyLine is : estimates.keySet()){
@@ -62,8 +61,11 @@ public class AssemblyLineScheduler {
 				}
 			}
 		}
-		
-		best.addOrder(order);
+		if(best == null){
+			overflowQueue.add(order);
+		}else{
+			best.addOrder(order);
+		}
 	}
 	
 	/**

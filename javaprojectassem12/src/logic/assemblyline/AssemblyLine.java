@@ -231,11 +231,16 @@ public class AssemblyLine implements Printable {
 
 	/**
 	 * Calls the schedule and asks to schedule the given car order.
+	 * The order will only be scheduled if it is not null and this assemblyline can actually schedule this order.
 	 * @param order The car order to be scheduled.
+	 * @return		Whether the order was scheduled.
 	 */
-	public void addOrder(Order order){
-		if(order != null)
+	public boolean addOrder(Order order){
+		if(order != null && this.accepts(order)){
 			schedule.scheduleOrder(order);
+			return true;
+		}
+		return false;
 	}
 
 	/**
