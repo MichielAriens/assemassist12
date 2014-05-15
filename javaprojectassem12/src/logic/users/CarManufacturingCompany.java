@@ -157,6 +157,17 @@ public class CarManufacturingCompany {
 		return this.assemblyLineScheduler.getCurrentTime();
 	}
 	
+	
+	/**
+	 * Completes the task corresponding to the given task.
+	 * @param task	A copy of the task that needs to be completed.
+	 * @return	True if the task is completed successfully
+	 * 			False the task could not be completed.
+	 */
+	public boolean doTask(Printable task, Printable assemblyLine, int duration){
+		return assemblyLineScheduler.doTask(task, assemblyLine, duration);
+	}
+	
 	/**
 	 * Returns a string representation of the current statistics.
 	 * @return	A string representation of the current statistics.
@@ -196,16 +207,7 @@ public class CarManufacturingCompany {
 	public void changeStrategy(Order order, Printable assemblyLine) {
 		assemblyLineScheduler.changeStrategy(order, assemblyLine);
 	}
-	
-	/**
-	 * Completes the task corresponding to the given task.
-	 * @param task	A copy of the task that needs to be completed.
-	 * @return	True if the task is completed successfully
-	 * 			False the task could not be completed.
-	 */
-	public boolean doTask(Printable task, Printable assemblyLine){
-		return assemblyLine.doTask(task, assemblyLine);
-	}
+
 	
 	/**
 	 * Returns a list of pending tasks at a given workstation.

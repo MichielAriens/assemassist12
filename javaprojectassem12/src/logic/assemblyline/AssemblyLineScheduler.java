@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -107,13 +108,20 @@ public class AssemblyLineScheduler {
 	
 	/**
 	 * Do the task corresponding to the given task on the given assemblyline.
+	 * If the task is completed the given assemblyline is checked for advancement
+	 * If the line advances this scheduler is advanced
 	 * @param Task				The task that needs to be completed wrapped in the printable interface.
 	 * @param assemblyLine		The assemblyline that the task is on wrapped in the printable interface.
 	 * @return
 	 */
 	public boolean doTask(Printable Task, Printable assemblyLine, int minutes){
 		AssemblyLine line = this.get(assemblyLine);
-		return line.doTask(Task, minutes);
+		boolean completed = line.doTask(Task, minutes);
+		if(completed){
+			//try to advance the system.
+			this.advance();
+		}
+		return completed;
 	}
 	
 	
@@ -197,6 +205,27 @@ public class AssemblyLineScheduler {
 		
 		VehicleModel[] models = {VehicleModel.CARMODELA, VehicleModel.CARMODELB, VehicleModel.CARMODELC, VehicleModel.TRUCKMODELX, VehicleModel.TRUCKMODELY};
 		this.addLine(new AssemblyLine(Arrays.asList(models), builder));
+	}
+
+	/**
+	 * Returns the workstations of a given assemblyline wrapped in the printable interface.
+	 * @param 		assemblyLine wrapped in the printable iterface.
+	 * @return		A list of workstations wrapped in the printable interface
+	 */
+	public List<Printable> getWorkStationsFromAssemblyLine(Printable assemblyLine) {
+		return this.get(assemblyLine).getWorkStations();
+	}
+
+	/**
+	 * Returns all workstations in the system.
+	 * @return		A list of workstations wrapped in the prinatable inteface.
+	 */
+	public List<Printable> getAllWorkstations() {
+		List<Printable> retval = new LinkedList<>();
+		for(AssemblyLine al : this.assemblyLines){
+			retval.addAll(al.getWorkStations());
+		}
+		return retval;
 	}
 	
 	
