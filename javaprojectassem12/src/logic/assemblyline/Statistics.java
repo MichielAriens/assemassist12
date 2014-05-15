@@ -81,6 +81,10 @@ public class Statistics {
 		return getMedian(delaysTimes);
 	}
 	
+	/**
+	 * Returns a list of all the delay times.
+	 * @return a list of all the delay times.
+	 */
 	protected ArrayList<Integer> getDelaysTimes() {
 		ArrayList<Integer> delaysTimes = new ArrayList<Integer>();
 		for(Delay d : delays){

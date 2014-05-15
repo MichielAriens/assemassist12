@@ -17,13 +17,13 @@ public class StatisticsGeneral extends Statistics{
 	}
 
 	/**
-	 * 
-	 * @param stats
+	 * Updates the records with the given statistics of assembly lines.
+	 * @param stats	The statistics of the assembly lines that are needed for the update.
 	 */
-	public void updateRecords(ArrayList<Statistics> stats){
+	public void updateRecords(ArrayList<StatisticsAssemblyLine> stats){
 		delays = new ArrayList<Delay>();
 		finishedCarOrdersPerDay = new ArrayList<Integer>();
-		for(Statistics s : stats){
+		for(StatisticsAssemblyLine s : stats){
 			for(Delay d : s.getDelays()){
 				delays.add(d);
 			}

@@ -61,11 +61,11 @@ public class UIMechanic {
 				if(answer == 2){
 					String lines = "Available assembly lines: ";
 					for(String line : meController.getAssemblyLines()){
-						line += line + "; ";
+						lines += line + "; ";
 					}
 					writer.write(lines + "\n");
 					writer.flush();
-					String assemblyLine = checkInput("Type the number of your current work station: ", this.meController.getAssemblyLines());
+					String assemblyLine = checkInput("Type the number of your current assembly line: ", this.meController.getAssemblyLines());
 					this.meController.setAssemblyLine(assemblyLine);
 					writer.flush();
 					

@@ -118,17 +118,28 @@ public class UIManager {
 	private void newSchedulingAlgorithm() throws IOException {
 		writer.write("===ALTERNATE SCHEDULING MECHANISM===\n");
 		writer.flush();
+		
+		ArrayList<String> assemblyLines = maController.getAssemblyLines();
+		String query = "Select assembly line to change status:\n";
+		for(int i = 0; i < assemblyLines.size(); i++){
+			query += "   " + (i) + ": " + assemblyLines.get(i) + "\n";
+		}
+		query += "   " + (assemblyLines.size()) + ": Cancel\nAnswer: ";
+		int assemblyLineIndex = chooseAction(query, assemblyLines.size());
+		int cancelIndex = assemblyLines.size(); 
+		
+		//TODO assembly line meegeven etc
 		ArrayList<String> strategies = maController.getStrategies();
 		writer.write("Current algorithm:\n   " + strategies.get(0) + "\n");
 		writer.flush();
 		
-		String query = "Select your algorithm:\n";
+		query = "Select your algorithm:\n";
 		for(int i = 1; i < strategies.size(); i++){
 			query += "   " + (i) + ": " + strategies.get(i) + "\n";
 		}
 		query += "   " + (strategies.size()) + ": Cancel\nAnswer: ";
 		int algorithm = chooseAction(query, strategies.size());
-		int cancelIndex = strategies.size(); 
+		cancelIndex = strategies.size(); 
 		if(algorithm != cancelIndex){
 			String chosenStrategy = strategies.get(algorithm);
 			if(chosenStrategy.equals("FIFO")){
