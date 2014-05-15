@@ -125,6 +125,11 @@ public class AssemblyLine implements Printable {
 		return returnList;
 			
 	}
+	
+	protected void fix(DateTime realTime){
+		this.cycleStartTime =realTime;
+		this.setStatus(OperationalStatus.OPERATIONAL);
+	}
 
 	/**
 	 * Returns true if the assembly line can be moved.
@@ -134,9 +139,13 @@ public class AssemblyLine implements Printable {
 	 */
 	 protected boolean moveAssemblyLine(DateTime realTime){
 		if(tryMoveAssemblyLine()){
+			if(status== OperationalStatus.MAINTENANCE && firstWorkStation.allIdle())
+				setStatus(OperationalStatus.OPERATIONAL);
 			boolean done = schedule.moveAndReschedule(cycleTime);
 			cycleTime = 0;
 			cycleStartTime = realTime;
+			if(status==OperationalStatus.MAINTENANCE && firstWorkStation.allIdle())
+				cycleTime=status.getTime();
 			return done;
 		}
 
