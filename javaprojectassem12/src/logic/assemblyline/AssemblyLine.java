@@ -58,7 +58,7 @@ public class AssemblyLine implements Printable {
 	 * Returns the current time of the system.
 	 * @return	The current time of the system.
 	 */
-	public DateTime getCurrentTime() {
+	public DateTime getcycleStartTime() {
 		return cycleStartTime;
 	}
 
@@ -112,7 +112,7 @@ public class AssemblyLine implements Printable {
 	 * @return
 	 */
 	public DateTime getCycleEnd(){
-		return this.getCurrentTime().plusMinutes(cycleTime);
+		return this.getcycleStartTime().plusMinutes(cycleTime);
 	}
 	
 	public List<Order> setStatus(OperationalStatus status){

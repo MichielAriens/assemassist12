@@ -33,6 +33,10 @@ public class AssemblyLineScheduler {
 		initializeAssemblylines();
 	}
 	
+	public DateTime getCurrentTime(){
+		return currentTime;
+	}
+	
 	/**
 	 * Accepts an order and distributes it to the best assemblyline. 
 	 * All elegible assemblylines will calculate an estimated completiontime
@@ -74,7 +78,7 @@ public class AssemblyLineScheduler {
 				if(bestLine == null){
 					bestLine = al;
 				}
-				if(al.getCycleEnd().isBefore(bestLine.getCurrentTime())){
+				if(al.getCycleEnd().isBefore(bestLine.getcycleStartTime())){
 					bestLine = al;
 				}
 				
