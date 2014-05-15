@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
-import logic.assemblyline.AssemblyLine;
+import logic.assemblyline.AssemblyLineScheduler;
 import logic.car.Order;
 
 /**
@@ -44,14 +44,13 @@ public class CarManufacturingCompany {
 	/**
 	 * Variable holding the assembly line of this car manufacturing company.
 	 */
-	private AssemblyLine assemblyLine;
+	private AssemblyLineScheduler assemblyLineScheduler;
 	
 	/**
 	 * Makes a new car manufacturing company.
 	 */
 	public CarManufacturingCompany(){
-		//TODO assembly lines maken hé mannen
-		//this.assemblyLine = new AssemblyLine();
+		this.assemblyLineScheduler = new AssemblyLineScheduler();
 		this.users = new HashMap<String,User>();
 		this.initialise();
 		
@@ -118,7 +117,7 @@ public class CarManufacturingCompany {
 	 */
 	public void addOrder(Order order) {
 		if(order != null)
-			this.assemblyLine.addOrder(order);
+			this.assemblyLineScheduler.addOrder(order);
 	}
 	
 	/**
@@ -127,10 +126,9 @@ public class CarManufacturingCompany {
 	 * @param assemblyLine
 	 * @return	The workstations of the assembly line.
 	 */
-	//TODO aanpassen want deze moet de workstations terug geven van de mee gegeven assemblyline
 	public List<Printable> getWorkStationsFromAssemblyLine(Printable assemblyLine){
-		//return this.assemblyLine.getWorkStations();
-		return null;
+		
+		return assemblyLineScheduler.getWorkStationsFromAssemblyLine(assemblyLine);
 	}
 	
 	/**
@@ -138,8 +136,7 @@ public class CarManufacturingCompany {
 	 * @return the list of all workstations from all assembly lines of the car manufacturing company.
 	 */
 	public List<Printable> getWorkStations() {
-		// TODO Auto-generated method stub
-		return null;
+		return assemblyLineScheduler.getAllWorkstations();
 	}
 	
 	/**
@@ -149,7 +146,7 @@ public class CarManufacturingCompany {
 	 * 			False if the assembly line can not be moved.
 	 */
 	public boolean moveAssemblyLine(int shiftDuration){
-		return this.assemblyLine.tryMoveAssemblyLine(shiftDuration);
+		return this.assemblyLineScheduler.tryMoveAssemblyLine(shiftDuration);
 	}
 	
 	/**
@@ -157,7 +154,7 @@ public class CarManufacturingCompany {
 	 * @return	The current time.
 	 */
 	public DateTime getCurrentTime(){
-		return this.assemblyLine.getCurrentTime();
+		return this.assemblyLineScheduler.getCurrentTime();
 	}
 	
 	/**
@@ -165,7 +162,7 @@ public class CarManufacturingCompany {
 	 * @return	A string representation of the current statistics.
 	 */
 	public String getStatistics() {
-		return assemblyLine.getStatistics();
+		return assemblyLineScheduler.getStatistics();
 	}
 	
 	/**
@@ -173,7 +170,7 @@ public class CarManufacturingCompany {
 	 * @return a list of the current strategies followed by the available scheduling strategies.
 	 */
 	public List<Printable> getStrategies() {
-		return assemblyLine.getStrategies();
+		return assemblyLineScheduler.getStrategies();
 	}
 	
 	/**
@@ -181,7 +178,7 @@ public class CarManufacturingCompany {
 	 * @return	a list of orders that are viable to be used by the batch specification scheduling strategy.
 	 */
 	public List<Order> getBatchList() {
-		return assemblyLine.getBachList();
+		return assemblyLineScheduler.getBachList();
 	}
 	
 	/**
@@ -189,7 +186,15 @@ public class CarManufacturingCompany {
 	 * @param order	The order that has to be used as a template for the strategy.
 	 */
 	public void changeStrategy(Order order) {
-		assemblyLine.changeStrategy(order);
+		assemblyLineScheduler.changeStrategy(order);
+	}
+	
+	/**
+	 * Changes the strategy according to the given order.
+	 * @param order	The order that has to be used as a template for the strategy.
+	 */
+	public void changeStrategy(Order order, Printable assemblyLine) {
+		assemblyLineScheduler.changeStrategy(order, assemblyLine);
 	}
 	
 	/**
@@ -198,8 +203,8 @@ public class CarManufacturingCompany {
 	 * @return	True if the task is completed successfully
 	 * 			False the task could not be completed.
 	 */
-	public boolean doTask(Printable task){
-		return assemblyLine.doTask(task);
+	public boolean doTask(Printable task, Printable assemblyLine){
+		return assemblyLine.doTask(task, assemblyLine);
 	}
 	
 	/**
@@ -208,8 +213,8 @@ public class CarManufacturingCompany {
 	 * @param line 		The assembly line of the workstation for which the pending tasks are needed.
 	 * @return	A list of tasks that are pending at the given workstation.
 	 */
-	public List<Printable> getRequiredTasks(Printable station, Printable line){
-		return this.assemblyLine.getRequiredTasks(station);
+	public List<Printable> getRequiredTasks(Printable station, Printable assemblyLine){
+		return this.assemblyLineScheduler.getRequiredTasks(station, assemblyLine);
 	}
 	
 	/**
@@ -217,8 +222,8 @@ public class CarManufacturingCompany {
 	 * @param station	The a copy of the workstation for which the tasks are needed.
 	 * @return	A list of tasks at the given workstation.
 	 */
-	public List<Printable> getAllTasks(Printable station){
-		return this.assemblyLine.getAllTasks(station);
+	public List<Printable> getAllTasks(Printable station, Printable assemblyLine){
+		return this.assemblyLineScheduler.getAllTasks(station, assemblyLine);
 	}
 	
 	/**
@@ -227,17 +232,15 @@ public class CarManufacturingCompany {
 	 * @return 	True if the duration is allowed.
 	 * 			False otherwise
 	 */
-	public boolean checkPhaseDuration(int duration){
-		return this.assemblyLine.checkPhaseDuration(duration);
+	public boolean checkPhaseDuration(int duration, Printable assemblyLine){
+		return this.assemblyLineScheduler.checkPhaseDuration(duration, assemblyLine);
 	}
 
 	public List<Printable> getAssemblyLines() {
-		// TODO Auto-generated method stub
-		return null;
+		return assemblyLineScheduler.getAssemblyLines();
 	}
 
 	public List<Printable> getAssemblyLinesStatuses() {
-		// TODO Auto-generated method stub
-		return null;
+		return assemblyLineScheduler.getAssemblyLinesStatuses();
 	}
 }

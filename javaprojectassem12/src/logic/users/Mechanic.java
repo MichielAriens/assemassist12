@@ -24,11 +24,7 @@ public class Mechanic extends User{
 	 */
 	private CarManufacturingCompany company;
 	
-	/**
-	 * The maximum time it took to perform a task and so the maximum duration of
-	 * a phase in the assembly line. Supposed that every task can be performed parallel.
-	 */
-	private int maxPhaseDuration = 0;
+
 	
 	/**
 	 * Constructs a new mechanic initializing its company and user name with the given 
@@ -64,33 +60,12 @@ public class Mechanic extends User{
 	 * @param task	A copy of the task that needs to be performed.
 	 */
 	public void doTask(Printable task, int duration){
-		if(company.checkPhaseDuration(duration)){
-			boolean performed = company.doTask(task);
+		if(company.checkPhaseDuration(duration,activeAssemblyLine)){
+			boolean performed = company.doTask(task,activeAssemblyLine);
 			if(performed){
-				setMaxPhaseDuration(duration);
-				if(company.moveAssemblyLine(maxPhaseDuration))
-					resetMaxPhaseDuration();
+				if(company.moveAssemblyLine(duration));
 			}
 		}
-	}
-
-	/**
-	 * Sets the maximum phase duration to the given duration if the given duration
-	 * is greater than the maximum phase duration.
-	 * @param duration	The duration that has to be checked and saved if it's greater than the current
-	 * 					maximum.
-	 */
-	private void setMaxPhaseDuration(int duration) {
-		if(duration > maxPhaseDuration){
-			maxPhaseDuration = duration;
-		}
-	}
-	
-	/**
-	 * Resets the maximum phase duration to zero.
-	 */
-	private void resetMaxPhaseDuration() {
-		maxPhaseDuration = 0;
 	}
 	
 	/**
@@ -99,7 +74,7 @@ public class Mechanic extends User{
 	 * 			The list of tasks otherwise.
 	 */
 	public List<Printable> getAvailableTasks(){
-		if(!isPosted())
+		if(!isPosted() || activeAssemblyLine==null)
 			return null;
 		return this.company.getRequiredTasks(this.activeStation, this.activeAssemblyLine);
 	}
@@ -110,7 +85,9 @@ public class Mechanic extends User{
 	 * @return	A list of tasks at the given workstation.
 	 */
 	public List<Printable> getAllTasks(Printable station){
-		return this.company.getAllTasks(station);
+		if(activeAssemblyLine==null || station == null)
+			return null;
+		return this.company.getAllTasks(station, activeAssemblyLine);
 	}
 	
 	/**
@@ -118,6 +95,8 @@ public class Mechanic extends User{
 	 * @return the list of workstations from the active assembly line of the car manufacturing company.
 	 */
 	public List<Printable> getWorkstationsFromAssemblyLine(){
+		if(activeAssemblyLine==null)
+			return null;
 		return this.company.getWorkStationsFromAssemblyLine(activeAssemblyLine);
 	}
 	
@@ -126,6 +105,8 @@ public class Mechanic extends User{
 	 * @return the list of all workstations from all assembly lines of the car manufacturing company.
 	 */
 	public List<Printable> getWorkstations() {
+		if(company == null)
+			return null;
 		return this.company.getWorkStations();
 	}
 	
@@ -134,6 +115,8 @@ public class Mechanic extends User{
 	 * @return the printable list of assembly lines of the car manufacturing company.
 	 */
 	public List<Printable> getAssemblyLines() {
+		if(company == null)
+			return null;
 		return this.company.getAssemblyLines();
 	}
 
