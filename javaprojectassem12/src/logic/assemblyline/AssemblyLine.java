@@ -503,11 +503,22 @@ public class AssemblyLine implements Printable {
 				return false;
 			int assemblyTime = 50*numberOfWorkStations;
 			if(!queue.isEmpty()){
-				assemblyTime = queue.getFirst().getPhaseTime()*numberOfWorkStations;
+				assemblyTime = getEstimatedAssemblyTime(queue.getFirst());
 			}
 			if(cycleStartTime.getMinuteOfDay()>=(shiftEndHour * 60-overTime - assemblyTime) || cycleStartTime.getMinuteOfDay()<shiftBeginHour*60)
 				return true;
 			return false;
+		}
+		
+		//TODO docu
+		private int getEstimatedAssemblyTime(Order order){
+			ArrayList<Integer> phases = new ArrayList<>();
+			firstWorkStation.buildEstimPhaseList(phases, queue.getFirst());
+			int assemblyTime = 0;
+			for(Integer i : phases){
+				assemblyTime += i;
+			}
+			return assemblyTime;
 		}
 
 		/**
@@ -577,10 +588,10 @@ public class AssemblyLine implements Printable {
 		private DateTime getEstimatedTime(DateTime estimatedEndTime, Order order) {
 			if(!timeForNewOrder(estimatedEndTime)){
 				if(estimatedEndTime.getHourOfDay()<=shiftBeginHour){
-					return new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour,0).plusMinutes(order.getPhaseTime()*numberOfWorkStations);
+					return new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour,0).plusMinutes(getEstimatedAssemblyTime(order));
 
 				}else{
-					estimatedEndTime =  new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour,0).plusMinutes(order.getPhaseTime()*numberOfWorkStations);
+					estimatedEndTime =  new DateTime(estimatedEndTime.getYear(),estimatedEndTime.getMonthOfYear(),estimatedEndTime.getDayOfMonth(),shiftBeginHour,0).plusMinutes(getEstimatedAssemblyTime(order));
 					return estimatedEndTime.plusDays(1);
 				}
 			}else{
@@ -626,7 +637,8 @@ public class AssemblyLine implements Printable {
 			}
 			return returnList;
 		}
-
+		
+		//TODO DOCU
 		private DateTime getEstimate(Order order, DateTime realTime){
 			DateTime returnTime = null;
 			LinkedList<Order> copyqueue = makeCopyOfQueue();
@@ -635,7 +647,7 @@ public class AssemblyLine implements Printable {
 				returnTime = firstOrderEstimate(order);
 
 			}else{
-				if(queue.getFirst().equals(order) && currentStrategy.example.equals(order) && queue.getFirst().getPhaseTime()>order.getPhaseTime() && !checkDeadline(queue.getFirst(), order)){
+				if(queue.getFirst().equals(order) && currentStrategy.example.equals(order) && getEstimatedAssemblyTime(queue.getFirst()) > getEstimatedAssemblyTime(order) && !checkDeadline(queue.getFirst(), order)){
 					returnTime = firstOrderEstimate(order);
 
 				}else{
@@ -649,6 +661,7 @@ public class AssemblyLine implements Printable {
 
 		}
 		
+		//TODO DOCU
 		private DateTime firstOrderEstimate(Order order){
 			int assemblyTime = 0;
 			assemblyTime += order.getPhaseTime();
@@ -660,7 +673,8 @@ public class AssemblyLine implements Printable {
 			DateTime estimatedEndTime = new DateTime(cycleStartTime);
 			return estimatedEndTime.plusMinutes(assemblyTime);
 		}
-
+		
+		//TODO docu
 		private boolean checkDeadline(Order order, Order next) {
 			if(order.getDeadLine()==null)
 				return false;

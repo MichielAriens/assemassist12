@@ -144,6 +144,22 @@ public abstract class Workstation implements Printable{
 		}
 	}
 	
+	//TODO docu
+	public void buildEstimPhaseList(List<Integer> phases, Order order){
+		if(order == null || phases == null)
+			return;
+		int max = 0;
+		for(Task task: order.getTasks()){
+			if(this.isCompatibleTask(task)){
+				if(task.getEstimatedPhaseDuration() > max)
+					max = task.getEstimatedPhaseDuration();
+			}
+		}
+		phases.add(max);
+		if(this.nextWorkStation != null)
+			this.nextWorkStation.buildEstimPhaseList(phases, order);
+	}
+	
 	/**
 	 * Checks whether the given task can be performed on this workstation.
 	 * @param task	The task that needs to be checked for compatibility.
