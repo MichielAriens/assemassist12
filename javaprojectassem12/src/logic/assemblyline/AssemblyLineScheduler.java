@@ -25,6 +25,7 @@ public class AssemblyLineScheduler {
 	private List<AssemblyLine> assemblyLines;
 	private DateTime currentTime;
 	private LinkedList<Order> overflowQueue;
+	private StatisticsGeneral stats;
 	
 	/**
 	 * 
@@ -40,9 +41,9 @@ public class AssemblyLineScheduler {
 	}
 	
 	/**
-	 * Accepts an order and distributes it to the best assemblyline. 
-	 * All elegible assemblylines will calculate an estimated completiontime
-	 * If no assemblylines are available for queueing then the order is placed on the overflow queue.
+	 * Accepts an order and distributes it to the best assembly line. 
+	 * All eligible assembly lines will calculate an estimated completion time
+	 * If no assembly lines are available for queuing then the order is placed on the overflow queue.
 	 * @param	order	...
 	 */
 	public void addOrder(Order order){
@@ -71,7 +72,7 @@ public class AssemblyLineScheduler {
 	}
 	
 	/**
-	 * Looks at the state of all the assembly lines at determines which assemblylines can be moved forwards.
+	 * Looks at the state of all the assembly lines at determines which assembly lines can be moved forwards.
 	 * @return		true if a line was moved
 	 * 				false if no lines were moved
 	 */
@@ -94,7 +95,7 @@ public class AssemblyLineScheduler {
 	}
 	
 	/**
-	 * Returns all non-broken assemblylines.
+	 * Returns all non-broken assembly lines.
 	 * @return
 	 */
 	private Set<AssemblyLine> getNonBrokenLines(){
@@ -108,11 +109,11 @@ public class AssemblyLineScheduler {
 	}
 	
 	/**
-	 * Do the task corresponding to the given task on the given assemblyline.
-	 * If the task is completed the given assemblyline is checked for advancement
+	 * Do the task corresponding to the given task on the given assembly line.
+	 * If the task is completed the given assembly line is checked for advancement
 	 * If the line advances this scheduler is advanced
 	 * @param Task				The task that needs to be completed wrapped in the printable interface.
-	 * @param assemblyLine		The assemblyline that the task is on wrapped in the printable interface.
+	 * @param assemblyLine		The assembly line that the task is on wrapped in the printable interface.
 	 * @return
 	 */
 	public boolean doTask(Printable Task, Printable assemblyLine, int minutes){
@@ -149,7 +150,7 @@ public class AssemblyLineScheduler {
 	}
 	
 	/**
-	 * Will get the correct assemblyline matching the one encapsulated within the parameter or null 
+	 * Will get the correct assembly line matching the one encapsulated within the parameter or null 
 	 * @param line
 	 * @return
 	 */
@@ -209,8 +210,8 @@ public class AssemblyLineScheduler {
 	}
 
 	/**
-	 * Returns the workstations of a given assemblyline wrapped in the printable interface.
-	 * @param 		assemblyLine wrapped in the printable iterface.
+	 * Returns the workstations of a given assembly line wrapped in the printable interface.
+	 * @param 		assemblyLine wrapped in the printable interface.
 	 * @return		A list of workstations wrapped in the printable interface
 	 */
 	public List<Printable> getWorkStationsFromAssemblyLine(Printable assemblyLine) {
@@ -219,7 +220,7 @@ public class AssemblyLineScheduler {
 
 	/**
 	 * Returns all workstations in the system.
-	 * @return		A list of workstations wrapped in the prinatable inteface.
+	 * @return		A list of all workstations wrapped in the printable interface.
 	 */
 	public List<Printable> getAllWorkstations() {
 		List<Printable> retval = new LinkedList<>();
@@ -229,6 +230,10 @@ public class AssemblyLineScheduler {
 		return retval;
 	}
 
+	/**
+	 * Returns a list of printable objects of the list of assembly lines.
+	 * @return a list of printable objects of the list of assembly lines.
+ 	 */
 	public List<Printable> getAssemblyLines() {
 		List<Printable> retval = new LinkedList<Printable>();
 		for(AssemblyLine al : assemblyLines){
@@ -250,8 +255,8 @@ public class AssemblyLineScheduler {
 	}
 
 	/**
-	 * returns a map mapping each assembly line to it's status.
-	 * @return
+	 * Returns a map mapping each assembly line to it's status.
+	 * @return a map mapping each assembly line to it's status.
 	 */
 	public Map<Printable, Printable> getAssemblyLinesStatuses() {
 		Map<Printable,Printable> retval = new HashMap<>();
@@ -264,15 +269,25 @@ public class AssemblyLineScheduler {
 	/**
 	 * Returns a list of all tasks at a given workstation.
 	 * @param station			The a copy of the workstation for which the tasks are needed.
-	 * @param assemblyLine		The assemblyline of the workstation. 
+	 * @param assemblyLine		The assembly line of the workstation. 
 	 * @return	A list of tasks at the given workstation.
 	 */
 	public List<Printable> getAllTasksAt(Printable station, Printable assemblyLine) {
 		return this.get(assemblyLine).getAllTasks(station);
 	}
-	
-	
-	
-	
 
+	/**
+	 * Returns a string representation of the statistics of all the assembly lines of this
+	 * assembly line scheduler.
+	 * @return a string representation of the statistics of all the assembly lines of this
+	 * assembly line scheduler.
+	 */
+	public String getStatistics() {
+		ArrayList<StatisticsAssemblyLine> statsList = new ArrayList<StatisticsAssemblyLine>();
+		for(AssemblyLine line : assemblyLines){
+			statsList.add(line.getStatistics());
+		}
+		stats.updateRecords(statsList);
+		return stats.toString();
+	}
 }

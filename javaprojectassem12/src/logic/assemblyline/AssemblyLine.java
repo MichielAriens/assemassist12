@@ -156,8 +156,8 @@ public class AssemblyLine implements Printable {
 	 * Returns a string containing the representation of the statistics.
 	 * @return	A string containing the representation of the statistics.
 	 */
-	public String getStatistics(){
-		return stats.toString();
+	public StatisticsAssemblyLine getStatistics(){
+		return stats;
 	}
 
 	/**
