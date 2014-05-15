@@ -4,7 +4,6 @@ import interfaces.Printable;
 
 import java.util.List;
 
-import logic.assemblyline.SchedulingStrategy;
 import logic.car.Order;
 
 /**
@@ -16,6 +15,11 @@ public class Manager extends User{
 	 * The manufacturing company for which the garage holder works.
 	 */
 	private CarManufacturingCompany company;
+	
+	/**
+	 * The printable instance of the assembly line the manager wants to perform actions on.
+	 */
+	private Printable activeAssemblyLine = null;
 	
 	/**
 	 * Constructs a new manager initializing its company and user name with the given 
@@ -60,11 +64,19 @@ public class Manager extends User{
 		company.changeStrategy(order);
 	}
 
-	public List<String> getAssemblyLines() {
+	public List<Printable> getAssemblyLines() {
 		return company.getAssemblyLines();
 	}
 	
-	public List<String> getAssemblyLinesStatuses() {
+	public List<Printable> getAssemblyLinesStatuses() {
 		return company.getAssemblyLinesStatuses();
+	}
+	
+	/**
+	 * Set the active assembly line to the given assembly line.
+	 * @param line	The new active assembly line.
+	 */
+	public void setActiveAssemblyLine(Printable line){
+		this.activeAssemblyLine = line;
 	}
 }

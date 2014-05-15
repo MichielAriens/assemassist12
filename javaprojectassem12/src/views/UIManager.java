@@ -78,7 +78,10 @@ public class UIManager {
 		writer.flush();
 	}
 	//TODO in changeAssemblyLineStatus() en newSchedulingAlgorithm() kunnen 3 stukken vervangen
-	// worden door 1 methode
+	// worden door 1 methode dus beter zoals in mechanic werken peinsek...
+	//TODO
+	//TODO
+	//TODO
 	private void changeAssemblyLineStatus() throws IOException{
 		writer.write("===CHANGE ASSEMBLY LINE STATUS===\n");
 		writer.flush();
@@ -119,27 +122,29 @@ public class UIManager {
 		writer.write("===ALTERNATE SCHEDULING MECHANISM===\n");
 		writer.flush();
 		
-		ArrayList<String> assemblyLines = maController.getAssemblyLines();
-		String query = "Select assembly line to change status:\n";
-		for(int i = 0; i < assemblyLines.size(); i++){
-			query += "   " + (i) + ": " + assemblyLines.get(i) + "\n";
+		String lines = "Available assembly lines: ";
+		for(String line : maController.getAssemblyLines()){
+			lines += line + "; ";
 		}
-		query += "   " + (assemblyLines.size()) + ": Cancel\nAnswer: ";
-		int assemblyLineIndex = chooseAction(query, assemblyLines.size());
-		int cancelIndex = assemblyLines.size(); 
+		writer.write(lines + "\n");
+		writer.flush();
+		String assemblyLine = checkInput("Type the number of your current assembly line: ", this.maController.getAssemblyLines());
+		this.maController.setAssemblyLine(assemblyLine);
+		writer.flush();
 		
-		//TODO assembly line meegeven etc
+		//TODO hier verder gaan
+		//TODO getStrategies aanpassen zodat die current assemblyline vraagt
 		ArrayList<String> strategies = maController.getStrategies();
 		writer.write("Current algorithm:\n   " + strategies.get(0) + "\n");
 		writer.flush();
 		
-		query = "Select your algorithm:\n";
+		String query = "Select your algorithm:\n";
 		for(int i = 1; i < strategies.size(); i++){
 			query += "   " + (i) + ": " + strategies.get(i) + "\n";
 		}
 		query += "   " + (strategies.size()) + ": Cancel\nAnswer: ";
 		int algorithm = chooseAction(query, strategies.size());
-		cancelIndex = strategies.size(); 
+		int cancelIndex = strategies.size(); 
 		if(algorithm != cancelIndex){
 			String chosenStrategy = strategies.get(algorithm);
 			if(chosenStrategy.equals("FIFO")){
@@ -227,6 +232,34 @@ public class UIManager {
 			reader.readLine();
 		} catch(IOException e){
 			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * A method that asks the user for input with a given query and then checks the user's answer with
+	 * a list of valid answers, and keeps repeating this until the user has given a valid answer.
+	 * @param query		The query that has to be printed out.
+	 * @param answers	The list of valid answers.
+	 * @return	The answer from the list that corresponds with the user's valid answer.
+	 */
+	private String checkInput(String query, ArrayList<String> answers){
+		try{
+			while(true){
+				writer.write(query);
+				writer.flush();
+				String answer = reader.readLine();
+				writer.write("\n");
+				writer.flush();
+				for(String s : answers){
+					if(s.endsWith(answer))
+						return s.substring(0, s.indexOf(":"));
+				}
+				writer.write("Invalid input, try again.\n");
+			}
+		}
+		catch(IOException e){
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

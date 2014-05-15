@@ -5,7 +5,6 @@ import interfaces.Printable;
 import java.util.ArrayList;
 import java.util.List;
 
-import logic.assemblyline.SchedulingStrategy;
 import logic.car.Order;
 import logic.users.Manager;
 import logic.workstation.Task;
@@ -25,7 +24,7 @@ public class ManagerController extends UserController{
 	 * scheduling strategy.
 	 */
 	private List<Order> currentBatchList;
-	
+
 	/**
 	 * Sets the current manager to the given manager.
 	 * @param manager	The new manager.
@@ -125,25 +124,47 @@ public class ManagerController extends UserController{
 		currentBatchList.clear();
 	}
 
+	/**
+	 * Returns the list of assembly lines from the assembly line with numbering if the current
+	 * mechanic is not null.
+	 * @return 	Null if the current mechanic is null.
+	 * 			The list of workstations from the assembly line with numbering otherwise.
+	 */
 	public ArrayList<String> getAssemblyLines() {
+		if(this.currentManager == null)
+			return null;
 		ArrayList<String> assemblyLines = new ArrayList<String>();
-		for(String s : currentManager.getAssemblyLines()){
-			assemblyLines.add(s.toString());
-		}		
+		List<Printable> lines = this.currentManager.getAssemblyLines();
+		int count = 1;
+		for(Printable w : lines){
+			assemblyLines.add(w.getStringRepresentation() + ": " + count);
+			count++;
+		}
 		return assemblyLines;
 	}
 	
 	public ArrayList<String> getAssemblyLinesStatuses() {
 		ArrayList<String> statuses = new ArrayList<String>();
-		for(String s : currentManager.getAssemblyLinesStatuses()){
-			statuses.add(s.toString());
+		for(Printable status : currentManager.getAssemblyLinesStatuses()){
+			statuses.add(status.getStringRepresentation());
 		}		
 		return statuses;
 	}
 
+	/**
+	 * Sets the assembly line for the current mechanic to the given assembly line.
+	 * @param assemblyLine		The new assembly line for the current mechanic.
+	 */
+	public void setAssemblyLine(String assemblyLine) {
+		if(this.currentManager == null)
+			return;
+		for(Printable line : this.currentManager.getAssemblyLines()){
+			if(line.getStringRepresentation().equals(assemblyLine))
+				this.currentManager.setActiveAssemblyLine(line);
+		}	
+	}
+	
 	public void changeAssemblyLineStatus(int assemblyLineIndex, int statusIndex) {
-		// TODO nog zo doen als in changeStrategyTo...() dus ook best een currentAssemblyLinesList() maken
-		// en een currentAssemblyLinesStatusesList() maken...
-		
+		//TODO auto generated
 	}
 }
