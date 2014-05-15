@@ -9,9 +9,7 @@ import java.util.Map;
 import logic.assemblyline.OperationalStatus;
 import logic.car.Order;
 import logic.users.Manager;
-import logic.workstation.AccessoriesPost;
 import logic.workstation.Task;
-import logic.workstation.Workstation;
 
 /**
  * Class used to form a link between the user interface and the Manager class.

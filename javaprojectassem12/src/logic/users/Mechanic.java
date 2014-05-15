@@ -58,10 +58,12 @@ public class Mechanic extends User{
 	 * Performs a task if the task is compatible with the active workstation of the mechanic
 	 * and tries to move the assembly line.
 	 * @param task	A copy of the task that needs to be performed.
+	 * @param duration	How long it took to perform the task.
 	 */
+	//TODO: checpPhaseDuration kan evengoed in company gebeuren?
 	public void doTask(Printable task, int duration){
 		if(company.checkPhaseDuration(duration,activeAssemblyLine)){
-			boolean performed = company.doTask(task,activeAssemblyLine);
+			boolean performed = company.doTask(task, activeAssemblyLine, duration);
 			if(performed){
 				if(company.moveAssemblyLine(duration));
 			}
@@ -87,7 +89,7 @@ public class Mechanic extends User{
 	public List<Printable> getAllTasks(Printable station){
 		if(activeAssemblyLine==null || station == null)
 			return null;
-		return this.company.getAllTasks(station, activeAssemblyLine);
+		return this.company.getAllTasksAt(station, activeAssemblyLine);
 	}
 	
 	/**
