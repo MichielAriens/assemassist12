@@ -5,6 +5,7 @@ import interfaces.Printable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,6 +17,8 @@ import logic.workstation.WorkstationDirectorA;
 import logic.workstation.WorkstationDirectorB;
 
 import org.joda.time.DateTime;
+
+import com.sun.xml.internal.bind.v2.model.core.Adapter;
 
 public class AssemblyLineScheduler {
 	
@@ -60,6 +63,42 @@ public class AssemblyLineScheduler {
 	}
 	
 	/**
+	 * Looks at the state of all the assembly lines at determines which assemblylines can be moved forwards.
+	 * @return		true if a line was moved
+	 * 				false if no lines were moved
+	 */
+	private boolean advance(){
+		if(linesReadyToMove()){
+			AssemblyLine bestLine = null;
+			for(AssemblyLine al :  getNonBrokenLines()){
+				if(bestLine == null){
+					bestLine = al;
+				}
+				if(al.getCycleEnd().isBefore(bestLine.getCurrentTime())){
+					bestLine = al;
+				}
+				
+			}
+			this.currentTime = bestLine.getCycleEnd();
+			bestLine.moveAssemblyLine(this.currentTime);
+			
+		}return false;
+	}
+	
+	/**
+	 * Returns all non-broken assemblylines.
+	 * @return
+	 */
+	private Set<AssemblyLine> getNonBrokenLines(){
+		Set<AssemblyLine> retval = new HashSet<>();
+		for(AssemblyLine al : this.assemblyLines){
+			if (al.getOperationalStatus() != OperationalStatus.BROKEN){
+				retval.add(al);
+			}
+		}
+	}
+	
+	/**
 	 * Do the task corresponding to the given task on the given assemblyline.
 	 * @param Task				The task that needs to be completed wrapped in the printable interface.
 	 * @param assemblyLine		The assemblyline that the task is on wrapped in the printable interface.
@@ -69,22 +108,28 @@ public class AssemblyLineScheduler {
 		AssemblyLine line = this.get(assemblyLine);
 		return line.doTask(Task);
 	}
-
-	
-	
-	public boolean advance(){
-		for(AssemblyLine al : assemblyLines){
-			
-		}
-	}
 	
 	
 	/**
-	 * Checks whether all non blocked lines 
+	 * Checks whether all non-broken lines are ready to move.
+	 * If all lines are broken the system is not ready to move. 
 	 * @return
 	 */
-	private boolean linesReadyToMove(){
-		
+	private boolean linesReadyToMove(){		
+		int brokenLines = 0;
+		for(AssemblyLine al : assemblyLines){
+			if(al.getOperationalStatus() != OperationalStatus.BROKEN){
+				if(!al.tryMoveAssemblyLine()){
+					return false;
+				}
+			}else{
+				brokenLines ++;
+			}
+		}
+		if(brokenLines >= assemblyLines.size()){
+			return false;
+		}
+		return true;
 	}
 	
 	/**

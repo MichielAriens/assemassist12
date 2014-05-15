@@ -107,6 +107,14 @@ public class AssemblyLine implements Printable {
 		return this.cycleTime;
 	}
 	
+	/**
+	 * Gets the end of the current phase (= time of the begin of the next cycle).
+	 * @return
+	 */
+	public DateTime getCycleEnd(){
+		return this.getCurrentTime().plusMinutes(cycleTime);
+	}
+	
 	public List<Order> setStatus(OperationalStatus status){
 		this.status=status;
 		LinkedList<Order> returnList = new LinkedList<Order>();
@@ -124,7 +132,7 @@ public class AssemblyLine implements Printable {
 	 * @return	True if the assembly line can be moved
 	 * 			False otherwise.
 	 */
-	public boolean moveAssemblyLine(DateTime realTime){
+	 protected boolean moveAssemblyLine(DateTime realTime){
 		if(tryMoveAssemblyLine()){
 			boolean done = schedule.moveAndReschedule(cycleTime);
 			cycleTime = 0;
@@ -682,5 +690,9 @@ public class AssemblyLine implements Printable {
 				return true;
 			return order.getDeadLine().isBefore(next.getDeadLine());
 		}
+	}
+
+	public OperationalStatus getOperationalStatus() {
+		return this.status;
 	}
 }
