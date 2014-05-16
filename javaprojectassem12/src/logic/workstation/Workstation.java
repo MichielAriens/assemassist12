@@ -146,16 +146,21 @@ public abstract class Workstation implements Printable{
 	
 	//TODO docu
 	public void buildEstimPhaseList(List<Integer> phases, Order order){
-		if(order == null || phases == null)
+		if(phases == null)
 			return;
-		int max = 0;
-		for(Task task: order.getTasks()){
-			if(this.isCompatibleTask(task)){
-				if(task.getEstimatedPhaseDuration() > max)
-					max = task.getEstimatedPhaseDuration();
-			}
+		if(order == null){
+			phases.add(0);
 		}
-		phases.add(max);
+		else{
+			int max = 0;
+			for(Task task: order.getTasks()){
+				if(this.isCompatibleTask(task)){
+					if(task.getEstimatedPhaseDuration() > max)
+						max = task.getEstimatedPhaseDuration();
+				}
+			}
+			phases.add(max);
+		}
 		if(this.nextWorkStation != null)
 			this.nextWorkStation.buildEstimPhaseList(phases, order);
 	}
@@ -297,28 +302,27 @@ public abstract class Workstation implements Printable{
 	 * @param currentTime		The current time.
 	 * @return 	The estimated completion time of the order in this workstation.
 	 */
-	public DateTime reschedule(List<Integer> prePhaseDurations, int NbOfWorkstations, DateTime currentTime){
+	public DateTime reschedule(List<List<Integer>> prePhaseDurations, int NbOfWorkstations, DateTime currentTime){
 		DateTime nextStationEET = currentTime;
-		if(nextWorkStation != null){
-			if(currentOrder == null)
-				prePhaseDurations.add(0);
-			else
-				prePhaseDurations.add(this.getEstimatedPhaseDuration());
+		ArrayList<Integer> phases = new ArrayList<>();
+		this.buildEstimPhaseList(phases, this.currentOrder);
+		for(int i = phases.size(); i < NbOfWorkstations; i++){
+			phases.add(0,0);
+		}
+		prePhaseDurations.add(0,phases);
+		if(nextWorkStation != null)
 			nextStationEET = nextWorkStation.reschedule(prePhaseDurations, NbOfWorkstations, currentTime);
-		}	
 		int maxPre = 0;
 		if(currentOrder != null)
 			maxPre = this.getEstimatedPhaseDuration();
-		int j = 0;
-		for(int i = prePhaseDurations.size()-1; i >=0; i--){
-			if(j >= NbOfWorkstations-1)
+		int j = NbOfWorkstations-1;
+		for(int i = 0; i < prePhaseDurations.size(); i++){
+			if(prePhaseDurations.get(i).get(j)>maxPre)
+				maxPre = prePhaseDurations.get(i).get(j);
+			if(j <= 0)
 				break;
-			j++;
-			if(prePhaseDurations.get(i)>maxPre)
-				maxPre = prePhaseDurations.get(i);
+			j--;
 		}
-		if(prePhaseDurations.size()>0)
-			prePhaseDurations.remove(prePhaseDurations.size()-1);
 		if(currentOrder != null){
 			currentOrder.setEndTime(nextStationEET.plusMinutes(maxPre));
 			return currentOrder.getEstimatedEndTime();

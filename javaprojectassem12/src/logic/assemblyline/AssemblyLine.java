@@ -96,12 +96,12 @@ public class AssemblyLine implements Printable {
 	/**
 	 * Initializes the workstation using a builder.
 	 */
-	private void initialiseWorkstations(){
-		WorkstationChainBuilder builder = new WorkstationChainBuilder();
-		WorkstationDirector director = new WorkstationDirector(builder);
-		director.construct();
-		this.firstWorkStation = builder.getResult();
-	}
+//	private void initialiseWorkstations(){
+//		WorkstationChainBuilder builder = new WorkstationChainBuilder();
+//		WorkstationDirector director = new WorkstationDirector(builder);
+//		director.construct();
+//		this.firstWorkStation = builder.getResult();
+//	}
 	
 	public int getCycleTime(){
 		return this.cycleTime;
@@ -436,16 +436,18 @@ public class AssemblyLine implements Printable {
 		/**
 		 * Builds a list of phase durations from the orders in the queue. The length of the returned list is either
 		 * the amount of workstations or the number of orders in the queue, if there are less orders than workstations.
-		 * @return A list of integers containing the phase durations.
+		 * @return A list of integers containing the phase durations. //TODO FIX
 		 */
-		private List<Integer> getPhaseDurations(){
-			ArrayList<Integer> prePhaseDurations = new ArrayList<Integer>();
+		private List<List<Integer>> getPhaseDurations(){
+			ArrayList<List<Integer>> prePhaseDurations = new ArrayList<>();
 			int j = 0;
 			for(int i = 0; i < queue.size(); i++){
 				if(j >= numberOfWorkStations-1)
 					break;
 				j++;
-				prePhaseDurations.add(0, queue.get(i).getPhaseTime());
+				ArrayList<Integer> phases = new ArrayList<>();
+				firstWorkStation.buildEstimPhaseList(phases, queue.get(i));
+				prePhaseDurations.add(0,phases);
 			}
 			return prePhaseDurations;
 		}
@@ -457,15 +459,19 @@ public class AssemblyLine implements Printable {
 		 * @param startTime	The time used for scheduling the queue.
 		 */
 		private void rescheduleQueue(DateTime startTime){
+			ArrayList<Integer> phases = new ArrayList<>();
 			for(int i = 0; i < queue.size(); i++){
-				int count = 0;
-				int maxPhase = queue.get(i).getPhaseTime();
+				int count = numberOfWorkStations-1;
+				firstWorkStation.buildEstimPhaseList(phases, queue.get(i));
+				int maxPhase = phases.get(count);
 				for(int j = i+1; j < queue.size(); j++){
-					if(count >= numberOfWorkStations-1)
+					if(count <= 0)
 						break;
-					count++;
-					if(queue.get(j).getPhaseTime() > maxPhase)
-						maxPhase = queue.get(j).getPhaseTime();
+					count--;
+					phases.clear();
+					firstWorkStation.buildEstimPhaseList(phases, queue.get(j));
+					if(phases.get(count) > maxPhase)
+						maxPhase = phases.get(count);
 				}
 				startTime = startTime.plusMinutes(maxPhase+status.getTime());
 				if(startTime.getHourOfDay()<shiftBeginHour || startTime.getMinuteOfDay()>=shiftEndHour*60-overTime)
@@ -686,8 +692,10 @@ public class AssemblyLine implements Printable {
 		//TODO DOCU
 		private DateTime firstOrderEstimate(Order order){
 			int assemblyTime = 0;
-			assemblyTime += order.getPhaseTime();
-			int maxPhaseWorkstations = order.getPhaseTime();
+			ArrayList<Integer> phases = new ArrayList<>();
+			firstWorkStation.buildEstimPhaseList(phases, order);
+			assemblyTime += phases.get(numberOfWorkStations-1);
+			int maxPhaseWorkstations = phases.get(numberOfWorkStations-1);
 			for(int i = 1; i < getWorkStations().size(); i++){
 				maxPhaseWorkstations = Math.max(maxPhaseWorkstations, firstWorkStation.getPhaseDuration(i));
 				assemblyTime += maxPhaseWorkstations;
