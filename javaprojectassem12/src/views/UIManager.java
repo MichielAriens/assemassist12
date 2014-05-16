@@ -3,7 +3,6 @@ package views;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.rmi.server.Operation;
 import java.util.ArrayList;
 
 import logic.assemblyline.OperationalStatus;
@@ -138,13 +137,12 @@ public class UIManager {
 		
 		String assemblyLine = chooseAssemblyLine();
 		
-		//TODO hier verder gaan
-		//TODO getStrategies aanpassen zodat die current assemblyline vraagt
+		//TODO nog is nakijken
 		ArrayList<String> strategies = maController.getStrategies();
-		writer.write("Current algorithm:\n   " + strategies.get(0) + "\n");
+		writer.write("Current algorithm for "+ assemblyLine + ":\n   " + strategies.get(0) + "\n");
 		writer.flush();
 		
-		String query = "Select your algorithm:\n";
+		String query = "Select new algorithm for "+ assemblyLine + ":\n";
 		for(int i = 1; i < strategies.size(); i++){
 			query += "   " + (i) + ": " + strategies.get(i) + "\n";
 		}

@@ -46,7 +46,7 @@ public class Manager extends User{
 	 * @return a list of the current strategies followed by the available scheduling strategies.
 	 */
 	public List<Printable> getStrategies() {
-		return company.getStrategies();
+		return company.getStrategies(activeAssemblyLine);
 	}
 	
 	/**

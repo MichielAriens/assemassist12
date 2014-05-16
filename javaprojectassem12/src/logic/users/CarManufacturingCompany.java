@@ -181,8 +181,8 @@ public class CarManufacturingCompany {
 	 * Returns a list of the current strategies followed by the available scheduling strategies.
 	 * @return a list of the current strategies followed by the available scheduling strategies.
 	 */
-	public List<Printable> getStrategies() {
-		return assemblyLineScheduler.getStrategies();
+	public List<Printable> getStrategies(Printable activeAssemblyLine) {
+		return assemblyLineScheduler.getStrategies(activeAssemblyLine);
 	}
 	
 	/**
