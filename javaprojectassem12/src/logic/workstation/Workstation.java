@@ -323,6 +323,8 @@ public abstract class Workstation implements Printable{
 				break;
 			j--;
 		}
+		if(prePhaseDurations.size()>0)
+			prePhaseDurations.remove(0);
 		if(currentOrder != null){
 			currentOrder.setEndTime(nextStationEET.plusMinutes(maxPre));
 			return currentOrder.getEstimatedEndTime();

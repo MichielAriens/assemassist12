@@ -47,9 +47,55 @@ public class SchedulingTest {
 		return new VehicleOrder(maker.getDetails());
 	}
 	
+	/**
+	 * Build a standard order: duration 70
+	 * @return	A standard order with a duration of 70 minutes.
+	 */
+	private VehicleOrder buildStandardOrderB(){
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_BREAK, 
+				VehiclePart.COLOUR_RED,
+				VehiclePart.ENGINE_4,
+				VehiclePart.GEARBOX_5AUTO,
+				VehiclePart.SEATS_LEATHER_WHITE,
+				VehiclePart.AIRCO_MANUAL,
+				VehiclePart.WHEELS_COMFORT,
+				VehiclePart.SPOILER_NONE
+			};
+		
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELB);
+		for(VehiclePart part : partsArray){
+			maker.addPart(part);
+		}
+		return new VehicleOrder(maker.getDetails());
+	}
+	
+	/**
+	 * Build a standard order: duration 60
+	 * @return	A standard order with a duration of 60 minutes.
+	 */
+	private VehicleOrder buildStandardOrderC(){
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_SPORT, 
+				VehiclePart.COLOUR_BLACK,
+				VehiclePart.ENGINE_8,
+				VehiclePart.GEARBOX_6MANUAL,
+				VehiclePart.SEATS_LEATHER_WHITE,
+				VehiclePart.AIRCO_NONE,
+				VehiclePart.WHEELS_SPORTS,
+				VehiclePart.SPOILER_LOW
+			};
+		
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELC);
+		for(VehiclePart part : partsArray){
+			maker.addPart(part);
+		}
+		return new VehicleOrder(maker.getDetails());
+	}
+	
 	private void printOrders(){
 		for(Order o : orders){
-			System.out.println(o);
+			System.out.println(o.getExtraInformation());
 		}
 	}
 	
@@ -59,14 +105,23 @@ public class SchedulingTest {
 		WorkstationDirector director = new WorkstationDirectorA(builder);
 		director.construct();
 		
-		VehicleModel[] models = {VehicleModel.CARMODELA, VehicleModel.CARMODELB};
+		VehicleModel[] models = {VehicleModel.CARMODELA, VehicleModel.CARMODELB, VehicleModel.CARMODELC};
 		this.line = new AssemblyLine(Arrays.asList(models), builder);
 	}
 
 	@Test
 	public void schedulingTest1() {
-		for(int i = 0; i < 10; i++){
-			orders.add(buildStandardOrderA());
+		orders.add(buildStandardOrderA());
+		orders.add(buildStandardOrderB());
+		orders.add(buildStandardOrderB());
+		orders.add(buildStandardOrderC());
+		orders.add(buildStandardOrderA());
+		orders.add(buildStandardOrderC());
+		orders.add(buildStandardOrderB());
+		orders.add(buildStandardOrderC());
+		orders.add(buildStandardOrderA());
+			
+		for(int i = 0; i < orders.size(); i++){
 			line.addOrder(orders.get(i));
 		}
 		printOrders();
