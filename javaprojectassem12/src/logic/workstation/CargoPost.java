@@ -6,7 +6,7 @@ import java.util.List;
 import logic.car.VehiclePartType;
 
 /**
- * Class used to describe a drive train post of an assembly line.
+ * Class used to describe a drive train post of an assembly line. //TODO fix docu
  */
 public class CargoPost extends Workstation {
 	
@@ -39,11 +39,11 @@ public class CargoPost extends Workstation {
 	}
 	
 	/**
-	 * Returns a string representation of a drive train post.
+	 * Returns a string representation of a cargo post.
 	 */
 	@Override
 	public String toString(){
-		return "Drive Train Post";
+		return "Cargo Post";
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import java.util.List;
 import logic.car.VehiclePartType;
 
 /**
- * Class used to describe a car body post of an assembly line.
+ * Class used to describe a car body post of an assembly line. //TODO fix docu
  */
 public class CertificationPost extends Workstation {
 
@@ -43,7 +43,7 @@ public class CertificationPost extends Workstation {
 	 */
 	@Override
 	public String toString(){
-		return "Car Body Post";
+		return "Certification Post";
 	}
 
 	@Override

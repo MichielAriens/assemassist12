@@ -115,7 +115,7 @@ public class SchedulingTest {
 				VehiclePart.GEARBOX_8MANUAL,
 				VehiclePart.SEATS_VINYL_GRAY,
 				VehiclePart.AIRCO_MANUAL,
-				VehiclePart.WHEELS_TRUCKSTANDARD,
+				VehiclePart.WHEELS_HEAVY_DUTY,
 				VehiclePart.SPOILER_NONE,
 				VehiclePart.TOOLSTORAGE_STANDARD,
 				VehiclePart.CARGO_STANDARD,
@@ -141,7 +141,7 @@ public class SchedulingTest {
 				VehiclePart.GEARBOX_8MANUAL,
 				VehiclePart.SEATS_VINYL_GRAY,
 				VehiclePart.AIRCO_MANUAL,
-				VehiclePart.WHEELS_TRUCKSTANDARD,
+				VehiclePart.WHEELS_HEAVY_DUTY,
 				VehiclePart.SPOILER_NONE,
 				VehiclePart.TOOLSTORAGE_STANDARD,
 				VehiclePart.CARGO_STANDARD,
@@ -155,6 +155,7 @@ public class SchedulingTest {
 		return new VehicleOrder(maker.getDetails());
 	}
 	
+	//TODO: remove
 	private void printOrders(){
 		for(Order o : orders){
 			System.out.println(o.toString());
@@ -179,13 +180,9 @@ public class SchedulingTest {
 		this.line = new AssemblyLine(Arrays.asList(models), builder);
 	}
 
-	@Before
-	public void prequel(){
-		buildAssemblyLineB();
-	}
-
 	@Test
 	public void schedulingTest1() {
+		buildAssemblyLineA();
 		orders.add(buildStandardOrderA());
 		orders.add(buildStandardOrderB());
 		orders.add(buildStandardOrderB());
@@ -195,11 +192,146 @@ public class SchedulingTest {
 		orders.add(buildStandardOrderB());
 		orders.add(buildStandardOrderC());
 		orders.add(buildStandardOrderA());
-			
 		for(int i = 0; i < orders.size(); i++){
 			line.addOrder(orders.get(i));
 		}
-		printOrders();
+		ArrayList<String> expected = new ArrayList<>();
+		expected.add("01-01-2014 09:10");
+		expected.add("01-01-2014 10:20");
+		expected.add("01-01-2014 11:30");
+		expected.add("01-01-2014 12:30");
+		expected.add("01-01-2014 13:40");
+		expected.add("01-01-2014 14:50");
+		expected.add("01-01-2014 16:00");
+		expected.add("01-01-2014 17:00");
+		expected.add("01-01-2014 17:50");
+		for(int i = 0; i < orders.size(); i++){
+			assertEquals(expected.get(i), orders.get(i).toString());
+		}
+	}
+	
+	@Test
+	public void schedulingTest2() {
+		buildAssemblyLineB();
+		orders.add(buildStandardOrderA());
+		orders.add(buildStandardOrderB());
+		orders.add(buildStandardOrderB());
+		orders.add(buildStandardOrderC());
+		orders.add(buildStandardOrderA());
+		orders.add(buildStandardOrderC());
+		orders.add(buildStandardOrderB());
+		orders.add(buildStandardOrderC());
+		orders.add(buildStandardOrderA());
+		for(int i = 0; i < orders.size(); i++){
+			line.addOrder(orders.get(i));
+		}
+		ArrayList<String> expected = new ArrayList<>();
+		expected.add("01-01-2014 11:30");
+		expected.add("01-01-2014 12:40");
+		expected.add("01-01-2014 13:50");
+		expected.add("01-01-2014 14:50");
+		expected.add("01-01-2014 16:00");
+		expected.add("01-01-2014 17:10");
+		expected.add("01-01-2014 18:10");
+		expected.add("01-01-2014 19:00");
+		expected.add("01-01-2014 19:00");
+		for(int i = 0; i < orders.size(); i++){
+			assertEquals(expected.get(i), orders.get(i).toString());
+		}
+	}
+	
+	@Test
+	public void schedulingTest3() {
+		buildAssemblyLineB();
+		orders.add(buildStandardOrderA());
+		orders.add(buildStandardOrderB());
+		orders.add(buildStandardOrderX());
+		orders.add(buildStandardOrderC());
+		orders.add(buildStandardOrderA());
+		orders.add(buildStandardOrderY());
+		for(int i = 0; i < orders.size(); i++){
+			line.addOrder(orders.get(i));
+		}
+		ArrayList<String> expected = new ArrayList<>();
+		expected.add("01-01-2014 11:50");
+		expected.add("01-01-2014 13:50");
+		expected.add("01-01-2014 14:50");
+		expected.add("01-01-2014 15:50");
+		expected.add("01-01-2014 16:50");
+		expected.add("01-01-2014 17:35");
+		for(int i = 0; i < orders.size(); i++){
+			assertEquals(expected.get(i), orders.get(i).toString());
+		}
+	}
+	
+	@Test
+	public void schedulingTest4() {
+		buildAssemblyLineB();
+		orders.add(buildStandardOrderA());
+		for(int i = 0; i < orders.size(); i++){
+			line.addOrder(orders.get(i));
+		}
+		ArrayList<String> expected = new ArrayList<>();
+		expected.add("01-01-2014 08:30");
+		for(int i = 0; i < orders.size(); i++){
+			assertEquals(expected.get(i), orders.get(i).toString());
+		}
+	}
+	
+	@Test
+	public void schedulingTest5() {
+		buildAssemblyLineB();
+		orders.add(buildStandardOrderB());
+		for(int i = 0; i < orders.size(); i++){
+			line.addOrder(orders.get(i));
+		}
+		ArrayList<String> expected = new ArrayList<>();
+		expected.add("01-01-2014 09:30");
+		for(int i = 0; i < orders.size(); i++){
+			assertEquals(expected.get(i), orders.get(i).toString());
+		}
+	}
+	
+	@Test
+	public void schedulingTest6() {
+		buildAssemblyLineB();
+		orders.add(buildStandardOrderC());
+		for(int i = 0; i < orders.size(); i++){
+			line.addOrder(orders.get(i));
+		}
+		ArrayList<String> expected = new ArrayList<>();
+		expected.add("01-01-2014 09:00");
+		for(int i = 0; i < orders.size(); i++){
+			assertEquals(expected.get(i), orders.get(i).toString());
+		}
+	}
+	
+	@Test
+	public void schedulingTest7() {
+		buildAssemblyLineB();
+		orders.add(buildStandardOrderX());
+		for(int i = 0; i < orders.size(); i++){
+			line.addOrder(orders.get(i));
+		}
+		ArrayList<String> expected = new ArrayList<>();
+		expected.add("01-01-2014 11:00");
+		for(int i = 0; i < orders.size(); i++){
+			assertEquals(expected.get(i), orders.get(i).toString());
+		}
+	}
+	
+	@Test
+	public void schedulingTest8() {
+		buildAssemblyLineB();
+		orders.add(buildStandardOrderY());
+		for(int i = 0; i < orders.size(); i++){
+			line.addOrder(orders.get(i));
+		}
+		ArrayList<String> expected = new ArrayList<>();
+		expected.add("01-01-2014 11:45");
+		for(int i = 0; i < orders.size(); i++){
+			assertEquals(expected.get(i), orders.get(i).toString());
+		}
 	}
 
 }

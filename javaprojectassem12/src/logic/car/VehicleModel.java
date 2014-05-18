@@ -171,6 +171,8 @@ public enum VehicleModel {
 		public int getPartPhaseDuration(VehiclePart part){
 			if(part.type == VehiclePartType.Body || part.type == VehiclePartType.Colour)
 				return this.bodyPhaseDur;
+			if(part == VehiclePart.CARGO_NONE || part == VehiclePart.TOOLSTORAGE_NONE)
+				return 0;
 			if(part.type == VehiclePartType.Certification)
 				return this.certPhaseDur;
 			return this.standardPhaseDur;

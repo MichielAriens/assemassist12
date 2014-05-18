@@ -313,8 +313,8 @@ public abstract class Workstation implements Printable{
 		if(nextWorkStation != null)
 			nextStationEET = nextWorkStation.reschedule(prePhaseDurations, NbOfWorkstations, currentTime);
 		int maxPre = 0;
-		if(currentOrder != null)
-			maxPre = this.getEstimatedPhaseDuration();
+//		if(currentOrder != null)
+//			maxPre = this.getEstimatedPhaseDuration();
 		int j = NbOfWorkstations-1;
 		for(int i = 0; i < prePhaseDurations.size(); i++){
 			if(prePhaseDurations.get(i).get(j)>maxPre)
@@ -323,6 +323,7 @@ public abstract class Workstation implements Printable{
 				break;
 			j--;
 		}
+//		System.out.println(this.toString() + ": maxpre == " + maxPre); //TODO REMOVE
 		if(prePhaseDurations.size()>0)
 			prePhaseDurations.remove(0);
 		if(currentOrder != null){
