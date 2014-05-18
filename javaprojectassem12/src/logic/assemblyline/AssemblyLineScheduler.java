@@ -278,6 +278,16 @@ public class AssemblyLineScheduler {
 	}
 
 	/**
+	 * Returns a list of all required tasks at a given workstation.
+	 * @param station			The a copy of the workstation for which the tasks are needed.
+	 * @param assemblyLine		The assembly line of the workstation. 
+	 * @return	A list of tasks at the given workstation.
+	 */
+	public List<Printable> getRequiredTasks(Printable station, Printable assemblyLine) {
+		return this.get(station).getRequiredTasks(station);
+	}
+
+	/**
 	 * Returns a string representation of the statistics of all the assembly lines of this
 	 * assembly line scheduler.
 	 * @return a string representation of the statistics of all the assembly lines of this
@@ -290,5 +300,53 @@ public class AssemblyLineScheduler {
 		}
 		stats.updateRecords(statsList);
 		return stats.toString();
+	}
+
+	/**
+	 * Try to advance the assembly line. This function should be redundant. It can't induce an unsafe state.  
+	 * @param shiftDuration
+	 * @return
+	 * @deprecated
+	 */
+	public boolean tryMoveAssemblyLine(int shiftDuration) {
+		return advance();
+	}
+
+	/**
+	 * Return a list if
+	 * @param activeAssemblyLine
+	 * @return
+	 */
+	public List<Printable> getStrategies(Printable activeAssemblyLine) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Order> getBatchList() {
+		List<Order> retval = new ArrayList<>();
+		for(AssemblyLine al : this.assemblyLines){
+			retval.addAll(this.getBatchList(al));
+		}
+		return retval;
+	}
+	
+	public List<Order> getBatchList(Printable assemblyline){
+		return this.get(assemblyline).getBachList();
+	}
+
+	public void changeStrategy(Order order) {
+		for(AssemblyLine al : this.assemblyLines){
+			this.setBatchStrategy(order, al);
+		}
+	}
+	
+	public void setBatchStrategy(Order template, Printable assemblyline){
+		this.get(assemblyline).changeStrategy(template);
+	}
+
+	public void changeAssemblyLineStatus(Printable activeAssemblyLine,
+			OperationalStatus newStatus) {
+		this.get(activeAssemblyLine).setStatus(newStatus);
+		
 	}
 }
