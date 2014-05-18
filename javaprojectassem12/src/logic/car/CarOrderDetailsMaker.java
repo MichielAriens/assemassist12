@@ -55,7 +55,7 @@ public class CarOrderDetailsMaker {
 			return false;
 		if(chosenTypes.contains(part.type))
 			return false;
-		if(part.type != VehiclePartType.Airco && part.type != VehiclePartType.Engine && part.type != VehiclePartType.Spoiler)
+		if(part.type != VehiclePartType.Airco && part.type != VehiclePartType.Engine && part.type != VehiclePartType.Spoiler && part.type != VehiclePartType.Wheels)
 			return true;
 		if(part.type == VehiclePartType.Airco){
 			if(chosenParts.contains(VehiclePart.ENGINE_8) && part == VehiclePart.AIRCO_AUTO)
@@ -67,6 +67,10 @@ public class CarOrderDetailsMaker {
 		}
 		if(part.type == VehiclePartType.Spoiler){
 			if(chosenParts.contains(VehiclePart.BODY_SPORT) && part == VehiclePart.SPOILER_NONE)
+				return false;
+		}
+		if(part.type == VehiclePartType.Wheels){
+			if(chosenParts.contains(VehiclePart.BODY_PLATFORM) && part != VehiclePart.WHEELS_HEAVY_DUTY)
 				return false;
 		}
 		return true;
@@ -91,7 +95,7 @@ public class CarOrderDetailsMaker {
 	 * @return	A new car order detail with this object's model and parts, null if there are too many or too less parts in this object's parts list.
 	 */
 	public CarOrderDetails getDetails(){
-		if(chosenParts.size() == 8){
+		if(chosenParts.size() == 11){
 			return new CarOrderDetails(model, chosenParts);
 		}
 		return null;
