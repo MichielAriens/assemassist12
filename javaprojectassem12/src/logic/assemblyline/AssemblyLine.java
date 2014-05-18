@@ -447,7 +447,7 @@ public class AssemblyLine implements Printable {
 				j++;
 				ArrayList<Integer> phases = new ArrayList<>();
 				firstWorkStation.buildEstimPhaseList(phases, queue.get(i));
-				prePhaseDurations.add(0,phases);
+				prePhaseDurations.add(phases);
 			}
 			return prePhaseDurations;
 		}
