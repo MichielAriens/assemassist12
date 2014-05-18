@@ -14,6 +14,7 @@ import logic.car.VehiclePart;
 import logic.workstation.WorkstationChainBuilder;
 import logic.workstation.WorkstationDirector;
 import logic.workstation.WorkstationDirectorA;
+import logic.workstation.WorkstationDirectorB;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +26,7 @@ public class SchedulingTest {
 	private ArrayList<Order> orders = new ArrayList<>();
 	
 	/**
-	 * Build a standard order: duration 50
+	 * Build a standard order: duration 50, 50, 0
 	 * @return	A standard order with a duration of 50 minutes.
 	 */
 	private VehicleOrder buildStandardOrderA(){
@@ -37,7 +38,10 @@ public class SchedulingTest {
 				VehiclePart.SEATS_LEATHER_WHITE,
 				VehiclePart.AIRCO_MANUAL,
 				VehiclePart.WHEELS_COMFORT,
-				VehiclePart.SPOILER_NONE
+				VehiclePart.SPOILER_NONE,
+				VehiclePart.TOOLSTORAGE_NONE,
+				VehiclePart.CARGO_NONE,
+				VehiclePart.CERTIFICATION_NONE
 			};
 		
 		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELA);
@@ -48,7 +52,7 @@ public class SchedulingTest {
 	}
 	
 	/**
-	 * Build a standard order: duration 70
+	 * Build a standard order: duration 70, 70, 0
 	 * @return	A standard order with a duration of 70 minutes.
 	 */
 	private VehicleOrder buildStandardOrderB(){
@@ -60,7 +64,10 @@ public class SchedulingTest {
 				VehiclePart.SEATS_LEATHER_WHITE,
 				VehiclePart.AIRCO_MANUAL,
 				VehiclePart.WHEELS_COMFORT,
-				VehiclePart.SPOILER_NONE
+				VehiclePart.SPOILER_NONE,
+				VehiclePart.TOOLSTORAGE_NONE,
+				VehiclePart.CARGO_NONE,
+				VehiclePart.CERTIFICATION_NONE
 			};
 		
 		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELB);
@@ -71,7 +78,7 @@ public class SchedulingTest {
 	}
 	
 	/**
-	 * Build a standard order: duration 60
+	 * Build a standard order: duration 60, 60, 0
 	 * @return	A standard order with a duration of 60 minutes.
 	 */
 	private VehicleOrder buildStandardOrderC(){
@@ -83,7 +90,10 @@ public class SchedulingTest {
 				VehiclePart.SEATS_LEATHER_WHITE,
 				VehiclePart.AIRCO_NONE,
 				VehiclePart.WHEELS_SPORTS,
-				VehiclePart.SPOILER_LOW
+				VehiclePart.SPOILER_LOW,
+				VehiclePart.TOOLSTORAGE_NONE,
+				VehiclePart.CARGO_NONE,
+				VehiclePart.CERTIFICATION_NONE
 			};
 		
 		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELC);
@@ -93,20 +103,85 @@ public class SchedulingTest {
 		return new VehicleOrder(maker.getDetails());
 	}
 	
+	/**
+	 * Build a standard truck order: duration 60, 90, 30
+	 * @return	A standard order with a duration of 60 minutes.
+	 */
+	private VehicleOrder buildStandardOrderX(){
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_PLATFORM, 
+				VehiclePart.COLOUR_GREEN,
+				VehiclePart.ENGINE_TRUCKSTANDARD,
+				VehiclePart.GEARBOX_8MANUAL,
+				VehiclePart.SEATS_VINYL_GRAY,
+				VehiclePart.AIRCO_MANUAL,
+				VehiclePart.WHEELS_TRUCKSTANDARD,
+				VehiclePart.SPOILER_NONE,
+				VehiclePart.TOOLSTORAGE_STANDARD,
+				VehiclePart.CARGO_STANDARD,
+				VehiclePart.CERTIFICATION_STANDARD
+			};
+		
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.TRUCKMODELX);
+		for(VehiclePart part : partsArray){
+			maker.addPart(part);
+		}
+		return new VehicleOrder(maker.getDetails());
+	}
+	
+	/**
+	 * Build a standard truck order: duration 60, 120, 45
+	 * @return	A standard order with a duration of 60 minutes.
+	 */
+	private VehicleOrder buildStandardOrderY(){
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_PLATFORM, 
+				VehiclePart.COLOUR_BLACK,
+				VehiclePart.ENGINE_TRUCKSTANDARD,
+				VehiclePart.GEARBOX_8MANUAL,
+				VehiclePart.SEATS_VINYL_GRAY,
+				VehiclePart.AIRCO_MANUAL,
+				VehiclePart.WHEELS_TRUCKSTANDARD,
+				VehiclePart.SPOILER_NONE,
+				VehiclePart.TOOLSTORAGE_STANDARD,
+				VehiclePart.CARGO_STANDARD,
+				VehiclePart.CERTIFICATION_STANDARD
+			};
+		
+		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.TRUCKMODELY);
+		for(VehiclePart part : partsArray){
+			maker.addPart(part);
+		}
+		return new VehicleOrder(maker.getDetails());
+	}
+	
 	private void printOrders(){
 		for(Order o : orders){
-			System.out.println(o.getExtraInformation());
+			System.out.println(o.toString());
 		}
 	}
 	
-	@Before
-	public void buildAssemblyLine(){
+	private void buildAssemblyLineA(){
 		WorkstationChainBuilder builder = new WorkstationChainBuilder();	
 		WorkstationDirector director = new WorkstationDirectorA(builder);
 		director.construct();
 		
 		VehicleModel[] models = {VehicleModel.CARMODELA, VehicleModel.CARMODELB, VehicleModel.CARMODELC};
 		this.line = new AssemblyLine(Arrays.asList(models), builder);
+	}
+	
+	private void buildAssemblyLineB(){
+		WorkstationChainBuilder builder = new WorkstationChainBuilder();	
+		WorkstationDirector director = new WorkstationDirectorB(builder);
+		director.construct();
+		
+		VehicleModel[] models = {VehicleModel.CARMODELA, VehicleModel.CARMODELB, VehicleModel.CARMODELC, VehicleModel.TRUCKMODELX, VehicleModel.TRUCKMODELY};
+		this.line = new AssemblyLine(Arrays.asList(models), builder);
+	}
+
+	@Before
+	public void prequel(){
+		buildAssemblyLineB();
 	}
 
 	@Test

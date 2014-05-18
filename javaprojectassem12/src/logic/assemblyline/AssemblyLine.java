@@ -461,6 +461,7 @@ public class AssemblyLine implements Printable {
 		private void rescheduleQueue(DateTime startTime){
 			ArrayList<Integer> phases = new ArrayList<>();
 			for(int i = 0; i < queue.size(); i++){
+				phases.clear();
 				int count = numberOfWorkStations-1;
 				firstWorkStation.buildEstimPhaseList(phases, queue.get(i));
 				int maxPhase = phases.get(count);
