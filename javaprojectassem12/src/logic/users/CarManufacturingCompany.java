@@ -10,6 +10,7 @@ import java.util.Map;
 import org.joda.time.DateTime;
 
 import logic.assemblyline.AssemblyLineScheduler;
+import logic.assemblyline.OperationalStatus;
 import logic.car.Order;
 
 /**
@@ -186,11 +187,11 @@ public class CarManufacturingCompany {
 	}
 	
 	/**
-	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy.
+	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy on any line.
 	 * @return	a list of orders that are viable to be used by the batch specification scheduling strategy.
 	 */
 	public List<Order> getBatchList() {
-		return assemblyLineScheduler.getBachList();
+		return assemblyLineScheduler.getBatchList();
 	}
 	
 	/**
@@ -198,7 +199,7 @@ public class CarManufacturingCompany {
 	 * @return	a list of orders that are viable to be used by the batch specification scheduling strategy.
 	 */
 	public List<Order> getBatchList(Printable assemblyline) {
-		return assemblyLineScheduler.getBachList(assemblyline);
+		return assemblyLineScheduler.getBatchList(assemblyline);
 	}
 	
 	/**
@@ -214,7 +215,7 @@ public class CarManufacturingCompany {
 	 * @param order	The order that has to be used as a template for the strategy.
 	 */
 	public void changeStrategy(Order order, Printable assemblyLine) {
-		assemblyLineScheduler.changeStrategy(order, assemblyLine);
+		assemblyLineScheduler.setBatchStrategy(order, assemblyLine);
 	}
 
 	
@@ -263,7 +264,7 @@ public class CarManufacturingCompany {
 		return assemblyLineScheduler.getAssemblyLinesStatuses();
 	}
 
-	public void changeAssemblyLineStatus(Printable activeAssemblyLine, Printable newStatus) {
+	public void changeAssemblyLineStatus(Printable activeAssemblyLine, OperationalStatus newStatus) {
 		assemblyLineScheduler.changeAssemblyLineStatus(activeAssemblyLine, newStatus);
 	}
 }

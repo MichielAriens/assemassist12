@@ -321,4 +321,32 @@ public class AssemblyLineScheduler {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public List<Order> getBatchList() {
+		List<Order> retval = new ArrayList<>();
+		for(AssemblyLine al : this.assemblyLines){
+			retval.addAll(this.getBatchList(al));
+		}
+		return retval;
+	}
+	
+	public List<Order> getBatchList(Printable assemblyline){
+		return this.get(assemblyline).getBachList();
+	}
+
+	public void changeStrategy(Order order) {
+		for(AssemblyLine al : this.assemblyLines){
+			this.setBatchStrategy(order, al);
+		}
+	}
+	
+	public void setBatchStrategy(Order template, Printable assemblyline){
+		this.get(assemblyline).changeStrategy(template);
+	}
+
+	public void changeAssemblyLineStatus(Printable activeAssemblyLine,
+			OperationalStatus newStatus) {
+		this.get(activeAssemblyLine).setStatus(newStatus);
+		
+	}
 }
