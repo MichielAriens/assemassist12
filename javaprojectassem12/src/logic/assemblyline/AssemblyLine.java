@@ -678,8 +678,9 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 				if(!queue.isEmpty()){
 					if(queue.getFirst().equals(order) && order.equals(currentStrategy.example) && getEstimatedAssemblyTime(queue.getFirst()) > getEstimatedAssemblyTime(order) && !checkDeadline(queue.getFirst(), order) && firstWorkStation.getCurrentOrder()==null){
 						returnTime = firstOrderEstimate(order);
+						return returnTime;
 					}
-					return returnTime;
+					
 				}
 					scheduleOrder(order);
 					returnTime = order.getEstimatedEndTime();
