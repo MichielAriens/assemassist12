@@ -8,15 +8,10 @@ import java.util.List;
 
 import logic.car.Order;
 import logic.car.VehicleModel;
-import logic.workstation.Task;
 import logic.workstation.Workstation;
 import logic.workstation.WorkstationChainBuilder;
-import logic.workstation.WorkstationDirector;
-
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-
-import com.sun.corba.se.spi.ior.MakeImmutable;
 
 /**
  * Class handling an assembly line of a car manufacturing company.
