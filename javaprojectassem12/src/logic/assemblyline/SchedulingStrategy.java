@@ -9,7 +9,7 @@ import logic.car.Order;
 /**
  * A class which adds an order to a queue in a specific way and refactors queue in some way.
  */
-public abstract class SchedulingStrategy implements Printable{
+public abstract class SchedulingStrategy implements Printable<SchedulingStrategy>{
 	
 	/**
 	 * The example order used for batch processing, null if batch processing is not used.

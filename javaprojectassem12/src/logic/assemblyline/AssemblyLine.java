@@ -8,6 +8,7 @@ import java.util.List;
 
 import logic.car.Order;
 import logic.car.VehicleModel;
+import logic.workstation.Task;
 import logic.workstation.Workstation;
 import logic.workstation.WorkstationChainBuilder;
 import org.joda.time.DateTime;
@@ -17,7 +18,7 @@ import org.joda.time.Days;
  * Class handling an assembly line of a car manufacturing company.
  */
 
-public class AssemblyLine implements Printable {
+public class AssemblyLine implements Printable<AssemblyLine> {
 
 
 	private OperationalStatus status = OperationalStatus.OPERATIONAL;
@@ -164,7 +165,7 @@ public class AssemblyLine implements Printable {
 	 * @return	True if the task is completed successfully.
 	 * 			False the task could not be completed.
 	 */
-	public boolean doTask(Printable task, int timeTaken){
+	public boolean doTask(Printable<Task> task, int timeTaken){
 		boolean work = firstWorkStation.doTask(task, timeTaken);
 		if(firstWorkStation.canMoveAssemblyLine()){
 			cycleTime = firstWorkStation.getMaxElapsedTime();
@@ -177,7 +178,7 @@ public class AssemblyLine implements Printable {
 	 * @param station	The a copy of the workstation for which the pending tasks are needed.
 	 * @return	A list of tasks that are pending at the given workstation.
 	 */
-	public List<Printable> getRequiredTasks(Printable station){
+	public List<Printable<Task>> getRequiredTasks(Printable<Workstation> station){
 		return this.firstWorkStation.getRequiredTasks(station);
 	}
 
@@ -186,7 +187,7 @@ public class AssemblyLine implements Printable {
 	 * @param station	The a copy of the workstation for which the tasks are needed.
 	 * @return	A list of tasks at the given workstation.
 	 */
-	public List<Printable> getAllTasks(Printable station){
+	public List<Printable<Task>> getAllTasks(Printable<Workstation> station){
 		return this.firstWorkStation.getAllTasks(station);
 	}
 
@@ -209,7 +210,7 @@ public class AssemblyLine implements Printable {
 	 * Returns a list of the current strategies followed by the available scheduling strategies.
 	 * @return a list of the current strategies followed by the available scheduling strategies.
 	 */
-	public List<Printable> getStrategies(){
+	public List<Printable<SchedulingStrategy>> getStrategies(){
 		return schedule.getStrategies();
 	}
 
@@ -225,8 +226,8 @@ public class AssemblyLine implements Printable {
 	 * Asks a list of available workstations.
 	 * @return	The list containing copies of the workstations.
 	 */
-	public List<Printable> getWorkStations() {
-		LinkedList<Printable> workStations = new LinkedList<>();
+	public List<Printable<Workstation>> getWorkStations() {
+		LinkedList<Printable<Workstation>> workStations = new LinkedList<>();
 		firstWorkStation.buildWorkstationList(workStations,numberOfWorkStations);
 		return workStations;
 	}
@@ -630,8 +631,8 @@ public class AssemblyLine implements Printable {
 		 * Returns a list of the current strategies followed by the available scheduling strategies.
 		 * @return a list of the current strategies followed by the available scheduling strategies.
 		 */
-		private List<Printable> getStrategies(){
-			LinkedList<Printable> returnList = new LinkedList<>();
+		private List<Printable<SchedulingStrategy>> getStrategies(){
+			LinkedList<Printable<SchedulingStrategy>> returnList = new LinkedList<>();
 			returnList.add(currentStrategy.getRawCopy());
 			for(SchedulingStrategy next : stratList){
 				returnList.add(next.getRawCopy());
