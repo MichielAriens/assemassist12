@@ -149,6 +149,10 @@ public class ManagerController extends UserController{
 		return assemblyLines;
 	}
 	
+	/**
+	 * Returns a string of TODO 
+	 * @return
+	 */
 	public String getCurrentAssemblyLineStatus() {
 		if(this.currentManager == null || this.currentManager.getActiveAssemblyLine() == null)
 			return null;
