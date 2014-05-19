@@ -259,8 +259,8 @@ public class AssemblyLineScheduler {
 	 * Returns a map mapping each assembly line to it's status.
 	 * @return a map mapping each assembly line to it's status.
 	 */
-	public Map<Printable, Printable> getAssemblyLinesStatuses() {
-		Map<Printable,Printable> retval = new HashMap<>();
+	public Map<Printable, OperationalStatus> getAssemblyLinesStatuses() {
+		Map<Printable,OperationalStatus> retval = new HashMap<>();
 		for(AssemblyLine al : this.assemblyLines){
 			retval.put(al, al.getOperationalStatus());
 		}

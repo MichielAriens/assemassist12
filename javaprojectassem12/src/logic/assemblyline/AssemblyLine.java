@@ -68,12 +68,15 @@ public class AssemblyLine implements Printable {
 	private Schedule schedule;
 
 	private Collection<VehicleModel> capabilities;
+	
+	private String name;
 
 	/**
 	 * Initializes the workstations, the schedule, the statistics and the queue containing the orders.
 	 * Also sets the current time to January first 2014 at the beginning of the shift. 
 	 */
-	public AssemblyLine(Collection<VehicleModel> capabilities, WorkstationChainBuilder builder){
+	public AssemblyLine(Collection<VehicleModel> capabilities, WorkstationChainBuilder builder, String name){
+		this.name = name;
 		this.capabilities = capabilities;
 		queue= new LinkedList<Order>();
 		schedule = new Schedule();
@@ -282,8 +285,7 @@ public class AssemblyLine implements Printable {
 
 	@Override
 	public String getStringRepresentation() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.name;
 	}
 
 	@Override
@@ -294,7 +296,7 @@ public class AssemblyLine implements Printable {
 
 	@Override
 	public String getStatus() {
-		return status.getStringRepresentation();
+		return status.toString();
 	}
 
 	/**
