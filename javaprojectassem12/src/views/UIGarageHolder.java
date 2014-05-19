@@ -4,10 +4,11 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-import controllers.GarageHolderController;
 import logic.car.VehicleModel;
 import logic.car.VehiclePartType;
+import controllers.GarageHolderController;
 
 /**
  * A command line interface class used to represent the garage holder's UI, which is used by garage holders
@@ -174,7 +175,12 @@ public class UIGarageHolder {
 			VehicleModel  model = VehicleModel.getModelFromString(modelString);
 			ghController.chooseModel(model);
 			for(VehiclePartType partType : VehiclePartType.values()){
-				String typeString = "Select " + partType.toString() + "-type: ";
+				List<String> options = ghController.getOptions(partType);
+				String typeString = "";
+				if(options.size() == 1){
+					typeString += "Auto-";
+				}
+				typeString += "Select " + partType.toString() + "-type: ";
 				for(String part : ghController.getOptions(partType))
 					typeString += part + "; ";
 				writer.write("   " + typeString+"\n");
@@ -198,6 +204,7 @@ public class UIGarageHolder {
 		try{
 			if(answers.size() == 1){
 				//No need to query user
+				writer.write("\n");
 				return answers.get(0).substring(0, answers.get(0).indexOf(":"));
 			}
 			while(true){
