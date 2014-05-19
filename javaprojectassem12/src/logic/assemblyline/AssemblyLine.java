@@ -290,7 +290,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 
 	@Override
 	public String getStringRepresentation() {
-		return this.getStringRepresentation();
+		return this.toString();
 	}
 
 	@Override
