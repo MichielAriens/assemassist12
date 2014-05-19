@@ -150,8 +150,8 @@ public class ManagerController extends UserController{
 	}
 	
 	/**
-	 * Returns a string of TODO 
-	 * @return
+	 * Returns a string representation of the status of the current AssemblyLine.
+	 * @return a string representation of the status of the current AssemblyLine.
 	 */
 	public String getCurrentAssemblyLineStatus() {
 		if(this.currentManager == null || this.currentManager.getActiveAssemblyLine() == null)
@@ -174,7 +174,10 @@ public class ManagerController extends UserController{
 		}	
 	}
 	
-	//TODO: is dit goed?
+	/**
+	 * Changes the status of the current AssemblyLine to the given status.
+	 * @param newStatus	The new status for the given AssemblyLine.
+	 */
 	public void changeAssemblyLineStatus(String newStatus) {
 		OperationalStatus[] availableStatuses = OperationalStatus.values();
 		for(OperationalStatus s : availableStatuses){
