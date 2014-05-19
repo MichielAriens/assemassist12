@@ -109,6 +109,7 @@ public class StatisticsTests {
 	@Test
 	public void testStat1(){
 		String stats = cmc.getStatistics();
+		System.out.println(stats);
 		assertTrue(stats.contains("Average number of cars produced: 13"));
 		assertTrue(stats.contains("Mean number of cars produced: 13"));
 	}
