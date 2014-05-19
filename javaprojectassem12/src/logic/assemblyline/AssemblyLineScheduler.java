@@ -284,7 +284,7 @@ public class AssemblyLineScheduler {
 	 * @return	A list of tasks at the given workstation.
 	 */
 	public List<Printable> getRequiredTasks(Printable station, Printable assemblyLine) {
-		return this.get(station).getRequiredTasks(station);
+		return this.get(assemblyLine).getRequiredTasks(station);
 	}
 
 	/**

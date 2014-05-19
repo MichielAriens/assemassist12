@@ -76,7 +76,8 @@ public class MechanicController extends UserController{
 	}
 	
 	/**
-	 * Returns the list of tasks the current mechanic can perform with numbering.
+	 * Returns the list of tasks the current mechanic can perform at his chosen work station
+	 * with numbering.
 	 * @return 	Null if the mechanic is null.
 	 * 			The list of tasks the mechanic can perform with numbering otherwise.
 	 */
@@ -151,26 +152,31 @@ public class MechanicController extends UserController{
 	}
 
 	/**
-	 * Returns the list of tasks per workstation, stating pending and completed tasks
-	 * or stating inactive if there are no tasks at the workstation.
-	 * @return 	The list of tasks per workstation, stating pending and completed tasks
+	 * Returns the list of tasks per workstation per assembly line, stating pending and 
+	 * completed tasks or stating inactive if there are no tasks at the workstation.
+	 * @return 	The list of tasks per workstation per assembly line, stating pending and completed tasks
 	 *			or stating inactive if there are no tasks at the workstation.
 	 */
 	public List<String> getTasksPerWorkstation(){
 		if(this.currentMechanic == null)
 			return null;
-		List<Printable> workStations = this.currentMechanic.getWorkstations();
 		ArrayList<String> tasks = new ArrayList<String>();
-		for(Printable stat : workStations){
-			String temp = stat.toString() + ":\n";
-			if(this.currentMechanic.getAllTasks(stat).size() == 0)
-				temp += "Inactive.\n";
-			else{
-				for(Printable task : this.currentMechanic.getAllTasks(stat)){
-					temp += "   -" + task.toString() + ": " + task.getStatus() + "\n";
+		List<Printable> assemblyLines = this.currentMechanic.getAssemblyLines();
+		for(Printable line : assemblyLines){
+			tasks.add("= " + line.getStringRepresentation() + " =");
+			this.currentMechanic.setActiveAssemblyLine(line);
+			List<Printable> workStations = this.currentMechanic.getWorkstationsFromAssemblyLine();
+			for(Printable stat : workStations){
+				String temp = " " + stat.toString() + ":\n";
+				if(this.currentMechanic.getAllTasks(stat).size() == 0)
+					temp += "   Inactive.\n";
+				else{
+					for(Printable task : this.currentMechanic.getAllTasks(stat)){
+						temp += "   -" + task.toString() + ": " + task.getStatus() + "\n";
+					}
 				}
+				tasks.add(temp);
 			}
-			tasks.add(temp);
 		}
 		return tasks;
 	}
