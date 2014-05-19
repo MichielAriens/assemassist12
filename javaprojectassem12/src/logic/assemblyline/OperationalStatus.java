@@ -8,7 +8,8 @@ import interfaces.Printable;
 public enum OperationalStatus implements Printable{
 	OPERATIONAL("Operational",0), 
 	MAINTENANCE("Maintenance",240), 
-	BROKEN("Broken",0);
+	BROKEN("Broken",0),
+	PREMAINTENANCE("Premaintenance",0);
 	
 	/**
 	 * The full name of this operational status.
