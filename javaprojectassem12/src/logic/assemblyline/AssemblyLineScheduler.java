@@ -51,6 +51,10 @@ public class AssemblyLineScheduler {
 	 * @param	order	...
 	 */
 	public void addOrder(Order order){
+		if(order == null)
+			System.out.println("michiel heeft gelijk");
+		else
+			System.out.println("Michiel is nen tard");
 		Map<AssemblyLine, DateTime> estimates = new HashMap<>();
 		//Map every al to its estimate
 		for(AssemblyLine al : getNonBrokenLines()){

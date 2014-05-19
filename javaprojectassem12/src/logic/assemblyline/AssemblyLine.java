@@ -85,7 +85,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	public boolean accepts(Order order){
 		VehicleModel model = order.getModel();
 		if(model == null){
-			return true;
+			return false;
 		}
 		if(this.capabilities.contains(model)){
 			return true;
@@ -673,20 +673,21 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			order.setStartTime(realTime);
 			if(firstWorkStation.getCurrentOrder()==null && queue.isEmpty()){
 				returnTime = firstOrderEstimate(order);
-
+				return returnTime;
 			}else{
 				if(!queue.isEmpty()){
-					if(queue.getFirst().equals(order) && currentStrategy.example.equals(order) && getEstimatedAssemblyTime(queue.getFirst()) > getEstimatedAssemblyTime(order) && !checkDeadline(queue.getFirst(), order) && firstWorkStation.getCurrentOrder()==null){
+					if(queue.getFirst().equals(order) && order.equals(currentStrategy.example) && getEstimatedAssemblyTime(queue.getFirst()) > getEstimatedAssemblyTime(order) && !checkDeadline(queue.getFirst(), order) && firstWorkStation.getCurrentOrder()==null){
 						returnTime = firstOrderEstimate(order);
 					}
-				}else{
+					return returnTime;
+				}
 					scheduleOrder(order);
 					returnTime = order.getEstimatedEndTime();
 					queue = copyqueue;
 					reschedule();
-				}
+					return returnTime;
 			}
-			return returnTime;
+			
 
 		}
 		
