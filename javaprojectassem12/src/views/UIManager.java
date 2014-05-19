@@ -90,7 +90,7 @@ public class UIManager {
 		String assemblyLine = chooseAssemblyLine();
 		
 		String currentAssemblyLineStatus = maController.getCurrentAssemblyLineStatus();
-		writer.write("Current status of " + assemblyLine + ": \n   " + currentAssemblyLineStatus);
+		writer.write("Current status of " + assemblyLine + ": \n   " + currentAssemblyLineStatus + "\n");
 		writer.flush();
 		
 		String query = "Available statuses:\n";	
