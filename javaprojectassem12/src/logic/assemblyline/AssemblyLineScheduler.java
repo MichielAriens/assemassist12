@@ -103,7 +103,9 @@ public class AssemblyLineScheduler {
 			}
 			this.currentTime = bestLine.getCycleEnd();
 			bestLine.moveAssemblyLine(this.currentTime);
-			
+			for(AssemblyLine al : emptyLines){
+				al.setCycleStartTime(currentTime);
+			}
 		}return false;
 	}
 	

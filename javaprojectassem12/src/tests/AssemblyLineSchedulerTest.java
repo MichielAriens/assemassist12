@@ -1,16 +1,19 @@
 package tests;
 
 import static org.junit.Assert.assertTrue;
+import interfaces.Printable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import logic.assemblyline.AssemblyLine;
 import logic.car.CarOrderDetailsMaker;
 import logic.car.Order;
 import logic.car.VehicleModel;
 import logic.car.VehicleOrder;
 import logic.car.VehiclePart;
 import logic.users.CarManufacturingCompany;
+import logic.workstation.Task;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -232,6 +235,28 @@ public class AssemblyLineSchedulerTest {
 			cmc.addOrder(order);
 		}
 		System.out.println(orders.get(orders.size() - 1).getEstimatedEndTime());
+		
+	}
+	
+	@Test
+	public void testDoTask(){
+		CarManufacturingCompany cmc = new CarManufacturingCompany();
+		List<Order> orders = new ArrayList<Order>();
+		Order order = buildStandardOrderA();
+		
+		cmc.addOrder(order);
+		AssemblyLine line = null;
+		for(Printable<AssemblyLine> pr : cmc.getAssemblyLines()){
+			AssemblyLine al = (AssemblyLine) pr;
+			if(!al.empty()){
+				line = al;
+			}
+		}
+		
+		cmc.getAssemblyLines();
+		for(Task task : order.getTasks()){
+			cmc.doTask(task , line, 50);
+		}
 		
 	}
 	

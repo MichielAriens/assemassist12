@@ -150,6 +150,15 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 
 		return false;
 	}
+	 
+	/**
+	 * Sets the time of this assemblyline.
+	 * @param time
+	 */
+	protected void setCycleStartTime(DateTime time){
+		this.cycleStartTime = time;
+		this.cycleTime = 0;
+	}
 
 	/**
 	 * Returns a string containing the representation of the statistics.
