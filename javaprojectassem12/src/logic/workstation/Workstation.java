@@ -144,7 +144,12 @@ public abstract class Workstation implements Printable{
 		}
 	}
 	
-	//TODO docu
+	/**
+	 * Builds a list of Integers, with the estimated durations that the given order would spend in
+	 * each workstation.
+	 * @param phases	The list of Integers that has to be filled.
+	 * @param order		The Order whose estimated durations in the workstations are needed.
+	 */
 	public void buildEstimPhaseList(List<Integer> phases, Order order){
 		if(phases == null)
 			return;
@@ -205,7 +210,11 @@ public abstract class Workstation implements Printable{
 		return false;
 	}
 	
-	//TODO docu
+	/**
+	 * Returns the time it took for all workstations to complete all pending tasks.
+	 * This time is equal to the maximum of the elapsed times for all individual workstations.
+	 * @return	The time it took for all workstations to complete all pending tasks.
+	 */
 	public int getMaxElapsedTime(){
 		int temp = -1;
 		if(this.nextWorkStation != null){
@@ -214,7 +223,11 @@ public abstract class Workstation implements Printable{
 		return Math.max(temp, this.getElapsedTaskTime());
 	}
 	
-	//TODO docu
+	/**
+	 * Returns the time it took for all pending tasks in this workstation to be completed.
+	 * This time is equal to the maximum of the elapsed times for all individual tasks.
+	 * @return	The time it took for all pending tasks in this workstation to be completed.
+	 */
 	private int getElapsedTaskTime(){
 		int temp = 0;
 		for(Task t : tasks){
@@ -225,9 +238,10 @@ public abstract class Workstation implements Printable{
 	}
 	
 	/**
-	 * Lets the chain of workstations build a list of pending tasks at a given workstation.
-	 * @param station	The a copy of the workstation for which the pending tasks are needed.
-	 * @return	A list of tasks that are pending at the given workstation.
+	 * Lets the chain of workstations build a list of Printables representing the pending tasks at 
+	 * a given workstation.
+	 * @param station	A Printable representing the workstation for which the pending tasks are needed.
+	 * @return	A list of Printables of all tasks that are pending at the given workstation.
 	 */
 	public List<Printable> getRequiredTasks(Printable station){
 		if(this.equals(station)){
@@ -244,9 +258,10 @@ public abstract class Workstation implements Printable{
 	}
 	
 	/**
-	 * Lets the chain of workstations build a list of all tasks at a given workstation.
-	 * @param station	The a copy of the workstation for which the tasks are needed.
-	 * @return	A list of tasks at the given workstation.
+	 * Lets the chain of workstations build a list of Printables representing all tasks at a 
+	 * given workstation.
+	 * @param station	A Printable representing the workstation for which the tasks are needed.
+	 * @return	A list of Printables of all tasks at the given workstation.
 	 */
 	public List<Printable> getAllTasks(Printable station){
 		if(this.equals(station)){
@@ -265,13 +280,13 @@ public abstract class Workstation implements Printable{
 	 * Returns a new instance of the type of the implementing classes. 
 	 * @return	A copy of this workstation.
 	 */
-	protected abstract Workstation getRawCopy();
+	protected abstract Workstation getRawCopy(); //TODO get rid of this?
 	
 	/**
-	 * Builds a list of workstations, by adding copies of the workstations in the chain to the back of the 
-	 * given list of workstations. The amount of workstations to add is also specified.
-	 * @param workstations			The list of workstations, to which the chain has to be added.
-	 * @param numberOfWorkstations	The amount of workstations that has to be added to the chain.
+	 * Builds a list of Printables representing workstations.
+	 * The amount of workstations to add is also specified.
+	 * @param workstations			The list of Printables, to which the chain has to be added.
+	 * @param numberOfWorkstations	The amount of workstations that have to be added to the chain.
 	 */
 	public void buildWorkstationList(List<Printable> workstations, int numberOfWorkstations){
 		if(numberOfWorkstations > 0){
@@ -287,7 +302,7 @@ public abstract class Workstation implements Printable{
 	 * the given list. Idle workstations don't add their (null) order.
 	 * @param orders	The list of orders, to which orders in the chain need to be added.
 	 */
-	public void buildOrderList(List<Order> orders){
+	public void buildOrderList(List<Order> orders){ //TODO printable of niet? (maybe batchlist needs le copy)
 		if(this.currentOrder != null)
 			orders.add(this.getCurrentOrder());
 		if(nextWorkStation != null)
@@ -313,8 +328,6 @@ public abstract class Workstation implements Printable{
 		if(nextWorkStation != null)
 			nextStationEET = nextWorkStation.reschedule(prePhaseDurations, NbOfWorkstations, currentTime);
 		int maxPre = 0;
-//		if(currentOrder != null)
-//			maxPre = this.getEstimatedPhaseDuration();
 		int j = NbOfWorkstations-1;
 		for(int i = 0; i < prePhaseDurations.size(); i++){
 			if(prePhaseDurations.get(i).get(j)>maxPre)
@@ -323,7 +336,6 @@ public abstract class Workstation implements Printable{
 				break;
 			j--;
 		}
-//		System.out.println(this.toString() + ": maxpre == " + maxPre); //TODO REMOVE
 		if(prePhaseDurations.size()>0)
 			prePhaseDurations.remove(0);
 		if(currentOrder != null){
@@ -396,7 +408,11 @@ public abstract class Workstation implements Printable{
 		return nextWorkStation.getPhaseDuration(workstationNumber-1);
 	}
 	
-	//TODO DOCU
+	/**
+	 * Returns the estimated phase duration for this workstation, which is the 
+	 * maximum of the estimated phase durations of the tasks that have to be performed at this workstation.
+	 * @return	The estimated phases duration for this workstation.
+	 */
 	private int getEstimatedPhaseDuration(){
 		int temp = 0;
 		for(Task t : tasks){
@@ -478,14 +494,24 @@ public abstract class Workstation implements Printable{
 				return null;
 	}
 	
-	@Override //TODO DOCU
+	/**
+	 * Returns a String representation of the current status of this workstation.
+	 * @return	"Idle"		If there are currently no pending tasks at this workstation.
+	 * 			"Working"	otherwise.
+	 */
+	@Override
 	public String getStatus() {
 		if(this.idle())
 			return "Idle";
 		return "Working";
 	}
 	
-	//TODO fix this
+	/**
+	 * Returns a String representation of the amount of pending and completed tasks there are at 
+	 * this workstation.
+	 * @return	A string representation of the amount of pending and completed tasks there are at 
+	 * 			this workstation.
+	 */
 	@Override
 	public String getExtraInformation() {
 		int pending = 0;

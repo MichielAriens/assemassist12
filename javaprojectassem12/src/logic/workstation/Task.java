@@ -13,9 +13,14 @@ public class Task implements Printable{
 	 */
 	private boolean completed = false;
 	
-	//TODO DOCU
+	/**
+	 * The time a mechanic worked on this task to complete it.
+	 */
 	private int elapsedTime = -1;
 	
+	/**
+	 * The estimated time a mechanic should work on this task to complete it.
+	 */
 	private final int estimatedPhaseDuration;
 	
 	/**
@@ -24,8 +29,9 @@ public class Task implements Printable{
 	private final VehiclePart carPart;
 	
 	/**
-	 * Creates a task corresponding with the given car part.
-	 * @param part	The car part to perform the task on. //TODO docu
+	 * Creates a task corresponding with the given car part, and estimated duration.
+	 * @param part	The car part to perform the task on.
+	 * @param estimDur The estimated duration for this task to be completed.
 	 */
 	public Task(VehiclePart part, int estimDur){
 		this.carPart = part;
@@ -52,7 +58,8 @@ public class Task implements Printable{
 	}
 	
 	/**
-	 * Sets completed to true. //TODO docu
+	 * Sets completed to true, and saves the time it took to complete it.
+	 * @param elapsedTime	The time it took to complete this task.
 	 */
 	public void perform(int elapsedTime){
 		if(this.completed)
@@ -61,12 +68,18 @@ public class Task implements Printable{
 		this.elapsedTime = elapsedTime;
 	}	
 	
-	//TODO docu
+	/**
+	 * Returns the time a mechanic worked on this task to complete it.
+	 * @return the time a mechanic worked on this task to complete it.
+	 */
 	public int getElapsedTime(){
 		return this.elapsedTime;
 	}
-	
-	//TODO DOCU
+
+	/**
+	 * Returns the estimated time a mechanic should work on this task to complete it.
+	 * @return the estimated time a mechanic should work on this task to complete it.
+	 */
 	public int getEstimatedPhaseDuration(){
 		return this.estimatedPhaseDuration;
 	}
@@ -119,19 +132,30 @@ public class Task implements Printable{
 	private boolean equals(Task other){
 		return this.carPart == other.carPart;
 	}
-
+	
+	/**
+	 * Returns the string representation of this task.
+	 * @return The string representation of this task.
+	 */
 	@Override
 	public String getStringRepresentation() {
 		return this.toString();
 	}
 	
-	//TODO: fix this up
-	
+	/**
+	 * Returns the string representation of the description of this task.
+	 * @return The string representation of the description of this task.
+	 */
 	@Override
 	public String getExtraInformation() {
 		return this.getDescription();
 	}
-
+	
+	/**
+	 * Returns a string representation of the current status of this task.
+	 * @return 	"Completed" if the task is completed.
+	 * 			"Pending"	otherwise.
+	 */
 	@Override
 	public String getStatus() {
 		if(this.isComplete())
