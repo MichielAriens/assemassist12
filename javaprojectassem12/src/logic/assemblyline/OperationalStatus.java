@@ -1,9 +1,11 @@
 package logic.assemblyline;
 
+import interfaces.Printable;
+
 /**
  * An enum to represent the operational status of an assembly line.
  */
-public enum OperationalStatus{
+public enum OperationalStatus implements Printable{
 	OPERATIONAL("Operational",0), 
 	MAINTENANCE("Maintenance",240), 
 	BROKEN("Broken",0);
@@ -40,7 +42,17 @@ public enum OperationalStatus{
 	 * Returns a string representation of this operational status.
 	 */
 	@Override
-	public String toString(){
+	public String getStringRepresentation() {
+		return this.fullName;
+	}
+
+	@Override
+	public String getExtraInformation() {
+		return "Standard time offline: " + getTime() + " minutes.";
+	}
+
+	@Override
+	public String getStatus() {
 		return this.fullName;
 	}
 }
