@@ -13,7 +13,7 @@ import logic.car.Order;
 /**
  * Class used to describe a work station of an assembly line.
  */
-public abstract class Workstation implements Printable{
+public abstract class Workstation implements Printable<Workstation>{
 	
 	/**
 	 * The current order this workstation is working on.
@@ -198,7 +198,7 @@ public abstract class Workstation implements Printable{
 	 * @return	True 	if the specified task has been successfully performed.
 	 * 			False	otherwise. 
 	 */
-	public boolean doTask(Printable task, int elapsedTime){
+	public boolean doTask(Printable<Task> task, int elapsedTime){
 		for(Task t : tasks){
 			if(t.equals(task)){
 				t.perform(elapsedTime);
@@ -243,9 +243,9 @@ public abstract class Workstation implements Printable{
 	 * @param station	A Printable representing the workstation for which the pending tasks are needed.
 	 * @return	A list of Printables of all tasks that are pending at the given workstation.
 	 */
-	public List<Printable> getRequiredTasks(Printable station){
+	public List<Printable<Task>> getRequiredTasks(Printable<Workstation> station){
 		if(this.equals(station)){
-			ArrayList<Printable> returnlist = new ArrayList<>();
+			ArrayList<Printable<Task>> returnlist = new ArrayList<>();
 			for(Task t : tasks){
 				if(!t.isComplete())
 					returnlist.add(t.getRawCopy());
@@ -263,9 +263,9 @@ public abstract class Workstation implements Printable{
 	 * @param station	A Printable representing the workstation for which the tasks are needed.
 	 * @return	A list of Printables of all tasks at the given workstation.
 	 */
-	public List<Printable> getAllTasks(Printable station){
+	public List<Printable<Task>> getAllTasks(Printable<Workstation> station){
 		if(this.equals(station)){
-			ArrayList<Printable> returnlist = new ArrayList<>();
+			ArrayList<Printable<Task>> returnlist = new ArrayList<>();
 			for(Task t : tasks){
 				returnlist.add(t.getRawCopy());
 			}
@@ -288,7 +288,7 @@ public abstract class Workstation implements Printable{
 	 * @param workstations			The list of Printables, to which the chain has to be added.
 	 * @param numberOfWorkstations	The amount of workstations that have to be added to the chain.
 	 */
-	public void buildWorkstationList(List<Printable> workstations, int numberOfWorkstations){
+	public void buildWorkstationList(List<Printable<Workstation>> workstations, int numberOfWorkstations){
 		if(numberOfWorkstations > 0){
 			workstations.add(this.getRawCopy());
 		}

@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface Printable{
+public interface Printable<S>{
 	
 	public String getStringRepresentation();
 	

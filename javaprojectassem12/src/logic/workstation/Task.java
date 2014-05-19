@@ -6,7 +6,7 @@ import logic.car.VehiclePart;
 /**
  * Class used to describe a task that needs to be performed in order to complete a car order.
  */
-public class Task implements Printable{
+public class Task implements Printable<Task>{
 	
 	/**
 	 * Flag keeping track of the completion of the task. 
