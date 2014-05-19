@@ -141,7 +141,10 @@ public class UIMechanic {
 			writer.write("\n" + meController.getTaskInformation(answer) + "\n");
 			waitForCompletion();
 			int duration = getTimeSpent();
-			this.meController.doTask(answer, duration);
+			if(this.meController.doTask(answer, duration))
+				writer.write("Task has been completed successfully.\n");
+			else
+				writer.write("Task couldn't be completed successfully, probably due to invalid filled in time.\n");
 		} catch(IOException e){
 			e.printStackTrace();
 		}

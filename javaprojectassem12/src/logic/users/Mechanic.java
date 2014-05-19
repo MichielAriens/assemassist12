@@ -63,10 +63,12 @@ public class Mechanic extends User{
 	 * and tries to move the assembly line.
 	 * @param task	A copy of the task that needs to be performed.
 	 * @param duration	How long it took to perform the task.
+	 * @return	True if the task has been performed successfully.
+	 * 			False otherwise.
 	 */
 	//TODO: checpPhaseDuration kan evengoed in company gebeuren?
-	public void doTask(Printable<Task> task, int duration){
-		company.doTask(task, this.activeAssemblyLine, duration);
+	public boolean doTask(Printable<Task> task, int duration){
+		return company.doTask(task, this.activeAssemblyLine, duration);
 	}
 	
 	/**

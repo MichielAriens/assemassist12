@@ -118,14 +118,17 @@ public class MechanicController extends UserController{
 	 * Performs the given task if the current mechanic is not null.
 	 * @param taskName	The name of the task that needs to be performed.
 	 * @param duration	How long the task took to perform.
+	 * @return	True if the task has been performed successfully.
+	 * 			False otherwise.
 	 */
-	public void doTask(String taskName, int duration){
+	public boolean doTask(String taskName, int duration){
 		if(this.currentMechanic == null)
-			return;
+			return false;
 		for(Printable<Task> task : this.currentMechanic.getAvailableTasks()){
 			if(task.getStringRepresentation().equals(taskName))
-				currentMechanic.doTask(task, duration);
+				return currentMechanic.doTask(task, duration);
 		}
+		return false;
 	}
 	
 	/**

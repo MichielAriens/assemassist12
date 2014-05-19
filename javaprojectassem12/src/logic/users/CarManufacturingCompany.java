@@ -170,6 +170,7 @@ public class CarManufacturingCompany {
 	 * @return	True if the task is completed successfully
 	 * 			False the task could not be completed.
 	 */
+	//TODO nog iets met boolean van checkPhaseDuration doen??? 
 	public boolean doTask(Printable<Task> task, Printable<AssemblyLine> assemblyLine, int duration){
 		if(checkPhaseDuration(duration, assemblyLine))
 			return assemblyLineScheduler.doTask(task, assemblyLine, duration);
@@ -255,21 +256,27 @@ public class CarManufacturingCompany {
 	}
 
 	/**
-	 * Returns the assemblylines of the system in order.
-	 * @return
+	 * Returns the assembly lines of the system in order.
+	 * @return the assembly lines of the system in order.
 	 */
 	public List<Printable<AssemblyLine>> getAssemblyLines() {
 		return assemblyLineScheduler.getAssemblyLines();
 	}
 
 	/**
-	 * returns a map mapping each assembly line to it's status.
-	 * @return
+	 * Returns a map mapping each assembly line to it's operational status.
+	 * @return a map mapping each assembly line to it's operational status.
 	 */
 	public Map<Printable<AssemblyLine>,Printable<OperationalStatus>> getAssemblyLinesStatuses() {
 		return assemblyLineScheduler.getAssemblyLinesStatuses();
 	}
 
+	/**
+	 * Changes the operational status of the given assembly line to the given 
+	 * operational status.
+	 * @param activeAssemblyLine	The assembly line which status has to be changed.
+	 * @param newStatus	The new status for the given assembly line.
+	 */
 	public void changeAssemblyLineStatus(Printable<AssemblyLine> activeAssemblyLine, OperationalStatus newStatus) {
 		assemblyLineScheduler.changeAssemblyLineStatus(activeAssemblyLine, newStatus);
 	}
