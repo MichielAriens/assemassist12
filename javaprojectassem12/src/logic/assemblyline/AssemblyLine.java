@@ -202,6 +202,10 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			
 	}
 	
+	public boolean empty(){
+		return firstWorkStation.allIdle();
+	}
+	
 	public boolean ready(){
 		return this.tryMoveAssemblyLine();
 	}

@@ -82,16 +82,24 @@ public class AssemblyLineScheduler {
 	 * 				false if no lines were moved
 	 */
 	private boolean advance(){
+		List<AssemblyLine> emptyLines = new ArrayList<AssemblyLine>(2);		
 		if(linesReadyToMove()){
 			AssemblyLine bestLine = null;
 			for(AssemblyLine al :  getNonBrokenLines()){
-				if(bestLine == null){
-					bestLine = al;
+				if(al.empty()){
+					emptyLines.add(al);
 				}
-				if(al.ready() && al.getCycleEnd().isBefore(bestLine.getcycleStartTime())){
-					bestLine = al;
+				else{
+					if(bestLine == null && al.ready()){
+						bestLine = al;
+					}
+					if(al.ready() && al.getCycleEnd().isBefore(bestLine.getcycleStartTime())){
+						bestLine = al;
+					}
 				}
-				
+			}
+			if(bestLine == null){
+				return false;
 			}
 			this.currentTime = bestLine.getCycleEnd();
 			bestLine.moveAssemblyLine(this.currentTime);
