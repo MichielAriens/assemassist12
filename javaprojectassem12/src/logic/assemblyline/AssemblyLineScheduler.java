@@ -64,10 +64,6 @@ public class AssemblyLineScheduler {
 			if(best == null){
 				best = is;
 			}else{
-				if(estimates.get(is) == null)
-					System.out.println("michiel heeft beslist gelijk");
-				else
-					System.out.println("Michiel is onbeslist");
 				if(estimates.get(is).isBefore(estimates.get(best))){
 					best = is;
 				}

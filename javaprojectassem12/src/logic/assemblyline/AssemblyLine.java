@@ -282,10 +282,15 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			return true;
 		return false;
 	}
+	
+	@Override
+	public String toString(){
+		return this.name;
+	}
 
 	@Override
 	public String getStringRepresentation() {
-		return this.name;
+		return this.getStringRepresentation();
 	}
 
 	@Override
