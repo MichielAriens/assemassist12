@@ -6,12 +6,12 @@ import java.util.List;
 import logic.car.VehiclePartType;
 
 /**
- * Class used to describe a drive train post of an assembly line. //TODO fix docu
+ * Class used to describe a cargo post of an assembly line.
  */
 public class CargoPost extends Workstation {
 	
 	/**
-	 * Initializes the compatible tasks for this drive train post.
+	 * Initializes the compatible tasks for this cargo post.
 	 */
 	private List<VehiclePartType> compatibleTasks;
 	{
@@ -23,7 +23,7 @@ public class CargoPost extends Workstation {
 	 * Get the types of tasks this workstation can perform. This methods completely 
 	 * defines the capabilities of an implementing class.
 	 * @return		A List of CarPartType elements defining the capabilities of the implementation. 
-	 * 				({CarPartType.Engine, CarPartType.Gearbox})
+	 * 				({CarPartType.ToolStorage, CarPartType.CargoProtection})
 	 */
 	@Override
 	public List<VehiclePartType> getCapabilities() {
@@ -31,7 +31,7 @@ public class CargoPost extends Workstation {
 	}
 	
 	/**
-	 * Get a new instance of DriveTrainPost.
+	 * Get a new instance of CargoPost.
 	 */
 	@Override
 	protected Workstation getRawCopy(){
@@ -46,15 +46,11 @@ public class CargoPost extends Workstation {
 		return "Cargo Post";
 	}
 
+	/**
+	 * Returns a string representation of a cargo post.
+	 */
 	@Override
 	public String getStringRepresentation() {
 		return this.toString();
 	}
-
-	@Override
-	public String getExtraInformation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

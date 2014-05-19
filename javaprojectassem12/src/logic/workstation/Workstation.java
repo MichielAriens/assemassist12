@@ -484,4 +484,18 @@ public abstract class Workstation implements Printable{
 			return "Idle";
 		return "Working";
 	}
+	
+	//TODO fix this
+	@Override
+	public String getExtraInformation() {
+		int pending = 0;
+		int completed = 0;
+		for(Task t : tasks){
+			if(t.isComplete())
+				completed++;
+			else
+				pending++;
+		}
+		return "There are currently " + pending + " pending tasks, and " + completed + " completed tasks at this workstation.";
+	}
 }

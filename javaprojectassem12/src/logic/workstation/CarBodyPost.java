@@ -46,15 +46,11 @@ public class CarBodyPost extends Workstation {
 		return "Car Body Post";
 	}
 
+	/**
+	 * Returns a string representation of a car body post.
+	 */
 	@Override
 	public String getStringRepresentation() {
 		return this.toString();
 	}
-
-	@Override
-	public String getExtraInformation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

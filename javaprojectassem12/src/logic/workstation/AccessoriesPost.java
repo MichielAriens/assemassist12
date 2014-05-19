@@ -52,11 +52,5 @@ public class AccessoriesPost extends Workstation {
 	@Override
 	public String getStringRepresentation() {
 		return this.toString();
-	}
-
-	//TODO fix this
-	@Override
-	public String getExtraInformation() {
-		return null;
-	}
+	}	
 }
