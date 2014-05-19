@@ -141,15 +141,15 @@ public class CarManufacturingCompany {
 		return assemblyLineScheduler.getAllWorkstations();
 	}
 	
-	/**
-	 * Moves the assembly line forward if every work station is ready and 
-	 * sets the end time of the first order to the given end time.
-	 * @return 	True if the assembly line has been moved.
-	 * 			False if the assembly line can not be moved.
-	 */
-	public boolean moveAssemblyLine(int shiftDuration){
-		return this.assemblyLineScheduler.tryMoveAssemblyLine(shiftDuration);
-	}
+//	/**
+//	 * Moves the assembly line forward if every work station is ready and 
+//	 * sets the end time of the first order to the given end time.
+//	 * @return 	True if the assembly line has been moved.
+//	 * 			False if the assembly line can not be moved.
+//	 */
+//	public boolean moveAssemblyLine(int shiftDuration){
+//		return this.assemblyLineScheduler.tryMoveAssemblyLine(shiftDuration);
+//	}
 	
 	/**
 	 * Returns the current time.
@@ -167,7 +167,9 @@ public class CarManufacturingCompany {
 	 * 			False the task could not be completed.
 	 */
 	public boolean doTask(Printable task, Printable assemblyLine, int duration){
-		return assemblyLineScheduler.doTask(task, assemblyLine, duration);
+		if(checkPhaseDuration(duration, assemblyLine))
+			return assemblyLineScheduler.doTask(task, assemblyLine, duration);
+		return false;
 	}
 	
 	/**
@@ -244,7 +246,7 @@ public class CarManufacturingCompany {
 	 * @return 	True if the duration is allowed.
 	 * 			False otherwise
 	 */
-	public boolean checkPhaseDuration(int duration, Printable assemblyLine){
+	private boolean checkPhaseDuration(int duration, Printable assemblyLine){
 		return this.assemblyLineScheduler.checkPhaseDuration(duration, assemblyLine);
 	}
 

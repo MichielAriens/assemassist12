@@ -52,7 +52,7 @@ public class AssemblyLineScheduler {
 		//Map every al to its estimate
 		for(AssemblyLine al : getNonBrokenLines()){
 			if(al.accepts(order));
-			estimates.put(al, al.getEstimate(order));
+			estimates.put(al, al.getEstimate(order,currentTime));
 		}
 		//chose the best estimate
 		AssemblyLine best = null;

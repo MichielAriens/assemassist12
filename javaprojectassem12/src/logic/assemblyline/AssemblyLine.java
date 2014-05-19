@@ -249,9 +249,8 @@ public class AssemblyLine implements Printable {
 	 * @return		A estimated assembly time or null if the order cannot be scheduled on this line.
 	 * @stateless
 	 */
-	public DateTime getEstimate(Order order) {
-		// TODO Auto-generated method stub
-		return null;
+	public DateTime getEstimate(Order order,DateTime realTime) {
+		return schedule.getEstimate(order, realTime);
 	}
 
 	/**
@@ -292,16 +291,10 @@ public class AssemblyLine implements Printable {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	public DateTime getEstimate(Order order, DateTime realTime){
-		return schedule.getEstimate(order, realTime);
-		
-	}
 
 	@Override
 	public String getStatus() {
-		// TODO Auto-generated method stub
-		return null;
+		return status.getStringRepresentation();
 	}
 
 	/**

@@ -62,12 +62,7 @@ public class Mechanic extends User{
 	 */
 	//TODO: checpPhaseDuration kan evengoed in company gebeuren?
 	public void doTask(Printable task, int duration){
-		if(company.checkPhaseDuration(duration,activeAssemblyLine)){
-			boolean performed = company.doTask(task, activeAssemblyLine, duration);
-			if(performed){
-				if(company.moveAssemblyLine(duration));
-			}
-		}
+		company.doTask(task, this.activeAssemblyLine, duration);
 	}
 	
 	/**
