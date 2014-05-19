@@ -4,6 +4,10 @@ import interfaces.Printable;
 
 import java.util.List; 
 
+import logic.assemblyline.AssemblyLine;
+import logic.workstation.Task;
+import logic.workstation.Workstation;
+
 /**
  * Class used to describe a mechanic working on an assembly line in a car manufacturing company.
  */
@@ -12,12 +16,12 @@ public class Mechanic extends User{
 	/**
 	 * The printable instance of the workstation this mechanic is currently working on.
 	 */
-	private Printable activeStation = null;
+	private Printable<Workstation> activeStation = null;
 	
 	/**
 	 * The printable instance of the assembly line this mechanic is currently working on.
 	 */
-	private Printable activeAssemblyLine = null;
+	private Printable<AssemblyLine> activeAssemblyLine = null;
 	
 	/**
 	 * The manufacturing company for which the mechanic works.
@@ -41,7 +45,7 @@ public class Mechanic extends User{
 	 * Returns the workstation the mechanic is currently working on.
 	 * @return The workstation the mechanic is currently working on.
 	 */
-	public Printable getActiveWorkstation(){
+	public Printable<Workstation> getActiveWorkstation(){
 		return this.activeStation;
 	}
 	
@@ -61,7 +65,7 @@ public class Mechanic extends User{
 	 * @param duration	How long it took to perform the task.
 	 */
 	//TODO: checpPhaseDuration kan evengoed in company gebeuren?
-	public void doTask(Printable task, int duration){
+	public void doTask(Printable<Task> task, int duration){
 		company.doTask(task, this.activeAssemblyLine, duration);
 	}
 	
@@ -70,7 +74,7 @@ public class Mechanic extends User{
 	 * @return	null	if the mechanic is not currently posted.
 	 * 			The list of tasks otherwise.
 	 */
-	public List<Printable> getAvailableTasks(){
+	public List<Printable<Task>> getAvailableTasks(){
 		if(!isPosted() || activeAssemblyLine==null)
 			return null;
 		return this.company.getRequiredTasks(this.activeStation, this.activeAssemblyLine);
@@ -81,7 +85,7 @@ public class Mechanic extends User{
 	 * @param station	The a copy of the workstation for which the tasks are needed.
 	 * @return	A list of tasks at the given workstation.
 	 */
-	public List<Printable> getAllTasks(Printable station){
+	public List<Printable<Task>> getAllTasks(Printable<Workstation> station){
 		if(activeAssemblyLine==null || station == null)
 			return null;
 		return this.company.getAllTasksAt(station, activeAssemblyLine);
@@ -91,7 +95,7 @@ public class Mechanic extends User{
 	 * Returns the list of workstations from the active assembly line of the car manufacturing company.
 	 * @return the list of workstations from the active assembly line of the car manufacturing company.
 	 */
-	public List<Printable> getWorkstationsFromAssemblyLine(){
+	public List<Printable<Workstation>> getWorkstationsFromAssemblyLine(){
 		if(activeAssemblyLine==null)
 			return null;
 		return this.company.getWorkStationsFromAssemblyLine(activeAssemblyLine);
@@ -101,7 +105,7 @@ public class Mechanic extends User{
 	 * Returns the list of all workstations from all assembly lines of the car manufacturing company.
 	 * @return the list of all workstations from all assembly lines of the car manufacturing company.
 	 */
-	public List<Printable> getWorkstations() {
+	public List<Printable<Workstation>> getWorkstations() {
 		if(company == null)
 			return null;
 		return this.company.getWorkStations();
@@ -111,7 +115,7 @@ public class Mechanic extends User{
 	 * Returns the printable list of assembly lines of the car manufacturing company.
 	 * @return the printable list of assembly lines of the car manufacturing company.
 	 */
-	public List<Printable> getAssemblyLines() {
+	public List<Printable<AssemblyLine>> getAssemblyLines() {
 		if(company == null)
 			return null;
 		return this.company.getAssemblyLines();
@@ -121,7 +125,7 @@ public class Mechanic extends User{
 	 * Set the active workstation to the given workstation.
 	 * @param workstation	The new active workstation.
 	 */
-	public void setActiveWorkstation(Printable station){
+	public void setActiveWorkstation(Printable<Workstation> station){
 		this.activeStation = station;
 	}
 	
@@ -129,7 +133,7 @@ public class Mechanic extends User{
 	 * Set the active assembly line to the given assembly line.
 	 * @param line	The new active assembly line.
 	 */
-	public void setActiveAssemblyLine(Printable line){
+	public void setActiveAssemblyLine(Printable<AssemblyLine> line){
 		this.activeAssemblyLine = line;
 	}
 }

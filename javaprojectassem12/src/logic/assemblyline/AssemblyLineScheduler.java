@@ -13,6 +13,8 @@ import java.util.Set;
 
 import logic.car.Order;
 import logic.car.VehicleModel;
+import logic.workstation.Task;
+import logic.workstation.Workstation;
 import logic.workstation.WorkstationChainBuilder;
 import logic.workstation.WorkstationDirector;
 import logic.workstation.WorkstationDirectorA;
@@ -119,7 +121,7 @@ public class AssemblyLineScheduler {
 	 * @param assemblyLine		The assembly line that the task is on wrapped in the printable interface.
 	 * @return
 	 */
-	public boolean doTask(Printable Task, Printable assemblyLine, int minutes){
+	public boolean doTask(Printable<Task> Task, Printable<AssemblyLine> assemblyLine, int minutes){
 		AssemblyLine line = this.get(assemblyLine);
 		boolean completed = line.doTask(Task, minutes);
 		this.advance();
@@ -154,7 +156,7 @@ public class AssemblyLineScheduler {
 	 * @param line
 	 * @return
 	 */
-	private AssemblyLine get(Printable line){
+	private AssemblyLine get(Printable<AssemblyLine> line){
 		for(AssemblyLine al : assemblyLines){
 			if(al.equals(line)){
 				return al;
@@ -214,7 +216,7 @@ public class AssemblyLineScheduler {
 	 * @param 		assemblyLine wrapped in the printable interface.
 	 * @return		A list of workstations wrapped in the printable interface
 	 */
-	public List<Printable> getWorkStationsFromAssemblyLine(Printable assemblyLine) {
+	public List<Printable<Workstation>> getWorkStationsFromAssemblyLine(Printable<AssemblyLine> assemblyLine) {
 		return this.get(assemblyLine).getWorkStations();
 	}
 
@@ -222,8 +224,8 @@ public class AssemblyLineScheduler {
 	 * Returns all workstations in the system.
 	 * @return		A list of all workstations wrapped in the printable interface.
 	 */
-	public List<Printable> getAllWorkstations() {
-		List<Printable> retval = new LinkedList<>();
+	public List<Printable<Workstation>> getAllWorkstations() {
+		List<Printable<Workstation>> retval = new LinkedList<>();
 		for(AssemblyLine al : this.assemblyLines){
 			retval.addAll(al.getWorkStations());
 		}
@@ -234,8 +236,8 @@ public class AssemblyLineScheduler {
 	 * Returns a list of printable objects of the list of assembly lines.
 	 * @return a list of printable objects of the list of assembly lines.
  	 */
-	public List<Printable> getAssemblyLines() {
-		List<Printable> retval = new LinkedList<Printable>();
+	public List<Printable<AssemblyLine>> getAssemblyLines() {
+		List<Printable<AssemblyLine>> retval = new LinkedList<>();
 		for(AssemblyLine al : assemblyLines){
 			retval.add(al);
 		}
@@ -249,7 +251,7 @@ public class AssemblyLineScheduler {
 	 * @return 	True if the duration is allowed.
 	 * 			False otherwise
 	 */
-	public boolean checkPhaseDuration(int duration, Printable assemblyLine) {
+	public boolean checkPhaseDuration(int duration, Printable<AssemblyLine> assemblyLine) {
 		AssemblyLine al = this.get(assemblyLine);
 		return al.checkPhaseDuration(duration);
 	}
@@ -258,8 +260,8 @@ public class AssemblyLineScheduler {
 	 * Returns a map mapping each assembly line to it's status.
 	 * @return a map mapping each assembly line to it's status.
 	 */
-	public Map<Printable, Printable> getAssemblyLinesStatuses() {
-		Map<Printable, Printable> retval = new HashMap<>();
+	public Map<Printable<AssemblyLine>, Printable<OperationalStatus>> getAssemblyLinesStatuses() {
+		Map<Printable<AssemblyLine>, Printable<OperationalStatus>> retval = new HashMap<>();
 		for(AssemblyLine al : this.assemblyLines){
 			retval.put(al, al.getOperationalStatus());
 		}
@@ -272,7 +274,7 @@ public class AssemblyLineScheduler {
 	 * @param assemblyLine		The assembly line of the workstation. 
 	 * @return	A list of tasks at the given workstation.
 	 */
-	public List<Printable> getAllTasksAt(Printable station, Printable assemblyLine) {
+	public List<Printable<Task>> getAllTasksAt(Printable<Workstation> station, Printable<AssemblyLine> assemblyLine) {
 		return this.get(assemblyLine).getAllTasks(station);
 	}
 
@@ -282,7 +284,7 @@ public class AssemblyLineScheduler {
 	 * @param assemblyLine		The assembly line of the workstation. 
 	 * @return	A list of tasks at the given workstation.
 	 */
-	public List<Printable> getRequiredTasks(Printable station, Printable assemblyLine) {
+	public List<Printable<Task>> getRequiredTasks(Printable<Workstation> station, Printable<AssemblyLine> assemblyLine) {
 		return this.get(assemblyLine).getRequiredTasks(station);
 	}
 
@@ -311,7 +313,7 @@ public class AssemblyLineScheduler {
 		return advance();
 	}
 
-	public List<Printable> getStrategies(Printable activeAssemblyLine) {
+	public List<Printable<SchedulingStrategy>> getStrategies(Printable<AssemblyLine> activeAssemblyLine) {
 		AssemblyLine active = get(activeAssemblyLine);
 		return active.getStrategies();
 	}
@@ -324,7 +326,7 @@ public class AssemblyLineScheduler {
 		return retval;
 	}
 	
-	public List<Order> getBatchList(Printable assemblyline){
+	public List<Order> getBatchList(Printable<AssemblyLine> assemblyline){
 		return this.get(assemblyline).getBachList();
 	}
 
@@ -334,11 +336,11 @@ public class AssemblyLineScheduler {
 		}
 	}
 	
-	public void setBatchStrategy(Order template, Printable assemblyline){
+	public void setBatchStrategy(Order template, Printable<AssemblyLine> assemblyline){
 		this.get(assemblyline).changeStrategy(template);
 	}
 
-	public void changeAssemblyLineStatus(Printable activeAssemblyLine,
+	public void changeAssemblyLineStatus(Printable<AssemblyLine> activeAssemblyLine,
 			OperationalStatus newStatus) {
 		this.get(activeAssemblyLine).setStatus(newStatus);
 		

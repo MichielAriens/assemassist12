@@ -5,7 +5,7 @@ import interfaces.Printable;
 /**
  * An enum to represent the operational status of an assembly line.
  */
-public enum OperationalStatus implements Printable{
+public enum OperationalStatus implements Printable<OperationalStatus>{
 	OPERATIONAL("Operational",0), 
 	MAINTENANCE("Maintenance",240), 
 	BROKEN("Broken",0),

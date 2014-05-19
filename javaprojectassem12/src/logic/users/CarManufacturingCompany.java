@@ -9,9 +9,13 @@ import java.util.Map;
 
 import org.joda.time.DateTime;
 
+import logic.assemblyline.AssemblyLine;
 import logic.assemblyline.AssemblyLineScheduler;
 import logic.assemblyline.OperationalStatus;
+import logic.assemblyline.SchedulingStrategy;
 import logic.car.Order;
+import logic.workstation.Task;
+import logic.workstation.Workstation;
 
 /**
  * Class used to describe a car manufacturing company.
@@ -128,7 +132,7 @@ public class CarManufacturingCompany {
 	 * @param assemblyLine
 	 * @return	The workstations of the assembly line.
 	 */
-	public List<Printable> getWorkStationsFromAssemblyLine(Printable assemblyLine){
+	public List<Printable<Workstation>> getWorkStationsFromAssemblyLine(Printable<AssemblyLine> assemblyLine){
 		
 		return assemblyLineScheduler.getWorkStationsFromAssemblyLine(assemblyLine);
 	}
@@ -137,7 +141,7 @@ public class CarManufacturingCompany {
 	 * Returns the list of all workstations from all assembly lines of the car manufacturing company.
 	 * @return the list of all workstations from all assembly lines of the car manufacturing company.
 	 */
-	public List<Printable> getWorkStations() {
+	public List<Printable<Workstation>> getWorkStations() {
 		return assemblyLineScheduler.getAllWorkstations();
 	}
 	
@@ -166,7 +170,7 @@ public class CarManufacturingCompany {
 	 * @return	True if the task is completed successfully
 	 * 			False the task could not be completed.
 	 */
-	public boolean doTask(Printable task, Printable assemblyLine, int duration){
+	public boolean doTask(Printable<Task> task, Printable<AssemblyLine> assemblyLine, int duration){
 		if(checkPhaseDuration(duration, assemblyLine))
 			return assemblyLineScheduler.doTask(task, assemblyLine, duration);
 		return false;
@@ -184,7 +188,7 @@ public class CarManufacturingCompany {
 	 * Returns a list of the current strategies followed by the available scheduling strategies.
 	 * @return a list of the current strategies followed by the available scheduling strategies.
 	 */
-	public List<Printable> getStrategies(Printable activeAssemblyLine) {
+	public List<Printable<SchedulingStrategy>> getStrategies(Printable<AssemblyLine> activeAssemblyLine) {
 		return assemblyLineScheduler.getStrategies(activeAssemblyLine);
 	}
 	
@@ -200,7 +204,7 @@ public class CarManufacturingCompany {
 	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy.
 	 * @return	a list of orders that are viable to be used by the batch specification scheduling strategy.
 	 */
-	public List<Order> getBatchList(Printable assemblyline) {
+	public List<Order> getBatchList(Printable<AssemblyLine> assemblyline) {
 		return assemblyLineScheduler.getBatchList(assemblyline);
 	}
 	
@@ -216,7 +220,7 @@ public class CarManufacturingCompany {
 	 * Changes the strategy according to the given order.
 	 * @param order	The order that has to be used as a template for the strategy.
 	 */
-	public void changeStrategy(Order order, Printable assemblyLine) {
+	public void changeStrategy(Order order, Printable<AssemblyLine> assemblyLine) {
 		assemblyLineScheduler.setBatchStrategy(order, assemblyLine);
 	}
 
@@ -227,7 +231,7 @@ public class CarManufacturingCompany {
 	 * @param line 		The assembly line of the workstation for which the pending tasks are needed.
 	 * @return	A list of tasks that are pending at the given workstation.
 	 */
-	public List<Printable> getRequiredTasks(Printable station, Printable assemblyLine){
+	public List<Printable<Task>> getRequiredTasks(Printable<Workstation> station, Printable<AssemblyLine> assemblyLine){
 		return this.assemblyLineScheduler.getRequiredTasks(station, assemblyLine);
 	}
 	
@@ -236,7 +240,7 @@ public class CarManufacturingCompany {
 	 * @param station	The a copy of the workstation for which the tasks are needed.
 	 * @return	A list of tasks at the given workstation.
 	 */
-	public List<Printable> getAllTasksAt(Printable station, Printable assemblyLine){
+	public List<Printable<Task>> getAllTasksAt(Printable<Workstation> station, Printable<AssemblyLine> assemblyLine){
 		return this.assemblyLineScheduler.getAllTasksAt(station, assemblyLine);
 	}
 	
@@ -246,7 +250,7 @@ public class CarManufacturingCompany {
 	 * @return 	True if the duration is allowed.
 	 * 			False otherwise
 	 */
-	private boolean checkPhaseDuration(int duration, Printable assemblyLine){
+	private boolean checkPhaseDuration(int duration, Printable<AssemblyLine> assemblyLine){
 		return this.assemblyLineScheduler.checkPhaseDuration(duration, assemblyLine);
 	}
 
@@ -254,7 +258,7 @@ public class CarManufacturingCompany {
 	 * Returns the assemblylines of the system in order.
 	 * @return
 	 */
-	public List<Printable> getAssemblyLines() {
+	public List<Printable<AssemblyLine>> getAssemblyLines() {
 		return assemblyLineScheduler.getAssemblyLines();
 	}
 
@@ -262,11 +266,11 @@ public class CarManufacturingCompany {
 	 * returns a map mapping each assembly line to it's status.
 	 * @return
 	 */
-	public Map<Printable,Printable> getAssemblyLinesStatuses() {
+	public Map<Printable<AssemblyLine>,Printable<OperationalStatus>> getAssemblyLinesStatuses() {
 		return assemblyLineScheduler.getAssemblyLinesStatuses();
 	}
 
-	public void changeAssemblyLineStatus(Printable activeAssemblyLine, OperationalStatus newStatus) {
+	public void changeAssemblyLineStatus(Printable<AssemblyLine> activeAssemblyLine, OperationalStatus newStatus) {
 		assemblyLineScheduler.changeAssemblyLineStatus(activeAssemblyLine, newStatus);
 	}
 }

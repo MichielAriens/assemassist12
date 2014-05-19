@@ -11,7 +11,7 @@ import org.joda.time.DateTime;
 /**
  * A class which represents different orders placed by users, only car orders and task orders available at the moment.
  */
-public abstract class Order implements Comparable<Order>, Printable{
+public abstract class Order implements Comparable<Order>, Printable<Order>{
 	
 	/**
 	 * The time this order was created.

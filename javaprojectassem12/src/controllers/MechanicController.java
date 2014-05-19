@@ -5,7 +5,10 @@ import interfaces.Printable;
 import java.util.ArrayList;
 import java.util.List;
 
+import logic.assemblyline.AssemblyLine;
 import logic.users.Mechanic;
+import logic.workstation.Task;
+import logic.workstation.Workstation;
 
 /**
  * Class used to form a link between the user interface and the Mechanic class.
@@ -47,9 +50,9 @@ public class MechanicController extends UserController{
 		if(this.currentMechanic == null)
 			return null;
 		ArrayList<String> workstations = new ArrayList<String>();
-		List<Printable> stations = this.currentMechanic.getWorkstationsFromAssemblyLine();
+		List<Printable<Workstation>> stations = this.currentMechanic.getWorkstationsFromAssemblyLine();
 		int count = 1;
-		for(Printable w : stations){
+		for(Printable<Workstation> w : stations){
 			workstations.add(w.getStringRepresentation() + ": " + count);
 			count++;
 		}
@@ -66,9 +69,9 @@ public class MechanicController extends UserController{
 		if(this.currentMechanic == null)
 			return null;
 		ArrayList<String> assemblyLines = new ArrayList<String>();
-		List<Printable> lines = this.currentMechanic.getAssemblyLines();
+		List<Printable<AssemblyLine>> lines = this.currentMechanic.getAssemblyLines();
 		int count = 1;
-		for(Printable w : lines){
+		for(Printable<AssemblyLine> w : lines){
 			assemblyLines.add(w.getStringRepresentation() + ": " + count);
 			count++;
 		}
@@ -86,7 +89,7 @@ public class MechanicController extends UserController{
 			return null;
 		ArrayList<String> tasks = new ArrayList<String>();
 		int count = 1;
-		for(Printable task : this.currentMechanic.getAvailableTasks()){
+		for(Printable<Task> task : this.currentMechanic.getAvailableTasks()){
 			tasks.add(task.getStringRepresentation() + ": " + count);
 			count++;
 		}
@@ -104,7 +107,7 @@ public class MechanicController extends UserController{
 	public String getTaskInformation(String taskName){
 		if(this.currentMechanic == null)
 			return null;
-		for(Printable task : this.currentMechanic.getAvailableTasks()){
+		for(Printable<Task> task : this.currentMechanic.getAvailableTasks()){
 			if(task.getStringRepresentation().equals(taskName))
 				return task.getExtraInformation();
 		}
@@ -119,7 +122,7 @@ public class MechanicController extends UserController{
 	public void doTask(String taskName, int duration){
 		if(this.currentMechanic == null)
 			return;
-		for(Printable task : this.currentMechanic.getAvailableTasks()){
+		for(Printable<Task> task : this.currentMechanic.getAvailableTasks()){
 			if(task.getStringRepresentation().equals(taskName))
 				currentMechanic.doTask(task, duration);
 		}
@@ -132,7 +135,7 @@ public class MechanicController extends UserController{
 	public void setAssemblyLine(String assemblyLine) {
 		if(this.currentMechanic == null)
 			return;
-		for(Printable line : this.currentMechanic.getAssemblyLines()){
+		for(Printable<AssemblyLine> line : this.currentMechanic.getAssemblyLines()){
 			if(line.getStringRepresentation().equals(assemblyLine))
 				this.currentMechanic.setActiveAssemblyLine(line);
 		}	
@@ -145,7 +148,7 @@ public class MechanicController extends UserController{
 	public void setWorkStation(String workstationName){
 		if(this.currentMechanic == null)
 			return;
-		for(Printable station : this.currentMechanic.getWorkstationsFromAssemblyLine()){
+		for(Printable<Workstation> station : this.currentMechanic.getWorkstationsFromAssemblyLine()){
 			if(station.getStringRepresentation().equals(workstationName))
 				this.currentMechanic.setActiveWorkstation(station);
 		}
@@ -161,17 +164,17 @@ public class MechanicController extends UserController{
 		if(this.currentMechanic == null)
 			return null;
 		ArrayList<String> tasks = new ArrayList<String>();
-		List<Printable> assemblyLines = this.currentMechanic.getAssemblyLines();
-		for(Printable line : assemblyLines){
+		List<Printable<AssemblyLine>> assemblyLines = this.currentMechanic.getAssemblyLines();
+		for(Printable<AssemblyLine> line : assemblyLines){
 			tasks.add("= " + line.getStringRepresentation() + " =");
 			this.currentMechanic.setActiveAssemblyLine(line);
-			List<Printable> workStations = this.currentMechanic.getWorkstationsFromAssemblyLine();
-			for(Printable stat : workStations){
+			List<Printable<Workstation>> workStations = this.currentMechanic.getWorkstationsFromAssemblyLine();
+			for(Printable<Workstation> stat : workStations){
 				String temp = " " + stat.toString() + ":\n";
 				if(this.currentMechanic.getAllTasks(stat).size() == 0)
 					temp += "   Inactive.\n";
 				else{
-					for(Printable task : this.currentMechanic.getAllTasks(stat)){
+					for(Printable<Task> task : this.currentMechanic.getAllTasks(stat)){
 						temp += "   -" + task.toString() + ": " + task.getStatus() + "\n";
 					}
 				}

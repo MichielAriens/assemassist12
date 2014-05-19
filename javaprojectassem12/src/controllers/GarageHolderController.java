@@ -51,7 +51,7 @@ public class GarageHolderController extends UserController{
 		if(this.currentGarageHolder == null)
 			return null;
 		ArrayList<String> pendingOrderStrings = new ArrayList<String>();
-		for(Printable order : this.currentGarageHolder.getPendingOrders()){
+		for(Printable<Order> order : this.currentGarageHolder.getPendingOrders()){
 			pendingOrderStrings.add("Pending, est. completion at: " + order.getStringRepresentation());
 		}
 		return pendingOrderStrings;
@@ -68,7 +68,7 @@ public class GarageHolderController extends UserController{
 	public String getPendingInfo(int index){
 		if(this.currentGarageHolder == null)
 			return null;
-		ArrayList<Printable> pendingOrders = this.currentGarageHolder.getPendingOrders();
+		ArrayList<Printable<Order>> pendingOrders = this.currentGarageHolder.getPendingOrders();
 		if(index < pendingOrders.size() && index >= 0)
 			return pendingOrders.get(index).getExtraInformation();
 		else
@@ -84,7 +84,7 @@ public class GarageHolderController extends UserController{
 	public String getCompletedInfo(int index){
 		if(this.currentGarageHolder == null)
 			return null;
-		ArrayList<Printable> completedOrders = this.currentGarageHolder.getCompletedOrders();
+		ArrayList<Printable<Order>> completedOrders = this.currentGarageHolder.getCompletedOrders();
 		if(index < completedOrders.size() && index >= 0)
 			return completedOrders.get(index).getExtraInformation();
 		else
@@ -100,7 +100,7 @@ public class GarageHolderController extends UserController{
 		if(this.currentGarageHolder == null)
 			return null;
 		ArrayList<String> completedOrderStrings = new ArrayList<String>();
-		for(Printable order : this.currentGarageHolder.getCompletedOrders()){
+		for(Printable<Order> order : this.currentGarageHolder.getCompletedOrders()){
 			completedOrderStrings.add("Completed on: " + order.toString());
 		}
 		return completedOrderStrings;

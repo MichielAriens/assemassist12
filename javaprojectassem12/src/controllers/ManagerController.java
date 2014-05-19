@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import logic.assemblyline.AssemblyLine;
 import logic.assemblyline.OperationalStatus;
+import logic.assemblyline.SchedulingStrategy;
 import logic.car.Order;
 import logic.users.Manager;
 import logic.workstation.Task;
@@ -65,7 +67,7 @@ public class ManagerController extends UserController{
 		if(currentManager == null)
 			return null;
 		ArrayList<String> strategies = new ArrayList<String>();
-		for(Printable s : currentManager.getStrategies()){
+		for(Printable<SchedulingStrategy> s : currentManager.getStrategies()){
 			strategies.add(s.getStringRepresentation());
 		}
 		return strategies;
@@ -138,9 +140,9 @@ public class ManagerController extends UserController{
 		if(this.currentManager == null)
 			return null;
 		ArrayList<String> assemblyLines = new ArrayList<String>();
-		List<Printable> lines = this.currentManager.getAssemblyLines();
+		List<Printable<AssemblyLine>> lines = this.currentManager.getAssemblyLines();
 		int count = 1;
-		for(Printable w : lines){
+		for(Printable<AssemblyLine> w : lines){
 			assemblyLines.add(w.getStringRepresentation() + ": " + count);
 			count++;
 		}
@@ -150,8 +152,8 @@ public class ManagerController extends UserController{
 	public String getCurrentAssemblyLineStatus() {
 		if(this.currentManager == null || this.currentManager.getActiveAssemblyLine() == null)
 			return null;
-		Map<Printable, Printable> assemblyLineStatuses = currentManager.getAssemblyLinesStatuses();
-		Printable currentAssemblyLine = assemblyLineStatuses.get(currentManager.getActiveAssemblyLine());
+		Map<Printable<AssemblyLine>, Printable<OperationalStatus>> assemblyLineStatuses = currentManager.getAssemblyLinesStatuses();
+		Printable<OperationalStatus> currentAssemblyLine = assemblyLineStatuses.get(currentManager.getActiveAssemblyLine());
 		return currentAssemblyLine + "";
 	}
 
@@ -162,7 +164,7 @@ public class ManagerController extends UserController{
 	public void setAssemblyLine(String assemblyLine) {
 		if(this.currentManager == null)
 			return;
-		for(Printable line : this.currentManager.getAssemblyLines()){
+		for(Printable<AssemblyLine> line : this.currentManager.getAssemblyLines()){
 			if(line.getStringRepresentation().equals(assemblyLine))
 				this.currentManager.setActiveAssemblyLine(line);
 		}	

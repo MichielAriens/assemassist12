@@ -5,7 +5,9 @@ import interfaces.Printable;
 import java.util.List;
 import java.util.Map;
 
+import logic.assemblyline.AssemblyLine;
 import logic.assemblyline.OperationalStatus;
+import logic.assemblyline.SchedulingStrategy;
 import logic.car.Order;
 
 /**
@@ -21,7 +23,7 @@ public class Manager extends User{
 	/**
 	 * The printable instance of the assembly line the manager wants to perform actions on.
 	 */
-	private Printable activeAssemblyLine = null;
+	private Printable<AssemblyLine> activeAssemblyLine = null;
 	
 	/**
 	 * Constructs a new manager initializing its company and user name with the given 
@@ -46,7 +48,7 @@ public class Manager extends User{
 	 * Returns a list of the current strategies followed by the available scheduling strategies.
 	 * @return a list of the current strategies followed by the available scheduling strategies.
 	 */
-	public List<Printable> getStrategies() {
+	public List<Printable<SchedulingStrategy>> getStrategies() {
 		return company.getStrategies(activeAssemblyLine);
 	}
 	
@@ -66,11 +68,11 @@ public class Manager extends User{
 		company.changeStrategy(order);
 	}
 
-	public List<Printable> getAssemblyLines() {
+	public List<Printable<AssemblyLine>> getAssemblyLines() {
 		return company.getAssemblyLines();
 	}
 	
-	public Map<Printable, Printable> getAssemblyLinesStatuses() {
+	public Map<Printable<AssemblyLine>, Printable<OperationalStatus>> getAssemblyLinesStatuses() {
 		return company.getAssemblyLinesStatuses();
 	}
 	
@@ -78,11 +80,11 @@ public class Manager extends User{
 	 * Set the active assembly line to the given assembly line.
 	 * @param line	The new active assembly line.
 	 */
-	public void setActiveAssemblyLine(Printable line){
+	public void setActiveAssemblyLine(Printable<AssemblyLine> line){
 		this.activeAssemblyLine = line;
 	}
 
-	public Printable getActiveAssemblyLine() {
+	public Printable<AssemblyLine> getActiveAssemblyLine() {
 		return activeAssemblyLine;
 	}
 

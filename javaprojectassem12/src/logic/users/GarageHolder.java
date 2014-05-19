@@ -5,6 +5,7 @@ import interfaces.Printable;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import logic.car.Order;
 import logic.car.VehicleOrder;
 import logic.car.CarOrderDetails;
 
@@ -39,8 +40,8 @@ public class GarageHolder extends User{
 	 * Returns a list of all committed orders that are not yet completed.
 	 * @return a list of all committed orders that are not yet completed.
 	 */
-	public ArrayList<Printable> getPendingOrders(){
-		ArrayList<Printable> pendingOrders = new ArrayList<>();
+	public ArrayList<Printable<Order>> getPendingOrders(){
+		ArrayList<Printable<Order>> pendingOrders = new ArrayList<>();
 		for(VehicleOrder o : this.committedOrders){
 			if(!o.done())
 				pendingOrders.add(o);
@@ -52,14 +53,14 @@ public class GarageHolder extends User{
 	 * Returns a list of all committed orders that are completed sorted on end time.
 	 * @return a list of all committed orders that are completed sorted on end time.
 	 */
-	public ArrayList<Printable> getCompletedOrders(){
+	public ArrayList<Printable<Order>> getCompletedOrders(){
 		ArrayList<VehicleOrder> completedOrders = new ArrayList<VehicleOrder>();
 		for(VehicleOrder o : this.committedOrders){
 			if(o.done())
 				completedOrders.add(o);
 		}
 		Collections.sort(completedOrders);
-		return new ArrayList<Printable>(completedOrders);
+		return new ArrayList<Printable<Order>>(completedOrders);
 	}
 	
 	/**
