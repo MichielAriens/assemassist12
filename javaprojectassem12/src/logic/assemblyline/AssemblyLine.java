@@ -75,14 +75,14 @@ public class AssemblyLine implements Printable {
 	 * Initializes the workstations, the schedule, the statistics and the queue containing the orders.
 	 * Also sets the current time to January first 2014 at the beginning of the shift. 
 	 */
-	public AssemblyLine(Collection<VehicleModel> capabilities, WorkstationChainBuilder builder, String name){
+	public AssemblyLine(Collection<VehicleModel> capabilities, WorkstationChainBuilder builder, DateTime startTime, String name){
 		this.name = name;
 		this.capabilities = capabilities;
 		queue= new LinkedList<Order>();
 		schedule = new Schedule();
 		this.firstWorkStation = builder.getResult();
 		this.numberOfWorkStations = firstWorkStation.countWorkStations();
-		this.cycleStartTime = new DateTime(2014, 1, 1, 6, 0);
+		this.cycleStartTime = startTime;
 		stats = new StatisticsAssemblyLine(this.getStringRepresentation());
 	}
 
