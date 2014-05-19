@@ -51,10 +51,6 @@ public class AssemblyLineScheduler {
 	 * @param	order	...
 	 */
 	public void addOrder(Order order){
-		if(order == null)
-			System.out.println("michiel heeft gelijk");
-		else
-			System.out.println("Michiel is nen tard");
 		Map<AssemblyLine, DateTime> estimates = new HashMap<>();
 		//Map every al to its estimate
 		for(AssemblyLine al : getNonBrokenLines()){
@@ -68,6 +64,10 @@ public class AssemblyLineScheduler {
 			if(best == null){
 				best = is;
 			}else{
+				if(estimates.get(is) == null)
+					System.out.println("michiel heeft beslist gelijk");
+				else
+					System.out.println("Michiel is onbeslist");
 				if(estimates.get(is).isBefore(estimates.get(best))){
 					best = is;
 				}
