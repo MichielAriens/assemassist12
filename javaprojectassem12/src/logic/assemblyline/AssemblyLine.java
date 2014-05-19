@@ -121,13 +121,25 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			returnList = schedule.makeCopyOfQueue();
 			queue.clear();
 		}
+		if((status == OperationalStatus.PREMAINTENANCE && firstWorkStation.allIdle()) || status == OperationalStatus.MAINTENANCE){
+			this.status = OperationalStatus.MAINTENANCE;
+			cycleTime = this.status.getTime();
+		}
 		return returnList;
 			
 	}
 	
 	protected void fix(DateTime realTime){
+		cycleTime= calculateBrokenTime(realTime);
 		this.cycleStartTime =realTime;
 		this.setStatus(OperationalStatus.OPERATIONAL);
+	}
+	
+	private int calculateBrokenTime(DateTime realTime){
+		if(Days.daysBetween(cycleStartTime, realTime).getDays() == 0 || (Days.daysBetween(cycleStartTime, realTime).getDays() == 0 && cycleStartTime.getMinuteOfDay()+cycleTime <= realTime.getMinuteOfDay())){
+			return 0;
+		}
+		return realTime.getMinuteOfDay() - cycleStartTime.getMinuteOfDay();
 	}
 
 	/**
@@ -138,13 +150,15 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	 */
 	 protected boolean moveAssemblyLine(DateTime realTime){
 		if(tryMoveAssemblyLine()){
-			if(status== OperationalStatus.MAINTENANCE && firstWorkStation.allIdle())
+			if(status== OperationalStatus.MAINTENANCE){
 				setStatus(OperationalStatus.OPERATIONAL);
+				cycleTime=0;
+			}
 			boolean done = schedule.moveAndReschedule(cycleTime);
 			cycleTime = 0;
 			cycleStartTime = realTime;
-			if(status==OperationalStatus.MAINTENANCE && firstWorkStation.allIdle())
-				cycleTime=status.getTime();
+			if(status==OperationalStatus.PREMAINTENANCE && firstWorkStation.allIdle())
+				setStatus(OperationalStatus.MAINTENANCE);
 			return done;
 		}
 
@@ -691,6 +705,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			order.setStartTime(realTime);
 			if(firstWorkStation.getCurrentOrder()==null && queue.isEmpty()){
 				returnTime = firstOrderEstimate(order);
+				returnTime = getEstimatedTime(returnTime, order);
 				return returnTime;
 			}else{
 				if(!queue.isEmpty()){
