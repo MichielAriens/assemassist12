@@ -12,6 +12,7 @@ import logic.car.Order;
 import logic.car.VehicleModel;
 import logic.car.VehicleOrder;
 import logic.car.VehiclePart;
+import logic.car.VehiclePartType;
 import logic.users.CarManufacturingCompany;
 import logic.workstation.Task;
 
@@ -255,7 +256,9 @@ public class AssemblyLineSchedulerTest {
 		
 		cmc.getAssemblyLines();
 		for(Task task : order.getTasks()){
-			cmc.doTask(task , line, 50);
+			if(task.getCarPart().type == VehiclePartType.Body || task.getCarPart().type == VehiclePartType.Colour){
+				cmc.doTask(task , line, 50);
+			}
 		}
 		
 	}

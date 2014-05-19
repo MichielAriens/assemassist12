@@ -34,6 +34,9 @@ public class Task implements Printable<Task>{
 	 * @param estimDur The estimated duration for this task to be completed.
 	 */
 	public Task(VehiclePart part, int estimDur){
+		if(part.autocompl){
+			this.completed = true;
+		}
 		this.carPart = part;
 		this.estimatedPhaseDuration = estimDur;
 	}

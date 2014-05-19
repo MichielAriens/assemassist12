@@ -81,7 +81,13 @@ public class AssemblyLineScheduler {
 	 * @return		true if a line was moved
 	 * 				false if no lines were moved
 	 */
-	private boolean advance(){
+	private void advance(){
+		while(advanceOnce()){
+			//Keep advancing while andvancing doesn't fail.
+		}
+	}
+	
+	private boolean advanceOnce(){
 		List<AssemblyLine> emptyLines = new ArrayList<AssemblyLine>(2);		
 		if(linesReadyToMove()){
 			AssemblyLine bestLine = null;
@@ -106,6 +112,7 @@ public class AssemblyLineScheduler {
 			for(AssemblyLine al : emptyLines){
 				al.setCycleStartTime(currentTime);
 			}
+			return true;
 		}return false;
 	}
 	
@@ -311,16 +318,6 @@ public class AssemblyLineScheduler {
 		}
 		stats.updateRecords(statsList);
 		return stats.toString();
-	}
-
-	/**
-	 * Try to advance the assembly line. This function should be redundant. It can't induce an unsafe state.  
-	 * @param shiftDuration
-	 * @return
-	 * @deprecated
-	 */
-	public boolean tryMoveAssemblyLine(int shiftDuration) {
-		return advance();
 	}
 
 	public List<Printable<SchedulingStrategy>> getStrategies(Printable<AssemblyLine> activeAssemblyLine) {
