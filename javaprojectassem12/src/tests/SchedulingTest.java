@@ -16,6 +16,7 @@ import logic.workstation.WorkstationDirector;
 import logic.workstation.WorkstationDirectorA;
 import logic.workstation.WorkstationDirectorB;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -168,7 +169,7 @@ public class SchedulingTest {
 		director.construct();
 		
 		VehicleModel[] models = {VehicleModel.CARMODELA, VehicleModel.CARMODELB, VehicleModel.CARMODELC};
-		this.line = new AssemblyLine(Arrays.asList(models), builder);
+		this.line = new AssemblyLine(Arrays.asList(models), builder, new DateTime(2014, 1, 1, 6, 0), "Assembly Line 1");
 	}
 	
 	private void buildAssemblyLineB(){
@@ -177,7 +178,7 @@ public class SchedulingTest {
 		director.construct();
 		
 		VehicleModel[] models = {VehicleModel.CARMODELA, VehicleModel.CARMODELB, VehicleModel.CARMODELC, VehicleModel.TRUCKMODELX, VehicleModel.TRUCKMODELY};
-		this.line = new AssemblyLine(Arrays.asList(models), builder);
+		this.line = new AssemblyLine(Arrays.asList(models), builder, new DateTime(2014, 1, 1, 6, 0), "Assembly Line 3");
 	}
 
 	@Test

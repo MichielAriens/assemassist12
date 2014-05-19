@@ -1,10 +1,12 @@
 package tests;
 
 import static org.junit.Assert.assertTrue;
+import interfaces.Printable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import logic.assemblyline.AssemblyLine;
 import logic.car.VehicleModel;
 import logic.car.VehicleOrder;
 import logic.car.CarOrderDetailsMaker;
@@ -13,6 +15,7 @@ import logic.car.Order;
 import logic.users.CarManufacturingCompany;
 import logic.users.Mechanic;
 import logic.workstation.Task;
+import logic.workstation.Workstation;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +30,7 @@ public class StatisticsTests {
 	private List<Order> orders = new ArrayList<Order>();
 	
 	/**
-	 * Build a standard order: duration 60
+	 * Build a standard order: duration 60, 60, 0
 	 * @return	A standard order with a duration of 60 minutes.
 	 */
 	private VehicleOrder buildStandardOrderC(){
@@ -39,7 +42,10 @@ public class StatisticsTests {
 				VehiclePart.SEATS_LEATHER_WHITE,
 				VehiclePart.AIRCO_NONE,
 				VehiclePart.WHEELS_SPORTS,
-				VehiclePart.SPOILER_LOW
+				VehiclePart.SPOILER_LOW,
+				VehiclePart.TOOLSTORAGE_NONE,
+				VehiclePart.CARGO_NONE,
+				VehiclePart.CERTIFICATION_NONE
 			};
 		
 		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELC);
@@ -62,7 +68,6 @@ public class StatisticsTests {
 		cmc = new CarManufacturingCompany();
 		for(int i = 0; i < 3; i++){
 			mechs.add(new Mechanic(cmc, "SuperMech2014"));
-			mechs.get(i).setActiveWorkstation(cmc.getWorkStations().get(i));
 		}
 		
 		//Build n orders
@@ -74,12 +79,26 @@ public class StatisticsTests {
 		}
 		
 		//Do all the orders
+		int tasksPerformed = 0;
 		while(!orders.get(orders.size()-1).done()){
 			for(Mechanic mech : mechs){
-				for(Task task : mech.getAvailableTasks()){
-					mech.doTask(task, 60);
+				for(Printable<AssemblyLine> line : mech.getAssemblyLines()){
+					mech.setActiveAssemblyLine(line);
+					for(Printable<Workstation> station : mech.getWorkstationsFromAssemblyLine()){
+						mech.setActiveWorkstation(station);
+						for(Printable<Task> task : mech.getAvailableTasks()){
+							mech.doTask(task, 60);
+							tasksPerformed++;
+						}
+					}
 				}
 			}
+			if(tasksPerformed == 0){
+				System.err.println("SOMETING WONG? cause 0 tasks performed");
+				break;
+			}
+			System.out.println("   Tasks performed: " + tasksPerformed);
+			tasksPerformed = 0;
 		}
 	}
 	
