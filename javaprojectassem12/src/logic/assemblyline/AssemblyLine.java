@@ -290,8 +290,12 @@ public class AssemblyLine implements Printable {
 
 	@Override
 	public String getExtraInformation() {
-		// TODO Auto-generated method stub
-		return null;
+		String extraInfo = "";
+		extraInfo += "Possible models: \n";
+		for(VehicleModel model : capabilities){
+			extraInfo += "   - " + model.toString() +"\n";
+		}
+		return extraInfo;
 	}
 
 	@Override

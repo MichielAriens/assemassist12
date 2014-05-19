@@ -189,7 +189,7 @@ public class AssemblyLineScheduler {
 		director.construct();
 		
 		VehicleModel[] models = {VehicleModel.CARMODELA, VehicleModel.CARMODELB};
-		this.addLine(new AssemblyLine(Arrays.asList(models), builder));
+		this.addLine(new AssemblyLine(Arrays.asList(models), builder, "Assembly Line 1"));
 	}
 	
 	private void buildLine2() {
@@ -198,7 +198,7 @@ public class AssemblyLineScheduler {
 		director.construct();
 		
 		VehicleModel[] models = {VehicleModel.CARMODELA, VehicleModel.CARMODELB, VehicleModel.CARMODELC};
-		this.addLine(new AssemblyLine(Arrays.asList(models), builder));
+		this.addLine(new AssemblyLine(Arrays.asList(models), builder, "Assembly Line 2"));
 	}
 	
 	private void buildLine3() {
@@ -207,7 +207,7 @@ public class AssemblyLineScheduler {
 		director.construct();
 		
 		VehicleModel[] models = {VehicleModel.CARMODELA, VehicleModel.CARMODELB, VehicleModel.CARMODELC, VehicleModel.TRUCKMODELX, VehicleModel.TRUCKMODELY};
-		this.addLine(new AssemblyLine(Arrays.asList(models), builder));
+		this.addLine(new AssemblyLine(Arrays.asList(models), builder, "Assembly Line 3"));
 	}
 
 	/**
