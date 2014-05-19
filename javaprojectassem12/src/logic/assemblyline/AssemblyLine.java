@@ -189,6 +189,8 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	 * 			False the task could not be completed.
 	 */
 	public boolean doTask(Printable<Task> task, int timeTaken){
+		if(status == OperationalStatus.BROKEN)
+			return false;
 		boolean work = firstWorkStation.doTask(task, timeTaken);
 		if(firstWorkStation.canMoveAssemblyLine()){
 			cycleTime = firstWorkStation.getMaxElapsedTime();

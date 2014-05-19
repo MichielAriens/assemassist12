@@ -4,8 +4,10 @@ import interfaces.Printable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import logic.assemblyline.AssemblyLine;
+import logic.assemblyline.OperationalStatus;
 import logic.users.Mechanic;
 import logic.workstation.Task;
 import logic.workstation.Workstation;
@@ -71,8 +73,8 @@ public class MechanicController extends UserController{
 		ArrayList<String> assemblyLines = new ArrayList<String>();
 		List<Printable<AssemblyLine>> lines = this.currentMechanic.getAssemblyLines();
 		int count = 1;
-		for(Printable<AssemblyLine> w : lines){
-			assemblyLines.add(w.getStringRepresentation() + ": " + count);
+		for(Printable<AssemblyLine> line : lines){
+			assemblyLines.add(line.getStringRepresentation() + ": " + count);
 			count++;
 		}
 		return assemblyLines;
@@ -139,8 +141,9 @@ public class MechanicController extends UserController{
 		if(this.currentMechanic == null)
 			return;
 		for(Printable<AssemblyLine> line : this.currentMechanic.getAssemblyLines()){
-			if(line.getStringRepresentation().equals(assemblyLine))
+			if(line.getStringRepresentation().equals(assemblyLine)){
 				this.currentMechanic.setActiveAssemblyLine(line);
+			}
 		}	
 	}
 	
@@ -169,7 +172,7 @@ public class MechanicController extends UserController{
 		ArrayList<String> tasks = new ArrayList<String>();
 		List<Printable<AssemblyLine>> assemblyLines = this.currentMechanic.getAssemblyLines();
 		for(Printable<AssemblyLine> line : assemblyLines){
-			tasks.add("= " + line.getStringRepresentation() + " =");
+			tasks.add("= " + line.getStringRepresentation() + " [" + line.getStatus() + "] =");
 			this.currentMechanic.setActiveAssemblyLine(line);
 			List<Printable<Workstation>> workStations = this.currentMechanic.getWorkstationsFromAssemblyLine();
 			for(Printable<Workstation> stat : workStations){

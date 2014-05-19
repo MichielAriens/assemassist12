@@ -72,7 +72,7 @@ public class StatisticsTests {
 		
 		//Build n orders
 		Order curr;
-		for(int i = 0; i < 200; i++){
+		for(int i = 0; i < 1; i++){
 			curr = buildStandardOrderC();
 			orders.add(curr);
 			cmc.addOrder(curr);
@@ -93,10 +93,10 @@ public class StatisticsTests {
 					}
 				}
 			}
-			if(tasksPerformed == 0){
-				System.err.println("SOMETING WONG? cause 0 tasks performed");
-				break;
-			}
+//			if(tasksPerformed == 0){
+//				System.err.println("SOMETING WONG? cause 0 tasks performed");
+//				break;
+//			}
 			System.out.println("   Tasks performed: " + tasksPerformed);
 			tasksPerformed = 0;
 		}

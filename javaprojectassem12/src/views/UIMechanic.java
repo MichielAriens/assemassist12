@@ -144,7 +144,7 @@ public class UIMechanic {
 			if(this.meController.doTask(answer, duration))
 				writer.write("Task has been completed successfully.\n");
 			else
-				writer.write("Task couldn't be completed successfully, probably due to invalid filled in time.\n");
+				writer.write("Task couldn't be completed successfully, due to invalid filled in time or the assembly line is broken.\n");
 		} catch(IOException e){
 			e.printStackTrace();
 		}

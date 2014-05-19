@@ -3,8 +3,10 @@ package logic.users;
 import interfaces.Printable;
 
 import java.util.List; 
+import java.util.Map;
 
 import logic.assemblyline.AssemblyLine;
+import logic.assemblyline.OperationalStatus;
 import logic.workstation.Task;
 import logic.workstation.Workstation;
 
@@ -66,7 +68,6 @@ public class Mechanic extends User{
 	 * @return	True if the task has been performed successfully.
 	 * 			False otherwise.
 	 */
-	//TODO: checpPhaseDuration kan evengoed in company gebeuren?
 	public boolean doTask(Printable<Task> task, int duration){
 		return company.doTask(task, this.activeAssemblyLine, duration);
 	}
@@ -137,5 +138,13 @@ public class Mechanic extends User{
 	 */
 	public void setActiveAssemblyLine(Printable<AssemblyLine> line){
 		this.activeAssemblyLine = line;
+	}
+
+	/**
+	 * Returns a map mapping each assembly line to it's operational status.
+	 * @return a map mapping each assembly line to it's operational status.
+	 */
+	public  Map<Printable<AssemblyLine>, Printable<OperationalStatus>> getAssemblyLinesStatuses() {
+		return company.getAssemblyLinesStatuses();
 	}
 }
