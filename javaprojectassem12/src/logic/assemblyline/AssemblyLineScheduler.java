@@ -259,8 +259,8 @@ public class AssemblyLineScheduler {
 	 * Returns a map mapping each assembly line to it's status.
 	 * @return a map mapping each assembly line to it's status.
 	 */
-	public Map<Printable, OperationalStatus> getAssemblyLinesStatuses() {
-		Map<Printable,OperationalStatus> retval = new HashMap<>();
+	public Map<Printable, Printable> getAssemblyLinesStatuses() {
+		Map<Printable, Printable> retval = new HashMap<>();
 		for(AssemblyLine al : this.assemblyLines){
 			retval.put(al, al.getOperationalStatus());
 		}
@@ -312,14 +312,9 @@ public class AssemblyLineScheduler {
 		return advance();
 	}
 
-	/**
-	 * Return a list if
-	 * @param activeAssemblyLine
-	 * @return
-	 */
 	public List<Printable> getStrategies(Printable activeAssemblyLine) {
-		// TODO Auto-generated method stub
-		return null;
+		AssemblyLine active = get(activeAssemblyLine);
+		return active.getStrategies();
 	}
 
 	public List<Order> getBatchList() {
