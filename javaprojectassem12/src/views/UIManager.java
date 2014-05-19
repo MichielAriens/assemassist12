@@ -97,7 +97,7 @@ public class UIManager {
 		OperationalStatus[] availableStatuses = OperationalStatus.values();
 		int count = 1;
 		for(OperationalStatus o : availableStatuses){
-			query += "   " + count + ": " + o.getStringRepresentation() + "\n";
+			query += "   " + count + ": " + o.toString() + "\n";
 			count++;
 		}
 		query += "   " + count + ": Cancel\nAnswer: ";

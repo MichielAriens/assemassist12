@@ -5,6 +5,7 @@ import interfaces.Printable;
 import java.util.List;
 import java.util.Map;
 
+import logic.assemblyline.OperationalStatus;
 import logic.car.Order;
 
 /**
@@ -85,7 +86,7 @@ public class Manager extends User{
 		return activeAssemblyLine;
 	}
 
-	public void changeAssemblyLineStatus(Printable newStatus) {
+	public void changeAssemblyLineStatus(OperationalStatus newStatus) {
 		company.changeAssemblyLineStatus(activeAssemblyLine, newStatus);
 	}
 }
