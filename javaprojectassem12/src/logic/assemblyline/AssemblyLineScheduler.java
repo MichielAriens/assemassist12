@@ -51,8 +51,9 @@ public class AssemblyLineScheduler {
 		Map<AssemblyLine, DateTime> estimates = new HashMap<>();
 		//Map every al to its estimate
 		for(AssemblyLine al : getNonBrokenLines()){
-			if(al.accepts(order));
-			estimates.put(al, al.getEstimate(order,currentTime));
+			if(al.accepts(order)){
+				estimates.put(al, al.getEstimate(order,currentTime));
+			}
 		}
 		//chose the best estimate
 		AssemblyLine best = null;
