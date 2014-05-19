@@ -205,6 +205,10 @@ public class AssemblyLine implements Printable {
 		return firstWorkStation.canMoveAssemblyLine();
 			
 	}
+	
+	public boolean ready(){
+		return this.tryMoveAssemblyLine();
+	}
 
 	/**
 	 * Returns a list of the current strategies followed by the available scheduling strategies.

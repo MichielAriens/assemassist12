@@ -86,7 +86,7 @@ public class AssemblyLineScheduler {
 				if(bestLine == null){
 					bestLine = al;
 				}
-				if(al.getCycleEnd().isBefore(bestLine.getcycleStartTime())){
+				if(al.ready() && al.getCycleEnd().isBefore(bestLine.getcycleStartTime())){
 					bestLine = al;
 				}
 				
@@ -122,10 +122,7 @@ public class AssemblyLineScheduler {
 	public boolean doTask(Printable Task, Printable assemblyLine, int minutes){
 		AssemblyLine line = this.get(assemblyLine);
 		boolean completed = line.doTask(Task, minutes);
-		if(completed){
-			//try to advance the system.
-			this.advance();
-		}
+		this.advance();
 		return completed;
 	}
 	

@@ -196,6 +196,10 @@ public class UIGarageHolder {
 	 */
 	private String checkInput(String query, ArrayList<String> answers){
 		try{
+			if(answers.size() == 1){
+				//No need to query user
+				return answers.get(0).substring(0, answers.get(0).indexOf(":"));
+			}
 			while(true){
 				writer.write(query);
 				writer.flush();
