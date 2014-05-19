@@ -197,7 +197,41 @@ public class AssemblyLineSchedulerTest {
 		for(Order order : orders){
 			cmc.addOrder(order);
 		}
+	}
+	
+	@Test
+	public void testRandom(){
+		CarManufacturingCompany cmc = new CarManufacturingCompany();
+		List<Order> orders = new ArrayList<Order>();
+		orders.add(buildStandardOrderA());
+		orders.add(buildStandardOrderA());
+		orders.add(buildStandardOrderA());
+		orders.add(buildStandardOrderA());
+		orders.add(buildStandardOrderA());
+		orders.add(buildStandardOrderA());
+		orders.add(buildStandardOrderA());
+		orders.add(buildStandardOrderA());
+		orders.add(buildStandardOrderA());
+		orders.add(buildStandardOrderA());
+		orders.add(buildStandardOrderX());
+		orders.add(buildStandardOrderY());
+		orders.add(buildStandardOrderX());
+		orders.add(buildStandardOrderX());
+		orders.add(buildStandardOrderY());
+		orders.add(buildStandardOrderX());
+		orders.add(buildStandardOrderX());
+		orders.add(buildStandardOrderY());
+		orders.add(buildStandardOrderX());
+		orders.add(buildStandardOrderB());
+		orders.add(buildStandardOrderB());
+		orders.add(buildStandardOrderB());
 		
+		
+		
+		for(Order order : orders){
+			cmc.addOrder(order);
+		}
+		System.out.println(orders.get(orders.size() - 1).getEstimatedEndTime());
 		
 	}
 	
