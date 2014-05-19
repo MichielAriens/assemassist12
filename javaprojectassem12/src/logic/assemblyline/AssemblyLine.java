@@ -294,7 +294,7 @@ public class AssemblyLine implements Printable {
 
 	@Override
 	public String getStatus() {
-		return status.getStringRepresentation();
+		return status.toString();
 	}
 
 	/**
