@@ -78,9 +78,8 @@ public class AssemblyLineScheduler {
 	}
 	
 	/**
-	 * Looks at the state of all the assembly lines at determines which assembly lines can be moved forwards.
-	 * @return		true if a line was moved
-	 * 				false if no lines were moved
+	 * Repeatedly looks at the state of all the assembly lines at determines which assembly lines can be moved forwards.
+	 * When moving the current time is synchronised with the last known time information from the assemblylines. 
 	 */
 	private void advance(){
 		while(advanceOnce()){
@@ -88,6 +87,12 @@ public class AssemblyLineScheduler {
 		}
 	}
 	
+	/**
+	 * Looks at the state of all the assembly lines at determines which assembly lines can be moved forwards.
+	 * Will move exactly one or no assemblylines.
+	 * @return		true if a line was moved
+	 * 				false if no lines were moved
+	 */
 	private boolean advanceOnce(){
 		List<AssemblyLine> emptyLines = new ArrayList<AssemblyLine>(2);		
 		if(linesReadyToMove()){
@@ -143,6 +148,12 @@ public class AssemblyLineScheduler {
 			setNewDay(currentTime);
 		}
 		
+	}
+	
+	private void scheduleOverflowQueue(){
+		for(Order order : this.overflowQueue){
+			this.addOrder(order);
+		}
 	}
 
 	/**
