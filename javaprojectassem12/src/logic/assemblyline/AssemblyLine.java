@@ -133,7 +133,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	
 	/**
 	 * Returns the longest time taken by this assembly line to complete its cycle.
-	 * @return
+	 * @return	The longest time taken by a task in this phase.
 	 */
 	public int getCycleTime(){
 		return this.cycleTime;
@@ -141,12 +141,17 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	
 	/**
 	 * Gets the end of the current phase (= time of the begin of the next cycle).
-	 * @return
+	 * @return The end time of the cycle in this assembly line.
 	 */
 	public DateTime getCycleEnd(){
 		return this.getcycleStartTime().plusMinutes(cycleTime);
 	}
 	
+	/**
+	 * 
+	 * @param status
+	 * @return
+	 */
 	public List<Order> changeStatus(OperationalStatus status){
 		this.status=status;
 		LinkedList<Order> returnList = new LinkedList<Order>();
