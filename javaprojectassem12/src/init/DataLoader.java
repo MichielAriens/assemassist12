@@ -1,17 +1,21 @@
 package init;
 
+import interfaces.Printable;
+
 import org.joda.time.DateTime;
 
+import logic.assemblyline.AssemblyLine;
 import logic.car.VehicleOrderDetails;
 import logic.car.VehicleOrderDetailsMaker;
-import logic.car.TaskOrder;
 import logic.car.TaskOrderDetails;
 import logic.car.TaskOrderDetailsMaker;
 import logic.car.VehicleModel;
-import logic.car.VehicleOrder;
 import logic.car.VehiclePart;
 import logic.users.CarManufacturingCompany;
 import logic.users.GarageHolder;
+import logic.users.Mechanic;
+import logic.workstation.Task;
+import logic.workstation.Workstation;
 
 public class DataLoader {
 	
@@ -22,13 +26,34 @@ public class DataLoader {
 	}
 	
 	public void loadData(){
-		
+		advanceDay();
+		System.out.println("hello");
 	}
 	
-	private void placeOrders(){
+	private void advanceDay(){
 		GarageHolder holder = (GarageHolder) this.company.logIn("gar");
-		for(int i = 0; i < 10; i++){
+		for(int i = 0; i < 55; i++){
 			holder.placeOrder(buildStandardOrderA());
+		}
+		performAllTasks();
+	}
+	
+	private void performAllTasks(){
+		Mechanic mech = (Mechanic) this.company.logIn("mech");
+		boolean taskPerformed = true;
+		while(taskPerformed){
+			taskPerformed = false;
+			for(Printable<AssemblyLine> line : mech.getAssemblyLines()){
+				mech.setActiveAssemblyLine(line);
+				for(Printable<Workstation> station : mech.getWorkstationsFromAssemblyLine()){
+					mech.setActiveWorkstation(station);
+					for(Printable<Task> task : mech.getAvailableTasks()){
+						int duration = ((Task) task).getEstimatedPhaseDuration();
+						mech.doTask(task, duration);
+						taskPerformed = true;
+					}
+				}
+			}
 		}
 	}
 	
@@ -165,7 +190,6 @@ public class DataLoader {
 	/**
 	 * Build standard TaskOrderDetails.
 	 * @return A standard TaskOrderDetails.
-	 * @return
 	 */
 	private TaskOrderDetails buildStandardCustomOrder(){
 		TaskOrderDetailsMaker maker = new TaskOrderDetailsMaker();

@@ -46,9 +46,9 @@ public class Task implements Printable<Task>{
 	 * @return	a copy of this task.
 	 */
 	public Task getRawCopy(){
-		Task copy = new Task(this.carPart, 0);
+		Task copy = new Task(this.carPart, this.estimatedPhaseDuration);
 		if(this.isComplete())
-			copy.perform(0);
+			copy.perform(this.elapsedTime);
 		return copy;
 	}
 	
