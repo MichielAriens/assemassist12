@@ -29,7 +29,14 @@ public class StatisticsGeneral extends Statistics{
 				delays.add(d);
 			}
 			for(int i = 0; i < s.getFinishedCarOrdersPerDay().size(); i++){
-				this.finishedCarOrdersPerDay.add(i, s.getFinishedCarOrdersPerDay().get(i));
+				int temp = s.getFinishedCarOrdersPerDay().get(i);
+				if(this.finishedCarOrdersPerDay.size() <= i){
+					this.finishedCarOrdersPerDay.add(temp);
+				}
+				else{
+					temp += this.finishedCarOrdersPerDay.get(i);
+					finishedCarOrdersPerDay.set(i, temp);
+				}
 			}
 		}
 		Collections.sort(delays);
