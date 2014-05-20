@@ -21,6 +21,7 @@ import logic.workstation.WorkstationDirectorA;
 import logic.workstation.WorkstationDirectorB;
 
 import org.joda.time.DateTime;
+import org.joda.time.MutableDateTime;
 
 public class AssemblyLineScheduler {
 	
@@ -112,10 +113,38 @@ public class AssemblyLineScheduler {
 			for(AssemblyLine al : emptyLines){
 				al.setCycleStartTime(currentTime);
 			}
+			checkDayEnds();
 			return true;
 		}return false;
 	}
 	
+	/**
+	 * Checks whether all assembylines are ready to start a new day. If so the current time is progressed and the assemblylines are informed. 
+	 */
+	private void checkDayEnds() {
+		for(AssemblyLine al : this.assemblyLines){
+			if(!readyForNextDay()){
+				return;
+			}
+		}
+		
+		//ready for next day.
+		//Set the current time to 6:00 the next day.
+		MutableDateTime mu = new MutableDateTime(currentTime);
+		if(currentTime.hourOfDay().get() < 8){
+			currentTime = new DateTime(2014, 1, currentTime.dayOfMonth().get(), 6, 0);
+		}else{
+			currentTime = new DateTime(2014, 1, currentTime.dayOfMonth().get(), 6, 0);
+			currentTime = currentTime.plusDays(1);
+		}
+		
+		//Inform assemblylines
+		for (AssemblyLine al : this.assemblyLines){
+			setNewDay(currentTime);
+		}
+		
+	}
+
 	/**
 	 * Returns all non-broken assembly lines.
 	 * @return
