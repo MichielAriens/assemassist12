@@ -385,14 +385,15 @@ public class AssemblyLineScheduler {
 	 * assembly line scheduler.
 	 */
 	public String getStatistics() {
+		String returnValue = "";
 		ArrayList<StatisticsAssemblyLine> statsList = new ArrayList<StatisticsAssemblyLine>();
 		for(AssemblyLine line : assemblyLines){
-			System.out.println(line.getStatistics());
-			System.out.println();
+			returnValue += line.getStatistics() +"\n";
 			statsList.add(line.getStatistics());
 		}
 		stats.updateRecords(statsList);
-		return stats.toString();
+		returnValue += stats.toString();
+		return returnValue;
 	}
 
 	public List<Printable<SchedulingStrategy>> getStrategies(Printable<AssemblyLine> activeAssemblyLine) {

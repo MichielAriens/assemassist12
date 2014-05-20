@@ -448,8 +448,6 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			Integer delayLastOrder= firstWorkStation.getDelayLastOrder();
 			if(delayLastOrder != null){
 				stats.finishedCarOrder(delayLastOrder, cycleStartTime);
-				totalOrdersFinished++;
-				System.err.println(name + ": " + totalOrdersFinished);
 			}
 			firstWorkStation.advanceOrders(null, cycleStartTime);
 			if(checkEndOfDay()){
@@ -463,8 +461,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			reschedule();
 			return true;
 		}
-
-		private int totalOrdersFinished = 0;
+		
 		/**
 		 * Checks if the system can change to FIFO strategy if the current strategy is batch specification and
 		 * if there are no more orders which qualify for batch processing. 

@@ -176,7 +176,6 @@ public class Statistics {
 	protected String carsProducedXLastDays(int days){
 		String statistics = "";
 		if(finishedCarOrdersPerDay.size() > 0){
-			System.err.println("Test: " + finishedCarOrdersPerDay.size());
 			int numberOfCars;
 			for(int i = days; i > 1 ; i--){
 				if(finishedCarOrdersPerDay.size()-i >= 0){

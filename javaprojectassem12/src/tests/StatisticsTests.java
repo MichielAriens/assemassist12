@@ -30,32 +30,6 @@ public class StatisticsTests {
 	private List<Order> orders = new ArrayList<Order>();
 	
 	/**
-	 * Build a standard order: duration 60, 60, 0
-	 * @return	A standard order with a duration of 60 minutes.
-	 */
-	private VehicleOrder buildStandardOrderC(){
-		VehiclePart[] partsArray = {
-				VehiclePart.BODY_SPORT, 
-				VehiclePart.COLOUR_BLACK,
-				VehiclePart.ENGINE_8,
-				VehiclePart.GEARBOX_6MANUAL,
-				VehiclePart.SEATS_LEATHER_WHITE,
-				VehiclePart.AIRCO_NONE,
-				VehiclePart.WHEELS_SPORTS,
-				VehiclePart.SPOILER_LOW,
-				VehiclePart.TOOLSTORAGE_NONE,
-				VehiclePart.CARGO_NONE,
-				VehiclePart.CERTIFICATION_NONE
-			};
-		
-		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELC);
-		for(VehiclePart part : partsArray){
-			maker.addPart(part);
-		}
-		return new VehicleOrder(maker.getDetails());
-	}
-	
-	/**
 	 * Build a standard VehicleOrderDetails of model A.
 	 * @return	A standard VehicleOrderDetails of model A.
 	 */
@@ -81,6 +55,8 @@ public class StatisticsTests {
 		return new VehicleOrder(maker.getDetails());
 	}
 
+	private int numberOfOrders = 39;
+	
 	/**
 	 * n = 1000
 	 * Set up an environment where: 
@@ -98,16 +74,9 @@ public class StatisticsTests {
 		
 		//Build n orders
 		Order curr;
-		//for(int i = 0; i < 19; i++){ dag gaat vooruit; 1 day ago == 9
-		//for(int i = 0; i < 21; i++){ 1 day ago == 10
-		//for(int i = 0; i < 22; i++){ 1 day ago == 11
-		//for(int i = 0; i < 23; i++){ 1 day ago == 23
-		//for(int i = 0; i < 70; i++){ 1 day ago: 9; 2 days ago: 26
-		//ORDER C
 		int count = 0;
-//		for(int i = 0; i < 40; i++){ checkEndOfDay() in schedule is fout???
 		//TODO
-		for(int i = 0; i < 6; i++){
+		for(int i = 0; i < numberOfOrders; i++){
 			curr = buildStandardOrderA();
 			orders.add(curr);
 			cmc.addOrder(curr);
@@ -132,10 +101,6 @@ public class StatisticsTests {
 					}
 				}
 			}
-//			if(tasksPerformed == 0){
-//				System.err.println("SOMETING WONG? cause 0 tasks performed");
-//				break;
-//			}
 			System.out.println("   Tasks performed: " + tasksPerformed);
 			tasksPerformed = 0;
 		}
@@ -150,9 +115,32 @@ public class StatisticsTests {
 	public void testStat1(){
 		String stats = cmc.getStatistics();
 		System.out.println(stats);
-		
-		assertTrue(stats.contains("Average number of cars produced: 25"));
-		assertTrue(stats.contains("Mean number of cars produced: 25"));
+
+		//assertTrue(stats.contains("Average number of cars produced: 25"));
+		//assertTrue(stats.contains("Mean number of cars produced: 25"));
+		assertTrue(stats.contains("Statistics of Assembly Line 3:\n"+
+				"Average number of cars produced: 12\n"+
+				"Mean number of cars produced: 12\n"+
+				"Exact numbers two last days:\n"+
+				"   2 days ago: No records.\n"+
+				"   1 day ago: 12\n"+
+				"Average delay: 0 minutes\n"+
+				"Mean delay: 0 minutes\n"+
+				"Two last delays:\n"+
+				"   2) 0 minutes on 2014-01-01T18:30:00.000+01:00\n"+
+				"   1) 0 minutes on 2014-01-01T18:30:00.000+01:00\n"+
+				"\n"+
+				"Statistics of Generality:\n"+
+				"Average number of cars produced: 12\n"+
+				"Mean number of cars produced: 12\n"+
+				"Exact numbers two last days:\n"+
+				"   2 days ago: No records.\n"+
+				"   1 day ago: 12\n"+
+				"Average delay: 0 minutes\n"+
+				"Mean delay: 0 minutes\n"+
+				"Two last delays:\n"+
+				"   2) 0 minutes on 2014-01-01T18:30:00.000+01:00\n"+
+				"   1) 0 minutes on 2014-01-01T19:20:00.000+01:00"));
 	}
 
 }
