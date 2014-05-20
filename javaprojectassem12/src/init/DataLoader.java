@@ -28,13 +28,13 @@ public class DataLoader {
 	private void placeOrders(){
 		GarageHolder holder = (GarageHolder) this.company.logIn("gar");
 		for(int i = 0; i < 10; i++){
-			holder.placeOrder(details);
+			holder.placeOrder(buildStandardOrderA());
 		}
 	}
 	
 	/**
-	 * Build a standard order of model A.
-	 * @return	A standard order of model A.
+	 * Build a standard VehicleOrderDetails of model A.
+	 * @return	A standard VehicleOrderDetails of model A.
 	 */
 	private VehicleOrderDetails buildStandardOrderA(){
 		VehiclePart[] partsArray = {
@@ -59,8 +59,8 @@ public class DataLoader {
 	}
 	
 	/**
-	 * Build a standard order of model B. 
-	 * @return	A standard order of model B.
+	 * Build a standard VehicleOrderDetails of model B. 
+	 * @return	A standard VehicleOrderDetails of model B.
 	 */
 	private VehicleOrderDetails buildStandardOrderB(){
 		VehiclePart[] partsArray = {
@@ -85,8 +85,8 @@ public class DataLoader {
 	}
 	
 	/**
-	 * Build a standard order of model C.
-	 * @return	A standard order of model C.
+	 * Build a standard VehicleOrderDetails of model C.
+	 * @return	A standard VehicleOrderDetails of model C.
 	 */
 	private VehicleOrderDetails buildStandardOrderC(){
 		VehiclePart[] partsArray = {
@@ -111,8 +111,8 @@ public class DataLoader {
 	}
 	
 	/**
-	 * Build a standard truck order of model X.
-	 * @return	A standard order of model X.
+	 * Build a standard VehicleOrderDetails of model X.
+	 * @return	A standard VehicleOrderDetails of model X.
 	 */
 	private VehicleOrderDetails buildStandardOrderX(){
 		VehiclePart[] partsArray = {
@@ -137,8 +137,8 @@ public class DataLoader {
 	}
 	
 	/**
-	 * Build a standard truck order of model Y.
-	 * @return	A standard order of model Y.
+	 * Build a standard VehicleOrderDetails of model Y.
+	 * @return	A standard VehicleOrderDetails of model Y.
 	 */
 	private VehicleOrderDetails buildStandardOrderY(){
 		VehiclePart[] partsArray = {
@@ -163,8 +163,8 @@ public class DataLoader {
 	}
 	
 	/**
-	 * Build standard custom task order.
-	 * @return A standard custom task order.
+	 * Build standard TaskOrderDetails.
+	 * @return A standard TaskOrderDetails.
 	 * @return
 	 */
 	private TaskOrderDetails buildStandardCustomOrder(){
