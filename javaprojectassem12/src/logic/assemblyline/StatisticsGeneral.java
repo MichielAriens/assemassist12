@@ -40,5 +40,6 @@ public class StatisticsGeneral extends Statistics{
 			}
 		}
 		Collections.sort(delays);
+		System.out.println("SIZE VAN DE DELAYS: " + delays.size());
 	}
 }
