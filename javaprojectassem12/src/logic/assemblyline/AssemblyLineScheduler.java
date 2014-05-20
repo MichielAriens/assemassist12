@@ -38,7 +38,7 @@ public class AssemblyLineScheduler {
 		assemblyLines = new ArrayList<>();
 		overflowQueue = new LinkedList<>();
 		initializeAssemblylines();
-		stats = new StatisticsGeneral("General statistics");
+		stats = new StatisticsGeneral("Generality");
 	}
 	
 	public DateTime getCurrentTime(){

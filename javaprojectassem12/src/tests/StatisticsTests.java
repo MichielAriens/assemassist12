@@ -106,7 +106,8 @@ public class StatisticsTests {
 		//ORDER C
 		int count = 0;
 //		for(int i = 0; i < 40; i++){ checkEndOfDay() in schedule is fout???
-		for(int i = 0; i < 37; i++){
+		//TODO
+		for(int i = 0; i < 6; i++){
 			curr = buildStandardOrderA();
 			orders.add(curr);
 			cmc.addOrder(curr);
