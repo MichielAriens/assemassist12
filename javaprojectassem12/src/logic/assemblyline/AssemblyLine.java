@@ -452,7 +452,6 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			if(checkEndOfDay()){
 				calculateOverTime();
 				setNextDay();
-				stats.setNextDay();
 				newday = true;
 			}
 
@@ -583,6 +582,8 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 				cycleStartTime = cycleStartTime.plusDays(1);
 				cycleStartTime = new DateTime(cycleStartTime.getYear(),cycleStartTime.getMonthOfYear(),cycleStartTime.getDayOfMonth(),shiftBeginHour,0);
 			}
+
+			stats.setNextDay();
 		}
 
 		/**

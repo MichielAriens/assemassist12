@@ -176,9 +176,10 @@ public class Statistics {
 	protected String carsProducedXLastDays(int days){
 		String statistics = "";
 		if(finishedCarOrdersPerDay.size() > 0){
+			System.err.println("Test: " + finishedCarOrdersPerDay.size());
 			int numberOfCars;
 			for(int i = days; i > 1 ; i--){
-				if(finishedCarOrdersPerDay.size()-i > 0){
+				if(finishedCarOrdersPerDay.size()-i >= 0){
 					numberOfCars = finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-i);
 					statistics += "   " + i + " days ago: " + numberOfCars + "\n";
 				}
@@ -206,7 +207,7 @@ public class Statistics {
 			int delayTime = 0;
 			DateTime dateOfDelay = null;
 			for(int i = number; i > 1 ; i--){
-				if(delays.size() - i > 0){
+				if(delays.size() - i >= 0){
 					delayTime = delays.get(delays.size()-i).getDelayTime();
 					dateOfDelay = delays.get(delays.size()-i).getDateOfDelay();
 					statistics += "   " + i + ") " + delayTime + " minutes on " + dateOfDelay + "\n";

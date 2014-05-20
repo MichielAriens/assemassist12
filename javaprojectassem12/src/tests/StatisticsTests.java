@@ -9,7 +9,6 @@ import java.util.List;
 import logic.assemblyline.AssemblyLine;
 import logic.car.VehicleModel;
 import logic.car.VehicleOrder;
-import logic.car.VehicleOrderDetails;
 import logic.car.VehicleOrderDetailsMaker;
 import logic.car.VehiclePart;
 import logic.car.Order;
@@ -106,7 +105,8 @@ public class StatisticsTests {
 		//for(int i = 0; i < 70; i++){ 1 day ago: 9; 2 days ago: 26
 		//ORDER C
 		int count = 0;
-		for(int i = 0; i < 2; i++){
+//		for(int i = 0; i < 40; i++){ checkEndOfDay() in schedule is fout???
+		for(int i = 0; i < 37; i++){
 			curr = buildStandardOrderA();
 			orders.add(curr);
 			cmc.addOrder(curr);
