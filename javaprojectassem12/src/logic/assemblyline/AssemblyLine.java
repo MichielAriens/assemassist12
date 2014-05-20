@@ -132,7 +132,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	}
 	
 	/**
-	 * Returns the longest time taken by this assembly line
+	 * Returns the longest time taken by this assembly line to complete its cycle.
 	 * @return
 	 */
 	public int getCycleTime(){
