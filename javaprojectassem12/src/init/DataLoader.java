@@ -32,15 +32,17 @@ public class DataLoader {
 	
 	private void advanceDay(){
 		GarageHolder holder = (GarageHolder) this.company.logIn("gar");
-		for(int i = 0; i < 55; i++){
+		for(int i = 0; i < 50; i++){
 			holder.placeOrder(buildStandardOrderA());
 		}
+		System.out.println("done posting");
 		performAllTasks();
 	}
 	
 	private void performAllTasks(){
 		Mechanic mech = (Mechanic) this.company.logIn("mech");
 		boolean taskPerformed = true;
+		int performed = 0;
 		while(taskPerformed){
 			taskPerformed = false;
 			for(Printable<AssemblyLine> line : mech.getAssemblyLines()){
@@ -49,11 +51,13 @@ public class DataLoader {
 					mech.setActiveWorkstation(station);
 					for(Printable<Task> task : mech.getAvailableTasks()){
 						int duration = ((Task) task).getEstimatedPhaseDuration();
-						mech.doTask(task, duration);
-						taskPerformed = true;
+						if(mech.doTask(task, duration))
+							taskPerformed = true;
+						performed++;
 					}
 				}
 			}
+			System.out.println(performed);
 		}
 	}
 	
