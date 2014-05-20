@@ -12,6 +12,7 @@ import logic.car.TaskOrderDetailsMaker;
 import logic.car.VehicleModel;
 import logic.car.VehiclePart;
 import logic.users.CarManufacturingCompany;
+import logic.users.CustomsManager;
 import logic.users.GarageHolder;
 import logic.users.Mechanic;
 import logic.workstation.Task;
@@ -27,7 +28,24 @@ public class DataLoader {
 	
 	public void loadData(){
 		advanceDay();
-		System.out.println("hello");
+		fillAssemblyLinesAndQueue();
+	}
+	
+	private void fillAssemblyLinesAndQueue(){
+		GarageHolder holder = (GarageHolder) this.company.logIn("gar");
+		for(int i = 0; i < 3; i++){
+			holder.placeOrder(buildStandardOrderA());
+		}
+		CustomsManager cust = (CustomsManager) this.company.logIn("cust");
+		for(int i = 0; i < 3; i++){
+			cust.placeOrder(buildStandardCustomOrder());
+		}
+		holder.placeOrder(buildStandardOrderB());
+		holder.placeOrder(buildStandardOrderC());
+		holder.placeOrder(buildStandardOrderX());
+		for(int i = 0; i < 3; i++){
+			holder.placeOrder(buildStandardOrderA());
+		}
 	}
 	
 	private void advanceDay(){
@@ -41,7 +59,6 @@ public class DataLoader {
 	private void performAllTasks(){
 		Mechanic mech = (Mechanic) this.company.logIn("mech");
 		boolean taskPerformed = true;
-		int performed = 0;
 		while(taskPerformed){
 			taskPerformed = false;
 			for(Printable<AssemblyLine> line : mech.getAssemblyLines()){
@@ -52,11 +69,9 @@ public class DataLoader {
 						int duration = ((Task) task).getEstimatedPhaseDuration();
 						if(mech.doTask(task, duration))
 							taskPerformed = true;
-						performed++;
 					}
 				}
 			}
-			System.out.println(performed);
 		}
 	}
 	
@@ -158,32 +173,6 @@ public class DataLoader {
 			};
 		
 		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.TRUCKMODELX);
-		for(VehiclePart part : partsArray){
-			maker.addPart(part);
-		}
-		return maker.getDetails();
-	}
-	
-	/**
-	 * Build a standard VehicleOrderDetails of model Y.
-	 * @return	A standard VehicleOrderDetails of model Y.
-	 */
-	private VehicleOrderDetails buildStandardOrderY(){
-		VehiclePart[] partsArray = {
-				VehiclePart.BODY_PLATFORM, 
-				VehiclePart.COLOUR_BLACK,
-				VehiclePart.ENGINE_TRUCKSTANDARD,
-				VehiclePart.GEARBOX_8MANUAL,
-				VehiclePart.SEATS_VINYL_GRAY,
-				VehiclePart.AIRCO_MANUAL,
-				VehiclePart.WHEELS_HEAVY_DUTY,
-				VehiclePart.SPOILER_NONE,
-				VehiclePart.TOOLSTORAGE_STANDARD,
-				VehiclePart.CARGO_STANDARD,
-				VehiclePart.CERTIFICATION_STANDARD
-			};
-		
-		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.TRUCKMODELY);
 		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}
