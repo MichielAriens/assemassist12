@@ -78,7 +78,7 @@ public class AssemblyLineScheduler {
 	}
 	
 	/**
-	 * Repeatedly looks at the state of all the assembly lines at determines which assembly lines can be moved forwards.
+	 * Repeatedly looks at the state of all the assembly lines and determines which assembly lines can be moved forwards.
 	 * When moving the current time is synchronised with the last known time information from the assemblylines. 
 	 */
 	private void advance(){

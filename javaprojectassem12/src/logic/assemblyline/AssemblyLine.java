@@ -108,7 +108,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	public boolean accepts(Order order){
 		VehicleModel model = order.getModel();
 		if(model == null){
-			return false;
+			return true;
 		}
 		if(this.capabilities.contains(model)){
 			return true;
