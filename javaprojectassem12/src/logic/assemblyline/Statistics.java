@@ -164,30 +164,30 @@ public class Statistics {
 		statistics += "Average delay: " + getAverageDelay() +" minutes\n";
 		statistics += "Mean delay: " + getMedianDelay() + " minutes\n";
 		statistics += "Two last delays:\n";
-		statistics += delayXLastDays(2);
+		statistics += xLastDelays(2);
 		return statistics;
 	}
 	
 	/**
 	 * Returns a string representation of the number of cars produced for the last X days.
+	 * @param days	The number of  days of which the number of cars produced need to be returned.
 	 * @return a string representation of the number of cars produced for the last X days.
 	 */
 	protected String carsProducedXLastDays(int days){
 		String statistics = "";
-		int maxIndex = finishedCarOrdersPerDay.size()-1;
-		if(maxIndex >= 0){
-			int numberOfCars = finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-1);
-			statistics += "   1 day ago: " + numberOfCars + "\n";
-			for(int i = 2; i <= days; i ++){
-				if(i <= maxIndex){
+		if(finishedCarOrdersPerDay.size() > 0){
+			int numberOfCars;
+			for(int i = days; i > 1 ; i--){
+				if(finishedCarOrdersPerDay.size()-i > 0){
 					numberOfCars = finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-i);
 					statistics += "   " + i + " days ago: " + numberOfCars + "\n";
 				}
 				else{
-					statistics += "   No further records.\n";
-					break;
+					statistics += "   " + i + " days ago: No records.\n";
 				}
 			}
+			numberOfCars = finishedCarOrdersPerDay.get(finishedCarOrdersPerDay.size()-1);
+			statistics += "   1 day ago: " + numberOfCars + "\n";
 		}
 		else{
 			statistics += "   No records.\n";
@@ -195,28 +195,30 @@ public class Statistics {
 		return statistics;
 	}
 	
-	//TODO zien dat de x laatste delays genomen worden
 	/**
 	 * Returns a string representation of the last X delays and the day they occurred.
+	 * @param number	The number of last delays that need to be returned.
 	 * @return a string representation of the last X delays and the day they occurred.
 	 */
-	protected String delayXLastDays(int days){
+	protected String xLastDelays(int number){
 		String statistics = "";
-		int maxIndex = delays.size()-1;
-		if(maxIndex >= 0){
-			int delayTime = delays.get(delays.size()-1).getDelayTime();
-			DateTime dateOfDelay = delays.get(delays.size()-1).getDateOfDelay();
-			statistics += "   1) " + delayTime + " minutes on " + dateOfDelay + "\n";
-			for(int i = 2; i <= days; i ++){
-				if(i <= maxIndex){
+		if(delays.size() > 0){
+			int delayTime = 0;
+			DateTime dateOfDelay = null;
+			for(int i = number; i > 1 ; i--){
+				if(delays.size() - i > 0){
 					delayTime = delays.get(delays.size()-i).getDelayTime();
-					statistics += "   " + i + ") " + delayTime + " minuts\n";
+					dateOfDelay = delays.get(delays.size()-i).getDateOfDelay();
+					statistics += "   " + i + ") " + delayTime + " minutes on " + dateOfDelay + "\n";
 				}
 				else{
-					statistics += "   No further records.\n";
+					statistics += "   " + i + ") No records.\n";
 					break;
 				}
 			}
+			delayTime = delays.get(delays.size()-1).getDelayTime();
+			dateOfDelay = delays.get(delays.size()-1).getDateOfDelay();
+			statistics += "   1) " + delayTime + " minutes on " + dateOfDelay + "\n";
 		}
 		else{
 			statistics += "   No records.\n";

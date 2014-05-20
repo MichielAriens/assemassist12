@@ -9,6 +9,7 @@ import java.util.List;
 import logic.assemblyline.AssemblyLine;
 import logic.car.VehicleModel;
 import logic.car.VehicleOrder;
+import logic.car.VehicleOrderDetails;
 import logic.car.VehicleOrderDetailsMaker;
 import logic.car.VehiclePart;
 import logic.car.Order;
@@ -54,6 +55,32 @@ public class StatisticsTests {
 		}
 		return new VehicleOrder(maker.getDetails());
 	}
+	
+	/**
+	 * Build a standard VehicleOrderDetails of model A.
+	 * @return	A standard VehicleOrderDetails of model A.
+	 */
+	private VehicleOrder buildStandardOrderA(){
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_BREAK, 
+				VehiclePart.COLOUR_RED,
+				VehiclePart.ENGINE_4,
+				VehiclePart.GEARBOX_5AUTO,
+				VehiclePart.SEATS_LEATHER_WHITE,
+				VehiclePart.AIRCO_MANUAL,
+				VehiclePart.WHEELS_COMFORT,
+				VehiclePart.SPOILER_NONE,
+				VehiclePart.TOOLSTORAGE_NONE,
+				VehiclePart.CARGO_NONE,
+				VehiclePart.CERTIFICATION_NONE
+			};
+		
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELA);
+		for(VehiclePart part : partsArray){
+			maker.addPart(part);
+		}
+		return new VehicleOrder(maker.getDetails());
+	}
 
 	/**
 	 * n = 1000
@@ -67,19 +94,29 @@ public class StatisticsTests {
 		//initialize the required actors
 		cmc = new CarManufacturingCompany();
 		for(int i = 0; i < 3; i++){
-			mechs.add(new Mechanic(cmc, "SuperMech2014"));
+			mechs.add(new Mechanic(cmc, "SuperMech2014Nr" + (i+1)));
 		}
 		
 		//Build n orders
 		Order curr;
-		for(int i = 0; i < 1; i++){
-			curr = buildStandardOrderC();
+		//for(int i = 0; i < 19; i++){ dag gaat vooruit; 1 day ago == 9
+		//for(int i = 0; i < 21; i++){ 1 day ago == 10
+		//for(int i = 0; i < 22; i++){ 1 day ago == 11
+		//for(int i = 0; i < 23; i++){ 1 day ago == 23
+		//for(int i = 0; i < 70; i++){ 1 day ago: 9; 2 days ago: 26
+		//ORDER C
+		int count = 0;
+		for(int i = 0; i < 2; i++){
+			curr = buildStandardOrderA();
 			orders.add(curr);
 			cmc.addOrder(curr);
+			count++;
 		}
+		System.out.println("Total number of orders == " + count);
 		
 		//Do all the orders
 		int tasksPerformed = 0;
+		int totalTasksPerformed = 0;
 		while(!orders.get(orders.size()-1).done()){
 			for(Mechanic mech : mechs){
 				for(Printable<AssemblyLine> line : mech.getAssemblyLines()){
@@ -87,8 +124,9 @@ public class StatisticsTests {
 					for(Printable<Workstation> station : mech.getWorkstationsFromAssemblyLine()){
 						mech.setActiveWorkstation(station);
 						for(Printable<Task> task : mech.getAvailableTasks()){
-							mech.doTask(task, 60);
+							mech.doTask(task, 50);
 							tasksPerformed++;
+							totalTasksPerformed++;
 						}
 					}
 				}
@@ -100,6 +138,7 @@ public class StatisticsTests {
 			System.out.println("   Tasks performed: " + tasksPerformed);
 			tasksPerformed = 0;
 		}
+		System.out.println("   Total tasks performed: " + totalTasksPerformed);
 	}
 	
 	
@@ -110,8 +149,9 @@ public class StatisticsTests {
 	public void testStat1(){
 		String stats = cmc.getStatistics();
 		System.out.println(stats);
-		assertTrue(stats.contains("Average number of cars produced: 13"));
-		assertTrue(stats.contains("Mean number of cars produced: 13"));
+		
+		assertTrue(stats.contains("Average number of cars produced: 25"));
+		assertTrue(stats.contains("Mean number of cars produced: 25"));
 	}
 
 }

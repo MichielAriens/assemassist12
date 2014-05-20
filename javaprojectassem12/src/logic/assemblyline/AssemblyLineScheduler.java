@@ -387,6 +387,8 @@ public class AssemblyLineScheduler {
 	public String getStatistics() {
 		ArrayList<StatisticsAssemblyLine> statsList = new ArrayList<StatisticsAssemblyLine>();
 		for(AssemblyLine line : assemblyLines){
+			System.out.println(line.getStatistics());
+			System.out.println();
 			statsList.add(line.getStatistics());
 		}
 		stats.updateRecords(statsList);
