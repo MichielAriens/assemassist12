@@ -35,7 +35,6 @@ public class DataLoader {
 		for(int i = 0; i < 50; i++){
 			holder.placeOrder(buildStandardOrderA());
 		}
-		System.out.println("done posting");
 		performAllTasks();
 	}
 	

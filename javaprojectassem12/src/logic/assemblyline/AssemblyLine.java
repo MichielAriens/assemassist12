@@ -127,8 +127,9 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	 * If this assembly line is ready for the next day and the cycle start time is at the beginning of the shift, then sets the ready for next day to false.
 	 */
 	protected void setNewDay(){
-		if(newday == true && cycleStartTime.getHourOfDay()==schedule.shiftBeginHour)
+		if(newday == true && cycleStartTime.getHourOfDay()==schedule.shiftBeginHour){
 			newday = false;
+		}
 	}
 	
 	/**
@@ -196,7 +197,8 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			}
 			boolean done = schedule.moveAndReschedule(cycleTime);
 			cycleTime = 0;
-			cycleStartTime = realTime;
+			if(newday==false)
+				cycleStartTime = realTime;
 			if(status==OperationalStatus.PREMAINTENANCE && firstWorkStation.allIdle())
 				changeStatus(OperationalStatus.MAINTENANCE);
 			return done;
@@ -451,6 +453,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 				calculateOverTime();
 				setNextDay();
 				stats.setNextDay();
+				newday = true;
 			}
 
 			checkStrategy();
@@ -603,12 +606,13 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			boolean doneWorking = firstWorkStation.allIdle();
 			if(!doneWorking)
 				return false;
-			int assemblyTime = 50*numberOfWorkStations;
+			int assemblyTime = 50*numberOfWorkStations; //TODO Fix this betterly
 			if(!queue.isEmpty()){
 				assemblyTime = getEstimatedAssemblyTime(queue.getFirst());
 			}
-			if(cycleStartTime.getMinuteOfDay()>=(shiftEndHour * 60-overTime - assemblyTime) || cycleStartTime.getMinuteOfDay()<shiftBeginHour*60)
+			if(cycleStartTime.getMinuteOfDay()>=(shiftEndHour * 60-overTime - assemblyTime) || cycleStartTime.getMinuteOfDay()<shiftBeginHour*60){
 				return true;
+			}
 			return false;
 		}
 		

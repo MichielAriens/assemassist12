@@ -115,10 +115,11 @@ public class AssemblyLineScheduler {
 			}
 			this.currentTime = bestLine.getCycleEnd();
 			bestLine.moveAssemblyLine(this.currentTime);
-			for(AssemblyLine al : emptyLines){
-				al.setCycleStartTime(currentTime);
-			}
 			checkDayEnds();
+			for(AssemblyLine al : emptyLines){
+				if(al.getcycleStartTime().getDayOfYear()==currentTime.getDayOfYear())
+					al.setCycleStartTime(currentTime);
+			}
 			return true;
 		}return false;
 	}
