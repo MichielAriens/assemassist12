@@ -7,7 +7,7 @@ import java.util.Collections;
 
 import logic.car.Order;
 import logic.car.VehicleOrder;
-import logic.car.CarOrderDetails;
+import logic.car.VehicleOrderDetails;
 
 /**
  * Class used to describe a garage holder who can order cars from a car manufacturing company.
@@ -67,7 +67,7 @@ public class GarageHolder extends User{
 	 * Commits a new order with the given car order details if the given car order details are not null.
 	 * @param details The car order details for the new order.
 	 */
-	public void placeOrder(CarOrderDetails details){
+	public void placeOrder(VehicleOrderDetails details){
 		if(details == null)
 			return;
 		VehicleOrder order = new VehicleOrder(details);

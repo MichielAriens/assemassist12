@@ -8,7 +8,7 @@ import logic.workstation.Task;
 /**
  * A class holding more information about car orders.
  */
-public class CarOrderDetails{
+public class VehicleOrderDetails{
 	
 	/**
 	 * A variable holding the type of car model this is.
@@ -25,7 +25,7 @@ public class CarOrderDetails{
 	 * @param model	The model of this car order's detail.
 	 * @param parts	The parts required for specific tasks that need to be completed for this car order's detail.
 	 */
-	public CarOrderDetails(VehicleModel model, List<VehiclePart> parts){
+	public VehicleOrderDetails(VehicleModel model, List<VehiclePart> parts){
 		this.model = model;
 		buildTasks(parts);		
 	}
@@ -61,12 +61,12 @@ public class CarOrderDetails{
 	 * Makes a new car order detail and sets the tasks and model values to this object's values.
 	 * @return	A copy of this object with the parts and model copied into it.
 	 */
-	public CarOrderDetails getRawCopy(){
+	public VehicleOrderDetails getRawCopy(){
 		ArrayList<VehiclePart> parts = new ArrayList<VehiclePart>();
 		for(Task t : tasks){
 			parts.add(t.getCarPart());
 		}
-		return new CarOrderDetails(model, parts);
+		return new VehicleOrderDetails(model, parts);
 	}
 	
 	/**

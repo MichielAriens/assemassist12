@@ -7,8 +7,8 @@ import java.util.List;
 
 import logic.car.VehicleModel;
 import logic.car.VehicleOrder;
-import logic.car.CarOrderDetails;
-import logic.car.CarOrderDetailsMaker;
+import logic.car.VehicleOrderDetails;
+import logic.car.VehicleOrderDetailsMaker;
 import logic.car.VehiclePart;
 import logic.car.Order;
 import logic.car.TaskOrderDetailsMaker;
@@ -43,7 +43,7 @@ public class UserTest {
 		//try to add a car order with null as carspecification
 		g.placeOrder(null);
 		//make carspecification to place an order
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELA);
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELA);
 		maker.addPart(VehiclePart.getPartfromString("Model A"));
 		maker.addPart(VehiclePart.getPartfromString("Sedan"));
 		maker.addPart(VehiclePart.getPartfromString("Red"));
@@ -80,7 +80,7 @@ public class UserTest {
 		carparts.add(VehiclePart.WHEELS_COMFORT);
 		carparts.add(VehiclePart.ENGINE_4);
 		carparts.add(VehiclePart.GEARBOX_5AUTO);
-		CarOrderDetails det = new CarOrderDetails(VehicleModel.CARMODELA, carparts);
+		VehicleOrderDetails det = new VehicleOrderDetails(VehicleModel.CARMODELA, carparts);
 		g.placeOrder(det);
 	}
 	
@@ -129,7 +129,7 @@ public class UserTest {
 		carparts.add(VehiclePart.WHEELS_COMFORT);
 		carparts.add(VehiclePart.ENGINE_4);
 		carparts.add(VehiclePart.GEARBOX_5AUTO);
-		CarOrderDetails spec = new CarOrderDetails(VehicleModel.CARMODELA, carparts);
+		VehicleOrderDetails spec = new VehicleOrderDetails(VehicleModel.CARMODELA, carparts);
 		g.placeOrder(spec);
 		g.placeOrder(spec.getRawCopy());
 		Mechanic m = (Mechanic) company.logIn("mech");

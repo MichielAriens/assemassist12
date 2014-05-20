@@ -9,7 +9,7 @@ import java.util.List;
 import logic.assemblyline.AssemblyLine;
 import logic.car.VehicleModel;
 import logic.car.VehicleOrder;
-import logic.car.CarOrderDetailsMaker;
+import logic.car.VehicleOrderDetailsMaker;
 import logic.car.VehiclePart;
 import logic.car.Order;
 import logic.users.CarManufacturingCompany;
@@ -48,7 +48,7 @@ public class StatisticsTests {
 				VehiclePart.CERTIFICATION_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELC);
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELC);
 		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}

@@ -38,13 +38,13 @@ public class OrderDetailsTests {
 				VehiclePart.SPOILER_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELA);
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELA);
 		
 		for(VehiclePart cp : partsArray){
 			maker.addPart(cp);
 		}
 		
-		CarOrderDetails details = maker.getDetails();
+		VehicleOrderDetails details = maker.getDetails();
 		List<VehiclePart> detailsParts = new ArrayList<VehiclePart>();
 		for(Task task : details.getPendingTasks()){
 			detailsParts.add(task.getCarPart());
@@ -66,13 +66,13 @@ public class OrderDetailsTests {
 				VehiclePart.SPOILER_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELA);
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELA);
 		
 		for(VehiclePart cp : partsArray){
 			maker.addPart(cp);
 		}
 		
-		CarOrderDetails details = maker.getDetails();
+		VehicleOrderDetails details = maker.getDetails();
 		assertNull(details);
 	}
 	
@@ -92,13 +92,13 @@ public class OrderDetailsTests {
 				VehiclePart.SPOILER_LOW
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELC);
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELC);
 		
 		for(VehiclePart cp : partsArray){
 			maker.addPart(cp);
 		}
 		
-		CarOrderDetails details = maker.getDetails();
+		VehicleOrderDetails details = maker.getDetails();
 		List<VehiclePart> detailsParts = new ArrayList<VehiclePart>();
 		for(Task task : details.getPendingTasks()){
 			detailsParts.add(task.getCarPart());
@@ -123,13 +123,13 @@ public class OrderDetailsTests {
 				VehiclePart.SPOILER_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELC);
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELC);
 		
 		for(VehiclePart cp : partsArray){
 			maker.addPart(cp);
 		}
 		
-		CarOrderDetails details = maker.getDetails();
+		VehicleOrderDetails details = maker.getDetails();
 		assertNull(details);
 	}
 	

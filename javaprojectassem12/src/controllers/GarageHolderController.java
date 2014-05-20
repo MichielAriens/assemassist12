@@ -20,7 +20,7 @@ public class GarageHolderController extends UserController{
 	/**
 	 * A maker for car order details.
 	 */
-	private CarOrderDetailsMaker maker;
+	private VehicleOrderDetailsMaker maker;
 	
 	/**
 	 * Sets the current garage holder to the given garage holder.
@@ -146,7 +146,7 @@ public class GarageHolderController extends UserController{
 	public void chooseModel(VehicleModel model){
 		if(model == null)
 			return;
-		this.maker = new CarOrderDetailsMaker(model);
+		this.maker = new VehicleOrderDetailsMaker(model);
 	}
 	
 	/**

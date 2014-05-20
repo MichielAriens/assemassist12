@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import logic.assemblyline.AssemblyLine;
-import logic.car.CarOrderDetailsMaker;
+import logic.car.VehicleOrderDetailsMaker;
 import logic.car.Order;
 import logic.car.VehicleModel;
 import logic.car.VehicleOrder;
@@ -40,7 +40,7 @@ public class AssemblyLineSchedulerTest {
 				VehiclePart.CARGO_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELA);
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELA);
 		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}
@@ -67,7 +67,7 @@ public class AssemblyLineSchedulerTest {
 				VehiclePart.CERTIFICATION_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELB);
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELB);
 		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}
@@ -94,7 +94,7 @@ public class AssemblyLineSchedulerTest {
 				VehiclePart.CERTIFICATION_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELC);
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELC);
 		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}
@@ -121,7 +121,7 @@ public class AssemblyLineSchedulerTest {
 				VehiclePart.CERTIFICATION_STANDARD
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.TRUCKMODELX);
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.TRUCKMODELX);
 		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}
@@ -148,7 +148,7 @@ public class AssemblyLineSchedulerTest {
 				VehiclePart.CERTIFICATION_STANDARD
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.TRUCKMODELY);
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.TRUCKMODELY);
 		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}

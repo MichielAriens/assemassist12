@@ -8,7 +8,7 @@ import java.util.List;
 
 import logic.car.VehicleModel;
 import logic.car.VehicleOrder;
-import logic.car.CarOrderDetailsMaker;
+import logic.car.VehicleOrderDetailsMaker;
 import logic.car.VehiclePart;
 import logic.car.VehiclePartType;
 import logic.car.TaskOrder;
@@ -62,7 +62,7 @@ public class WorkStationTest {
 				VehiclePart.SPOILER_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELA);
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELA);
 		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}

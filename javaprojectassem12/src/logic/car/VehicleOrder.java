@@ -17,13 +17,13 @@ public class VehicleOrder extends Order{
 	/**
 	 * A variable holding the car order details. 
 	 */
-	private CarOrderDetails details;
+	private VehicleOrderDetails details;
 	
 	/**
 	 * Initializes the car order details of this class to the given details.
 	 * @param details	The car order details which need to be set.
 	 */
-	public VehicleOrder(CarOrderDetails details){
+	public VehicleOrder(VehicleOrderDetails details){
 		this.details = details;
 	}
 

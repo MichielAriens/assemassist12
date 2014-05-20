@@ -2,8 +2,8 @@ package init;
 
 import org.joda.time.DateTime;
 
-import logic.car.CarOrderDetails;
-import logic.car.CarOrderDetailsMaker;
+import logic.car.VehicleOrderDetails;
+import logic.car.VehicleOrderDetailsMaker;
 import logic.car.TaskOrder;
 import logic.car.TaskOrderDetails;
 import logic.car.TaskOrderDetailsMaker;
@@ -36,7 +36,7 @@ public class DataLoader {
 	 * Build a standard order of model A.
 	 * @return	A standard order of model A.
 	 */
-	private CarOrderDetails buildStandardOrderA(){
+	private VehicleOrderDetails buildStandardOrderA(){
 		VehiclePart[] partsArray = {
 				VehiclePart.BODY_BREAK, 
 				VehiclePart.COLOUR_RED,
@@ -51,7 +51,7 @@ public class DataLoader {
 				VehiclePart.CERTIFICATION_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELA);
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELA);
 		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}
@@ -62,7 +62,7 @@ public class DataLoader {
 	 * Build a standard order of model B. 
 	 * @return	A standard order of model B.
 	 */
-	private CarOrderDetails buildStandardOrderB(){
+	private VehicleOrderDetails buildStandardOrderB(){
 		VehiclePart[] partsArray = {
 				VehiclePart.BODY_BREAK, 
 				VehiclePart.COLOUR_RED,
@@ -77,7 +77,7 @@ public class DataLoader {
 				VehiclePart.CERTIFICATION_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELB);
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELB);
 		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}
@@ -88,7 +88,7 @@ public class DataLoader {
 	 * Build a standard order of model C.
 	 * @return	A standard order of model C.
 	 */
-	private CarOrderDetails buildStandardOrderC(){
+	private VehicleOrderDetails buildStandardOrderC(){
 		VehiclePart[] partsArray = {
 				VehiclePart.BODY_SPORT, 
 				VehiclePart.COLOUR_BLACK,
@@ -103,7 +103,7 @@ public class DataLoader {
 				VehiclePart.CERTIFICATION_NONE
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.CARMODELC);
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELC);
 		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}
@@ -114,7 +114,7 @@ public class DataLoader {
 	 * Build a standard truck order of model X.
 	 * @return	A standard order of model X.
 	 */
-	private CarOrderDetails buildStandardOrderX(){
+	private VehicleOrderDetails buildStandardOrderX(){
 		VehiclePart[] partsArray = {
 				VehiclePart.BODY_PLATFORM, 
 				VehiclePart.COLOUR_GREEN,
@@ -129,7 +129,7 @@ public class DataLoader {
 				VehiclePart.CERTIFICATION_STANDARD
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.TRUCKMODELX);
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.TRUCKMODELX);
 		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}
@@ -140,7 +140,7 @@ public class DataLoader {
 	 * Build a standard truck order of model Y.
 	 * @return	A standard order of model Y.
 	 */
-	private CarOrderDetails buildStandardOrderY(){
+	private VehicleOrderDetails buildStandardOrderY(){
 		VehiclePart[] partsArray = {
 				VehiclePart.BODY_PLATFORM, 
 				VehiclePart.COLOUR_BLACK,
@@ -155,7 +155,7 @@ public class DataLoader {
 				VehiclePart.CERTIFICATION_STANDARD
 			};
 		
-		CarOrderDetailsMaker maker = new CarOrderDetailsMaker(VehicleModel.TRUCKMODELY);
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.TRUCKMODELY);
 		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}

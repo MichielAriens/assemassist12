@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * A class for building the car order's details.
  */
-public class CarOrderDetailsMaker {
+public class VehicleOrderDetailsMaker {
 	
 	/**
 	 * A variable holding the model of the car order.
@@ -27,7 +27,7 @@ public class CarOrderDetailsMaker {
 	 * Initializes this car order details maker with a given model.
 	 * @param model	The car model of the CarOrderDetails that has to be made by this maker.
 	 */
-	public CarOrderDetailsMaker(VehicleModel model){
+	public VehicleOrderDetailsMaker(VehicleModel model){
 		this.model = model;
 		this.chosenParts = new ArrayList<VehiclePart>();
 		this.chosenTypes = new ArrayList<VehiclePartType>();
@@ -94,9 +94,9 @@ public class CarOrderDetailsMaker {
 	 * Makes a car order detail with this objects model and parts and returns it if possible
 	 * @return	A new car order detail with this object's model and parts, null if there are too many or too less parts in this object's parts list.
 	 */
-	public CarOrderDetails getDetails(){
+	public VehicleOrderDetails getDetails(){
 		if(chosenParts.size() == 11){
-			return new CarOrderDetails(model, chosenParts);
+			return new VehicleOrderDetails(model, chosenParts);
 		}
 		return null;
 	}
