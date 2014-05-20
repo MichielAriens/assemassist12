@@ -21,9 +21,20 @@ import org.joda.time.Days;
 public class AssemblyLine implements Printable<AssemblyLine> {
 
 
+	/**
+	 * The operational status of this assembly line.
+	 */
 	private OperationalStatus status = OperationalStatus.OPERATIONAL;
 	
+	/**
+	 * The time it took for this assembly line to complete the longest during task.
+	 */
 	private int cycleTime=0;
+	
+	/**
+	 * A boolean holding whether this assembly line can go to the next day or not.
+	 */
+	private boolean newday = false;
 	
 	/**
 	 * The first workstation in a line of workstations.
@@ -36,40 +47,46 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	private int numberOfWorkStations;
 
 	/**
-	 * A list holding the pending orders not on the assembly line.
+	 * A list holding the pending orders waiting to be processed on this assembly line.
 	 */
 	private LinkedList<Order> queue;
 
 	/**
-	 * A dateTime object holding the current time of the system. 
+	 * A dateTime object holding the phase start time of this assembly line. 
 	 */
 	private DateTime cycleStartTime;
 
 	/**
-	 * A variable holding the statistics of the assembly line.
+	 * A variable holding the statistics of this assembly line.
 	 */
 	private StatisticsAssemblyLine stats;
 
 	/**
-	 * Returns the current time of the system.
-	 * @return	The current time of the system.
+	 * Returns the phase start time of this assembly line.
+	 * @return	The phase start time of this assembly line.
 	 */
 	public DateTime getcycleStartTime() {
 		return cycleStartTime;
 	}
 
 	/**
-	 * A variable containing the schedule, which is used for scheduling orders.
+	 * A variable containing this assembly line's schedule, which is used for scheduling orders.
 	 */
 	private Schedule schedule;
 
+	/**
+	 * A variable holding the different models that can be processed by this assembly line
+	 */
 	private Collection<VehicleModel> capabilities;
 	
+	/**
+	 * The name of this assembly line.
+	 */
 	private String name;
 
 	/**
-	 * Initializes the workstations, the schedule, the statistics and the queue containing the orders.
-	 * Also sets the current time to January first 2014 at the beginning of the shift. 
+	 *Initializes this assembly line with the given possible models, the workstation builder, the cycle start time, and the name of this assembly line.
+	 *Also makes the queue for orders and the statistics.
 	 */
 	public AssemblyLine(Collection<VehicleModel> capabilities, WorkstationChainBuilder builder, DateTime startTime, String name){
 		this.name = name;
@@ -82,6 +99,12 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 		stats = new StatisticsAssemblyLine(this.getStringRepresentation());
 	}
 
+	/**
+	 * Checks if this assembly line can process the given order's model.
+	 * @param order	The order which needs to be checked.
+	 * @return	True if this model can be processed by this assembly line.
+	 * 			False otherwise
+	 */
 	public boolean accepts(Order order){
 		VehicleModel model = order.getModel();
 		if(model == null){
@@ -91,17 +114,27 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			return true;
 		}return false;
 	}
-
-	/**
-	 * Initializes the workstation using a builder.
-	 */
-//	private void initialiseWorkstations(){
-//		WorkstationChainBuilder builder = new WorkstationChainBuilder();
-//		WorkstationDirector director = new WorkstationDirector(builder);
-//		director.construct();
-//		this.firstWorkStation = builder.getResult();
-//	}
 	
+	/**
+	 * Checks if this assembly line is ready for the day.
+	 * @return	True if this assembly line can go to the next day.
+	 */
+	protected boolean readyForNextDay(){
+		return newday;
+	}
+	
+	/**
+	 * If this assembly line is ready for the next day and the cycle start time is at the beginning of the shift, then sets the ready for next day to false.
+	 */
+	protected void setNewDay(){
+		if(newday == true && cycleStartTime.getHourOfDay()==schedule.shiftBeginHour)
+			newday = false;
+	}
+	
+	/**
+	 * Returns the longest time taken by this assembly line
+	 * @return
+	 */
 	public int getCycleTime(){
 		return this.cycleTime;
 	}
