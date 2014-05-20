@@ -128,30 +128,26 @@ public class AssemblyLineScheduler {
 	 */
 	private void checkDayEnds() {
 		for(AssemblyLine al : this.assemblyLines){
-			if(!readyForNextDay()){
+			if(!al.readyForNextDay()){
 				return;
 			}
 		}
 		
-		//ready for next day.
-		//Set the current time to 6:00 the next day.
-		MutableDateTime mu = new MutableDateTime(currentTime);
-		if(currentTime.hourOfDay().get() < 8){
-			currentTime = new DateTime(2014, 1, currentTime.dayOfMonth().get(), 6, 0);
-		}else{
-			currentTime = new DateTime(2014, 1, currentTime.dayOfMonth().get(), 6, 0);
-			currentTime = currentTime.plusDays(1);
-		}
-		
 		//Inform assemblylines
 		for (AssemblyLine al : this.assemblyLines){
-			setNewDay(currentTime);
+			al.setNewDay();
 		}
 		
+		this.currentTime = assemblyLines.get(0).getcycleStartTime();
 	}
 	
+	/**
+	 * Will attempt to redistribute orders from the overflow queue to the assemblylines. 
+	 * If this fails the orders will remain in the overflow queue.
+	 */
 	private void scheduleOverflowQueue(){
 		for(Order order : this.overflowQueue){
+			this.overflowQueue.remove(order);
 			this.addOrder(order);
 		}
 	}
@@ -275,6 +271,42 @@ public class AssemblyLineScheduler {
 	 */
 	public List<Printable<Workstation>> getWorkStationsFromAssemblyLine(Printable<AssemblyLine> assemblyLine) {
 		return this.get(assemblyLine).getWorkStations();
+	}
+	
+	/**
+	 * Breaks an assemblyline: The assemblyline will be inhibited from moving and orders on its queue will be rescheduled to other
+	 * lines where possible. 
+	 * @param line
+	 */
+	public void breakAssemblyLine(Printable<AssemblyLine> line){
+		AssemblyLine al = get(line);
+		this.overflowQueue.addAll(al.setStatus(OperationalStatus.BROKEN));
+		this.scheduleOverflowQueue();
+	}
+	
+	/**
+	 * Brings a broken line back to the operational state. Orders on the line will be able to advance again.
+	 * An attempt will be made to redistribute the overflow queue. 
+	 * @param line
+	 */
+	public void fixAssemAssemblyLine(Printable<AssemblyLine> line){
+		AssemblyLine al = get(line);
+		if(al.getOperationalStatus() == OperationalStatus.BROKEN){
+			al.fix(currentTime);
+			this.scheduleOverflowQueue();
+		}
+	}
+	
+	/**
+	 * Starts the preparation for maintenance on an assemblyline. The first workstation will reject all orders. The orders on 
+	 * the line are still able to be completed. Once the line is empty the four-hour maintenance cycle starts. 
+	 * The queue for this line is rescheduled with the 4 hour delay in mind.
+	 * @param line
+	 */
+	public void startMaintenace(Printable<AssemblyLine> line){
+		AssemblyLine al = this.get(line);
+		this.overflowQueue.addAll(al.setStatus(OperationalStatus.PREMAINTENANCE));
+		this.scheduleOverflowQueue();
 	}
 
 	/**
