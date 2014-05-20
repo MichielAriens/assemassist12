@@ -147,7 +147,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 		return this.getcycleStartTime().plusMinutes(cycleTime);
 	}
 	
-	public List<Order> setStatus(OperationalStatus status){
+	public List<Order> changeStatus(OperationalStatus status){
 		this.status=status;
 		LinkedList<Order> returnList = new LinkedList<Order>();
 		if(status != OperationalStatus.OPERATIONAL){
@@ -163,9 +163,11 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	}
 	
 	protected void fix(DateTime realTime){
-		cycleTime= calculateBrokenTime(realTime);
-		this.cycleStartTime =realTime;
-		this.setStatus(OperationalStatus.OPERATIONAL);
+		if(OperationalStatus.BROKEN==status){
+			cycleTime= calculateBrokenTime(realTime);
+			this.cycleStartTime =realTime;
+			this.changeStatus(OperationalStatus.OPERATIONAL);
+		}
 	}
 	
 	private int calculateBrokenTime(DateTime realTime){
@@ -184,14 +186,14 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	 protected boolean moveAssemblyLine(DateTime realTime){
 		if(tryMoveAssemblyLine()){
 			if(status== OperationalStatus.MAINTENANCE){
-				setStatus(OperationalStatus.OPERATIONAL);
+				changeStatus(OperationalStatus.OPERATIONAL);
 				cycleTime=0;
 			}
 			boolean done = schedule.moveAndReschedule(cycleTime);
 			cycleTime = 0;
 			cycleStartTime = realTime;
 			if(status==OperationalStatus.PREMAINTENANCE && firstWorkStation.allIdle())
-				setStatus(OperationalStatus.MAINTENANCE);
+				changeStatus(OperationalStatus.MAINTENANCE);
 			return done;
 		}
 

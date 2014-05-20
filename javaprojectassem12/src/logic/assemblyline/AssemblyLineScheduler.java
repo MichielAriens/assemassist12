@@ -280,7 +280,7 @@ public class AssemblyLineScheduler {
 	 */
 	public void breakAssemblyLine(Printable<AssemblyLine> line){
 		AssemblyLine al = get(line);
-		this.overflowQueue.addAll(al.setStatus(OperationalStatus.BROKEN));
+		this.overflowQueue.addAll(al.changeStatus(OperationalStatus.BROKEN));
 		this.scheduleOverflowQueue();
 	}
 	
@@ -305,7 +305,7 @@ public class AssemblyLineScheduler {
 	 */
 	public void startMaintenace(Printable<AssemblyLine> line){
 		AssemblyLine al = this.get(line);
-		this.overflowQueue.addAll(al.setStatus(OperationalStatus.PREMAINTENANCE));
+		this.overflowQueue.addAll(al.changeStatus(OperationalStatus.PREMAINTENANCE));
 		this.scheduleOverflowQueue();
 	}
 
@@ -421,7 +421,7 @@ public class AssemblyLineScheduler {
 
 	public void changeAssemblyLineStatus(Printable<AssemblyLine> activeAssemblyLine,
 			OperationalStatus newStatus) {
-		this.get(activeAssemblyLine).setStatus(newStatus);
+		this.get(activeAssemblyLine).changeStatus(newStatus);
 		
 	}
 }
