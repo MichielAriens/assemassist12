@@ -248,9 +248,34 @@ public class AssemblyLineSchedulerTest {
 		DataLoader loader = new DataLoader(cmc);
 		loader.loadData();
 		
+		//Check next day
 		assertTrue(AssemblyLineTest.eqiDateTime(cmc.getCurrentTime(), new DateTime(2014,1,2,6,0)));
-		System.out.println(cmc.getStatistics());
+		// Check that 50 cars have been produced.
+		assertTrue(cmc.getStatistics().contains("Statistics of Generality:\nAverage number of cars produced: 50"));
 	}
 	
+	/**
+	 * Test the correct calculation of the time of the system when processing orders.
+	 */
+	@Test
+	public void testCorrectOrderPlacing(){
+		CarManufacturingCompany cmc = new CarManufacturingCompany();
+		cmc.addOrder(buildStandardOrderX());
+		
+	}
+	
+	/**
+	 * Method for extracting real objects from thei
+	 * @param <T>
+	 * @param printables
+	 * @return
+	 */
+	private <T> List<T> extractPrintable(final List<Printable<T>> printables){
+		List<T> lines = new ArrayList<>();
+		for(Printable<T> printable : printables){
+			lines.add((T) printable);
+		}
+		return lines;
+	}
 
 }
