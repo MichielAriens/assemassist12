@@ -262,21 +262,30 @@ public class AssemblyLineSchedulerTest {
 	public void testCorrectOrderPlacing(){
 		//Model X can only be scheduled on line 3.
 		CarManufacturingCompany cmc = new CarManufacturingCompany();
-		Order order = buildStandardOrderA();
+		Order order = buildStandardOrderX();
 		cmc.addOrder(order);
 		
 		List<AssemblyLine> lines = this.extractPrintables(cmc.getAssemblyLines());
 		assertTrue(lines.get(0).empty());
 		assertTrue(lines.get(1).empty());
-		assertTrue(lines.get(2).empty());
 		List<Workstation> stations = extractPrintables(lines.get(2).getWorkStations());
 		assertTrue(stations.get(0).getCurrentOrder().equals(order));
 		assertTrue(AssemblyLineTest.eqiDateTime(order.getEstimatedEndTime(), new DateTime(2014,1,1,11,0)));
 		
-		//Model C can be scheduled on line 2 & 3 but will be scheduled on 2 because of the better estimated completiontime.
+		//Model C can be scheduled on line 2 & 3 but will be scheduled on 2 because of the better estimated completion time.
 		order = buildStandardOrderC();
+		cmc.addOrder(order);
+		assertTrue(lines.get(0).empty());
+		stations = extractPrintables(lines.get(1).getWorkStations());
+		assertTrue(stations.get(0).getCurrentOrder().equals(order));
+		assertTrue(AssemblyLineTest.eqiDateTime(order.getEstimatedEndTime(), new DateTime(2014,1,1,9,0)));
 		
-		
+		//Model A can be scheduled on all lines but will be scheduled on 1 because of the better estimated completion time.
+		order = buildStandardOrderA();
+		cmc.addOrder(order);
+		stations = extractPrintables(lines.get(0).getWorkStations());
+		assertTrue(stations.get(0).getCurrentOrder().equals(order));
+		assertTrue(AssemblyLineTest.eqiDateTime(order.getEstimatedEndTime(), new DateTime(2014,1,1,8,30)));
 	}
 	
 	/**
