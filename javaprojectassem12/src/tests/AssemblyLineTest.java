@@ -61,28 +61,17 @@ public class AssemblyLineTest {
 		}
 	}
 	
-	/**
-	 * Do all tasks on lines 2 & 3
-	 * 
-	 * NOTE: do not copy!
-	 */
-	private void performAllTasksOn2n3(CarManufacturingCompany company){
-		Mechanic mech = (Mechanic) company.logIn("mech");
-		boolean taskPerformed = true;
-		while(taskPerformed){
-			taskPerformed = false;
-			for(Printable<AssemblyLine> line : mech.getAssemblyLines().subList(1, 2)){
-				mech.setActiveAssemblyLine(line);
-				for(Printable<Workstation> station : mech.getWorkstationsFromAssemblyLine()){
-					mech.setActiveWorkstation(station);
-					for(Printable<Task> task : mech.getAvailableTasks()){
-						int duration = ((Task) task).getEstimatedPhaseDuration();
-						if(mech.doTask(task, duration))
-							taskPerformed = true;
-					}
-				}
+	private void complete2n3(CarManufacturingCompany cmc){
+		for(Printable<AssemblyLine> pal : cmc.getAssemblyLines().subList(1, 2)){
+			AssemblyLine al = (AssemblyLine) pal;
+			barry.setActiveAssemblyLine(al);
+			barry.setActiveWorkstation(al.getWorkStations().get(0));
+			for(Printable<Task> ptask : barry.getAvailableTasks()){
+				Task task = (Task) ptask;
+				barry.doTask(task, task.getEstimatedPhaseDuration());
 			}
 		}
+		
 	}
 	
 	/**
@@ -136,7 +125,7 @@ public class AssemblyLineTest {
 		
 		//Add a load of orders to lines 2&3. Complete as many as possible to allow us to test on one single assemblyline.
 		swampLine2n3(cmcMotors);
-		performAllTasksOn2n3(cmcMotors);
+		complete2n3(cmcMotors);
 		
 		//Lets start adding orders.
 		cmcMotors.addOrder(orders.get(0));
@@ -164,7 +153,7 @@ public class AssemblyLineTest {
 		
 		for(int i = 0; i < 3; i++){
 			System.out.println(orders.get(i));
-		}
+		}		
 		
 		for(Task task : orders.get(0).getTasks()){
 			Workstation ws = (Workstation) cmcMotors.getWorkStationsFromAssemblyLine(cmcMotors.getAssemblyLines().get(1)).get(0);
