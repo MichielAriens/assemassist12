@@ -140,8 +140,8 @@ public class StatisticsTests {
 				"Average delay: 0 minutes\n"+
 				"Mean delay: 0 minutes\n"+
 				"Two last delays:\n"+
-				"   2) 0 minutes on 2014-01-01T18:30:00.000+01:00\n"+
-				"   1) 0 minutes on 2014-01-01T18:30:00.000+01:00\n"+
+				"   2) 0 minutes on 01-01-2014 18:30\n"+
+				"   1) 0 minutes on 01-01-2014 18:30\n"+
 				"\n"+
 				"Statistics of Generality:\n"+
 				"Average number of cars produced: 0\n"+
@@ -151,8 +151,8 @@ public class StatisticsTests {
 				"Average delay: 0 minutes\n"+
 				"Mean delay: 0 minutes\n"+
 				"Two last delays:\n"+
-				"   2) 0 minutes on 2014-01-01T18:30:00.000+01:00\n"+
-				"   1) 0 minutes on 2014-01-01T19:20:00.000+01:00"));
+				"   2) 0 minutes on 01-01-2014 18:30\n"+
+				"   1) 0 minutes on 01-01-2014 19:20\n"));
 	}
 
 }

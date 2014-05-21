@@ -127,10 +127,10 @@ public class CarManufacturingCompany {
 	}
 	
 	/**
-	 * Method to return the list of workstations of the assembly line 
+	 * Method to return the list of representations of workstations of the given assembly line 
 	 * of this car manufacturing company.
-	 * @param assemblyLine
-	 * @return	The workstations of the assembly line.
+	 * @param assemblyLine The assembly line for which we want the workstations.
+	 * @return	The representations of the workstations of the assembly line.
 	 */
 	public List<Printable<Workstation>> getWorkStationsFromAssemblyLine(Printable<AssemblyLine> assemblyLine){
 		
@@ -138,26 +138,16 @@ public class CarManufacturingCompany {
 	}
 	
 	/**
-	 * Returns the list of all workstations from all assembly lines of the car manufacturing company.
-	 * @return the list of all workstations from all assembly lines of the car manufacturing company.
+	 * Returns the list of representations of all workstations from all assembly lines of the car manufacturing company.
+	 * @return the list of representations of all workstations from all assembly lines of the car manufacturing company.
 	 */
 	public List<Printable<Workstation>> getWorkStations() {
 		return assemblyLineScheduler.getAllWorkstations();
 	}
 	
-//	/**
-//	 * Moves the assembly line forward if every work station is ready and 
-//	 * sets the end time of the first order to the given end time.
-//	 * @return 	True if the assembly line has been moved.
-//	 * 			False if the assembly line can not be moved.
-//	 */
-//	public boolean moveAssemblyLine(int shiftDuration){
-//		return this.assemblyLineScheduler.tryMoveAssemblyLine(shiftDuration);
-//	}
-	
 	/**
-	 * Returns the current time.
-	 * @return	The current time.
+	 * Returns the current time of the system.
+	 * @return	The current time of the system.
 	 */
 	public DateTime getCurrentTime(){
 		return this.assemblyLineScheduler.getCurrentTime();
@@ -165,8 +155,10 @@ public class CarManufacturingCompany {
 	
 	
 	/**
-	 * Completes the task corresponding to the given task.
+	 * Completes the task corresponding to the given task representation in the given axssembly line.
 	 * @param task	A copy of the task that needs to be completed.
+	 * @param assemblyLine The assembly line on which we want to perform a task.
+	 * @param duration The duration needed to complete the given task.
 	 * @return	True if the task is completed successfully
 	 * 			False the task could not be completed.
 	 */
@@ -186,7 +178,8 @@ public class CarManufacturingCompany {
 	}
 	
 	/**
-	 * Returns a list of the current strategies followed by the available scheduling strategies.
+	 * Returns a list of representations of the the current strategies followed by the available scheduling strategies in the given assemblyLine.
+	 * @param activeAssemblyLine The assembly line for which we want the strategies.
 	 * @return a list of the current strategies followed by the available scheduling strategies.
 	 */
 	public List<Printable<SchedulingStrategy>> getStrategies(Printable<AssemblyLine> activeAssemblyLine) {
@@ -194,6 +187,7 @@ public class CarManufacturingCompany {
 	}
 	
 	/**
+<<<<<<< HEAD
 	 * Returns a map mapping each assembly line to it's strategies list.
 	 * @return a map mapping each assembly line to it's strategies list.
 	 */
@@ -205,6 +199,11 @@ public class CarManufacturingCompany {
 	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy for the given assembly line.
 	 * @param assemblyLine	The assembly line for which the batch list needs to be returned.
 	 * @return a list of orders that are viable to be used by the batch specification scheduling strategy for the given assembly line.
+=======
+	 * Returns a list of representations of orders that are viable to be used by the batch specification scheduling strategy in the given assembly line.
+	 * @param assemblyLine the assembly line for which we want all the orders which can be processed in batch.
+	 * @return	a list of orders that are viable to be used by the batch specification scheduling strategy.
+>>>>>>> 9924f93c3a547532d4c338cfdd8461317254858e
 	 */
 	public List<Order> getBatchList(Printable<AssemblyLine> assemblyline) {
 		return assemblyLineScheduler.getBatchList(assemblyline);
@@ -228,6 +227,7 @@ public class CarManufacturingCompany {
 	}
 	
 	/**
+<<<<<<< HEAD
 	 * Changes the strategy of the given assembly line according to the given order.
 	 * @param order	The order that has to be used as a template for the strategy.
 	 * @param assemblyLine	The assembly line of which the strategy needs to be changed.
@@ -238,18 +238,22 @@ public class CarManufacturingCompany {
 	
 	/**
 	 * Returns a list of pending tasks at a given workstation.
+=======
+	 * Returns a list of pending tasks at a given workstation in a given assembly line.
+>>>>>>> 9924f93c3a547532d4c338cfdd8461317254858e
 	 * @param station	The workstation for which the pending tasks are needed.
-	 * @param line 		The assembly line of the workstation for which the pending tasks are needed.
-	 * @return	A list of tasks that are pending at the given workstation.
+	 * @param assemblyLine 		The assembly line of the workstation for which the pending tasks are needed.
+	 * @return	A list of representations of tasks that are pending at the given workstation.
 	 */
 	public List<Printable<Task>> getRequiredTasks(Printable<Workstation> station, Printable<AssemblyLine> assemblyLine){
 		return this.assemblyLineScheduler.getRequiredTasks(station, assemblyLine);
 	}
 	
 	/**
-	 * Returns a list of all tasks at a given workstation.
+	 * Returns a list of all tasks at a given workstation on a given assembly line.
 	 * @param station	The a copy of the workstation for which the tasks are needed.
-	 * @return	A list of tasks at the given workstation.
+	 * @param assemblyLine The assembly line on which we want the tasks.
+	 * @return	A list of tasks at the given workstation and given assembly line.
 	 */
 	public List<Printable<Task>> getAllTasksAt(Printable<Workstation> station, Printable<AssemblyLine> assemblyLine){
 		return this.assemblyLineScheduler.getAllTasksAt(station, assemblyLine);
@@ -258,6 +262,7 @@ public class CarManufacturingCompany {
 	/**
 	 * Asks the assembly line to check the given duration, if the duration is allowed it returns true, otherwise false.
 	 * @param duration	The duration that needs to be checked.
+	 * @param assemblyLine The assembly line on which we need to check the phase duration.
 	 * @return 	True if the duration is allowed.
 	 * 			False otherwise
 	 */

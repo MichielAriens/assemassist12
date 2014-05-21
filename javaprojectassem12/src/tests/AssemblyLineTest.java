@@ -145,24 +145,23 @@ public class AssemblyLineTest {
 		assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusMinutes(310)));
 		//Lets to all tasks in workstation 1, thus progressing the line. 
 		//We'll complete this phase 20 minutes early to check that the estimates come forwards too. 
-		barry.setActiveAssemblyLine(cmcMotors.getAssemblyLines().get(0));
-		barry.setActiveWorkstation(cmcMotors.getWorkStationsFromAssemblyLine(cmcMotors.getAssemblyLines().get(0)).get(0));
+		
 		
 		//Complete some tasks in lines 2 & 3 to allow line 1 to advance.
 		completeFirstWS((AssemblyLine) cmcMotors.getAssemblyLines().get(1));
 		completeFirstWS((AssemblyLine) cmcMotors.getAssemblyLines().get(2));
 		
+		barry.setActiveAssemblyLine(cmcMotors.getAssemblyLines().get(0));
+		barry.setActiveWorkstation(cmcMotors.getWorkStationsFromAssemblyLine(cmcMotors.getAssemblyLines().get(0)).get(0));
 		
 		for(int i = 0; i < 3; i++){
 			System.out.println(orders.get(i));
 		}		
 		
 		for(Task task : orders.get(0).getTasks()){
-			//if(((Workstation) cmcMotors.getWorkStations().get(0)).getCapabilities().contains(task.getVehiclePart().type)){
-			//	barry.doTask(task, task.getEstimatedPhaseDuration()-20);
 			Workstation ws = (Workstation) cmcMotors.getWorkStationsFromAssemblyLine(cmcMotors.getAssemblyLines().get(1)).get(0);
 			if(ws.getCapabilities().contains(task.getVehiclePart().type)){
-				barry.doTask(task, task.getEstimatedPhaseDuration());
+				barry.doTask(task, task.getEstimatedPhaseDuration()-20);
 			}
 		}
 		//assert that 30 mins have passed.

@@ -1,6 +1,7 @@
 package tests;
 
 import static org.junit.Assert.assertTrue;
+import init.DataLoader;
 import interfaces.Printable;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import logic.car.VehiclePart;
 import logic.car.VehiclePartType;
 import logic.users.CarManufacturingCompany;
 import logic.workstation.Task;
+import logic.workstation.Workstation;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -214,42 +216,6 @@ public class AssemblyLineSchedulerTest {
 	}
 	
 	@Test
-	public void testRandom(){
-		CarManufacturingCompany cmc = new CarManufacturingCompany();
-		List<Order> orders = new ArrayList<Order>();
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderX());
-		orders.add(buildStandardOrderY());
-		orders.add(buildStandardOrderX());
-		orders.add(buildStandardOrderX());
-		orders.add(buildStandardOrderY());
-		orders.add(buildStandardOrderX());
-		orders.add(buildStandardOrderX());
-		orders.add(buildStandardOrderY());
-		orders.add(buildStandardOrderX());
-		orders.add(buildStandardOrderB());
-		orders.add(buildStandardOrderB());
-		orders.add(buildStandardOrderB());
-		
-		
-		
-		for(Order order : orders){
-			cmc.addOrder(order);
-		}
-		System.out.println(orders.get(orders.size() - 1).getEstimatedEndTime());
-		
-	}
-	
-	@Test
 	public void testDoTask(){
 		CarManufacturingCompany cmc = new CarManufacturingCompany();
 		List<Order> orders = new ArrayList<Order>();
@@ -273,5 +239,76 @@ public class AssemblyLineSchedulerTest {
 		
 	}
 	
+	/**
+	 * Assert that the data loaders leaves the system at the start of a new day.
+	 */
+	@Test 
+	public void testDataLoaderStartsNewDay(){
+		//Initialize the startup sequence.
+		CarManufacturingCompany cmc = new CarManufacturingCompany();
+		DataLoader loader = new DataLoader(cmc);
+		loader.loadData();
+		
+		//Check next day
+		assertTrue(AssemblyLineTest.eqiDateTime(cmc.getCurrentTime(), new DateTime(2014,1,2,6,0)));
+		// Check that 50 cars have been produced.
+		assertTrue(cmc.getStatistics().contains("Statistics of Generality:\nAverage number of cars produced: 50"));
+	}
+	
+	/**
+	 * Test the correct placement of orders: Does each order get scheduled onto the expected assemblyline?
+	 */
+	@Test
+	public void testCorrectOrderPlacing(){
+		//Model X can only be scheduled on line 3.
+		CarManufacturingCompany cmc = new CarManufacturingCompany();
+		Order order = buildStandardOrderX();
+		cmc.addOrder(order);
+		
+		List<AssemblyLine> lines = this.extractPrintables(cmc.getAssemblyLines());
+		assertTrue(lines.get(0).empty());
+		assertTrue(lines.get(1).empty());
+		List<Workstation> stations = extractPrintables(lines.get(2).getWorkStations());
+		assertTrue(stations.get(0).getCurrentOrder().equals(order));
+		assertTrue(AssemblyLineTest.eqiDateTime(order.getEstimatedEndTime(), new DateTime(2014,1,1,11,0)));
+		
+		//Model C can be scheduled on line 2 & 3 but will be scheduled on 2 because of the better estimated completion time.
+		order = buildStandardOrderC();
+		cmc.addOrder(order);
+		assertTrue(lines.get(0).empty());
+		stations = extractPrintables(lines.get(1).getWorkStations());
+		assertTrue(stations.get(0).getCurrentOrder().equals(order));
+		assertTrue(AssemblyLineTest.eqiDateTime(order.getEstimatedEndTime(), new DateTime(2014,1,1,9,0)));
+		
+		//Model A can be scheduled on all lines but will be scheduled on 1 because of the better estimated completion time.
+		order = buildStandardOrderA();
+		cmc.addOrder(order);
+		stations = extractPrintables(lines.get(0).getWorkStations());
+		assertTrue(stations.get(0).getCurrentOrder().equals(order));
+		assertTrue(AssemblyLineTest.eqiDateTime(order.getEstimatedEndTime(), new DateTime(2014,1,1,8,30)));
+	}
+	
+	/**
+	 * Extract the underlying objects from it's printable wrapper in a list.
+	 * @param <T>
+	 * @param printables
+	 * @return
+	 */
+	private <T> List<T> extractPrintables(final List<Printable<T>> printables){
+		List<T> lines = new ArrayList<>();
+		for(Printable<T> printable : printables){
+			lines.add(extractPrintable(printable));
+		}
+		return lines;
+	}
+	
+	/**
+	 * Extract the underlying object form it's printable wrapper.
+	 * @param printable
+	 * @return
+	 */
+	private <T> T extractPrintable(final Printable<T> printable){
+		return (T) printable;
+	}
 
 }
