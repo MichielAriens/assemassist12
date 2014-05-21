@@ -68,10 +68,18 @@ public class Manager extends User{
 		company.changeStrategy(order, activeAssemblyLine);
 	}
 
+	/**
+	 * Returns a list of all the assembly lines in the company.
+	 * @return	A list of all the assembly lines in this company.
+	 */
 	public List<Printable<AssemblyLine>> getAssemblyLines() {
 		return company.getAssemblyLines();
 	}
 	
+	/**
+	 * Returns a map of representations of assembly lines as keys and the representations of the statuses as values.
+	 * @return A map of representations of assembly lines as keys and the representations of the statuses as values.
+	 */
 	public Map<Printable<AssemblyLine>, Printable<OperationalStatus>> getAssemblyLinesStatuses() {
 		return company.getAssemblyLinesStatuses();
 	}
@@ -84,10 +92,18 @@ public class Manager extends User{
 		this.activeAssemblyLine = line;
 	}
 
+	/**
+	 * Returns the assembly line representation on which this manager is currently operating.
+	 * @return The assembly line representation on which this manager is currently operating.
+	 */
 	public Printable<AssemblyLine> getActiveAssemblyLine() {
 		return activeAssemblyLine;
 	}
 
+	/**
+	 * Changes the status of this manager's active assembly line to the given status.
+	 * @param newStatus	The new status of this manager's active assembly line.
+	 */
 	public void changeAssemblyLineStatus(OperationalStatus newStatus) {
 		company.changeAssemblyLineStatus(activeAssemblyLine, newStatus);
 	}

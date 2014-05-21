@@ -20,7 +20,7 @@ public class GarageHolder extends User{
 	private CarManufacturingCompany company;
 	
 	/**
-	 * List of all the orders committed by this garage holder.
+	 * List of all the vehicle orders committed by this garage holder.
 	 */
 	private ArrayList<VehicleOrder> committedOrders;
 	
