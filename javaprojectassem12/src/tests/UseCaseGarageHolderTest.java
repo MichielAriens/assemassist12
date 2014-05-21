@@ -3,6 +3,7 @@ package tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import interfaces.Printable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,10 +64,12 @@ public class UseCaseGarageHolderTest {
 		//if the user does not want to make a new order, the use case ends here (alternate flow 1)
 		//the user fills in an ordering form on the user interface:
 		ArrayList<String> models = new ArrayList<String>();
-		models.add("Model A: 1");
-		models.add("Model B: 2");
-		models.add("Model C: 3");
-		VehicleModel  model = VehicleModel.getModelFromString("Model A");
+		models.add("Car Model A: 1");
+		models.add("Car Model B: 2");
+		models.add("Car Model C: 3");
+		models.add("Truck Model X: 4");
+		models.add("Truck Model Y: 5");
+		VehicleModel  model = VehicleModel.getModelFromString("Car Model A");
 		ghCont.chooseModel(model);
 		assertEquals(models, ghCont.getModels());
 		ArrayList<String> bodyParts = new ArrayList<String>();
@@ -75,7 +78,7 @@ public class UseCaseGarageHolderTest {
 		
 		assertEquals(bodyParts, ghCont.getOptions(VehiclePartType.Body));
 		
-		ghCont.addPart("Model A");
+		ghCont.addPart("Car Model A");
 		ghCont.addPart("Sedan");
 		ghCont.addPart("Red");
 		ghCont.addPart("Standard 2l v4");
@@ -84,6 +87,9 @@ public class UseCaseGarageHolderTest {
 		ghCont.addPart("Manual");
 		ghCont.addPart("Comfort");
 		ghCont.addPart("No Spoiler");
+		ghCont.addPart("No Toolstorage");
+		ghCont.addPart("No Cargo Protection");
+		ghCont.addPart("No Certification");
 		//user places the order:
 		//if the user does not want to place the newly created order, the use case ends here (alternate flow 2)
 		ghCont.placeOrder();
@@ -143,9 +149,9 @@ public class UseCaseGarageHolderTest {
 	private void completeOneOrder(){
 		Mechanic mech = new Mechanic(cmc, "AutoMech2014");
 		//Do all the orders
-		for(Workstation	ws : cmc.getWorkStations()){
+		for(Printable<Workstation>	ws : cmc.getWorkStations()){
 			mech.setActiveWorkstation(ws);
-			for(Task task : mech.getAvailableTasks()){
+			for(Printable<Task> task : mech.getAvailableTasks()){
 				mech.doTask(task, 60);
 			}
 		}
