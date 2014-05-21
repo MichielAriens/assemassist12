@@ -2,10 +2,12 @@ package tests;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import interfaces.Printable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import logic.assemblyline.AssemblyLine;
 import logic.car.VehicleModel;
 import logic.car.VehicleOrder;
 import logic.car.VehicleOrderDetailsMaker;
@@ -16,6 +18,7 @@ import logic.car.TaskOrderDetailsMaker;
 import logic.users.CarManufacturingCompany;
 import logic.users.Mechanic;
 import logic.workstation.Task;
+import logic.workstation.Workstation;
 
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
@@ -32,75 +35,6 @@ public class AssemblyLineTest {
 	private List<VehicleOrder> simpleOrders;
 	
 	/**
-	 * Build a standard order: duration 50
-	 * @return	A standard order with a duration of 50 minutes.
-	 */
-	private VehicleOrder buildStandardOrderA(){
-		VehiclePart[] partsArray = {
-				VehiclePart.BODY_BREAK, 
-				VehiclePart.COLOUR_RED,
-				VehiclePart.ENGINE_4,
-				VehiclePart.GEARBOX_5AUTO,
-				VehiclePart.SEATS_LEATHER_WHITE,
-				VehiclePart.AIRCO_MANUAL,
-				VehiclePart.WHEELS_COMFORT,
-				VehiclePart.SPOILER_NONE
-			};
-		
-		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELA);
-		for(VehiclePart part : partsArray){
-			maker.addPart(part);
-		}
-		return new VehicleOrder(maker.getDetails());
-	}
-	
-	/**
-	 * Build a standard order: duration 70
-	 * @return	A standard order with a duration of 70 minutes.
-	 */
-	private VehicleOrder buildStandardOrderB(){
-		VehiclePart[] partsArray = {
-				VehiclePart.BODY_BREAK, 
-				VehiclePart.COLOUR_RED,
-				VehiclePart.ENGINE_4,
-				VehiclePart.GEARBOX_5AUTO,
-				VehiclePart.SEATS_LEATHER_WHITE,
-				VehiclePart.AIRCO_MANUAL,
-				VehiclePart.WHEELS_COMFORT,
-				VehiclePart.SPOILER_NONE
-			};
-		
-		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELB);
-		for(VehiclePart part : partsArray){
-			maker.addPart(part);
-		}
-		return new VehicleOrder(maker.getDetails());
-	}
-	
-	/**
-	 * Build a standard order: duration 60
-	 * @return	A standard order with a duration of 60 minutes.
-	 */
-	private VehicleOrder buildStandardOrderC(){
-		VehiclePart[] partsArray = {
-				VehiclePart.BODY_SPORT, 
-				VehiclePart.COLOUR_BLACK,
-				VehiclePart.ENGINE_8,
-				VehiclePart.GEARBOX_6MANUAL,
-				VehiclePart.SEATS_LEATHER_WHITE,
-				VehiclePart.AIRCO_NONE,
-				VehiclePart.WHEELS_SPORTS,
-				VehiclePart.SPOILER_LOW
-			};
-		
-		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELC);
-		for(VehiclePart part : partsArray){
-			maker.addPart(part);
-		}
-		return new VehicleOrder(maker.getDetails());
-	}
-	
-	/**
 	 * Build a standard task order: duration 60
 	 * @return	A standard task order with a duration of 60 minutes.
 	 */
@@ -109,6 +43,35 @@ public class AssemblyLineTest {
 		maker.chooseDeadline(deadline);
 		maker.choosePart(VehiclePart.COLOUR_BLACK);
 		return new TaskOrder(maker.getDetails());
+	}
+	
+	/**
+	 * Commits orders to the system so that lines 2 & 3 are each filled with a queue of 100 orders. 
+	 * Line 1 is still available and is empty. It accepts orders A & B.
+	 * @param cmc
+	 */
+	private void swampLine2n3(CarManufacturingCompany cmc){
+		//Swamp line 3.
+		for(int i = 0; i < 100 ; i++){
+			cmc.addOrder(buildStandardOrderX());
+		}
+		//swamp line 2.
+		for(int i = 0; i < 100 ; i++){
+			cmc.addOrder(buildStandardOrderC());
+		}
+	}
+	
+	private void complete2n3(CarManufacturingCompany cmc){
+		for(Printable<AssemblyLine> pal : cmc.getAssemblyLines().subList(1, 2)){
+			AssemblyLine al = (AssemblyLine) pal;
+			barry.setActiveAssemblyLine(al);
+			barry.setActiveWorkstation(al.getWorkStations().get(0));
+			for(Printable<Task> ptask : barry.getAvailableTasks()){
+				Task task = (Task) ptask;
+				barry.doTask(task, task.getEstimatedPhaseDuration());
+			}
+		}
+		
 	}
 	
 	/**
@@ -135,12 +98,10 @@ public class AssemblyLineTest {
 		cmcMotors = new CarManufacturingCompany();
 		barry = new Mechanic(cmcMotors, "Barry");
 		for(int i = 0; i < 10; i++){
-			if((i % 3) == 0){
+			if((i % 2) == 0){
 				orders.add(buildStandardOrderA());
-			} else if((i % 3) == 1){
+			} else if((i % 2) == 1){
 				orders.add(buildStandardOrderB());
-			}else{
-				orders.add(buildStandardOrderC());
 			}
 		}
 		
@@ -153,13 +114,18 @@ public class AssemblyLineTest {
 	
 
 	/**
-	 * This test tests the correct propagation of estimated completion times.
-	 * 50 - 70 - 60 - 50 - 70 - 60 - ...
+	 * This test tests the correct propagation of estimated completion times on one assemblyline. 
+	 * We start by filling line 2 & 3 so that we can reuse tests to test correct estimations on one assemblyline. 
+	 * 50 - 70 - 50 - 70 - ...
 	 */
 	@Test
 	public void testEstimatesEasy(){
 		// The day starts at 6:00.
 		DateTime now = cmcMotors.getCurrentTime();
+		
+		//Add a load of orders to lines 2&3. Complete as many as possible to allow us to test on one single assemblyline.
+		swampLine2n3(cmcMotors);
+		complete2n3(cmcMotors);
 		
 		//Lets start adding orders.
 		cmcMotors.addOrder(orders.get(0));
@@ -173,27 +139,42 @@ public class AssemblyLineTest {
 		//the second order is comleted after 50 + 3* 70 mins
 		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusMinutes(260)));
 		
-		//Let's add the third order (60 mins cycle):
+		//Let's add the third order (50 mins cycle):
 		cmcMotors.addOrder(orders.get(2));
 		//The first & second order should be unaffected.
 		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusMinutes(190)));
 		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusMinutes(260)));
-		//The thirs order will be done after 50 + 70 + 70 + 70 + 60 mins = 320 mins
-		assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusMinutes(320)));
+		//The thirs order will be done after 50 + 70 + 70 + 70 + 50 mins = 310 mins
+		assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusMinutes(310)));
 		//Lets to all tasks in workstation 1, thus progressing the line. 
 		//We'll complete this phase 20 minutes early to check that the estimates come forwards too. 
-		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0));
+		barry.setActiveAssemblyLine(cmcMotors.getAssemblyLines().get(0));
+		barry.setActiveWorkstation(cmcMotors.getWorkStationsFromAssemblyLine(cmcMotors.getAssemblyLines().get(0)).get(0));
+		
+		for(int i = 0; i < 3; i++){
+			System.out.println(orders.get(i));
+		}		
+		
 		for(Task task : orders.get(0).getTasks()){
 			if(cmcMotors.getWorkStations().get(0).getCapabilities().contains(task.getVehiclePart().type)){
 				barry.doTask(task, orders.get(0).getPhaseTime() - 20);
+			Workstation ws = (Workstation) cmcMotors.getWorkStationsFromAssemblyLine(cmcMotors.getAssemblyLines().get(1)).get(0);
+			if(ws.getCapabilities().contains(task.getVehiclePart().type)){
+				barry.doTask(task, task.getEstimatedPhaseDuration());
 			}
 		}
 		//assert that 30 mins have passed.
-		assertTrue(eqiDateTime(now.plusMinutes(30), cmcMotors.getCurrentTime()));
+		//assertTrue(eqiDateTime(now.plusMinutes(30), cmcMotors.getCurrentTime()));
 		//assert that the estimates cascade as expected.
+		for(int i = 0; i < 3; i++){
+			System.out.println(orders.get(i));
+		}
+		
+		
+		
 		assertTrue(eqiDateTime(orders.get(0).getEstimatedEndTime(), now.plusMinutes(170)));
 		assertTrue(eqiDateTime(orders.get(1).getEstimatedEndTime(), now.plusMinutes(240)));
-		assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusMinutes(300)));
+		assertTrue(eqiDateTime(orders.get(2).getEstimatedEndTime(), now.plusMinutes(290)));
 
 	}
 	
@@ -430,6 +411,136 @@ public class AssemblyLineTest {
 		mu.addDays(1);
 		mu.setHourOfDay(6);mu.setMinuteOfHour(0);
 		return mu.toDateTime();
+	}
+
+	/**
+	 * Build a standard order: duration 50, 50, 0
+	 * @return	A standard order with a duration of 50 minutes.
+	 */
+	private VehicleOrder buildStandardOrderA(){
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_BREAK, 
+				VehiclePart.COLOUR_RED,
+				VehiclePart.ENGINE_4,
+				VehiclePart.GEARBOX_5AUTO,
+				VehiclePart.SEATS_LEATHER_WHITE,
+				VehiclePart.AIRCO_MANUAL,
+				VehiclePart.WHEELS_COMFORT,
+				VehiclePart.SPOILER_NONE,
+				VehiclePart.TOOLSTORAGE_NONE,
+				VehiclePart.CARGO_NONE,
+				VehiclePart.CERTIFICATION_NONE
+			};
+		
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELA);
+		for(VehiclePart part : partsArray){
+			maker.addPart(part);
+		}
+		return new VehicleOrder(maker.getDetails());
+	}
+
+	/**
+	 * Build a standard order: duration 70, 70, 0
+	 * @return	A standard order with a duration of 70 minutes.
+	 */
+	private VehicleOrder buildStandardOrderB(){
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_BREAK, 
+				VehiclePart.COLOUR_RED,
+				VehiclePart.ENGINE_4,
+				VehiclePart.GEARBOX_5AUTO,
+				VehiclePart.SEATS_LEATHER_WHITE,
+				VehiclePart.AIRCO_MANUAL,
+				VehiclePart.WHEELS_COMFORT,
+				VehiclePart.SPOILER_NONE,
+				VehiclePart.TOOLSTORAGE_NONE,
+				VehiclePart.CARGO_NONE,
+				VehiclePart.CERTIFICATION_NONE
+			};
+		
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELB);
+		for(VehiclePart part : partsArray){
+			maker.addPart(part);
+		}
+		return new VehicleOrder(maker.getDetails());
+	}
+
+	/**
+	 * Build a standard order: duration 60, 60, 0
+	 * @return	A standard order with a duration of 60 minutes.
+	 */
+	private VehicleOrder buildStandardOrderC(){
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_SPORT, 
+				VehiclePart.COLOUR_BLACK,
+				VehiclePart.ENGINE_8,
+				VehiclePart.GEARBOX_6MANUAL,
+				VehiclePart.SEATS_LEATHER_WHITE,
+				VehiclePart.AIRCO_NONE,
+				VehiclePart.WHEELS_SPORTS,
+				VehiclePart.SPOILER_LOW,
+				VehiclePart.TOOLSTORAGE_NONE,
+				VehiclePart.CARGO_NONE,
+				VehiclePart.CERTIFICATION_NONE
+			};
+		
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELC);
+		for(VehiclePart part : partsArray){
+			maker.addPart(part);
+		}
+		return new VehicleOrder(maker.getDetails());
+	}
+
+	/**
+	 * Build a standard truck order: duration 60, 90, 30
+	 * @return	A standard order with a duration of 60 minutes.
+	 */
+	private VehicleOrder buildStandardOrderX(){
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_PLATFORM, 
+				VehiclePart.COLOUR_GREEN,
+				VehiclePart.ENGINE_TRUCKSTANDARD,
+				VehiclePart.GEARBOX_8MANUAL,
+				VehiclePart.SEATS_VINYL_GRAY,
+				VehiclePart.AIRCO_MANUAL,
+				VehiclePart.WHEELS_HEAVY_DUTY,
+				VehiclePart.SPOILER_NONE,
+				VehiclePart.TOOLSTORAGE_STANDARD,
+				VehiclePart.CARGO_STANDARD,
+				VehiclePart.CERTIFICATION_STANDARD
+			};
+		
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.TRUCKMODELX);
+		for(VehiclePart part : partsArray){
+			maker.addPart(part);
+		}
+		return new VehicleOrder(maker.getDetails());
+	}
+
+	/**
+	 * Build a standard truck order: duration 60, 120, 45
+	 * @return	A standard order with a duration of 60 minutes.
+	 */
+	private VehicleOrder buildStandardOrderY(){
+		VehiclePart[] partsArray = {
+				VehiclePart.BODY_PLATFORM, 
+				VehiclePart.COLOUR_BLACK,
+				VehiclePart.ENGINE_TRUCKSTANDARD,
+				VehiclePart.GEARBOX_8MANUAL,
+				VehiclePart.SEATS_VINYL_GRAY,
+				VehiclePart.AIRCO_MANUAL,
+				VehiclePart.WHEELS_HEAVY_DUTY,
+				VehiclePart.SPOILER_NONE,
+				VehiclePart.TOOLSTORAGE_STANDARD,
+				VehiclePart.CARGO_STANDARD,
+				VehiclePart.CERTIFICATION_STANDARD
+			};
+		
+		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.TRUCKMODELY);
+		for(VehiclePart part : partsArray){
+			maker.addPart(part);
+		}
+		return new VehicleOrder(maker.getDetails());
 	}
 	
 	

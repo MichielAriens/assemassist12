@@ -156,10 +156,16 @@ public class AssemblyLineSchedulerTest {
 	}
 
 
+	/**
+	 * Test the basic case where 3 A orders are placed into the empty system. 
+	 * We expect the estimated completiontimes to fall together as they aredistibuted over the lines.
+	 * A fourth order will be scheduled later.
+	 */
 	@Test
 	public void testBasicOrder(){
+		//First three orders have the same est completiontime
 		List<Order> orders = new ArrayList<>(3);
-		for(int i = 0; i < 4 ; i++){
+		for(int i = 0; i < 3 ; i++){
 			orders.add(buildStandardOrderA());
 		}
 		CarManufacturingCompany cmc = new CarManufacturingCompany();
@@ -172,6 +178,10 @@ public class AssemblyLineSchedulerTest {
 			assertTrue(eqiDateTime(order.getEstimatedEndTime(),est));
 		}
 		
+		//One more order which should finish 50 mins later.
+		orders.add(buildStandardOrderA());
+		cmc.addOrder(orders.get(orders.size()-1));
+		assertTrue(eqiDateTime(orders.get(orders.size()-1).getEstimatedEndTime(),est.plusMinutes(50)));
 	}
 
 
