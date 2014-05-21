@@ -49,17 +49,20 @@ public class UIManager {
 		try {
 			writer.write("Manager " + maController.getUserName()+ " has logged in.\n\n");			
 			while(true){				
-				int answer = chooseAction("Select your action:\n   1: Check statistics\n   2: Select alternative scheduling algorithm\n   3: Change Assembly Line's Operational Status\n   4: Leave overview\nAnswer: ", 4);
+				int answer = chooseAction("Select your action:\n   1: Check statistics\n   2: Select alternative scheduling algorithm for one assembly line\n   3: Select alternative scheduling algorithm for all assembly lines\n   4: Change Assembly Line's Operational Status\n   5: Leave overview\nAnswer: ", 5);
 				if(answer == 1){
 					writeStatistics();
 				}
 				else if(answer == 2){
-					newSchedulingAlgorithm();
+					newSchedulingAlgorithmOneAssemblyLine();
 				}
 				else if(answer == 3){
-					changeAssemblyLineStatus();
+					newSchedulingAlgorithmAllAssemblyLines();
 				}
 				else if(answer == 4){
+					changeAssemblyLineStatus();
+				}
+				else if(answer == 5){
 					return;
 				}
 			}
@@ -108,6 +111,7 @@ public class UIManager {
 			waitForCompletion("Status has been changed. Press enter to continue.\n");
 		}
 	}
+	
 
 	/**
 	 * Lets the user choose the assembly line it wants to perform actions on.
@@ -131,14 +135,14 @@ public class UIManager {
 	 * Lets the user choose an alternate scheduling algorithm for an assembly line.
 	 * @throws IOException	When IO fails.
 	 */
-	private void newSchedulingAlgorithm() throws IOException {
-		writer.write("===ALTERNATE SCHEDULING MECHANISM===\n");
+	private void newSchedulingAlgorithmOneAssemblyLine() throws IOException {
+		writer.write("===ALTERNATE SCHEDULING MECHANISM ONE ASSEMBLY LINE===\n");
 		writer.flush();
 		
 		String assemblyLine = chooseAssemblyLine();
 		
 		//TODO nog is nakijken
-		ArrayList<String> strategies = maController.getStrategies();
+		ArrayList<String> strategies = maController.getStrategiesActiveLine();
 		writer.write("Current algorithm for "+ assemblyLine + ":\n   " + strategies.get(0) + "\n");
 		writer.flush();
 		
@@ -152,19 +156,75 @@ public class UIManager {
 		if(algorithm != cancelIndex){
 			String chosenStrategy = strategies.get(algorithm);
 			if(chosenStrategy.equals("FIFO")){
-				chooseFIFO();
+				chooseFIFOActiveAssmblyLine();
 			}
 			else if(chosenStrategy.equals("Specification Batch")){
-				chooseSpecificationBatch();
+				chooseSpecificationBatchActiveAssemblyLine();
 			}
 		}
 	}
 	
+
 	/**
-	 * Changes the strategy to FIFO and notifies the user of what happened.
+	 * Lets the user choose an alternate scheduling algorithm for all assemblylines.
+	 * @throws IOException	When IO fails.
 	 */
-	private void chooseFIFO() {
-		if(maController.changeStrategyToFIFO()){
+	private void newSchedulingAlgorithmAllAssemblyLines() throws IOException{
+		writer.write("===ALTERNATE SCHEDULING MECHANISM ALL ASSEMBLY LINEs===\n");
+		writer.flush();
+		
+		ArrayList<ArrayList<String>> allStrategies = maController.getStrategiesAllLines();
+		ArrayList<String> currentStrategies = allStrategies.get(0);
+		ArrayList<String> possibleStrategies = allStrategies.get(1);
+		String currentStrats = "Current strategies: \n";
+		for(String s : currentStrategies){
+			currentStrats += "   " + s + "\n";
+		}
+		writer.write(currentStrats);
+		writer.flush();		
+		
+		String query = "Select new algorithm:\n";
+		for(String s : possibleStrategies){
+			query += "   " + s + "\n";
+		}
+		int cancelIndex = possibleStrategies.size() + 1;
+		query += "   " + (cancelIndex) + ": Cancel\nAnswer: ";
+		int algorithm = chooseAction(query, cancelIndex);
+		
+		if(algorithm != cancelIndex){
+			String chosenStrategy = possibleStrategies.get(algorithm);
+			if(chosenStrategy.equals("FIFO")){
+				chooseFIFOAllAssmblyLines();
+			}
+			else if(chosenStrategy.equals("Specification Batch")){
+				chooseSpecificationBatchAllAssemblyLines();
+			}
+		}
+		
+	}
+
+	/**
+	 * Changes the strategy of all assembly lines to FIFO.
+	 */
+	private void chooseSpecificationBatchAllAssemblyLines() {
+		maController.changeToFIFOAllLines();
+		waitForCompletion("Chosen strategy has been applied to all assembly lines. Press enter to continue.\n");
+	}
+
+	/**
+	 * Lets the user choose which set of options to use for the batch specifications strategy,
+	 * and applies this strategy to all assembly lines if possible.
+	 */
+	private void chooseFIFOAllAssmblyLines() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * Changes the strategy of the active assembly line to FIFO and notifies the user of what happened.
+	 */
+	private void chooseFIFOActiveAssmblyLine() {
+		if(maController.changeToFIFOActiveLine()){
 			waitForCompletion("Chosen strategy has been applied. Press enter to continue.\n");
 		}
 		else{
@@ -174,11 +234,11 @@ public class UIManager {
 	
 	/**
 	 * Lets the user choose which set of options to use for the batch specifications strategy,
-	 * and applies this strategy if possible.
+	 * and applies this strategy to the active assembly line if possible.
 	 */
-	private void chooseSpecificationBatch() {
+	private void chooseSpecificationBatchActiveAssemblyLine() {
 		String query;
-		ArrayList<String> listCarOptions = maController.getBatchList();
+		ArrayList<String> listCarOptions = maController.getBatchListActiveLine();
 		if(listCarOptions.size() < 1){
 			waitForCompletion("No available sets of car options. Press enter to continue.\n");
 		}
@@ -190,7 +250,7 @@ public class UIManager {
 			query += "   " + (listCarOptions.size()+1) + ": Cancel\n";
 			int carOption = chooseAction(query, listCarOptions.size()+1);
 			if(carOption != listCarOptions.size()+1){
-				maController.changeStrategyToBatchProcessing(carOption-1);
+				maController.changeStrategyToBatchProcessingActiveLine(carOption-1);
 				waitForCompletion("Chosen strategy has been applied. Press enter to continue.\n");
 			}
 		}

@@ -194,11 +194,28 @@ public class CarManufacturingCompany {
 	}
 	
 	/**
-	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy.
-	 * @return	a list of orders that are viable to be used by the batch specification scheduling strategy.
+	 * Returns a map mapping each assembly line to it's strategies list.
+	 * @return a map mapping each assembly line to it's strategies list.
+	 */
+	public Map<Printable<AssemblyLine>, List<Printable<SchedulingStrategy>>> getAssemblyLinesStrategies() {
+		return assemblyLineScheduler.getAssemblyLinesStrategies();
+	}
+	
+	/**
+	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy for the given assembly line.
+	 * @param assemblyLine	The assembly line for which the batch list needs to be returned.
+	 * @return a list of orders that are viable to be used by the batch specification scheduling strategy for the given assembly line.
 	 */
 	public List<Order> getBatchList(Printable<AssemblyLine> assemblyline) {
 		return assemblyLineScheduler.getBatchList(assemblyline);
+	}
+	
+	/**
+	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy of all assembly lines combined.
+	 * @return a list of orders that are viable to be used by the batch specification scheduling strategy of all assembly lines combined.
+	 */
+	public List<Order> getBatchList() {
+		return assemblyLineScheduler.getBatchList();
 	}
 	
 	/**
@@ -208,6 +225,15 @@ public class CarManufacturingCompany {
 	 */
 	public void changeStrategy(Order order, Printable<AssemblyLine> assemblyLine) {
 		assemblyLineScheduler.changeStrategy(order, assemblyLine);
+	}
+	
+	/**
+	 * Changes the strategy of the given assembly line according to the given order.
+	 * @param order	The order that has to be used as a template for the strategy.
+	 * @param assemblyLine	The assembly line of which the strategy needs to be changed.
+	 */
+	public void changeStrategy(Order order) {
+		assemblyLineScheduler.changeStrategy(order);
 	}
 	
 	/**

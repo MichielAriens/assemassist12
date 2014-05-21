@@ -45,33 +45,65 @@ public class Manager extends User{
 	}
 	
 	/**
-	 * Returns a list of the current strategies followed by the available scheduling strategies.
-	 * @return a list of the current strategies followed by the available scheduling strategies.
+	 * Returns a list of the current strategies followed by the available scheduling strategies for the active assembly line.
+	 * @return a list of the current strategies followed by the available scheduling strategies for the active assembly line.
 	 */
-	public List<Printable<SchedulingStrategy>> getStrategies() {
+	public List<Printable<SchedulingStrategy>> getStrategiesActiveLine() {
 		return company.getStrategies(activeAssemblyLine);
 	}
 	
 	/**
-	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy.
-	 * @return	a list of orders that are viable to be used by the batch specification scheduling strategy.
+	 * Returns a map mapping each assembly line to it's strategies list.
+	 * @return a map mapping each assembly line to it's strategies list.
 	 */
-	public List<Order> getBatchList() {
+	public Map<Printable<AssemblyLine>, List<Printable<SchedulingStrategy>>> getAssemblyLinesStrategies() {
+		return company.getAssemblyLinesStrategies();
+	}
+	
+	/**
+	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy for the given assembly line.
+	 * @return a list of orders that are viable to be used by the batch specification scheduling strategy for the given assembly line.
+	 */
+	public List<Order> getBatchListActiveLine() {
 		return company.getBatchList(activeAssemblyLine);
+	}
+	
+	/**
+	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy of all assembly lines combined.
+	 * @return a list of orders that are viable to be used by the batch specification scheduling strategy of all assembly lines combined.
+	 */
+	public List<Order> getBatchListAllLines() {
+		return company.getBatchList();
 	}
 	
 	/**
 	 * Changes the strategy of the active assembly line according to the given order.
 	 * @param order	The order that has to be used as a template for the strategy.
 	 */
-	public void changeStrategy(Order order) {
+	public void changeStrategyActiveAssemblyLine(Order order) {
 		company.changeStrategy(order, activeAssemblyLine);
 	}
+	
+	/**
+	 * Changes the strategy of the active assembly line according to the given order.
+	 * @param order	The order that has to be used as a template for the strategy.
+	 */
+	public void changeStrategyAllLines(Order order) {
+		company.changeStrategy(order);
+	}
 
+	/**
+	 * Returns the assembly lines of the system in order.
+	 * @return the assembly lines of the system in order.
+	 */
 	public List<Printable<AssemblyLine>> getAssemblyLines() {
 		return company.getAssemblyLines();
 	}
 	
+	/**
+	 * Returns a map mapping each assembly line to it's operational status.
+	 * @return a map mapping each assembly line to it's operational status.
+	 */
 	public Map<Printable<AssemblyLine>, Printable<OperationalStatus>> getAssemblyLinesStatuses() {
 		return company.getAssemblyLinesStatuses();
 	}
@@ -84,10 +116,18 @@ public class Manager extends User{
 		this.activeAssemblyLine = line;
 	}
 
+	/**
+	 * Returns the printable instance of the assembly line the manager wants to perform actions on.
+	 * @return the printable instance of the assembly line the manager wants to perform actions on.
+	 */
 	public Printable<AssemblyLine> getActiveAssemblyLine() {
 		return activeAssemblyLine;
 	}
 
+	/**
+	 * Changes the assembly line status of the active assembly line to the given new status.
+	 * @param newStatus The new status for the active assembly line.
+	 */
 	public void changeAssemblyLineStatus(OperationalStatus newStatus) {
 		company.changeAssemblyLineStatus(activeAssemblyLine, newStatus);
 	}

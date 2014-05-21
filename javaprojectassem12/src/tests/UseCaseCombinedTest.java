@@ -37,7 +37,7 @@ public class UseCaseCombinedTest {
 		
 		ManagerController maCont = new ManagerController();
 		assertEquals(null,maCont.getUserName());
-		assertEquals(null,maCont.getBatchList());
+		assertEquals(null,maCont.getBatchListActiveLine());
 		maCont = (ManagerController) controller.logIn("Wander");
 		assertEquals("Wander", maCont.getUserName());
 		
@@ -51,9 +51,9 @@ public class UseCaseCombinedTest {
 		strats.add("Specification Batch");
 		assertEquals(strats,maCont.getStrategies());
 		ArrayList<String> batchList = new ArrayList<String>();
-		assertEquals(batchList,maCont.getBatchList());
-		assertFalse(maCont.changeStrategyToFIFO());
-		maCont.changeStrategyToBatchProcessing(0);
+		assertEquals(batchList,maCont.getBatchListActiveLine());
+		assertFalse(maCont.changeToFIFOOneLine());
+		maCont.changeStrategyToBatchProcessingActiveLine(0);
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		///////////////////////////////END MANAGERTEST EMPTY ASSEMBLY LINE//////////////////////////////
@@ -214,10 +214,10 @@ public class UseCaseCombinedTest {
 		batchList = new ArrayList<String>();
 		batchList.add("   1: Option 1:\n      - Sedan\n      - Red\n      - Standard 2l v4\n      - 6 speed manual\n      - Leather black\n      - Manual\n      - Comfort\n      - No Spoiler\n\n");
 		
-		assertEquals(batchList,maCont.getBatchList());
-		assertFalse(maCont.changeStrategyToFIFO());
-		maCont.changeStrategyToBatchProcessing(0);
-		assertTrue(maCont.changeStrategyToFIFO());
+		assertEquals(batchList,maCont.getBatchListActiveLine());
+		assertFalse(maCont.changeToFIFOOneLine());
+		maCont.changeStrategyToBatchProcessingActiveLine(0);
+		assertTrue(maCont.changeToFIFOOneLine());
 		
 
 		////////////////////////////////////////////////////////////////////////////////////////////////

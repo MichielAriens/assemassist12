@@ -94,25 +94,25 @@ public class UserTest {
 		//check initial values
 		assertEquals("Wander", m.getUserName());
 		
-		assertEquals("FIFO", m.getStrategies().get(0).toString());
+		assertEquals("FIFO", m.getStrategiesActiveLine().get(0).toString());
 		
 		ArrayList<VehicleOrder> orders = new ArrayList<VehicleOrder>();
 		orders.add(null);
 		orders.add(null);
 		orders.add(null);
-		assertTrue(m.getBatchList().isEmpty());
+		assertTrue(m.getBatchListActiveLine().isEmpty());
 		//check if the assembly line can be moved if there are no car orders present
 		
 		//add a car order to the assembly line
 		makeAndPlaceOrder();
 		makeAndPlaceOrder();
-		List<Order> bach  = m.getBatchList();
+		List<Order> bach  = m.getBatchListActiveLine();
 		assertTrue(bach.isEmpty());
 		makeAndPlaceOrder();
-		bach = m.getBatchList();
+		bach = m.getBatchListActiveLine();
 		assertFalse(bach.isEmpty());
-		m.changeStrategy(bach.get(0));
-		assertEquals("Specification Batch", m.getStrategies().get(0).toString());
+		m.changeStrategyActiveAssemblyLine(bach.get(0));
+		assertEquals("Specification Batch", m.getStrategiesActiveLine().get(0).toString());
 		assertEquals("Average number of cars produced: 0\nMean number of cars produced: 0\nExact numbers two last days:\n   No records.\nAverage delay: 0 minutes\nMean delay: 0 minutes\nTwo last delays:\n   No records.\n", m.getStatistics());
 	}
 	
