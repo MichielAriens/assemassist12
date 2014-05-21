@@ -8,6 +8,7 @@ import interfaces.Printable;
 import java.util.ArrayList;
 import java.util.List;
 
+import logic.assemblyline.AssemblyLine;
 import logic.car.VehicleModel;
 import logic.car.VehiclePartType;
 import logic.users.CarManufacturingCompany;
@@ -112,7 +113,7 @@ public class UseCaseGarageHolderTest {
 		
 		//2. The user indicates the order he wants to check the details for. (we'll select the first option)
 		//3. The system presents the order.
-		assertTrue(ghCont.getCompletedInfo(0).contains("Specifications:   Model A; (Sedan, Red, Standard 2l v4, 6 speed manual, Leather black, Manual, Comfort, No Spoiler)"));
+		assertTrue(ghCont.getCompletedInfo(0).contains("Specifications:   Car Model A; (Sedan, Red, Standard 2l v4, 6 speed manual, Leather black, Manual, Comfort, No Spoiler, No Toolstorage, No Cargo Protection, No Certification)"));
 		assertTrue(ghCont.getCompletedInfo(0).contains("Start Time:       01-01-2014 06:00"));
 		assertTrue(ghCont.getCompletedInfo(0).contains("End Time:         01-01-2014 09:00"));
 	}
@@ -149,10 +150,13 @@ public class UseCaseGarageHolderTest {
 	private void completeOneOrder(){
 		Mechanic mech = new Mechanic(cmc, "AutoMech2014");
 		//Do all the orders
-		for(Printable<Workstation>	ws : cmc.getWorkStations()){
-			mech.setActiveWorkstation(ws);
-			for(Printable<Task> task : mech.getAvailableTasks()){
-				mech.doTask(task, 60);
+		for(Printable<AssemblyLine> as : cmc.getAssemblyLines()){
+			mech.setActiveAssemblyLine(as);
+			for(Printable<Workstation>	ws : cmc.getWorkStationsFromAssemblyLine(as)){
+				mech.setActiveWorkstation(ws);
+				for(Printable<Task> task : mech.getAvailableTasks()){
+					mech.doTask(task, 60);
+				}
 			}
 		}
 	}
