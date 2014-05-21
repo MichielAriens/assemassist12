@@ -1,7 +1,7 @@
 package logic.car;
 
 /**
- * An enum that represents the possible car parts.
+ * An enum that represents the possible vehicle parts.
  */
 public enum VehiclePart {
 	BODY_SEDAN 				(VehiclePartType.Body, 				"Sedan",						false),
@@ -49,21 +49,25 @@ public enum VehiclePart {
 	
 	
 	/**
-	 * The car part type of this car part.
+	 * The vehicle part type of this vehicle part.
 	 */
 	public final VehiclePartType type;
 	
 	/**
-	 * The full name of this car part.
+	 * The full name of this vehicle part.
 	 */
 	public final String fullName;
 	
+	/**
+	 * A boolean representing whether this part is automatically installed.
+	 */
 	public final boolean autocompl;
 	
 	/**
-	 * Make a CarPart with given car part type and full name.
-	 * @param type		The type of this car part.
-	 * @param fullName	The full name of this car part.
+	 * Make a VehiclePart with given vehicle part type and full name.
+	 * @param type		The type of this vehicle part.
+	 * @param fullName	The full name of this vehicle part.
+	 * @param autocompl	Whether this part is automatically installed. (for example SPOILER_NONE does not need to be installed).
 	 */
 	VehiclePart(VehiclePartType type, String fullName, boolean autocompl){
 		this.autocompl = autocompl;
@@ -72,7 +76,7 @@ public enum VehiclePart {
 	}
 	
 	/**
-	 * Returns a string representation of this car part.
+	 * Returns a string representation of this vehicle part.
 	 */
 	@Override
 	public String toString(){
@@ -80,10 +84,10 @@ public enum VehiclePart {
 	}
 	
 	/**
-	 * Returns the CarPart that corresponds with a given name.
-	 * @param name	The name of the car part that has to be searched.
-	 * @return	Null if the given name does not correspond with the full name of any car part.
-	 * 			The car part whose full name corresponds with the given name otherwise.
+	 * Returns the VehiclePart that corresponds with a given name.
+	 * @param name	The name of the vehicle part that has to be searched.
+	 * @return	Null if the given name does not correspond with the full name of any vehicle part.
+	 * 			The vehicle part whose full name corresponds with the given name otherwise.
 	 */
 	public static VehiclePart getPartfromString(String name){
 		VehiclePart part = null;

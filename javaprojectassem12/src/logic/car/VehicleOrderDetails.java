@@ -53,7 +53,7 @@ public class VehicleOrderDetails{
 	 * Returns the phase duration of this object's model.
 	 * @return	An integer containing the phase duration of this detail's model.
 	 */
-	public int getPhaseTime() { //TODO verwijderen maybe
+	public int getPhaseTime() {
 		return model.standardPhaseDur;
 	}
 	

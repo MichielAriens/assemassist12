@@ -1,7 +1,7 @@
 package logic.car;
 
 /**
- * An enum to represent the possible car part types.
+ * An enum to represent the possible vehicle part types.
  */
 public enum VehiclePartType {
 	Body("Body"),
@@ -17,20 +17,20 @@ public enum VehiclePartType {
 	Certification("Maximum cargo load certification");
 	
 	/**
-	 * The name of this car part type.
+	 * The name of this vehicle part type.
 	 */
 	public String name;
 	
 	/**
-	 * Make a car part type with a given name.
-	 * @param name
+	 * Make a vehicle part type with a given name.
+	 * @param name	The name of the vehicle part type.
 	 */
 	VehiclePartType(String name){
 		this.name = name;
 	}
 	
 	/**
-	 * Returns a string representation of this car part type.
+	 * Returns a string representation of this vehicle part type.
 	 */
 	@Override
 	public String toString(){
@@ -38,10 +38,10 @@ public enum VehiclePartType {
 	}
 	
 	/**
-	 * Returns the CarPartType that corresponds with a given name.
-	 * @param name	The name of the car part type that has to be searched.
-	 * @return	Null if the given name does not correspond with the full name of any car part type.
-	 * 			The car part type whose full name corresponds with the given name otherwise.
+	 * Returns the VehiclePartType that corresponds with a given name.
+	 * @param name	The name of the vehicle part type that has to be searched.
+	 * @return	Null if the given name does not correspond with the full name of any vehicle part type.
+	 * 			The vehicle part type whose full name corresponds with the given name otherwise.
 	 */
 	public static VehiclePartType getTypefromString(String name){
 		VehiclePartType type = null;
