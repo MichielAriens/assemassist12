@@ -59,7 +59,6 @@ public class CarManufacturingCompany {
 		this.assemblyLineScheduler = new AssemblyLineScheduler();
 		this.users = new HashMap<String,User>();
 		this.initialise();
-		
 	}
 
 	/**
@@ -187,7 +186,6 @@ public class CarManufacturingCompany {
 	}
 	
 	/**
-<<<<<<< HEAD
 	 * Returns a map mapping each assembly line to it's strategies list.
 	 * @return a map mapping each assembly line to it's strategies list.
 	 */
@@ -199,11 +197,6 @@ public class CarManufacturingCompany {
 	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy for the given assembly line.
 	 * @param assemblyLine	The assembly line for which the batch list needs to be returned.
 	 * @return a list of orders that are viable to be used by the batch specification scheduling strategy for the given assembly line.
-=======
-	 * Returns a list of representations of orders that are viable to be used by the batch specification scheduling strategy in the given assembly line.
-	 * @param assemblyLine the assembly line for which we want all the orders which can be processed in batch.
-	 * @return	a list of orders that are viable to be used by the batch specification scheduling strategy.
->>>>>>> 9924f93c3a547532d4c338cfdd8461317254858e
 	 */
 	public List<Order> getBatchList(Printable<AssemblyLine> assemblyline) {
 		return assemblyLineScheduler.getBatchList(assemblyline);
@@ -227,7 +220,6 @@ public class CarManufacturingCompany {
 	}
 	
 	/**
-<<<<<<< HEAD
 	 * Changes the strategy of the given assembly line according to the given order.
 	 * @param order	The order that has to be used as a template for the strategy.
 	 * @param assemblyLine	The assembly line of which the strategy needs to be changed.
@@ -237,10 +229,7 @@ public class CarManufacturingCompany {
 	}
 	
 	/**
-	 * Returns a list of pending tasks at a given workstation.
-=======
 	 * Returns a list of pending tasks at a given workstation in a given assembly line.
->>>>>>> 9924f93c3a547532d4c338cfdd8461317254858e
 	 * @param station	The workstation for which the pending tasks are needed.
 	 * @param assemblyLine 		The assembly line of the workstation for which the pending tasks are needed.
 	 * @return	A list of representations of tasks that are pending at the given workstation.
