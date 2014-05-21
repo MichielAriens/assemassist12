@@ -1,5 +1,8 @@
 package logic.assemblyline;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import interfaces.Printable;
 
 /**
@@ -37,6 +40,14 @@ public enum OperationalStatus implements Printable<OperationalStatus>{
 	 */
 	public int getTime(){
 		return this.time;
+	}
+	
+	public static List<OperationalStatus> getSelectableStatusByManager(){
+		ArrayList<OperationalStatus> selectables = new ArrayList<>();
+		selectables.add(OPERATIONAL);
+		selectables.add(BROKEN);
+		selectables.add(PREMAINTENANCE);
+		return selectables;
 	}
 	
 	/**

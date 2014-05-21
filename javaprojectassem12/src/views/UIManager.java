@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import logic.assemblyline.OperationalStatus;
 import controllers.ManagerController;
@@ -97,15 +98,15 @@ public class UIManager {
 		writer.flush();
 		
 		String query = "Available statuses:\n";	
-		OperationalStatus[] availableStatuses = OperationalStatus.values();
+		List<OperationalStatus> selectables = OperationalStatus.getSelectableStatusByManager();
 		int count = 1;
-		for(OperationalStatus o : availableStatuses){
+		for(OperationalStatus o : selectables){
 			query += "   " + count + ": " + o.toString() + "\n";
 			count++;
 		}
 		query += "   " + count + ": Cancel\nAnswer: ";
 		int statusIndex = chooseAction(query, count);
-		String chosenStatus = availableStatuses[statusIndex-1].toString();
+		String chosenStatus = selectables.get(statusIndex-1).toString();
 		if(statusIndex != count){
 			maController.changeAssemblyLineStatus(chosenStatus);
 			waitForCompletion("Status has been changed. Press enter to continue.\n");
