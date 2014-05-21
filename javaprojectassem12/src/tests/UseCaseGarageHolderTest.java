@@ -53,7 +53,7 @@ public class UseCaseGarageHolderTest {
 	}
 
 	/**
-	 * Test making and placing an order.
+	 * Use Case 5.1: Test making and placing an order.
 	 */
 	private void testOrderNewCar() {
 		//Precondition: The garage holder is successfully logged into the system.
@@ -102,7 +102,7 @@ public class UseCaseGarageHolderTest {
 	}
 	
 	/**
-	 * Test the checking of the order details.
+	 * Use Case 5.2: Test the checking of the order details.
 	 */
 	private void testCheckOrderDetails() {
 		//1. The system presents an overview of the orders placed by the user...

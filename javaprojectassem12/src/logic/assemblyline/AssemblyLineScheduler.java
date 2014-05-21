@@ -396,22 +396,69 @@ public class AssemblyLineScheduler {
 		return returnValue;
 	}
 
+	/**
+	 * Returns the strategies list from the given assembly line.
+	 * @param activeAssemblyLine	The assembly line of which the strategies list must be returned.
+	 * @return the strategies list from the given assembly line.
+	 */
 	public List<Printable<SchedulingStrategy>> getStrategies(Printable<AssemblyLine> activeAssemblyLine) {
 		AssemblyLine active = get(activeAssemblyLine);
 		return active.getStrategies();
 	}
 	
+	
+	/**
+	 * Returns a map mapping each assembly line to it's strategies list.
+	 * @return a map mapping each assembly line to it's strategies list.
+	 */
+	public Map<Printable<AssemblyLine>, List<Printable<SchedulingStrategy>>> getAssemblyLinesStrategies() {
+		Map<Printable<AssemblyLine>, List<Printable<SchedulingStrategy>>> retval = new HashMap<>();
+		for(AssemblyLine al : this.assemblyLines){
+			retval.put(al, al.getStrategies());
+		}
+		return retval;
+	}
+	
+	/**
+	 * Returns the batch list for the given assembly line.
+	 * @param assemblyline	The assembly line for which the batch list needs to be returned.
+	 * @return the batch list for the given assembly line.
+	 */
 	public List<Order> getBatchList(Printable<AssemblyLine> assemblyline){
 		return this.get(assemblyline).getBachList();
 	}
 	
 	/**
+	 * Returns the combined batch list of all assembly lines.
+	 * @return the combined batch list of all assembly lines.
+	 */
+	public List<Order> getBatchList(){
+		ArrayList<Order> returnValue = new ArrayList<Order>();
+		for(AssemblyLine al : assemblyLines){
+			for(Order order : al.getBachList()){
+				returnValue.add(order);
+			}
+		}
+		return returnValue;
+	}
+	
+	/**
 	 * Changes the strategy of the given assembly line according to the given order.
-	 * @param template	The order that has to be used as a template for the strategy.
+	 * @param order	The order that has to be used as a template for the strategy.
 	 * @param assemblyLine	The assembly line of which the strategy needs to be changed.
 	 */
-	public void changeStrategy(Order template, Printable<AssemblyLine> assemblyline){
-		this.get(assemblyline).changeStrategy(template);
+	public void changeStrategy(Order order, Printable<AssemblyLine> assemblyline){
+		this.get(assemblyline).changeStrategy(order);
+	}
+	
+	/**
+	 * Changes the strategy of all assembly lines according to the given order.
+	 * @param order	The order that has to be used as a template for the strategy.
+	 */
+	public void changeStrategyAllLines(Order order) {
+		for(AssemblyLine al : assemblyLines){
+			al.changeStrategy(order);
+		}
 	}
 
 	public boolean changeAssemblyLineStatus(Printable<AssemblyLine> activeAssemblyLine,
@@ -439,5 +486,6 @@ public class AssemblyLineScheduler {
 			return false;
 		}
 		return false;
+
 	}
 }
