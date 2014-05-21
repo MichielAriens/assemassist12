@@ -410,7 +410,7 @@ public class AssemblyLineScheduler {
 	 * @param template	The order that has to be used as a template for the strategy.
 	 * @param assemblyLine	The assembly line of which the strategy needs to be changed.
 	 */
-	public void setStrategy(Order template, Printable<AssemblyLine> assemblyline){
+	public void changeStrategy(Order template, Printable<AssemblyLine> assemblyline){
 		this.get(assemblyline).changeStrategy(template);
 	}
 

@@ -207,7 +207,7 @@ public class CarManufacturingCompany {
 	 * @param assemblyLine	The assembly line of which the strategy needs to be changed.
 	 */
 	public void changeStrategy(Order order, Printable<AssemblyLine> assemblyLine) {
-		assemblyLineScheduler.setStrategy(order, assemblyLine);
+		assemblyLineScheduler.changeStrategy(order, assemblyLine);
 	}
 	
 	/**
