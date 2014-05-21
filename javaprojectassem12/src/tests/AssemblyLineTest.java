@@ -10,6 +10,7 @@ import java.util.List;
 import logic.assemblyline.AssemblyLine;
 import logic.car.VehicleModel;
 import logic.car.VehicleOrder;
+import logic.car.VehicleOrderDetails;
 import logic.car.VehicleOrderDetailsMaker;
 import logic.car.VehiclePart;
 import logic.car.Order;
@@ -61,15 +62,12 @@ public class AssemblyLineTest {
 		}
 	}
 	
-	private void complete2n3(CarManufacturingCompany cmc){
-		for(Printable<AssemblyLine> pal : cmc.getAssemblyLines().subList(1, 2)){
-			AssemblyLine al = (AssemblyLine) pal;
-			barry.setActiveAssemblyLine(al);
-			barry.setActiveWorkstation(al.getWorkStations().get(0));
-			for(Printable<Task> ptask : barry.getAvailableTasks()){
-				Task task = (Task) ptask;
-				barry.doTask(task, task.getEstimatedPhaseDuration());
-			}
+	private void completeFirstWS(AssemblyLine al){
+		barry.setActiveAssemblyLine(al);
+		barry.setActiveWorkstation(al.getWorkStations().get(0));
+		for(Printable<Task> ptask : barry.getAvailableTasks()){
+			Task task = (Task) ptask;
+			barry.doTask(task, task.getEstimatedPhaseDuration());
 		}
 		
 	}
@@ -123,9 +121,8 @@ public class AssemblyLineTest {
 		// The day starts at 6:00.
 		DateTime now = cmcMotors.getCurrentTime();
 		
-		//Add a load of orders to lines 2&3. Complete as many as possible to allow us to test on one single assemblyline.
+		//Add a load of orders to lines 2&3.
 		swampLine2n3(cmcMotors);
-		complete2n3(cmcMotors);
 		
 		//Lets start adding orders.
 		cmcMotors.addOrder(orders.get(0));
@@ -151,13 +148,18 @@ public class AssemblyLineTest {
 		barry.setActiveAssemblyLine(cmcMotors.getAssemblyLines().get(0));
 		barry.setActiveWorkstation(cmcMotors.getWorkStationsFromAssemblyLine(cmcMotors.getAssemblyLines().get(0)).get(0));
 		
+		//Complete some tasks in lines 2 & 3 to allow line 1 to advance.
+		completeFirstWS((AssemblyLine) cmcMotors.getAssemblyLines().get(1));
+		completeFirstWS((AssemblyLine) cmcMotors.getAssemblyLines().get(2));
+		
+		
 		for(int i = 0; i < 3; i++){
 			System.out.println(orders.get(i));
 		}		
 		
 		for(Task task : orders.get(0).getTasks()){
-			if(cmcMotors.getWorkStations().get(0).getCapabilities().contains(task.getVehiclePart().type)){
-				barry.doTask(task, orders.get(0).getPhaseTime() - 20);
+			//if(((Workstation) cmcMotors.getWorkStations().get(0)).getCapabilities().contains(task.getVehiclePart().type)){
+			//	barry.doTask(task, task.getEstimatedPhaseDuration()-20);
 			Workstation ws = (Workstation) cmcMotors.getWorkStationsFromAssemblyLine(cmcMotors.getAssemblyLines().get(1)).get(0);
 			if(ws.getCapabilities().contains(task.getVehiclePart().type)){
 				barry.doTask(task, task.getEstimatedPhaseDuration());
