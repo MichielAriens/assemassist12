@@ -99,7 +99,7 @@ public class Task implements Printable<Task>{
 	 * @return The string representation of the description of this task.
 	 */
 	private String getDescription(){
-		return "Task description:\n   -Type of part needed: " + this.getVehiclePart().type.toString() + ",\n   -Car Part: " + this.getVehiclePart().toString() + "\n";
+		return "Task description:\n   -Type of part needed: " + this.getVehiclePart().type.toString() + ",\n   -Vehicle Part: " + this.getVehiclePart().toString() + "\n";
 	}
 	
 	/**
@@ -118,7 +118,7 @@ public class Task implements Printable<Task>{
 	/**
 	 * Checks if this Task is equal to a given Task.
 	 * @param other	The other Task that needs to be checked.
-	 * @return	True	if the CarPart of this Task is the same as the vehiclePart of the other Task.
+	 * @return	True	if the VehiclePart of this Task is the same as the vehiclePart of the other Task.
 	 * 			False	otherwise.
 	 */
 	private boolean equals(Task other){

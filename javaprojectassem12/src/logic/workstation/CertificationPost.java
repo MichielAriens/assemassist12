@@ -22,8 +22,8 @@ public class CertificationPost extends Workstation {
 	/**
 	 * Get the types of tasks this workstation can perform. This methods completely 
 	 * defines the capabilities of an implementing class.
-	 * @return		A List of CarPartType elements defining the capabilities of the implementation. 
-	 * 				({CarPartType.Certification})
+	 * @return		A List of VehiclePartType elements defining the capabilities of the implementation. 
+	 * 				({VehiclePartType.Certification})
 	 */
 	@Override
 	public List<VehiclePartType> getCapabilities(){

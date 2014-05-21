@@ -22,8 +22,8 @@ public class AccessoriesPost extends Workstation {
 	/**
 	 * Get the types of tasks this workstation can perform. This methods completely 
 	 * defines the capabilities of an implementing class.
-	 * @return		A List of CarPartType elements defining the capabilities of the implementation. 
-	 * 				({CarPartType.Seats, CarPartType.Airco, CarPartType.Wheels})
+	 * @return		A List of VehiclePartType elements defining the capabilities of the implementation. 
+	 * 				({VehiclePartType.Seats, VehiclePartType.Airco, VehiclePartType.Wheels})
 	 */
 	@Override
 	public List<VehiclePartType> getCapabilities() {

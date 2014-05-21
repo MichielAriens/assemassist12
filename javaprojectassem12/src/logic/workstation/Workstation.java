@@ -178,7 +178,6 @@ public abstract class Workstation implements Printable<Workstation>{
 	 * 			False otherwise.
 	 */
 	private boolean isCompatibleTask(Task task){
-		//if(getCapabilities().contains(task.getCarPart().type) && !task.isComplete() && task != null){
 		if(getCapabilities().contains(task.getVehiclePart().type) && task != null){
 			return true;
 		}
@@ -188,7 +187,7 @@ public abstract class Workstation implements Printable<Workstation>{
 	/**
 	 * Get the types of tasks that can be performed on this workstation. This method completely 
 	 * defines the capabilities of an implementing class.
-	 * @return		A List of CarPartType elements defining the capabilities of 
+	 * @return		A List of VehiclePartType elements defining the capabilities of 
 	 * 				the implementation.
 	 */
 	public abstract List<VehiclePartType> getCapabilities();

@@ -22,8 +22,8 @@ public class CarBodyPost extends Workstation {
 	/**
 	 * Get the types of tasks this workstation can perform. This methods completely 
 	 * defines the capabilities of an implementing class.
-	 * @return		A List of CarPartType elements defining the capabilities of the implementation. 
-	 * 				({CarPartType.Body, CarPartType.Colour})
+	 * @return		A List of VehiclePartType elements defining the capabilities of the implementation. 
+	 * 				({VehiclePartType.Body, VehiclePartType.Colour})
 	 */
 	@Override
 	public List<VehiclePartType> getCapabilities(){
