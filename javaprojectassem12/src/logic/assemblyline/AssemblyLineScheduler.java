@@ -146,22 +146,22 @@ public class AssemblyLineScheduler {
 	 * Will attempt to redistribute orders from the overflow queue to the assemblylines. 
 	 * If this fails the orders will remain in the overflow queue.
 	 */
-	private void scheduleOverflowQueue(){
+	private void scheduleOverflowQueue(){	
 		for(Order order : this.overflowQueue){
-			this.overflowQueue.remove(order);
 			this.addOrder(order);
 		}
+		this.overflowQueue = new LinkedList<>();
 	}
 
 	/**
 	 * Returns all non-broken assembly lines.
 	 * @return
 	 */
-	private Set<AssemblyLine> getNonBrokenLines(){
-		Set<AssemblyLine> retval = new HashSet<>();
+	private List<AssemblyLine> getNonBrokenLines(){
+		List<AssemblyLine> retval = new ArrayList<>();
 		for(AssemblyLine al : this.assemblyLines){
 			if (al.getOperationalStatus() != OperationalStatus.BROKEN){
-				retval.add(al);
+				retval.add(0,al);
 			}
 		}
 		return retval;
@@ -414,9 +414,30 @@ public class AssemblyLineScheduler {
 		this.get(assemblyline).changeStrategy(template);
 	}
 
-	public void changeAssemblyLineStatus(Printable<AssemblyLine> activeAssemblyLine,
+	public boolean changeAssemblyLineStatus(Printable<AssemblyLine> activeAssemblyLine,
 			OperationalStatus newStatus) {
-		this.get(activeAssemblyLine).changeStatus(newStatus);
-		
+		AssemblyLine al = this.get(activeAssemblyLine);
+		if(al.getOperationalStatus() == OperationalStatus.OPERATIONAL){
+			if(newStatus == OperationalStatus.BROKEN){
+				this.breakAssemblyLine(activeAssemblyLine);
+				return true;
+			}else if(newStatus == OperationalStatus.PREMAINTENANCE || newStatus == OperationalStatus.MAINTENANCE){
+				this.startMaintenace(activeAssemblyLine);
+				return true;
+			}else{
+				//no effect
+				return false;
+			}
+		}else if(al.getOperationalStatus() == OperationalStatus.BROKEN){
+			if(newStatus == OperationalStatus.OPERATIONAL){
+				this.fixAssemAssemblyLine(activeAssemblyLine);
+				return true;
+			}else{
+				return false;
+			}
+		}else if(al.getOperationalStatus() == OperationalStatus.MAINTENANCE){
+			return false;
+		}
+		return false;
 	}
 }

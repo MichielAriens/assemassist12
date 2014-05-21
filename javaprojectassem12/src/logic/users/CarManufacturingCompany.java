@@ -260,4 +260,5 @@ public class CarManufacturingCompany {
 	public void changeAssemblyLineStatus(Printable<AssemblyLine> activeAssemblyLine, OperationalStatus newStatus) {
 		assemblyLineScheduler.changeAssemblyLineStatus(activeAssemblyLine, newStatus);
 	}
+	
 }

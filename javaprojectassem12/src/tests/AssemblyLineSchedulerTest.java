@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import logic.assemblyline.AssemblyLine;
+import logic.assemblyline.OperationalStatus;
 import logic.car.VehicleOrderDetailsMaker;
 import logic.car.Order;
 import logic.car.VehicleModel;
@@ -15,6 +16,7 @@ import logic.car.VehicleOrder;
 import logic.car.VehiclePart;
 import logic.car.VehiclePartType;
 import logic.users.CarManufacturingCompany;
+import logic.users.Mechanic;
 import logic.workstation.Task;
 import logic.workstation.Workstation;
 
@@ -289,6 +291,37 @@ public class AssemblyLineSchedulerTest {
 	}
 	
 	/**
+	 * We'll commit 30 orders the system. Then we'll break assemblyline 1. We'll see if the orders in the queue on line 1 are redistributed correctly.
+	 * We'll try to complete all completable work on the system and assert that all orders except the order on line 1 are complete and that
+	 * th order on line 1 is still stuck int line 1 station 1.
+	 */
+	@Test
+	public void testBrokenLines(){
+		CarManufacturingCompany cmc = new CarManufacturingCompany();
+		for(int i = 0; i < 30 ; i++){
+			cmc.addOrder(buildStandardOrderA());
+		}
+		List<AssemblyLine> lines = extractPrintables(cmc.getAssemblyLines());
+		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(0), OperationalStatus.BROKEN);
+		performAllTasks(cmc);
+		List<Workstation> stations = extractPrintables(lines.get(0).getWorkStations());
+		assertTrue(stations.get(0).getCurrentOrder() != null);
+		assertTrue(lines.get(1).empty());
+		assertTrue(lines.get(2).empty());
+		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(0), OperationalStatus.OPERATIONAL);
+		performAllTasks(cmc);
+		performAllTasks(cmc);
+		performAllTasks(cmc);
+		assertTrue(lines.get(0).empty());//?? dafuq TODO: Michiel hier
+		assertTrue(lines.get(1).empty());
+		assertTrue(lines.get(2).empty());
+		
+		
+		
+		
+	}
+	
+	/**
 	 * Extract the underlying objects from it's printable wrapper in a list.
 	 * @param <T>
 	 * @param printables
@@ -307,8 +340,28 @@ public class AssemblyLineSchedulerTest {
 	 * @param printable
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private <T> T extractPrintable(final Printable<T> printable){
 		return (T) printable;
+	}
+	
+	private void performAllTasks(CarManufacturingCompany company){
+		Mechanic mech = (Mechanic) company.logIn("mech");
+		boolean taskPerformed = true;
+		while(taskPerformed){
+			taskPerformed = false;
+			for(Printable<AssemblyLine> line : mech.getAssemblyLines()){
+				mech.setActiveAssemblyLine(line);
+				for(Printable<Workstation> station : mech.getWorkstationsFromAssemblyLine()){
+					mech.setActiveWorkstation(station);
+					for(Printable<Task> task : mech.getAvailableTasks()){
+						int duration = ((Task) task).getEstimatedPhaseDuration();
+						if(mech.doTask(task, duration))
+							taskPerformed = true;
+					}
+				}
+			}
+		}
 	}
 
 }
