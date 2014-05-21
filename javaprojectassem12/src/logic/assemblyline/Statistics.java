@@ -2,7 +2,10 @@ package logic.assemblyline;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
  * Class handling the statistics of a car manufacturing company.
@@ -209,7 +212,7 @@ public class Statistics {
 				if(delays.size() - i >= 0){
 					delayTime = delays.get(delays.size()-i).getDelayTime();
 					dateOfDelay = delays.get(delays.size()-i).getDateOfDelay();
-					statistics += "   " + i + ") " + delayTime + " minutes on " + dateOfDelay + "\n";
+					statistics += "   " + i + ") " + delayTime + " minutes on " + prettyPrintDate(dateOfDelay) + "\n";
 				}
 				else{
 					statistics += "   " + i + ") No records.\n";
@@ -218,11 +221,16 @@ public class Statistics {
 			}
 			delayTime = delays.get(delays.size()-1).getDelayTime();
 			dateOfDelay = delays.get(delays.size()-1).getDateOfDelay();
-			statistics += "   1) " + delayTime + " minutes on " + dateOfDelay + "\n";
+			statistics += "   1) " + delayTime + " minutes on " + prettyPrintDate(dateOfDelay) + "\n";
 		}
 		else{
 			statistics += "   No records.\n";
 		}
 		return statistics;
+	}
+	
+	private String prettyPrintDate(DateTime date){
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm");
+		return fmt.print(date);
 	}
 }

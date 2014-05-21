@@ -1,6 +1,7 @@
 package tests;
 
 import static org.junit.Assert.assertTrue;
+import init.DataLoader;
 import interfaces.Printable;
 
 import java.util.ArrayList;
@@ -214,42 +215,6 @@ public class AssemblyLineSchedulerTest {
 	}
 	
 	@Test
-	public void testRandom(){
-		CarManufacturingCompany cmc = new CarManufacturingCompany();
-		List<Order> orders = new ArrayList<Order>();
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderA());
-		orders.add(buildStandardOrderX());
-		orders.add(buildStandardOrderY());
-		orders.add(buildStandardOrderX());
-		orders.add(buildStandardOrderX());
-		orders.add(buildStandardOrderY());
-		orders.add(buildStandardOrderX());
-		orders.add(buildStandardOrderX());
-		orders.add(buildStandardOrderY());
-		orders.add(buildStandardOrderX());
-		orders.add(buildStandardOrderB());
-		orders.add(buildStandardOrderB());
-		orders.add(buildStandardOrderB());
-		
-		
-		
-		for(Order order : orders){
-			cmc.addOrder(order);
-		}
-		System.out.println(orders.get(orders.size() - 1).getEstimatedEndTime());
-		
-	}
-	
-	@Test
 	public void testDoTask(){
 		CarManufacturingCompany cmc = new CarManufacturingCompany();
 		List<Order> orders = new ArrayList<Order>();
@@ -271,6 +236,20 @@ public class AssemblyLineSchedulerTest {
 			}
 		}
 		
+	}
+	
+	/**
+	 * Assert that the data loaders leaves the system at the start of a new day.
+	 */
+	@Test 
+	public void testDataLoaderStartsNewDay(){
+		//Initialize the startup sequence.
+		CarManufacturingCompany cmc = new CarManufacturingCompany();
+		DataLoader loader = new DataLoader(cmc);
+		loader.loadData();
+		
+		assertTrue(AssemblyLineTest.eqiDateTime(cmc.getCurrentTime(), new DateTime(2014,1,2,6,0)));
+		System.out.println(cmc.getStatistics());
 	}
 	
 
