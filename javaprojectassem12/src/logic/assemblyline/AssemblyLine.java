@@ -149,9 +149,10 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	}
 	
 	/**
-	 * 
-	 * @param status
-	 * @return
+	 * Change the status of this assembly line to the given status and returns the queue to be processed on another assembly line.
+	 * @param status	The new status of this assembly line.
+	 * @return	An empty list if the given status equals operational or the queue of this assembly line is empty.
+	 * 			A copy of the queue of orders in this assembly line if the given status is not operational. 
 	 */
 	public List<Order> changeStatus(OperationalStatus status){
 		this.status=status;
@@ -168,6 +169,10 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			
 	}
 	
+	/**
+	 * Repairs this assembly line if the status was broken. Sets this assembly line's cycle start time to the given realTime.
+	 * @param realTime	The current time of the system
+	 */
 	protected void fix(DateTime realTime){
 		if(OperationalStatus.BROKEN==status){
 			cycleTime= calculateBrokenTime(realTime);
@@ -176,16 +181,23 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 		}
 	}
 	
+	/**
+	 * Calculates the new cycle time of this assembly line, based on the time this assembly line was broken. 
+	 * @param realTime	The current time of the system
+	 * @return	0 if the time broken was longer than the previous cycle time.
+	 * 			otherwise the minutes remaining to complete the cycle.
+	 */
 	private int calculateBrokenTime(DateTime realTime){
 		if(Days.daysBetween(cycleStartTime, realTime).getDays() == 0 || (Days.daysBetween(cycleStartTime, realTime).getDays() == 0 && cycleStartTime.getMinuteOfDay()+cycleTime <= realTime.getMinuteOfDay())){
 			return 0;
 		}
-		return realTime.getMinuteOfDay() - cycleStartTime.getMinuteOfDay();
+		return cycleTime - (realTime.getMinuteOfDay() - cycleStartTime.getMinuteOfDay());
 	}
 
 	/**
-	 * Returns true if the assembly line can be moved.
-	 * @param phaseDuration	The longest time needed to complete this phase.
+	 * Tries to move the assembly line if all workstations are done. Checks the status of this assembly line 
+	 * and sets the cycletime, newday and cyclestarttime accordingly. 
+	 * @param realTime	The current time of the system and new cycle start time if this assembly line can be moved.
 	 * @return	True if the assembly line can be moved
 	 * 			False otherwise.
 	 */
@@ -208,8 +220,8 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	}
 	 
 	/**
-	 * Sets the time of this assemblyline.
-	 * @param time
+	 * Sets the cycle start time of this assembly line.
+	 * @param time The new cycle start time this assembly line needs to have.
 	 */
 	protected void setCycleStartTime(DateTime time){
 		this.cycleStartTime = time;
@@ -217,8 +229,8 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	}
 
 	/**
-	 * Returns a string containing the representation of the statistics.
-	 * @return	A string containing the representation of the statistics.
+	 * Returns a class containing the representation of the statistics of this assembly line.
+	 * @return	A class containing the representation of the statistics.
 	 */
 	public StatisticsAssemblyLine getStatistics(){
 		return stats;
@@ -226,7 +238,8 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 
 	/**
 	 * Completes the task corresponding to the given task.
-	 * @param task	A copy of the task that needs to be completed.
+	 * @param task	A representation of the task that needs to be completed.
+	 * @param timeTaken	The time it took for the given task to be finished.
 	 * @return	True if the task is completed successfully.
 	 * 			False the task could not be completed.
 	 */
@@ -242,7 +255,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 
 	/**
 	 * Returns a list of pending tasks at a given workstation.
-	 * @param station	The a copy of the workstation for which the pending tasks are needed.
+	 * @param station	The representation of the workstation for which the pending tasks are needed.
 	 * @return	A list of tasks that are pending at the given workstation.
 	 */
 	public List<Printable<Task>> getRequiredTasks(Printable<Workstation> station){
@@ -251,7 +264,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 
 	/**
 	 * Returns a list of all tasks at a given workstation.
-	 * @param station	The a copy of the workstation for which the tasks are needed.
+	 * @param station	The representation of the workstation for which the tasks are needed.
 	 * @return	A list of tasks at the given workstation.
 	 */
 	public List<Printable<Task>> getAllTasks(Printable<Workstation> station){
@@ -260,7 +273,6 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 
 	/**
 	 * Returns true if the assembly line can be moved, false otherwise.
-	 * @param phaseDuration The largest time needed for this phase to complete.
 	 * @return	True if the assembly line and workstations can be moved.
 	 * 			false otherwise.
 	 */
@@ -608,7 +620,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			boolean doneWorking = firstWorkStation.allIdle();
 			if(!doneWorking)
 				return false;
-			int assemblyTime = 50*numberOfWorkStations; //TODO Fix this betterly
+			int assemblyTime = 150;
 			if(!queue.isEmpty()){
 				assemblyTime = getEstimatedAssemblyTime(queue.getFirst());
 			}
