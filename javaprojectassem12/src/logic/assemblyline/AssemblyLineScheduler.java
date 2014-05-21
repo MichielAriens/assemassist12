@@ -400,26 +400,17 @@ public class AssemblyLineScheduler {
 		AssemblyLine active = get(activeAssemblyLine);
 		return active.getStrategies();
 	}
-
-	public List<Order> getBatchList() {
-		List<Order> retval = new ArrayList<>();
-		for(AssemblyLine al : this.assemblyLines){
-			retval.addAll(this.getBatchList(al));
-		}
-		return retval;
-	}
 	
 	public List<Order> getBatchList(Printable<AssemblyLine> assemblyline){
 		return this.get(assemblyline).getBachList();
 	}
-
-	public void changeStrategy(Order order) {
-		for(AssemblyLine al : this.assemblyLines){
-			this.setBatchStrategy(order, al);
-		}
-	}
 	
-	public void setBatchStrategy(Order template, Printable<AssemblyLine> assemblyline){
+	/**
+	 * Changes the strategy of the given assembly line according to the given order.
+	 * @param template	The order that has to be used as a template for the strategy.
+	 * @param assemblyLine	The assembly line of which the strategy needs to be changed.
+	 */
+	public void setStrategy(Order template, Printable<AssemblyLine> assemblyline){
 		this.get(assemblyline).changeStrategy(template);
 	}
 

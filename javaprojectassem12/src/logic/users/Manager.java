@@ -57,15 +57,15 @@ public class Manager extends User{
 	 * @return	a list of orders that are viable to be used by the batch specification scheduling strategy.
 	 */
 	public List<Order> getBatchList() {
-		return company.getBatchList();
+		return company.getBatchList(activeAssemblyLine);
 	}
 	
 	/**
-	 * Changes the strategy according to the given order.
+	 * Changes the strategy of the active assembly line according to the given order.
 	 * @param order	The order that has to be used as a template for the strategy.
 	 */
 	public void changeStrategy(Order order) {
-		company.changeStrategy(order);
+		company.changeStrategy(order, activeAssemblyLine);
 	}
 
 	public List<Printable<AssemblyLine>> getAssemblyLines() {

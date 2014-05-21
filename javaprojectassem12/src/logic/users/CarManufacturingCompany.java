@@ -194,14 +194,6 @@ public class CarManufacturingCompany {
 	}
 	
 	/**
-	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy on any line.
-	 * @return	a list of orders that are viable to be used by the batch specification scheduling strategy.
-	 */
-	public List<Order> getBatchList() {
-		return assemblyLineScheduler.getBatchList();
-	}
-	
-	/**
 	 * Returns a list of orders that are viable to be used by the batch specification scheduling strategy.
 	 * @return	a list of orders that are viable to be used by the batch specification scheduling strategy.
 	 */
@@ -210,21 +202,13 @@ public class CarManufacturingCompany {
 	}
 	
 	/**
-	 * Changes the strategy according to the given order.
+	 * Changes the strategy of the given assembly line according to the given order.
 	 * @param order	The order that has to be used as a template for the strategy.
-	 */
-	public void changeStrategy(Order order) {
-		assemblyLineScheduler.changeStrategy(order);
-	}
-	
-	/**
-	 * Changes the strategy according to the given order.
-	 * @param order	The order that has to be used as a template for the strategy.
+	 * @param assemblyLine	The assembly line of which the strategy needs to be changed.
 	 */
 	public void changeStrategy(Order order, Printable<AssemblyLine> assemblyLine) {
-		assemblyLineScheduler.setBatchStrategy(order, assemblyLine);
+		assemblyLineScheduler.setStrategy(order, assemblyLine);
 	}
-
 	
 	/**
 	 * Returns a list of pending tasks at a given workstation.
