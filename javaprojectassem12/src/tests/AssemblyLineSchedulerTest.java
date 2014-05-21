@@ -265,17 +265,26 @@ public class AssemblyLineSchedulerTest {
 	}
 	
 	/**
-	 * Method for extracting real objects from thei
+	 * Extract the underlying objects from it's printable wrapper in a list.
 	 * @param <T>
 	 * @param printables
 	 * @return
 	 */
-	private <T> List<T> extractPrintable(final List<Printable<T>> printables){
+	private <T> List<T> extractPrintables(final List<Printable<T>> printables){
 		List<T> lines = new ArrayList<>();
 		for(Printable<T> printable : printables){
-			lines.add((T) printable);
+			lines.add(extractPrintable(printable));
 		}
 		return lines;
+	}
+	
+	/**
+	 * Extract the underlying object form it's printable wrapper.
+	 * @param printable
+	 * @return
+	 */
+	private <T> T extractPrintable(final Printable<T> printable){
+		return (T) printable;
 	}
 
 }
