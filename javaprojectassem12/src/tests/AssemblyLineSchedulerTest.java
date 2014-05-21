@@ -16,6 +16,7 @@ import logic.car.VehiclePart;
 import logic.car.VehiclePartType;
 import logic.users.CarManufacturingCompany;
 import logic.workstation.Task;
+import logic.workstation.Workstation;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -255,12 +256,26 @@ public class AssemblyLineSchedulerTest {
 	}
 	
 	/**
-	 * Test the correct calculation of the time of the system when processing orders.
+	 * Test the correct placement of orders: Does each order get scheduled onto the expected assemblyline?
 	 */
 	@Test
 	public void testCorrectOrderPlacing(){
+		//Model X can only be scheduled on line 3.
 		CarManufacturingCompany cmc = new CarManufacturingCompany();
-		cmc.addOrder(buildStandardOrderX());
+		Order order = buildStandardOrderA();
+		cmc.addOrder(order);
+		
+		List<AssemblyLine> lines = this.extractPrintables(cmc.getAssemblyLines());
+		assertTrue(lines.get(0).empty());
+		assertTrue(lines.get(1).empty());
+		assertTrue(lines.get(2).empty());
+		List<Workstation> stations = extractPrintables(lines.get(2).getWorkStations());
+		assertTrue(stations.get(0).getCurrentOrder().equals(order));
+		assertTrue(AssemblyLineTest.eqiDateTime(order.getEstimatedEndTime(), new DateTime(2014,1,1,11,0)));
+		
+		//Model C can be scheduled on line 2 & 3 but will be scheduled on 2 because of the better estimated completiontime.
+		order = buildStandardOrderC();
+		
 		
 	}
 	
