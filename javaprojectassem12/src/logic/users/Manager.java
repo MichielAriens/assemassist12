@@ -93,16 +93,16 @@ public class Manager extends User{
 	}
 
 	/**
-	 * Returns the assembly lines of the system in order.
-	 * @return the assembly lines of the system in order.
+	 * Returns a list of all the assembly lines in the company.
+	 * @return	A list of all the assembly lines in this company.
 	 */
 	public List<Printable<AssemblyLine>> getAssemblyLines() {
 		return company.getAssemblyLines();
 	}
 	
 	/**
-	 * Returns a map mapping each assembly line to it's operational status.
-	 * @return a map mapping each assembly line to it's operational status.
+	 * Returns a map of representations of assembly lines as keys and the representations of the statuses as values.
+	 * @return A map of representations of assembly lines as keys and the representations of the statuses as values.
 	 */
 	public Map<Printable<AssemblyLine>, Printable<OperationalStatus>> getAssemblyLinesStatuses() {
 		return company.getAssemblyLinesStatuses();
@@ -117,16 +117,16 @@ public class Manager extends User{
 	}
 
 	/**
-	 * Returns the printable instance of the assembly line the manager wants to perform actions on.
-	 * @return the printable instance of the assembly line the manager wants to perform actions on.
+	 * Returns the assembly line representation on which this manager is currently operating.
+	 * @return The assembly line representation on which this manager is currently operating.
 	 */
 	public Printable<AssemblyLine> getActiveAssemblyLine() {
 		return activeAssemblyLine;
 	}
 
 	/**
-	 * Changes the assembly line status of the active assembly line to the given new status.
-	 * @param newStatus The new status for the active assembly line.
+	 * Changes the status of this manager's active assembly line to the given status.
+	 * @param newStatus	The new status of this manager's active assembly line.
 	 */
 	public void changeAssemblyLineStatus(OperationalStatus newStatus) {
 		company.changeAssemblyLineStatus(activeAssemblyLine, newStatus);
