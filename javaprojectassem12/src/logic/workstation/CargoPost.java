@@ -31,14 +31,6 @@ public class CargoPost extends Workstation {
 	}
 	
 	/**
-	 * Get a new instance of CargoPost.
-	 */
-	@Override
-	protected Workstation getRawCopy(){
-		return new CargoPost();
-	}
-	
-	/**
 	 * Returns a string representation of a cargo post.
 	 */
 	@Override

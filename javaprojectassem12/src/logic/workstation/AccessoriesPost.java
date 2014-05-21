@@ -31,14 +31,6 @@ public class AccessoriesPost extends Workstation {
 	}
 	
 	/**
-	 * Get a new instance of AccesoriesPost
-	 */
-	@Override
-	protected Workstation getRawCopy(){
-		return new AccessoriesPost();
-	}
-	
-	/**
 	 * Returns a string representation of an accessories post.
 	 */
 	@Override

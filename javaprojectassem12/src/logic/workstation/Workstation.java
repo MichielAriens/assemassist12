@@ -249,7 +249,7 @@ public abstract class Workstation implements Printable<Workstation>{
 			ArrayList<Printable<Task>> returnlist = new ArrayList<>();
 			for(Task t : tasks){
 				if(!t.isComplete())
-					returnlist.add(t.getRawCopy());
+					returnlist.add(t);
 			}
 			return returnlist;
 		}
@@ -268,7 +268,7 @@ public abstract class Workstation implements Printable<Workstation>{
 		if(this.equals(station)){
 			ArrayList<Printable<Task>> returnlist = new ArrayList<>();
 			for(Task t : tasks){
-				returnlist.add(t.getRawCopy());
+				returnlist.add(t);
 			}
 			return returnlist;
 		}
@@ -276,12 +276,6 @@ public abstract class Workstation implements Printable<Workstation>{
 			return this.nextWorkStation.getAllTasks(station);
 		return null;
 	}
-	 
-	/**
-	 * Returns a new instance of the type of the implementing classes. 
-	 * @return	A copy of this workstation.
-	 */
-	protected abstract Workstation getRawCopy(); //TODO get rid of this?
 	
 	/**
 	 * Builds a list of Printables representing workstations.
@@ -291,7 +285,7 @@ public abstract class Workstation implements Printable<Workstation>{
 	 */
 	public void buildWorkstationList(List<Printable<Workstation>> workstations, int numberOfWorkstations){
 		if(numberOfWorkstations > 0){
-			workstations.add(this.getRawCopy());
+			workstations.add(this);
 		}
 		if(numberOfWorkstations > 1 && nextWorkStation != null){
 			nextWorkStation.buildWorkstationList(workstations, numberOfWorkstations-1);

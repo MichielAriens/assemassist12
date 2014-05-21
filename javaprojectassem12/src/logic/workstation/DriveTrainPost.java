@@ -31,14 +31,6 @@ public class DriveTrainPost extends Workstation {
 	}
 	
 	/**
-	 * Get a new instance of DriveTrainPost.
-	 */
-	@Override
-	protected Workstation getRawCopy(){
-		return new DriveTrainPost();
-	}
-	
-	/**
 	 * Returns a string representation of a drive train post.
 	 */
 	@Override

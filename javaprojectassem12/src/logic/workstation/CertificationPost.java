@@ -31,14 +31,6 @@ public class CertificationPost extends Workstation {
 	}
 	
 	/**
-	 * Get a new instance of CertificationPost.
-	 */
-	@Override
-	protected Workstation getRawCopy(){
-		return new CertificationPost();
-	}
-	
-	/**
 	 * Returns a string representation of a certification post.
 	 */
 	@Override

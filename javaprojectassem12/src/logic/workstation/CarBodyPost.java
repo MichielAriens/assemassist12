@@ -31,14 +31,6 @@ public class CarBodyPost extends Workstation {
 	}
 	
 	/**
-	 * Get a new instance of CarBodyPost.
-	 */
-	@Override
-	protected Workstation getRawCopy(){
-		return new CarBodyPost();
-	}
-	
-	/**
 	 * Returns a string representation of a car body post.
 	 */
 	@Override
