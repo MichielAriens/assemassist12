@@ -27,19 +27,12 @@ public class UseCaseMechanic {
 		//The mechanic logs in.
 		MechanicController mCont = (MechanicController) controller.logIn("Joren");
 		assertEquals("Joren", mCont.getUserName());
-		//the system prints out a list of assembly lines that the mechanic can choose from
-		ArrayList<String> assemblyLines = new ArrayList<String>();
-		assemblyLines.add("Assembly Line 1: 1");
-		assemblyLines.add("Assembly Line 2: 2");
-		assemblyLines.add("Assembly Line 3: 3");
-		assertEquals(assemblyLines, mCont.getAssemblyLines());
-		mCont.setAssemblyLine("Assembly Line 1");
 		//the system prints out a list of workstations that the mechanic can choose from
 		ArrayList<String> workstations = new ArrayList<String>();
 		workstations.add("Car Body Post: 1");
 		workstations.add("Drive Train Post: 2");
 		workstations.add("Accessories Post: 3");
-		assertEquals(workstations, mCont.getWorkStationsFromAssemblyLine());
+		assertEquals(workstations, mCont.getWorkStations());
 		//the mechanic chooses the first work station
 		mCont.setWorkStation("Car Body Post");
 		//The system prints out a list of tasks that the mechanic can perform in this workstation
@@ -49,6 +42,4 @@ public class UseCaseMechanic {
 		//The system asks whether the user wants to perform another task, but the user answers no (alternate flow)
 		//The use case ends here.
 	}
-	
-	//TODO assembly line status checking hier?
 }
