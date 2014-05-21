@@ -163,5 +163,30 @@ public abstract class Order implements Comparable<Order>, Printable<Order>{
 		return this.estimatedEndTime.compareTo(o.estimatedEndTime);
 	}
 	
+	/**
+	 * Returns the model of the Order, if any.
+	 * @return the model of the Order, if any.
+	 */
 	public abstract VehicleModel getModel();
+	
+	/**
+	 * Returns a String representation of this order.
+	 * @return a String representation of this order.
+	 */
+	@Override
+	public String getStringRepresentation() {
+		return this.toString();
+	}
+	
+	/**
+	 * Returns a String representation of the status of this Order.
+	 * @return 	"Completed" if this Order is done.
+	 * 			"Pending"	otherwise.
+	 */
+	@Override
+	public String getStatus() {
+		if(this.done())
+			return "Completed";
+		return "Pending";
+	}
 }

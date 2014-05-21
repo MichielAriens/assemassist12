@@ -167,7 +167,11 @@ public enum VehicleModel {
 			return false;
 		}
 		
-		//TODO DOCU
+		/**
+		 * A method that returns the estimated time it will take to install the given part on this model.
+		 * @param 	part	The part whose estimated time is needed.
+		 * @return	The estimated time it will take to install the given part on this model.
+		 */
 		public int getPartPhaseDuration(VehiclePart part){
 			if(part.type == VehiclePartType.Body || part.type == VehiclePartType.Colour)
 				return this.bodyPhaseDur;

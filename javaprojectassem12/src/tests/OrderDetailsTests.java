@@ -47,7 +47,7 @@ public class OrderDetailsTests {
 		VehicleOrderDetails details = maker.getDetails();
 		List<VehiclePart> detailsParts = new ArrayList<VehiclePart>();
 		for(Task task : details.getPendingTasks()){
-			detailsParts.add(task.getCarPart());
+			detailsParts.add(task.getVehiclePart());
 		}
 		assertTrue(detailsParts.containsAll(Arrays.asList(partsArray)));
 	}
@@ -101,7 +101,7 @@ public class OrderDetailsTests {
 		VehicleOrderDetails details = maker.getDetails();
 		List<VehiclePart> detailsParts = new ArrayList<VehiclePart>();
 		for(Task task : details.getPendingTasks()){
-			detailsParts.add(task.getCarPart());
+			detailsParts.add(task.getVehiclePart());
 		}
 		assertTrue(detailsParts.containsAll(Arrays.asList(partsArray)));
 	}
@@ -143,7 +143,7 @@ public class OrderDetailsTests {
 		maker.chooseDeadline(DateTime.now().plusHours(5));
 		TaskOrderDetails details = maker.getDetails();
 		assertNotNull(details);
-		assertTrue(details.getPendingTasks().get(0).getCarPart().type == VehiclePartType.Colour);
+		assertTrue(details.getPendingTasks().get(0).getVehiclePart().type == VehiclePartType.Colour);
 	}
 	
 	/**

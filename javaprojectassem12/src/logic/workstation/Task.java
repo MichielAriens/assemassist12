@@ -4,7 +4,7 @@ import interfaces.Printable;
 import logic.car.VehiclePart;
 
 /**
- * Class used to describe a task that needs to be performed in order to complete a car order.
+ * Class used to describe a task that needs to be performed in order to complete a vehicle order.
  */
 public class Task implements Printable<Task>{
 	
@@ -24,29 +24,29 @@ public class Task implements Printable<Task>{
 	private final int estimatedPhaseDuration;
 	
 	/**
-	 * The car part where upon the task needs to be performed.
+	 * The vehicle part where upon the task needs to be performed.
 	 */
-	private final VehiclePart carPart;
+	private final VehiclePart vehiclePart;
 	
 	/**
-	 * Creates a task corresponding with the given car part, and estimated duration.
-	 * @param part	The car part to perform the task on.
+	 * Creates a task corresponding with the given vehicle part, and estimated duration.
+	 * @param part	The vehicle part to perform the task on.
 	 * @param estimDur The estimated duration for this task to be completed.
 	 */
 	public Task(VehiclePart part, int estimDur){
 		if(part.autocompl){
 			this.completed = true;
 		}
-		this.carPart = part;
+		this.vehiclePart = part;
 		this.estimatedPhaseDuration = estimDur;
 	}
 	
 	/**
-	 * Returns the car part corresponding to this task.
-	 * @return the car part corresponding to this task.
+	 * Returns the vehicle part corresponding to this task.
+	 * @return the vehicle part corresponding to this task.
 	 */
-	public VehiclePart getCarPart(){
-		return carPart;
+	public VehiclePart getVehiclePart(){
+		return vehiclePart;
 	}
 	
 	/**
@@ -91,7 +91,7 @@ public class Task implements Printable<Task>{
 	 */
 	@Override
 	public String toString(){
-		return "Install " + this.getCarPart().type.toString() + "= " + this.getCarPart().toString();
+		return "Install " + this.getVehiclePart().type.toString() + "= " + this.getVehiclePart().toString();
 	}
 	
 	/**
@@ -99,13 +99,13 @@ public class Task implements Printable<Task>{
 	 * @return The string representation of the description of this task.
 	 */
 	private String getDescription(){
-		return "Task description:\n   -Type of part needed: " + this.getCarPart().type.toString() + ",\n   -Car Part: " + this.getCarPart().toString() + "\n";
+		return "Task description:\n   -Type of part needed: " + this.getVehiclePart().type.toString() + ",\n   -Car Part: " + this.getVehiclePart().toString() + "\n";
 	}
 	
 	/**
 	 * Checks if this Task is equal to a given object.
 	 * @return	False	if the given object is null, or if the given object is not an instance of the Task class,
-	 * 					Or if the given object does not have the same CarPart as this Task.
+	 * 					Or if the given object does not have the same vehiclePart as this Task.
 	 * 			True 	otherwise.
 	 */
 	@Override
@@ -118,11 +118,11 @@ public class Task implements Printable<Task>{
 	/**
 	 * Checks if this Task is equal to a given Task.
 	 * @param other	The other Task that needs to be checked.
-	 * @return	True	if the CarPart of this Task is the same as the CarPart of the other Task.
+	 * @return	True	if the CarPart of this Task is the same as the vehiclePart of the other Task.
 	 * 			False	otherwise.
 	 */
 	private boolean equals(Task other){
-		return this.carPart == other.carPart;
+		return this.vehiclePart == other.vehiclePart;
 	}
 	
 	/**

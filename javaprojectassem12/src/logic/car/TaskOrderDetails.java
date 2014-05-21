@@ -69,6 +69,6 @@ public class TaskOrderDetails{
 	 * @return a raw copy for this task order's details.
 	 */
 	public TaskOrderDetails getRawCopy(){
-		return new TaskOrderDetails(tasks.get(0).getCarPart(), null);
+		return new TaskOrderDetails(tasks.get(0).getVehiclePart(), null);
 	}
 }

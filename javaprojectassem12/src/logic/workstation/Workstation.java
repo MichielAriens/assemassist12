@@ -179,7 +179,7 @@ public abstract class Workstation implements Printable<Workstation>{
 	 */
 	private boolean isCompatibleTask(Task task){
 		//if(getCapabilities().contains(task.getCarPart().type) && !task.isComplete() && task != null){
-		if(getCapabilities().contains(task.getCarPart().type) && task != null){
+		if(getCapabilities().contains(task.getVehiclePart().type) && task != null){
 			return true;
 		}
 		return false;

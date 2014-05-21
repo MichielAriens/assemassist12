@@ -10,26 +10,26 @@ import org.joda.time.format.DateTimeFormatter;
 
 
 /**
- * A class representing a car order and all its requirements. 
+ * A class representing a vehicle order and all its requirements. 
  */
 public class VehicleOrder extends Order{
 	
 	/**
-	 * A variable holding the car order details. 
+	 * A variable holding the vehicle order details. 
 	 */
 	private VehicleOrderDetails details;
 	
 	/**
-	 * Initializes the car order details of this class to the given details.
-	 * @param details	The car order details which need to be set.
+	 * Initializes the vehicle order details of this class to the given details.
+	 * @param details	The vehicle order details which need to be set.
 	 */
 	public VehicleOrder(VehicleOrderDetails details){
 		this.details = details;
 	}
 
 	/**
-	 * Returns a time object which represents the deadline of this car order.
-	 * @return	The deadline of this car order.
+	 * Returns a time object which represents the deadline of this vehicle order.
+	 * @return	The deadline of this vehicle order, which is null.
 	 */
 	@Override
 	public DateTime getDeadLine() {
@@ -37,8 +37,8 @@ public class VehicleOrder extends Order{
 	}
 
 	/**
-	 * Returns a list of tasks which are required to complete this car order's details and thus the car itself.
-	 * @return	A list of task needed to complete the details of this car order.
+	 * Returns a list of tasks which are required to complete this vehicle order's details and thus the vehicle itself.
+	 * @return	A list of task needed to complete the details of this vehicle order.
 	 */
 	@Override
 	public List<Task> getTasks() {
@@ -46,8 +46,8 @@ public class VehicleOrder extends Order{
 	}
 
 	/**
-	 * returns a boolean holding whether this car order is done or not.
-	 * @return	True if all tasks from the details of this car order are done or this object is null.
+	 * returns a boolean holding whether this vehicle order is done or not.
+	 * @return	True if all tasks from the details of this vehicle order are done or this object is null.
 	 * 			False otherwise
 	 */
 	@Override
@@ -71,7 +71,7 @@ public class VehicleOrder extends Order{
 	}
 	
 	/**
-	 * Returns a string representation of this car order.
+	 * Returns a string representation of this vehicle order.
 	 * @return	The estimated end time in the form of a string.
 	 */
 	@Override
@@ -83,8 +83,8 @@ public class VehicleOrder extends Order{
 	}
 	
 	/**
-	 * Makes a new car order and sets its detail's field to a copy of this car order's details.
-	 * @return	A new car order with a copy of its details in it.
+	 * Makes a new vehicle order and sets its detail's field to a copy of this vehicle order's details.
+	 * @return	A new vehicle order with a copy of its details in it.
 	 */
 	@Override
 	public Order getRawCopy(){
@@ -92,17 +92,8 @@ public class VehicleOrder extends Order{
 	}
 	
 	/**
-	 * Returns a string representation of this car order.
-	 * @return	The estimated end time in the form of a string.
-	 */
-	@Override
-	public String getStringRepresentation() {
-		return this.toString();
-	}
-	
-	/**
-	 * Returns information about this car order. 
-	 * The information contains this car order's details and the start, end and est end times.
+	 * Returns information about this vehicle order. 
+	 * The information contains this vehicle order's details and the start, end and estimated end times.
 	 * @return	A string containing the details, the start time, end time and estimated end time.
 	 */
 	@Override
@@ -116,17 +107,13 @@ public class VehicleOrder extends Order{
 			str +=   "   Est. End Time:    " + fmt.print(super.getEstimatedEndTime()) + "\n";
 		return str;
 	}
-
+	
+	/**
+	 * Returns the model of this vehicle order.
+	 * @return the model of this vehicle order.
+	 */
 	@Override
 	public VehicleModel getModel() {
 		return this.details.getModel();
 	}
-
-	@Override
-	public String getStatus() {
-		if(this.done())
-			return "Completed";
-		return "Pending";
-	}
-
 }

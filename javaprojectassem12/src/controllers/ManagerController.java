@@ -99,7 +99,7 @@ public class ManagerController extends UserController{
 		String options = "";
 		List<Task> tasks = order.getTasks();
 		for(Task t : tasks){
-			options += "      - " + t.getCarPart().toString() + "\n";
+			options += "      - " + t.getVehiclePart().toString() + "\n";
 		}
 		return options;
 	}

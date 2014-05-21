@@ -184,7 +184,7 @@ public class AssemblyLineTest {
 		//We'll complete this phase 20 minutes early to check that the estimates come forwards too. 
 		barry.setActiveWorkstation(cmcMotors.getWorkStations().get(0));
 		for(Task task : orders.get(0).getTasks()){
-			if(cmcMotors.getWorkStations().get(0).getCapabilities().contains(task.getCarPart().type)){
+			if(cmcMotors.getWorkStations().get(0).getCapabilities().contains(task.getVehiclePart().type)){
 				barry.doTask(task, orders.get(0).getPhaseTime() - 20);
 			}
 		}

@@ -6,24 +6,24 @@ import java.util.List;
 import logic.workstation.Task;
 
 /**
- * A class holding more information about car orders.
+ * A class holding more information about vehicle orders.
  */
 public class VehicleOrderDetails{
 	
 	/**
-	 * A variable holding the type of car model this is.
+	 * A variable holding the type of vehicle model this is.
 	 */
 	private VehicleModel model;
 	
 	/**
-	 * A variable holding a list of tasks that need to be done for this car order's detail.
+	 * A variable holding a list of tasks that need to be done for this vehicle order's detail.
 	 */
 	private ArrayList<Task> tasks;
 	
 	/**
-	 * Initializes the model and tasks of this car order's detail.
-	 * @param model	The model of this car order's detail.
-	 * @param parts	The parts required for specific tasks that need to be completed for this car order's detail.
+	 * Initializes the model and tasks of this vehicle order's detail.
+	 * @param model	The model of this vehicle order's detail.
+	 * @param parts	The parts required for specific tasks that need to be completed for this vehicle order's detail.
 	 */
 	public VehicleOrderDetails(VehicleModel model, List<VehiclePart> parts){
 		this.model = model;
@@ -31,8 +31,8 @@ public class VehicleOrderDetails{
 	}
 	
 	/**
-	 * Builds the tasks of this car order's detail with the given car parts.
-	 * @param parts	The list of car parts that need to be on this car.
+	 * Builds the tasks of this vehicle order's detail with the given vehicle parts.
+	 * @param parts	The list of vehicle parts that need to be on this vehicle.
 	 */
 	private void buildTasks(List<VehiclePart> parts){
 		this.tasks = new ArrayList<Task>();
@@ -42,7 +42,7 @@ public class VehicleOrderDetails{
 	}
 
 	/**
-	 * Returns a list of tasks that still need to be completed for this car order's detail.
+	 * Returns a list of tasks that still need to be completed for this vehicle order's detail.
 	 * @return	A list of remaining tasks, an empty list if there are no more remaining tasks.
 	 */
 	public List<Task> getPendingTasks() {
@@ -58,13 +58,13 @@ public class VehicleOrderDetails{
 	}
 	
 	/**
-	 * Makes a new car order detail and sets the tasks and model values to this object's values.
+	 * Makes a new vehicle order detail and sets the tasks and model values to this object's values.
 	 * @return	A copy of this object with the parts and model copied into it.
 	 */
 	public VehicleOrderDetails getRawCopy(){
 		ArrayList<VehiclePart> parts = new ArrayList<VehiclePart>();
 		for(Task t : tasks){
-			parts.add(t.getCarPart());
+			parts.add(t.getVehiclePart());
 		}
 		return new VehicleOrderDetails(model, parts);
 	}
@@ -77,7 +77,7 @@ public class VehicleOrderDetails{
 	public String toString(){
 		String str = this.model.toString() + "; (";
 		for(Task task : tasks){
-			str += task.getCarPart().toString() + ", ";
+			str += task.getVehiclePart().toString() + ", ";
 		}
 		str = str.substring(0, str.length()-2);
 		str += ")";

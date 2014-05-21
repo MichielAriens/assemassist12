@@ -14,7 +14,7 @@ import org.joda.time.format.DateTimeFormatter;
 public class TaskOrder extends Order{
 	
 	/**
-	 * A variable holding the details for this task. 
+	 * A variable holding the details for this task order. 
 	 */
 	private TaskOrderDetails details;
 	
@@ -59,10 +59,10 @@ public class TaskOrder extends Order{
 	}
 	
 	/**
-	 * Checks if this task order's tasks are the same as a given task order's tasks.
-	 * @param other	The other task order against which we want to check equality.
-	 * @return	True if this task order's tasks are the same as the given task order's tasks.
-	 * 			False otherwise.
+	 * Checks if this task order equals the given object.
+	 * @param 	obj		The object against which we want to check equality.
+	 * @return	True	If the given object is a task order with the same tasks as this task order.
+	 * 			False 	otherwise.
 	 */
 	@Override
 	public boolean equals(Object obj){
@@ -86,32 +86,23 @@ public class TaskOrder extends Order{
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm");
 		return "Estimated completion: " + fmt.print(super.getEstimatedEndTime());
 	}
-
+	
+	/**
+	 * Returns the model of this TaskOrder, which is null.
+	 * @return The model of this TaskOrder, which is null.
+	 */
 	@Override
 	public VehicleModel getModel(){
 		return null;
 	}
 	
 	/**
-	 * Returns a string representation for the estimated completion time for this task order.
-	 * @return a string representation for the estimated completion time for this task order.
+	 * Returns a String representation of the deadline of this task order.
+	 * @return a String representation of the deadline of this task order.
 	 */
 	@Override
-	public String getStringRepresentation() {
-		return this.toString();
-	}
-	
-	//TODO: docushit
-	@Override
 	public String getExtraInformation() {
-
-		return null;
-	}
-
-	@Override
-	public String getStatus() {
-		if(this.done())
-			return "Completed";
-		return "Pending";
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm");
+		return "Deadline: " + fmt.print(this.getDeadLine());
 	}
 }

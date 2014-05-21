@@ -256,7 +256,7 @@ public class AssemblyLineSchedulerTest {
 		
 		cmc.getAssemblyLines();
 		for(Task task : order.getTasks()){
-			if(task.getCarPart().type == VehiclePartType.Body || task.getCarPart().type == VehiclePartType.Colour){
+			if(task.getVehiclePart().type == VehiclePartType.Body || task.getVehiclePart().type == VehiclePartType.Colour){
 				cmc.doTask(task , line, 50);
 			}
 		}
