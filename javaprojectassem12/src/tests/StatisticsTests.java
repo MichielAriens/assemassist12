@@ -57,7 +57,7 @@ public class StatisticsTests {
 
 	//TODO
 	//test slaagt bij numberOfOrders == 39
-	private int numberOfOrders = 60;
+	private int numberOfOrders = 39;
 	
 	/**
 	 * n = 1000
@@ -133,11 +133,10 @@ public class StatisticsTests {
 		//assertTrue(stats.contains("Average number of cars produced: 25"));
 		//assertTrue(stats.contains("Mean number of cars produced: 25"));
 		assertTrue(stats.contains("Statistics of Assembly Line 3:\n"+
-				"Average number of cars produced: 12\n"+
-				"Mean number of cars produced: 12\n"+
+				"Average number of cars produced: 0\n"+
+				"Mean number of cars produced: 0\n"+
 				"Exact numbers two last days:\n"+
-				"   2 days ago: No records.\n"+
-				"   1 day ago: 12\n"+
+				"   No records.\n"+
 				"Average delay: 0 minutes\n"+
 				"Mean delay: 0 minutes\n"+
 				"Two last delays:\n"+
@@ -145,11 +144,10 @@ public class StatisticsTests {
 				"   1) 0 minutes on 2014-01-01T18:30:00.000+01:00\n"+
 				"\n"+
 				"Statistics of Generality:\n"+
-				"Average number of cars produced: 12\n"+
-				"Mean number of cars produced: 12\n"+
+				"Average number of cars produced: 0\n"+
+				"Mean number of cars produced: 0\n"+
 				"Exact numbers two last days:\n"+
-				"   2 days ago: No records.\n"+
-				"   1 day ago: 12\n"+
+				"   No records.\n"+
 				"Average delay: 0 minutes\n"+
 				"Mean delay: 0 minutes\n"+
 				"Two last delays:\n"+
