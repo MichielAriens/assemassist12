@@ -281,10 +281,20 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			
 	}
 	
+	/**
+	 * Checks if all the workstations are empty.
+	 * @return	True if all workstations are empty.
+	 * 			False otherwise.
+	 */
 	public boolean empty(){
 		return firstWorkStation.allIdle();
 	}
 	
+	/**
+	 * Checks if this assembly line is ready to move.
+	 * @return	True if this assembly line is done with the orders in the workstations
+	 * 			False otherwise.
+	 */
 	public boolean ready(){
 		return this.tryMoveAssemblyLine();
 	}
@@ -307,7 +317,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 
 	/**
 	 * Asks a list of available workstations.
-	 * @return	The list containing copies of the workstations.
+	 * @return	The list containing representations of the workstations.
 	 */
 	public List<Printable<Workstation>> getWorkStations() {
 		LinkedList<Printable<Workstation>> workStations = new LinkedList<>();
@@ -317,9 +327,10 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 
 	/**
 	 * Calls the schedule and asks to schedule the given car order.
-	 * The order will only be scheduled if it is not null and this assemblyline can actually schedule this order.
+	 * The order will only be scheduled if it is not null and this assembly line can actually schedule this order.
 	 * @param order The car order to be scheduled.
-	 * @return		Whether the order was scheduled.
+	 * @return		True if the order could be scheduled.
+	 * 				False otherwise.
 	 */
 	public boolean addOrder(Order order){
 		if(order != null && this.accepts(order)){
@@ -331,9 +342,8 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 
 	/**
 	 * Returns an estimate for an order if scheduled on this line without mutation of either the order or this line.
-	 * @param 		order		The order to schedule.
-	 * @return		A estimated assembly time or null if the order cannot be scheduled on this line.
-	 * @stateless
+	 * @param order	The order to schedule.
+	 * @return		An estimated assembly time or null if the order cannot be scheduled on this line.
 	 */
 	public DateTime getEstimate(Order order,DateTime realTime) {
 		return schedule.getEstimate(order, realTime);
@@ -366,16 +376,28 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 		return false;
 	}
 	
+	/**
+	 * Returns the name of this assembly line.
+	 * @return The name of this assembly line.
+	 */
 	@Override
 	public String toString(){
 		return this.name;
 	}
 
+	/**
+	 * Returns the name in the form of a string of this assembly line.
+	 * @return The name of this assembly line.
+	 */
 	@Override
 	public String getStringRepresentation() {
 		return this.toString();
 	}
 
+	/**
+	 * Returns additional information about this assembly line. Additional information consists of the possible vehicle models that can be processed in this assembly line.
+	 * @return Extra information in the form of a string. 
+	 */
 	@Override
 	public String getExtraInformation() {
 		String extraInfo = "";
@@ -386,9 +408,21 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 		return extraInfo;
 	}
 
+	/**
+	 * Returns the status of this assembly line.
+	 * @return The status of this assembly line in the form of a string.
+	 */
 	@Override
 	public String getStatus() {
 		return status.toString();
+	}
+
+	/**
+	 * Returns the status of this assembly line.
+	 * @return The operational status of this assembly line.
+	 */
+	public OperationalStatus getOperationalStatus() {
+		return this.status;
 	}
 
 	/**
@@ -444,7 +478,6 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 		}
 
 		/**
-		 * First checks if the given phase duration is allowed or not.
 		 * Updates the current time and sets the end time of the order in the last workstation if there is one.
 		 * Also sets the next day and overtime if necessary and updates the statistics. 
 		 * Then checks if the strategy needs to change back to FIFO.
@@ -522,9 +555,9 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 
 
 		/**
-		 * Builds a list of phase durations from the orders in the queue. The length of the returned list is either
+		 * Builds a list of a list of phase durations from the orders in the queue. The length of the returned list is either
 		 * the amount of workstations or the number of orders in the queue, if there are less orders than workstations.
-		 * @return A list of integers containing the phase durations. //TODO FIX
+		 * @return A list of a list of integers containing the phase durations. 
 		 */
 		private List<List<Integer>> getPhaseDurations(){
 			ArrayList<List<Integer>> prePhaseDurations = new ArrayList<>();
@@ -630,10 +663,17 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			return false;
 		}
 		
-		//TODO docu
+		/**
+		 * Calculates the total assembly time for a given order in the workstations.
+		 * @param order	The order for which we want the total assembly time.
+		 * @return	The assembly time of the given order.
+		 * 			0 if the given order is null.
+		 */
 		private int getEstimatedAssemblyTime(Order order){
+			if(order == null)
+				return 0;
 			ArrayList<Integer> phases = new ArrayList<>();
-			firstWorkStation.buildEstimPhaseList(phases, queue.getFirst());
+			firstWorkStation.buildEstimPhaseList(phases, order);
 			int assemblyTime = 0;
 			for(Integer i : phases){
 				assemblyTime += i;
@@ -642,10 +682,10 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 		}
 
 		/**
-		 * If the days between the given time and the current time of the system differ, then it checks 
+		 * If the days between the given time and the cycle start time of this assembly line differ, then it checks 
 		 * if there is time for a new order without considering the overtime. Else checks if there is time
 		 * for a new order considering the overtime. 
-		 * @param time	The time to check against the current time of the system.
+		 * @param time	The time to check against thcycle start time of this assembly line.
 		 * @return True if there is time for a new order on this day, false otherwise.
 		 */
 		private boolean timeForNewOrder(DateTime time) {
@@ -670,8 +710,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 		}
 
 		/**
-		 * Sets the start time of the given order to the current time, then uses the current 
-		 * strategy to add the order and reschedule the whole queue and workstations.
+		 * Uses the current strategy to add the order and reschedule the whole queue and workstations.
 		 * @param order	The order that needs to be scheduled.
 		 */
 		private void scheduleOrder(Order order){
@@ -758,7 +797,12 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			return returnList;
 		}
 		
-		//TODO DOCU
+		/**
+		 * Returns the estimated end time of a given order, sets the start time of the given order because it will be scheduled afterwards.
+		 * @param order The order for which we want to calculate the estimated end time.
+		 * @param realTime	The current time of the system.
+		 * @return An estimated date time object which is the estimated end time of the given order.
+		 */
 		private DateTime getEstimate(Order order, DateTime realTime){
 			DateTime returnTime = null;
 			LinkedList<Order> copyqueue = makeCopyOfQueue();
@@ -785,7 +829,11 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 
 		}
 		
-		//TODO DOCU
+		/**
+		 * Calculates the estimated end time for a given order possibly scheduled in the first workstation.
+		 * @param order	The order for which we want an estimated end time.
+		 * @return	The estimated end time for the given order.
+		 */
 		private DateTime firstOrderEstimate(Order order){
 			int assemblyTime = 0;
 			ArrayList<Integer> phases = new ArrayList<>();
@@ -800,7 +848,13 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			return estimatedEndTime.plusMinutes(assemblyTime);
 		}
 		
-		//TODO docu
+		/**
+		 * Returns true if the deadline of the given order is earlier than the deadline of the given next order.
+		 * @param order The order for which we want to check.
+		 * @param next	The order against which we want to check.
+		 * @return	True if the first orders deadline is before the next orders deadline.
+		 * 			False if first order deadline is null or later than deadline of the next order.
+		 */
 		private boolean checkDeadline(Order order, Order next) {
 			if(order.getDeadLine()==null)
 				return false;
@@ -810,7 +864,4 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 		}
 	}
 
-	public OperationalStatus getOperationalStatus() {
-		return this.status;
-	}
 }
