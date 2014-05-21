@@ -55,7 +55,9 @@ public class StatisticsTests {
 		return new VehicleOrder(maker.getDetails());
 	}
 
-	private int numberOfOrders = 39;
+	//TODO
+	//test slaagt bij numberOfOrders == 39
+	private int numberOfOrders = 60;
 	
 	/**
 	 * n = 1000
@@ -75,7 +77,6 @@ public class StatisticsTests {
 		//Build n orders
 		Order curr;
 		int count = 0;
-		//TODO
 		for(int i = 0; i < numberOfOrders; i++){
 			curr = buildStandardOrderA();
 			orders.add(curr);
@@ -87,7 +88,7 @@ public class StatisticsTests {
 		//Do all the orders
 		int tasksPerformed = 0;
 		int totalTasksPerformed = 0;
-		while(!orders.get(orders.size()-1).done()){
+		while(!allDone()){
 			for(Mechanic mech : mechs){
 				for(Printable<AssemblyLine> line : mech.getAssemblyLines()){
 					mech.setActiveAssemblyLine(line);
@@ -107,7 +108,20 @@ public class StatisticsTests {
 		System.out.println("   Total tasks performed: " + totalTasksPerformed);
 	}
 	
-	
+	/**
+	 * Checks if all orders are done
+	 * @return 	True if all orders are done.
+	 * 			False otherwise.
+	 */
+	private boolean allDone() {
+		for(Order o : orders){
+			if(!o.done())
+				return false;
+		}
+		return true;
+	}
+
+
 	/**
 	 * The main test.
 	 */
