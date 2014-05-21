@@ -315,7 +315,7 @@ public class AssemblyLineTest {
 		//		 0|1-2-3
 		
 		//Set priority for specification defined by standard order C.
-		cmcMotors.changeStrategy(buildStandardOrderC());
+		cmcMotors.changeStrategyActiveAssemblyLine(buildStandardOrderC());
 		
 		//SCHED: A|C-A-B 
 		//		 0|3-1-2

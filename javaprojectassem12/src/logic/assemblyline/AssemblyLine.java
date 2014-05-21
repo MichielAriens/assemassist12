@@ -416,7 +416,12 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	public String getStatus() {
 		return status.toString();
 	}
+	
 
+	public int getQueueLength(){
+		return this.queue.size();
+	}
+	
 	/**
 	 * Returns the status of this assembly line.
 	 * @return The operational status of this assembly line.

@@ -15,7 +15,7 @@ import controllers.ManagerController;
 public class UseCaseManagerTest {
 	
 	/**
-	 * 4.5 Use Case: Check Production Statistics
+	 * 5.5 Use Case: Check Production Statistics
 	 */
 	@Test
 	public void mainSuccesTest() {
@@ -26,11 +26,41 @@ public class UseCaseManagerTest {
 		//1. The user wants to check statistics about the production
 		//2. The system shows a set of available statistics
 		String stats = "";
+		stats += "Statistics of Assembly Line 1:\n";
 		stats += "Average number of cars produced: 0\n";
 		stats += "Mean number of cars produced: 0\n";
 		stats += "Exact numbers two last days:\n";
 		stats += "   No records.\n";
-		
+		stats += "Average delay: 0 minutes\n";
+		stats += "Mean delay: 0 minutes\n";
+		stats += "Two last delays:\n";
+		stats += "   No records.\n";
+		stats += "\n";
+		stats += "Statistics of Assembly Line 2:\n";
+		stats += "Average number of cars produced: 0\n";
+		stats += "Mean number of cars produced: 0\n";
+		stats += "Exact numbers two last days:\n";
+		stats += "   No records.\n";
+		stats += "Average delay: 0 minutes\n";
+		stats += "Mean delay: 0 minutes\n";
+		stats += "Two last delays:\n";
+		stats += "   No records.\n";
+		stats += "\n";
+		stats += "Statistics of Assembly Line 3:\n";
+		stats += "Average number of cars produced: 0\n";
+		stats += "Mean number of cars produced: 0\n";
+		stats += "Exact numbers two last days:\n";
+		stats += "   No records.\n";
+		stats += "Average delay: 0 minutes\n";
+		stats += "Mean delay: 0 minutes\n";
+		stats += "Two last delays:\n";
+		stats += "   No records.\n";
+		stats += "\n";
+		stats += "Statistics of Generality:\n";
+		stats += "Average number of cars produced: 0\n";
+		stats += "Mean number of cars produced: 0\n";
+		stats += "Exact numbers two last days:\n";
+		stats += "   No records.\n";
 		stats += "Average delay: 0 minutes\n";
 		stats += "Mean delay: 0 minutes\n";
 		stats += "Two last delays:\n";
@@ -40,6 +70,10 @@ public class UseCaseManagerTest {
 	}
 	
 	/**
-	 * The test for use-case 4.6: Adapt Scheduling Algorithm is covered in UseCaseCombinedTest.java
+	 * The test for use-case 5.6: Adapt Scheduling Algorithm is covered in UseCaseCombinedTest.java
+	 */
+	
+	/**
+	 * The test for use-case 5.7: is covered in AssemblyLineSchedulerTest.java
 	 */
 }
