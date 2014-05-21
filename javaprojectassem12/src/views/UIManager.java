@@ -184,15 +184,14 @@ public class UIManager {
 		writer.flush();		
 		
 		String query = "Select new algorithm:\n";
-		for(String s : possibleStrategies){
-			query += "   " + s + "\n";
+		for(int i = 0; i < possibleStrategies.size(); i++){
+			query += "   "+ (i+1) + ": " + possibleStrategies.get(i) + "\n";
 		}
 		int cancelIndex = possibleStrategies.size() + 1;
 		query += "   " + (cancelIndex) + ": Cancel\nAnswer: ";
 		int algorithm = chooseAction(query, cancelIndex);
-		
 		if(algorithm != cancelIndex){
-			String chosenStrategy = possibleStrategies.get(algorithm);
+			String chosenStrategy = possibleStrategies.get(algorithm-1);
 			if(chosenStrategy.equals("FIFO")){
 				chooseFIFOAllAssmblyLines();
 			}
@@ -200,24 +199,14 @@ public class UIManager {
 				chooseSpecificationBatchAllAssemblyLines();
 			}
 		}
-		
 	}
 
 	/**
 	 * Changes the strategy of all assembly lines to FIFO.
 	 */
-	private void chooseSpecificationBatchAllAssemblyLines() {
+	private void chooseFIFOAllAssmblyLines() {
 		maController.changeToFIFOAllLines();
 		waitForCompletion("Chosen strategy has been applied to all assembly lines. Press enter to continue.\n");
-	}
-
-	/**
-	 * Lets the user choose which set of options to use for the batch specifications strategy,
-	 * and applies this strategy to all assembly lines if possible.
-	 */
-	private void chooseFIFOAllAssmblyLines() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	/**
@@ -232,6 +221,30 @@ public class UIManager {
 		}
 	}
 	
+	/**
+	 * Lets the user choose which set of options to use for the batch specifications strategy,
+	 * and applies this strategy to all assembly lines if possible.
+	 */
+	private void chooseSpecificationBatchAllAssemblyLines() {
+		String query;
+		ArrayList<String> listCarOptions = maController.getBatchListAllLines();
+		if(listCarOptions.size() < 1){
+			waitForCompletion("No available sets of car options. Press enter to continue.\n");
+		}
+		else{
+			query = "===Select desired set===\n";
+			for(int i = 0; i < listCarOptions.size(); i++){
+				query += listCarOptions.get(i);
+			}
+			query += "   " + (listCarOptions.size()+1) + ": Cancel\n";
+			int carOption = chooseAction(query, listCarOptions.size()+1);
+			if(carOption != listCarOptions.size()+1){
+				maController.changeStrategyToBatchProcessingAllLines(carOption-1);
+				waitForCompletion("Chosen strategy has been applied. Press enter to continue.\n");
+			}
+		}
+	}
+
 	/**
 	 * Lets the user choose which set of options to use for the batch specifications strategy,
 	 * and applies this strategy to the active assembly line if possible.

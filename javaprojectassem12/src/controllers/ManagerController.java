@@ -96,7 +96,7 @@ public class ManagerController extends UserController{
 			currentStrategies.add(entry.getKey().getStringRepresentation() + ": " + strategiesList.get(0));
 			possibleStrategies = new ArrayList<String>();
 			for(int i = 1; i < strategiesList.size(); i++){
-				possibleStrategies.add(i + ": " + strategiesList.get(i).getStringRepresentation());
+				possibleStrategies.add(strategiesList.get(i).getStringRepresentation());
 			}
 		}		
 		Collections.sort(currentStrategies);
@@ -175,14 +175,26 @@ public class ManagerController extends UserController{
 	}
 	
 	/**
-	 * Tries to change the current strategy to the batch processing strategy. Returns true if successful,
-	 * false otherwise.
+	 * Tries to change the current strategy of the active assembly line to the batch 
+	 * processing strategy.
 	 * @param index	The index of the order for batch processing. 
 	 */
 	public void changeStrategyToBatchProcessingActiveLine(int index){
 		if(index+1>currentBatchList.size() || currentBatchList==null)
 			return;
 		currentManager.changeStrategyActiveAssemblyLine(currentBatchList.get(index));
+		currentBatchList.clear();
+	}
+	
+	/**
+	 * Tries to change the current strategy of all assembly lines to the batch 
+	 * processing strategy.
+	 * @param index	The index of the order for batch processing. 
+	 */
+	public void changeStrategyToBatchProcessingAllLines(int index) {
+		if(index+1>currentBatchList.size() || currentBatchList==null)
+			return;
+		currentManager.changeStrategyAllLines(currentBatchList.get(index));
 		currentBatchList.clear();
 	}
 
@@ -242,5 +254,4 @@ public class ManagerController extends UserController{
 			}
 		}
 	}
-
 }

@@ -89,7 +89,7 @@ public class Manager extends User{
 	 * @param order	The order that has to be used as a template for the strategy.
 	 */
 	public void changeStrategyAllLines(Order order) {
-		company.changeStrategy(order);
+		company.changeStrategyAllLines(order);
 	}
 
 	/**

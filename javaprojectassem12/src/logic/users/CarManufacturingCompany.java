@@ -224,8 +224,8 @@ public class CarManufacturingCompany {
 	 * @param order	The order that has to be used as a template for the strategy.
 	 * @param assemblyLine	The assembly line of which the strategy needs to be changed.
 	 */
-	public void changeStrategy(Order order) {
-		assemblyLineScheduler.changeStrategy(order);
+	public void changeStrategyAllLines(Order order) {
+		assemblyLineScheduler.changeStrategyAllLines(order);
 	}
 	
 	/**

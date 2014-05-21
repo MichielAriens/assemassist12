@@ -455,7 +455,7 @@ public class AssemblyLineScheduler {
 	 * Changes the strategy of all assembly lines according to the given order.
 	 * @param order	The order that has to be used as a template for the strategy.
 	 */
-	public void changeStrategy(Order order) {
+	public void changeStrategyAllLines(Order order) {
 		for(AssemblyLine al : assemblyLines){
 			al.changeStrategy(order);
 		}
