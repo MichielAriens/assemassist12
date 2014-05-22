@@ -35,7 +35,10 @@ public class OrderDetailsTests {
 				VehiclePart.SEATS_LEATHER_WHITE,
 				VehiclePart.AIRCO_MANUAL,
 				VehiclePart.WHEELS_COMFORT,
-				VehiclePart.SPOILER_NONE
+				VehiclePart.SPOILER_NONE,
+				VehiclePart.TOOLSTORAGE_NONE,
+				VehiclePart.CERTIFICATION_NONE,
+				VehiclePart.CARGO_NONE
 			};
 		
 		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELA);
@@ -89,7 +92,10 @@ public class OrderDetailsTests {
 				VehiclePart.SEATS_LEATHER_WHITE,
 				VehiclePart.AIRCO_NONE,
 				VehiclePart.WHEELS_SPORTS,
-				VehiclePart.SPOILER_LOW
+				VehiclePart.SPOILER_LOW,
+				VehiclePart.TOOLSTORAGE_NONE,
+				VehiclePart.CARGO_NONE,
+				VehiclePart.CERTIFICATION_NONE
 			};
 		
 		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELC);
