@@ -70,20 +70,14 @@ public class AssemblyLineScheduler {
 	 * @param	order	The order that needs to be scheduled.
 	 */
 	public void addOrder(Order order){
-		Map<AssemblyLine, DateTime> estimates = new HashMap<>();
-		//Map every al to its estimate
-		for(AssemblyLine al : getNonBrokenLines()){
-			if(al.accepts(order)){
-				estimates.put(al, al.getEstimate(order,currentTime));
-			}
-		}
 		//choose the best estimate
 		AssemblyLine best = null;
-		for(AssemblyLine is : estimates.keySet()){
-			if(best == null){
+		
+		for(AssemblyLine is : getNonBrokenLines()){
+			if(best == null && is.accepts(order)){
 				best = is;
 			}else{
-				if(estimates.get(is).isBefore(estimates.get(best))){
+				if(is.getEstimate(order, currentTime).isBefore(best.getEstimate(order, currentTime))){
 					best = is;
 				}
 			}

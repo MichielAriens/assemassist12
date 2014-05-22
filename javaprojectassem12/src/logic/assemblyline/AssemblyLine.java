@@ -351,8 +351,8 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	 * @param order	The order to schedule.
 	 * @return		An estimated assembly time or null if the order cannot be scheduled on this line.
 	 */
-	public DateTime getEstimate(Order order,DateTime realTime) {
-		return schedule.getEstimate(order, realTime).minusSeconds(getBias());
+	public DateTime getEstimate(Order order,DateTime realTime) {		
+		return schedule.getEstimate(order, realTime).minusMillis(getBias());
 	}
 
 	/**
@@ -856,7 +856,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			firstWorkStation.buildEstimPhaseList(phases, order);
 			assemblyTime += phases.get(numberOfWorkStations-1);
 			int maxPhaseWorkstations = phases.get(numberOfWorkStations-1);
-			for(int i = 1; i < getWorkStations().size(); i++){
+			for(int i = 1; i < numberOfWorkStations; i++){
 				maxPhaseWorkstations = Math.max(maxPhaseWorkstations, firstWorkStation.getPhaseDuration(i));
 				assemblyTime += maxPhaseWorkstations;
 			}
