@@ -82,6 +82,7 @@ public class AssemblyLineScheduler {
 				}
 			}
 		}
+		order.setStartTime(getCurrentTime());
 		if(best == null){
 			overflowQueue.add(order);
 		}else{

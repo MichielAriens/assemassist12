@@ -822,10 +822,9 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 		private DateTime getEstimate(Order order, DateTime realTime){
 			DateTime returnTime = null;
 			LinkedList<Order> copyqueue = makeCopyOfQueue();
-			order.setStartTime(realTime);
+			
 			if(firstWorkStation.getCurrentOrder()==null && queue.isEmpty()){
 				returnTime = firstOrderEstimate(order);
-				System.err.println(name + " : " + returnTime);
 				returnTime = getEstimatedTime(returnTime, order);
 				return returnTime;
 			}else{
