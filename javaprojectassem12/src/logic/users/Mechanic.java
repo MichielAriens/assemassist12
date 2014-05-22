@@ -44,8 +44,8 @@ public class Mechanic extends User{
 	}
 	
 	/**
-	 * Returns the workstation the mechanic is currently working on.
-	 * @return The workstation the mechanic is currently working on.
+	 * Returns the representation of the workstation the mechanic is currently working on.
+	 * @return The representation of the workstation the mechanic is currently working on.
 	 */
 	public Printable<Workstation> getActiveWorkstation(){
 		return this.activeStation;
@@ -63,7 +63,7 @@ public class Mechanic extends User{
 	/**
 	 * Performs a task if the task is compatible with the active workstation of the mechanic
 	 * and tries to move the assembly line.
-	 * @param task	A copy of the task that needs to be performed.
+	 * @param task	A representation of the task that needs to be performed.
 	 * @param duration	How long it took to perform the task.
 	 * @return	True if the task has been performed successfully.
 	 * 			False otherwise.
@@ -73,9 +73,9 @@ public class Mechanic extends User{
 	}
 	
 	/**
-	 * Returns a list tasks that are currently pending at this mechanic's active workstation.
+	 * Returns a list of representations of tasks that are currently pending at this mechanic's active workstation.
 	 * @return	null	if the mechanic is not currently posted.
-	 * 			The list of tasks otherwise.
+	 * 			The list of representations of tasks otherwise.
 	 */
 	public List<Printable<Task>> getAvailableTasks(){
 		if(!isPosted() || activeAssemblyLine==null)
@@ -84,9 +84,9 @@ public class Mechanic extends User{
 	}
 	
 	/**
-	 * Returns a list of all tasks at a given workstation.
-	 * @param station	The a copy of the workstation for which the tasks are needed.
-	 * @return	A list of tasks at the given workstation.
+	 * Returns a list of representations of all tasks at a given workstation.
+	 * @param station	The representation of the workstation for which the tasks are needed.
+	 * @return	A list of representations of tasks at the given workstation.
 	 */
 	public List<Printable<Task>> getAllTasks(Printable<Workstation> station){
 		if(activeAssemblyLine==null || station == null)
@@ -95,8 +95,8 @@ public class Mechanic extends User{
 	}
 	
 	/**
-	 * Returns the list of workstations from the active assembly line of the car manufacturing company.
-	 * @return the list of workstations from the active assembly line of the car manufacturing company.
+	 * Returns the list of representations of workstations from the active assembly line of the car manufacturing company.
+	 * @return the list of representations of workstations from the active assembly line of the car manufacturing company.
 	 */
 	public List<Printable<Workstation>> getWorkstationsFromAssemblyLine(){
 		if(activeAssemblyLine==null)
@@ -105,8 +105,8 @@ public class Mechanic extends User{
 	}
 	
 	/**
-	 * Returns the list of all workstations from all assembly lines of the car manufacturing company.
-	 * @return the list of all workstations from all assembly lines of the car manufacturing company.
+	 * Returns the list of representations of all workstations from all assembly lines of the car manufacturing company.
+	 * @return the list of representations of all workstations from all assembly lines of the car manufacturing company.
 	 */
 	public List<Printable<Workstation>> getWorkstations() {
 		if(company == null)
