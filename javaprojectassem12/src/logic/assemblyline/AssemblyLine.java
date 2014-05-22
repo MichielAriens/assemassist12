@@ -212,8 +212,6 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			}
 			schedule.moveAndReschedule(cycleTime);
 			cycleTime = 0;
-			if(newday==false)
-				cycleStartTime = realTime;
 			if(status==OperationalStatus.PREMAINTENANCE && firstWorkStation.allIdle())
 				changeStatus(OperationalStatus.MAINTENANCE);
 			return true;
