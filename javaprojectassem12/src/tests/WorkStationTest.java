@@ -75,8 +75,8 @@ public class WorkStationTest {
 			}
 
 			@Override
-			protected Workstation getRawCopy() {
-				//This method is not needed for these tests.
+			public String getStringRepresentation() {
+				// TODO Auto-generated method stub
 				return null;
 			}
 		};
@@ -99,12 +99,12 @@ public class WorkStationTest {
 	public void testUniversalPost() {
 		universalPost.setOrder(carOrder);
 		assertFalse(carOrder.done());		
-		universalPost.doTask(carOrder.getTasks().get(0));
+		universalPost.doTask(carOrder.getTasks().get(0),0);
 		assertFalse(carOrder.done());
 		assertFalse(universalPost.done());
 		
 		for(Task task : carOrder.getTasks()){
-			universalPost.doTask(task);
+			universalPost.doTask(task,0);
 		}
 		assertTrue(carOrder.done());
 		assertTrue(universalPost.done());
@@ -125,28 +125,28 @@ public class WorkStationTest {
 		assertFalse(carBodyPost.done());
 		assertFalse(carOrder.done());
 		for(Task task : carOrder.getTasks()){
-			carBodyPost.doTask(task);
+			carBodyPost.doTask(task,0);
 		}
 		assertTrue(carBodyPost.done());
 		assertFalse(carOrder.done());
 		assertFalse(driveTrainPost.done());
 		assertFalse(accessoriesPost.done());
 		for(Task task : carOrder.getTasks()){
-			carBodyPost.doTask(task);
+			carBodyPost.doTask(task,0);
 		}
 		assertTrue(carBodyPost.done());
 		assertFalse(carOrder.done());
 		assertFalse(driveTrainPost.done());
 		assertFalse(accessoriesPost.done());
 		for(Task task : carOrder.getTasks()){
-			driveTrainPost.doTask(task);
+			driveTrainPost.doTask(task,0);
 		}
 		assertTrue(carBodyPost.done());
 		assertTrue(driveTrainPost.done());
 		assertFalse(accessoriesPost.done());
 		assertFalse(carOrder.done());
 		for(Task task : carOrder.getTasks()){
-			accessoriesPost.doTask(task);
+			accessoriesPost.doTask(task,0);
 		}
 		assertTrue(carBodyPost.done());
 		assertTrue(driveTrainPost.done());
@@ -166,7 +166,7 @@ public class WorkStationTest {
 		
 		carBodyPost.setOrder(order);
 		for(Task task : order.getTasks()){
-			carBodyPost.doTask(task);
+			carBodyPost.doTask(task,0);
 		}
 		
 		assertTrue(carBodyPost.done());
