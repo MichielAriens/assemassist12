@@ -46,7 +46,7 @@ public enum OperationalStatus implements Printable<OperationalStatus>{
 		ArrayList<OperationalStatus> selectables = new ArrayList<>();
 		selectables.add(OPERATIONAL);
 		selectables.add(BROKEN);
-		selectables.add(PREMAINTENANCE);
+		selectables.add(MAINTENANCE);
 		return selectables;
 	}
 	
