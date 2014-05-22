@@ -101,8 +101,8 @@ public class AssemblyLineScheduler {
 	/**
 	 * Looks at the state of all the assembly lines and determines which assembly lines can be moved forward.
 	 * Will move exactly one or no assembly lines.
-	 * @return		true if a line was moved
-	 * 				false if no lines were moved
+	 * @return	True if a line was moved
+	 * 			False if no lines were moved
 	 */
 	private boolean advanceOnce(){
 		List<AssemblyLine> emptyLines = new ArrayList<AssemblyLine>();		
@@ -180,14 +180,14 @@ public class AssemblyLineScheduler {
 	
 	/**
 	 * Do the task corresponding to the given task on the given assembly line.
-	 * If the task is completed the given assembly line is checked for advancement
-	 * If the line advances this scheduler is advanced
+	 * Try to advance the assembly lines.
 	 * @param Task				The task that needs to be completed wrapped in the printable interface.
 	 * @param assemblyLine		The assembly line that the task is on wrapped in the printable interface.
-	 * @return
+	 * @return	True if the task has been performed succesfully.
+	 * 			False otherwise.
 	 */
 	public boolean doTask(Printable<Task> Task, Printable<AssemblyLine> assemblyLine, int minutes){
-		AssemblyLine line = this.get(assemblyLine);
+		AssemblyLine line = this.getLineFromPrintable(assemblyLine);
 		boolean completed = line.doTask(Task, minutes);
 		this.advance();
 		return completed;
@@ -197,7 +197,8 @@ public class AssemblyLineScheduler {
 	/**
 	 * Checks whether all non-broken lines are ready to move.
 	 * If all lines are broken the system is not ready to move. 
-	 * @return
+	 * @return	True if not all assembly lines can move,
+	 * 			False otherwise.
 	 */
 	private boolean linesReadyToMove(){		
 		int brokenLines = 0;
@@ -217,11 +218,12 @@ public class AssemblyLineScheduler {
 	}
 	
 	/**
-	 * Will get the correct assembly line matching the one encapsulated within the parameter or null 
-	 * @param line
-	 * @return
+	 * Will get the correct assembly line matching the one encapsulated within the parameter or null.
+	 * @param line	The printable assembly line for which the actual assembly line needs to be returned.
+	 * @return	The actual assembly line that matches the given printable.
+	 * 			Null if there is no assembly line that matches the given printable.
 	 */
-	private AssemblyLine get(Printable<AssemblyLine> line){
+	private AssemblyLine getLineFromPrintable(Printable<AssemblyLine> line){
 		for(AssemblyLine al : assemblyLines){
 			if(al.equals(line)){
 				return al;
@@ -232,12 +234,15 @@ public class AssemblyLineScheduler {
 	
 	/**
 	 * Add an assembly line to this scheduler.
-	 * @param line
+	 * @param line	The assembly line that needs to be added to the list of lines.
 	 */
 	private void addLine(AssemblyLine line){
 		assemblyLines.add(line);
 	}
 
+	/**
+	 * Builds the assembly lines.
+	 */
 	private void initializeAssemblylines(){
 		buildLine1();
 		buildLine2();
@@ -245,10 +250,8 @@ public class AssemblyLineScheduler {
 	}
 	
 	/**
-	 * NOTE: BUILDER PATTERN MUCH?
+	 * Builds the first assembly line which can only handle car models A and B.
 	 */
-	
-
 	private void buildLine1(){
 		WorkstationChainBuilder builder = new WorkstationChainBuilder();	
 		WorkstationDirector director = new WorkstationDirectorA(builder);
@@ -258,6 +261,9 @@ public class AssemblyLineScheduler {
 		this.addLine(new AssemblyLine(Arrays.asList(models), builder, this.currentTime, "Assembly Line 1"));
 	}
 	
+	/**
+	 * Builds the second assembly line which can only handle car models A, B and C.
+	 */
 	private void buildLine2() {
 		WorkstationChainBuilder builder = new WorkstationChainBuilder();	
 		WorkstationDirector director = new WorkstationDirectorA(builder);
@@ -267,6 +273,9 @@ public class AssemblyLineScheduler {
 		this.addLine(new AssemblyLine(Arrays.asList(models), builder, this.currentTime, "Assembly Line 2"));
 	}
 	
+	/**
+	 * Builds the third assembly line which handle car models A, B, C, X and Y.
+	 */
 	private void buildLine3() {
 		WorkstationChainBuilder builder = new WorkstationChainBuilder();	
 		WorkstationDirector director = new WorkstationDirectorB(builder);
@@ -282,16 +291,16 @@ public class AssemblyLineScheduler {
 	 * @return		A list of workstations wrapped in the printable interface
 	 */
 	public List<Printable<Workstation>> getWorkStationsFromAssemblyLine(Printable<AssemblyLine> assemblyLine) {
-		return this.get(assemblyLine).getWorkStations();
+		return this.getLineFromPrintable(assemblyLine).getWorkStations();
 	}
 	
 	/**
-	 * Breaks an assemblyline: The assemblyline will be inhibited from moving and orders on its queue will be rescheduled to other
+	 * Breaks an assembly line: The assembly line will be inhibited from moving and orders on its queue will be rescheduled to other
 	 * lines where possible. 
-	 * @param line
+	 * @param line	The line which status needs to go to broken.
 	 */
 	public void breakAssemblyLine(Printable<AssemblyLine> line){
-		AssemblyLine al = get(line);
+		AssemblyLine al = getLineFromPrintable(line);
 		this.overflowQueue.addAll(al.changeStatus(OperationalStatus.BROKEN));
 		this.scheduleOverflowQueue();
 	}
@@ -299,10 +308,10 @@ public class AssemblyLineScheduler {
 	/**
 	 * Brings a broken line back to the operational state. Orders on the line will be able to advance again.
 	 * An attempt will be made to redistribute the overflow queue. 
-	 * @param line
+	 * @param line	The line that needs to be fixed.
 	 */
 	public void fixAssemAssemblyLine(Printable<AssemblyLine> line){
-		AssemblyLine al = get(line);
+		AssemblyLine al = getLineFromPrintable(line);
 		if(al.getOperationalStatus() == OperationalStatus.BROKEN){
 			al.fix(currentTime);
 			this.scheduleOverflowQueue();
@@ -310,20 +319,20 @@ public class AssemblyLineScheduler {
 	}
 	
 	/**
-	 * Starts the preparation for maintenance on an assemblyline. The first workstation will reject all orders. The orders on 
+	 * Starts the preparation for maintenance on an assembly line. The first workstation will reject all orders. The orders on 
 	 * the line are still able to be completed. Once the line is empty the four-hour maintenance cycle starts. 
 	 * The queue for this line is rescheduled with the 4 hour delay in mind.
-	 * @param line
+	 * @param line	The line for which maintenance needs to start.
 	 */
 	public void startMaintenace(Printable<AssemblyLine> line){
-		AssemblyLine al = this.get(line);
+		AssemblyLine al = this.getLineFromPrintable(line);
 		this.overflowQueue.addAll(al.changeStatus(OperationalStatus.PREMAINTENANCE));
 		this.scheduleOverflowQueue();
 	}
 
 	/**
 	 * Returns all workstations in the system.
-	 * @return		A list of all workstations wrapped in the printable interface.
+	 * @return A list of all workstations wrapped in the printable interface.
 	 */
 	public List<Printable<Workstation>> getAllWorkstations() {
 		List<Printable<Workstation>> retval = new LinkedList<>();
@@ -353,7 +362,7 @@ public class AssemblyLineScheduler {
 	 * 			False otherwise
 	 */
 	public boolean checkPhaseDuration(int duration, Printable<AssemblyLine> assemblyLine) {
-		AssemblyLine al = this.get(assemblyLine);
+		AssemblyLine al = this.getLineFromPrintable(assemblyLine);
 		return al.checkPhaseDuration(duration);
 	}
 
@@ -376,7 +385,7 @@ public class AssemblyLineScheduler {
 	 * @return	A list of tasks at the given workstation.
 	 */
 	public List<Printable<Task>> getAllTasksAt(Printable<Workstation> station, Printable<AssemblyLine> assemblyLine) {
-		return this.get(assemblyLine).getAllTasks(station);
+		return this.getLineFromPrintable(assemblyLine).getAllTasks(station);
 	}
 
 	/**
@@ -386,7 +395,7 @@ public class AssemblyLineScheduler {
 	 * @return	A list of tasks at the given workstation.
 	 */
 	public List<Printable<Task>> getRequiredTasks(Printable<Workstation> station, Printable<AssemblyLine> assemblyLine) {
-		return this.get(assemblyLine).getRequiredTasks(station);
+		return this.getLineFromPrintable(assemblyLine).getRequiredTasks(station);
 	}
 
 	/**
@@ -413,7 +422,7 @@ public class AssemblyLineScheduler {
 	 * @return the strategies list from the given assembly line.
 	 */
 	public List<Printable<SchedulingStrategy>> getStrategies(Printable<AssemblyLine> activeAssemblyLine) {
-		AssemblyLine active = get(activeAssemblyLine);
+		AssemblyLine active = getLineFromPrintable(activeAssemblyLine);
 		if(active == null)
 			return new ArrayList<Printable<SchedulingStrategy>>();
 		return active.getStrategies();
@@ -438,7 +447,7 @@ public class AssemblyLineScheduler {
 	 * @return the batch list for the given assembly line.
 	 */
 	public List<Order> getBatchList(Printable<AssemblyLine> assemblyline){
-		return this.get(assemblyline).getBachList();
+		return this.getLineFromPrintable(assemblyline).getBachList();
 	}
 	
 	/**
@@ -461,7 +470,7 @@ public class AssemblyLineScheduler {
 	 * @param assemblyLine	The assembly line of which the strategy needs to be changed.
 	 */
 	public void changeStrategy(Order order, Printable<AssemblyLine> assemblyline){
-		this.get(assemblyline).changeStrategy(order);
+		this.getLineFromPrintable(assemblyline).changeStrategy(order);
 	}
 	
 	/**
@@ -483,7 +492,7 @@ public class AssemblyLineScheduler {
 	 */
 	public boolean changeAssemblyLineStatus(Printable<AssemblyLine> activeAssemblyLine,
 			OperationalStatus newStatus) {
-		AssemblyLine al = this.get(activeAssemblyLine);
+		AssemblyLine al = this.getLineFromPrintable(activeAssemblyLine);
 		if(al.getOperationalStatus() == OperationalStatus.OPERATIONAL){
 			if(newStatus == OperationalStatus.BROKEN){
 				this.breakAssemblyLine(activeAssemblyLine);
