@@ -479,6 +479,13 @@ public class AssemblyLineScheduler {
 		}
 	}
 
+	/**
+	 * Changes the status of the given assembly line to the given status if the given status is different from the current status.
+	 * @param activeAssemblyLine	The assembly line that receives a new status.
+	 * @param newStatus	The new status of the given assembly line.
+	 * @return	True if the new status could be set.
+	 * 			False otherwise.
+	 */
 	public boolean changeAssemblyLineStatus(Printable<AssemblyLine> activeAssemblyLine,
 			OperationalStatus newStatus) {
 		AssemblyLine al = this.get(activeAssemblyLine);
