@@ -5,12 +5,9 @@ import interfaces.Printable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import logic.car.Order;
 import logic.car.VehicleModel;
 import logic.workstation.Task;
@@ -21,17 +18,34 @@ import logic.workstation.WorkstationDirectorA;
 import logic.workstation.WorkstationDirectorB;
 
 import org.joda.time.DateTime;
-import org.joda.time.MutableDateTime;
 
+/**
+ * A class which is responsible for scheduling orders on the different assembly lines.
+ */
 public class AssemblyLineScheduler {
 	
+	/**
+	 * The list of all the assembly lines.
+	 */
 	private List<AssemblyLine> assemblyLines;
+	
+	/**
+	 * The current time of the system.
+	 */
 	private DateTime currentTime;
+	
+	/**
+	 * The queue which holds orders if all the assembly lines are broken.
+	 */
 	private LinkedList<Order> overflowQueue;
+	
+	/**
+	 * The statistics of the assembly line scheduler, which has the statistics of all the assembly lines in this assembly line scheduler.
+	 */
 	private StatisticsGeneral stats;
 	
 	/**
-	 * 
+	 * Initializes the current time, the assembly lines, the overflow queue and the statistics.
 	 */
 	public AssemblyLineScheduler(){
 		currentTime = new DateTime(2014, 1, 1, 6, 0);
@@ -41,15 +55,19 @@ public class AssemblyLineScheduler {
 		stats = new StatisticsGeneral("Generality");
 	}
 	
+	/**
+	 * Returns the current time of the system.
+	 * @return	The current time of the system.
+	 */
 	public DateTime getCurrentTime(){
 		return currentTime;
 	}
 	
 	/**
 	 * Accepts an order and distributes it to the best assembly line. 
-	 * All eligible assembly lines will calculate an estimated completion time
+	 * All eligible assembly lines will calculate an estimated completion time.
 	 * If no assembly lines are available for queuing then the order is placed on the overflow queue.
-	 * @param	order	...
+	 * @param	order	The order that needs to be scheduled.
 	 */
 	public void addOrder(Order order){
 		Map<AssemblyLine, DateTime> estimates = new HashMap<>();
@@ -59,7 +77,7 @@ public class AssemblyLineScheduler {
 				estimates.put(al, al.getEstimate(order,currentTime));
 			}
 		}
-		//chose the best estimate
+		//choose the best estimate
 		AssemblyLine best = null;
 		for(AssemblyLine is : estimates.keySet()){
 			if(best == null){
@@ -79,22 +97,20 @@ public class AssemblyLineScheduler {
 	
 	/**
 	 * Repeatedly looks at the state of all the assembly lines and determines which assembly lines can be moved forwards.
-	 * When moving the current time is synchronised with the last known time information from the assemblylines. 
+	 * When moving, the current time is synchronized with the last known time information from the assembly lines. 
 	 */
 	private void advance(){
-		while(advanceOnce()){
-			//Keep advancing while andvancing doesn't fail.
-		}
+		while(advanceOnce());
 	}
 	
 	/**
-	 * Looks at the state of all the assembly lines at determines which assembly lines can be moved forwards.
-	 * Will move exactly one or no assemblylines.
+	 * Looks at the state of all the assembly lines and determines which assembly lines can be moved forward.
+	 * Will move exactly one or no assembly lines.
 	 * @return		true if a line was moved
 	 * 				false if no lines were moved
 	 */
 	private boolean advanceOnce(){
-		List<AssemblyLine> emptyLines = new ArrayList<AssemblyLine>(2);		
+		List<AssemblyLine> emptyLines = new ArrayList<AssemblyLine>();		
 		if(linesReadyToMove()){
 			AssemblyLine bestLine = null;
 			for(AssemblyLine al :  getNonBrokenLines()){
@@ -125,7 +141,7 @@ public class AssemblyLineScheduler {
 	}
 	
 	/**
-	 * Checks whether all assembylines are ready to start a new day. If so the current time is progressed and the assemblylines are informed. 
+	 * Checks whether all assembly lines are ready to start a new day. If so the current time is progressed and the assembly lines are informed. 
 	 */
 	private void checkDayEnds() {
 		for(AssemblyLine al : this.assemblyLines){
@@ -134,7 +150,7 @@ public class AssemblyLineScheduler {
 			}
 		}
 		
-		//Inform assemblylines
+		//Inform assembly lines
 		for (AssemblyLine al : this.assemblyLines){
 			al.setNewDay();
 		}
@@ -143,7 +159,7 @@ public class AssemblyLineScheduler {
 	}
 	
 	/**
-	 * Will attempt to redistribute orders from the overflow queue to the assemblylines. 
+	 * Will attempt to redistribute orders from the overflow queue to the assembly lines. 
 	 * If this fails the orders will remain in the overflow queue.
 	 */
 	private void scheduleOverflowQueue(){	
@@ -155,7 +171,7 @@ public class AssemblyLineScheduler {
 
 	/**
 	 * Returns all non-broken assembly lines.
-	 * @return
+	 * @return All the non-broken assembly lines.
 	 */
 	private List<AssemblyLine> getNonBrokenLines(){
 		List<AssemblyLine> retval = new ArrayList<>();
@@ -403,6 +419,8 @@ public class AssemblyLineScheduler {
 	 */
 	public List<Printable<SchedulingStrategy>> getStrategies(Printable<AssemblyLine> activeAssemblyLine) {
 		AssemblyLine active = get(activeAssemblyLine);
+		if(active == null)
+			return new ArrayList<Printable<SchedulingStrategy>>();
 		return active.getStrategies();
 	}
 	
