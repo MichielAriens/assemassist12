@@ -54,9 +54,7 @@ public class StatisticsTests {
 		}
 		return new VehicleOrder(maker.getDetails());
 	}
-
-	//TODO
-	//test slaagt bij numberOfOrders == 39
+	
 	private int numberOfOrders = 39;
 	
 	/**
@@ -76,18 +74,13 @@ public class StatisticsTests {
 		
 		//Build n orders
 		Order curr;
-		int count = 0;
 		for(int i = 0; i < numberOfOrders; i++){
 			curr = buildStandardOrderA();
 			orders.add(curr);
 			cmc.addOrder(curr);
-			count++;
 		}
-		System.out.println("Total number of orders == " + count);
 		
 		//Do all the orders
-		int tasksPerformed = 0;
-		int totalTasksPerformed = 0;
 		while(!allDone()){
 			for(Mechanic mech : mechs){
 				for(Printable<AssemblyLine> line : mech.getAssemblyLines()){
@@ -96,16 +89,11 @@ public class StatisticsTests {
 						mech.setActiveWorkstation(station);
 						for(Printable<Task> task : mech.getAvailableTasks()){
 							mech.doTask(task, 50);
-							tasksPerformed++;
-							totalTasksPerformed++;
 						}
 					}
 				}
 			}
-			System.out.println("   Tasks performed: " + tasksPerformed);
-			tasksPerformed = 0;
 		}
-		System.out.println("   Total tasks performed: " + totalTasksPerformed);
 	}
 	
 	/**
@@ -128,8 +116,6 @@ public class StatisticsTests {
 	@Test
 	public void testStat1(){
 		String stats = cmc.getStatistics();
-		System.out.println(stats);
-
 		//assertTrue(stats.contains("Average number of cars produced: 25"));
 		//assertTrue(stats.contains("Mean number of cars produced: 25"));
 		assertTrue(stats.contains("Statistics of Assembly Line 3:\n"+

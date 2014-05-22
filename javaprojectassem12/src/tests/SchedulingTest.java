@@ -17,7 +17,6 @@ import logic.workstation.WorkstationDirectorA;
 import logic.workstation.WorkstationDirectorB;
 
 import org.joda.time.DateTime;
-import org.junit.Before;
 import org.junit.Test;
 
 public class SchedulingTest {
@@ -154,13 +153,6 @@ public class SchedulingTest {
 			maker.addPart(part);
 		}
 		return new VehicleOrder(maker.getDetails());
-	}
-	
-	//TODO: remove
-	private void printOrders(){
-		for(Order o : orders){
-			System.out.println(o.toString());
-		}
 	}
 	
 	private void buildAssemblyLineA(){

@@ -321,7 +321,6 @@ public class UseCaseCombinedTest {
 		allBatchList.add("   1: Option 1:\n      - Sedan\n      - Red\n      - Standard 2l v4\n      - 6 speed manual\n      - Leather black\n      - Manual\n      - Comfort\n      - No Spoiler\n      - No Toolstorage\n      - No Cargo Protection\n      - No Certification\n\n");
 		allBatchList.add("   2: Option 2:\n      - Sedan\n      - Red\n      - Standard 2l v4\n      - 6 speed manual\n      - Leather black\n      - Manual\n      - Comfort\n      - No Spoiler\n      - No Toolstorage\n      - No Cargo Protection\n      - No Certification\n\n");
 		allBatchList.add("   3: Option 3:\n      - Sedan\n      - Red\n      - Standard 2l v4\n      - 6 speed manual\n      - Leather black\n      - Manual\n      - Comfort\n      - No Spoiler\n      - No Toolstorage\n      - No Cargo Protection\n      - No Certification\n\n");
-		System.out.println(maCont.getBatchListAllLines());
 		assertEquals(allBatchList,maCont.getBatchListAllLines());
 		maCont.changeToFIFOAllLines();
 		maCont.changeStrategyToBatchProcessingAllLines(0);
