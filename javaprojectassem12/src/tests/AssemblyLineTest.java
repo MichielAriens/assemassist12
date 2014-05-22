@@ -252,9 +252,9 @@ public class AssemblyLineTest{
 	public void testNegativeOvertime(){
 		int day1 = assemblyLine.getcycleStartTime().getDayOfYear();
 		assemblyLine.moveAssemblyLine(assemblyLine.getcycleStartTime().plusMinutes(12 * 60 + 30)); //18:30
+
 		assemblyLine.addOrder(buildStandardOrderC());
-		
-		//complete the order: Do all the tasks over a period of 9 hours so that the total overtime becomes 5 hours. 
+		//complete the order: Do all the tasks over a period of 3 hours so that the total overtime becomes -0:30. 
 		for(int i = 0; i < assemblyLine.getWorkStations().size(); i++){
 			for(Task task : extractPrintables(assemblyLine.getAllTasks(assemblyLine.getWorkStations().get(i)))){
 				assemblyLine.doTask(task, task.getEstimatedPhaseDuration());
@@ -262,7 +262,7 @@ public class AssemblyLineTest{
 			}
 		}
 		
-		assemblyLine.moveAssemblyLine(assemblyLine.getcycleStartTime().plusMinutes(180 + 60));//This will end the day and result in a theoretical overtime of -30. The overtime will be set to 0.
+		//This will end the day and result in a theoretical overtime of -30. The overtime will be set to 0.
 		//We can't access the overtime directly, however progressing time to 21:59 should not result in a day switch.
 		assertTrue(assemblyLine.getcycleStartTime().getDayOfYear() == day1 + 1);
 		assemblyLine.moveAssemblyLine(assemblyLine.getcycleStartTime().plusMinutes(16 * 60 - 151));
