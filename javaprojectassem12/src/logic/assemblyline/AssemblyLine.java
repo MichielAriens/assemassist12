@@ -352,7 +352,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	 * @return		An estimated assembly time or null if the order cannot be scheduled on this line.
 	 */
 	public DateTime getEstimate(Order order,DateTime realTime) {		
-		return schedule.getEstimate(order, realTime).minusMillis(getBias());
+		return schedule.getEstimate(order, realTime).plusMillis(getBias());
 	}
 
 	/**
