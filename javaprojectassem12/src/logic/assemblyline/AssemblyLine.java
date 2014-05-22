@@ -178,6 +178,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			cycleTime= calculateBrokenTime(realTime);
 			this.cycleStartTime =realTime;
 			this.changeStatus(OperationalStatus.OPERATIONAL);
+			schedule.reschedule();
 		}
 	}
 	
