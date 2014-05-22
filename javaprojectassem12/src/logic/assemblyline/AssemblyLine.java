@@ -126,7 +126,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	/**
 	 * If this assembly line is ready for the next day and the cycle start time is at the beginning of the shift, then sets the ready for next day to false.
 	 */
-	protected void setNewDay(){
+	public void setNewDay(){
 		if(newday == true && cycleStartTime.getHourOfDay()==schedule.shiftBeginHour){
 			newday = false;
 		}
@@ -197,11 +197,14 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	/**
 	 * Tries to move the assembly line if all workstations are done. Checks the status of this assembly line 
 	 * and sets the cycletime, newday and cyclestarttime accordingly. 
+	 * 
+	 * Note: If you use this class stand-allone (without an assemblyline scheduler) you can call: assemblyLine.moveAssemblyLine(assemblyLine.getCycleEnd());
+	 * to effect to move without external time effects.
 	 * @param realTime	The current time of the system and new cycle start time if this assembly line can be moved.
 	 * @return	True if the assembly line can be moved
 	 * 			False otherwise.
 	 */
-	 protected boolean moveAssemblyLine(DateTime realTime){
+	 public boolean moveAssemblyLine(DateTime realTime){
 		if(tryMoveAssemblyLine()){
 			if(status== OperationalStatus.MAINTENANCE){
 				changeStatus(OperationalStatus.OPERATIONAL);

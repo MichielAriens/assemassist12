@@ -245,8 +245,8 @@ public class AssemblyLineScheduler {
 
 	private void initializeAssemblylines(){
 		buildLine1();
-		buildLine2();
-		buildLine3();
+		//buildLine2();
+		//buildLine3();
 	}
 	
 	/**

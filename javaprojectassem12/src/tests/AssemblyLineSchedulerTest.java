@@ -327,7 +327,7 @@ public class AssemblyLineSchedulerTest {
 	 * @param printables
 	 * @return
 	 */
-	private <T> List<T> extractPrintables(final List<Printable<T>> printables){
+	private static <T> List<T> extractPrintables(final List<Printable<T>> printables){
 		List<T> lines = new ArrayList<>();
 		for(Printable<T> printable : printables){
 			lines.add(extractPrintable(printable));
@@ -341,7 +341,7 @@ public class AssemblyLineSchedulerTest {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private <T> T extractPrintable(final Printable<T> printable){
+	private static <T> T extractPrintable(final Printable<T> printable){
 		return (T) printable;
 	}
 	
