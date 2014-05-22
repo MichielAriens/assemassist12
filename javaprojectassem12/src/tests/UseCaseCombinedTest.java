@@ -354,7 +354,6 @@ public class UseCaseCombinedTest {
 		meCont.setWorkStation("Car Body Post");
 		meCont.doTask("Install Body= Sedan", 60);
 		meCont.doTask("Install Colour= Red", 60);
-		System.out.println(meCont.getTasksPerWorkstation());
 		
 		//Sets his active workstation and does the tasks.
 		meCont.setAssemblyLine("Assembly Line 1");
@@ -365,24 +364,61 @@ public class UseCaseCombinedTest {
 		assertEquals(availableTasks, meCont.getTasks());
 		meCont.doTask("Install Engine= Standard 2l v4", 50);
 		meCont.doTask("Install Gearbox= 6 speed manual", 50);
-		meCont.doTask("Install Engine= Standard 2l v4", 50);
-		meCont.doTask("Install Gearbox= 6 speed manual", 50);
 		meCont.setWorkStation("Car Body Post");
 		meCont.doTask("Install Body= Sedan", 50);
 		meCont.doTask("Install Colour= Red", 50);
+		//perform all tasks on second assembly line
+		meCont.setAssemblyLine("Assembly Line 2");
+		meCont.setWorkStation("Car Body Post");
+		meCont.doTask("Install Body= Sedan", 55);
+		meCont.doTask("Install Colour= Red", 55);
+		meCont.setWorkStation("Drive Train Post");
+		meCont.doTask("Install Engine= Standard 2l v4", 55);
+		meCont.doTask("Install Gearbox= 6 speed manual", 55);
+		//perform all tasks on the third assembly line
+		meCont.setAssemblyLine("Assembly Line 3");
+		meCont.setWorkStation("Car Body Post");
+		meCont.doTask("Install Body= Sedan", 60);
+		meCont.doTask("Install Colour= Red", 60);
+		meCont.setWorkStation("Drive Train Post");
+		meCont.doTask("Install Engine= Standard 2l v4", 60);
+		meCont.doTask("Install Gearbox= 6 speed manual", 60);
 		
 		//Sets his active workstation to the accessories post and performs the tasks. 
+		meCont.setAssemblyLine("Assembly Line 1");
+		meCont.setWorkStation("Car Body Post");
+		meCont.doTask("Install Body= Sedan", 50);
+		meCont.doTask("Install Colour= Red", 50);
+		meCont.setWorkStation("Drive Train Post");
+		meCont.doTask("Install Engine= Standard 2l v4", 50);
+		meCont.doTask("Install Gearbox= 6 speed manual", 50);
 		meCont.setWorkStation("Accessories Post");
 		availableTasks = new ArrayList<String>();
 		availableTasks.add("Install Seats= Leather black: 1");
 		availableTasks.add("Install Airco= Manual: 2");
 		availableTasks.add("Install Wheels= Comfort: 3");
-		availableTasks.add("Install Spoiler= No Spoiler: 4");
 		assertEquals(availableTasks, meCont.getTasks());
 		meCont.doTask("Install Seats= Leather black", 50);
 		meCont.doTask("Install Airco= Manual", 50);
 		meCont.doTask("Install Wheels= Comfort", 50);
-		meCont.doTask("Install Spoiler= No Spoiler", 50);
+		//perform all tasks on second assembly line
+		meCont.setAssemblyLine("Assembly Line 2");
+		meCont.setWorkStation("Car Body Post");
+		meCont.doTask("Install Body= Sedan", 55);
+		meCont.doTask("Install Colour= Red", 55);
+		//task order in drive train post so no pending tasks to be performed there
+		meCont.setWorkStation("Accessories Post");
+		meCont.doTask("Install Seats= Leather black", 55);
+		meCont.doTask("Install Airco= Manual", 55);
+		meCont.doTask("Install Wheels= Comfort", 55);
+		//perform all tasks on the third assembly line
+		meCont.setAssemblyLine("Assembly Line 3");
+		meCont.setWorkStation("Car Body Post");
+		meCont.doTask("Install Body= Sedan", 60);
+		meCont.doTask("Install Colour= Red", 60);
+		meCont.setWorkStation("Drive Train Post");
+		meCont.doTask("Install Engine= Standard 2l v4", 60);
+		meCont.doTask("Install Gearbox= 6 speed manual", 60);
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////END MECHANICTEST PERFORM TASKS///////////////////////////////
@@ -392,14 +428,15 @@ public class UseCaseCombinedTest {
 		///////////////////////////START GARAGEHOLDERTEST COMPLETED ORDER///////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		//Checks his completed orders after everything should be done.
+		//Checks his completed orders after an order should be completed.
 		gaCont = (GarageHolderController) controller.logIn("gar");
 		
 		ArrayList<String> completed = new ArrayList<String>();
 		completed.add("Completed on: 01-01-2014 08:30");
+		completed.add("Completed on: 01-01-2014 08:40");
 		assertEquals(completed, gaCont.getCompletedOrders());
 		
-		info = "   Specifications:   Model A; (Sedan, Red, Standard 2l v4, 6 speed manual, Leather black, Manual, Comfort, No Spoiler)\n   Start Time:       01-01-2014 06:00\n   End Time:         01-01-2014 08:30\n";
+		info = "   Specifications:   Car Model A; (Sedan, Red, Standard 2l v4, 6 speed manual, Leather black, Manual, Comfort, No Spoiler, No Toolstorage, No Cargo Protection, No Certification)\n   Start Time:       01-01-2014 06:00\n   End Time:         01-01-2014 08:30\n";
 		assertEquals(info, gaCont.getCompletedInfo(0));
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
