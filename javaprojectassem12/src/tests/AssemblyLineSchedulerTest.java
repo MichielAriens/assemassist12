@@ -328,10 +328,21 @@ public class AssemblyLineSchedulerTest {
 	public void testMaintenace(){
 		//init
 		CarManufacturingCompany cmc = new CarManufacturingCompany();
-		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(0), OperationalStatus.BROKEN);
+		DateTime now = cmc.getCurrentTime();
 		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(1), OperationalStatus.BROKEN);
+		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(2), OperationalStatus.BROKEN);
 		
-		for(int i = )
+		for(int i = 30; i < 30; i++){
+			cmc.addOrder(buildStandardOrderA());
+		}
+
+		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(0), OperationalStatus.MAINTENANCE);
+		assertTrue(AssemblyLineTest.eqiDateTime(now, cmc.getCurrentTime()));
+		performAllTasks(cmc);
+		
+		System.out.println(cmc.getCurrentTime());
+		//assertTrue(AssemblyLineTest.eqiDateTime(now.plusMinutes(150), b));
+		
 	}
 	
 	/**

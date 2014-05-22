@@ -77,7 +77,7 @@ public class AssemblyLineScheduler {
 			if(best == null && is.accepts(order)){
 				best = is;
 			}else{
-				if(is.getEstimate(order, currentTime).isBefore(best.getEstimate(order, currentTime))){
+				if(is.accepts(order) && is.getEstimate(order, currentTime).isBefore(best.getEstimate(order, currentTime))){
 					best = is;
 				}
 			}
