@@ -352,7 +352,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	 * @return		An estimated assembly time or null if the order cannot be scheduled on this line.
 	 */
 	public DateTime getEstimate(Order order,DateTime realTime) {
-		return schedule.getEstimate(order, realTime);
+		return schedule.getEstimate(order, realTime).minusSeconds(getBias());
 	}
 
 	/**
@@ -434,6 +434,14 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	 */
 	public OperationalStatus getOperationalStatus() {
 		return this.status;
+	}
+	
+	/**
+	 * A small bias to induce a absolute ordering between assemblylines.
+	 * @return		a small bias.
+	 */
+	private int getBias(){
+		return this.capabilities.size() + this.numberOfWorkStations;
 	}
 
 	/**

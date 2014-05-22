@@ -298,7 +298,7 @@ public class AssemblyLineSchedulerTest {
 	@Test
 	public void testBrokenLines(){
 		CarManufacturingCompany cmc = new CarManufacturingCompany();
-		for(int i = 0; i < 30 ; i++){
+		for(int i = 0; i < 15 ; i++){//30
 			cmc.addOrder(buildStandardOrderA());
 		}
 		List<AssemblyLine> lines = extractPrintables(cmc.getAssemblyLines());
@@ -318,11 +318,20 @@ public class AssemblyLineSchedulerTest {
 		
 		assertTrue(lines.get(0).empty());
 		assertTrue(lines.get(1).empty());
-		assertTrue(lines.get(2).empty());
+		assertTrue(lines.get(2).empty());		
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testMaintenace(){
+		//init
+		CarManufacturingCompany cmc = new CarManufacturingCompany();
+		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(0), OperationalStatus.BROKEN);
+		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(1), OperationalStatus.BROKEN);
 		
-		
-		
-		
+		for(int i = )
 	}
 	
 	/**
