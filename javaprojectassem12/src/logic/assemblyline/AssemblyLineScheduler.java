@@ -121,7 +121,7 @@ public class AssemblyLineScheduler {
 					if(bestLine == null && al.ready()){
 						bestLine = al;
 					}
-					if(al.ready() && al.getCycleEnd().isBefore(bestLine.getcycleStartTime())){
+					if(al.ready() && al.getCycleEnd().isBefore(bestLine.getCycleEnd())){
 						bestLine = al;
 					}
 				}
