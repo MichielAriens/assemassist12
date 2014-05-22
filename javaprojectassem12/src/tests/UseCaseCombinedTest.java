@@ -42,17 +42,58 @@ public class UseCaseCombinedTest {
 		assertEquals("Wander", maCont.getUserName());
 		
 		//Check the statistics test
-		assertEquals("Average number of cars produced: 0\nMean number of cars produced: 0\nExact numbers two last days:\n   No records.\nAverage delay: 0 minutes\nMean delay: 0 minutes\nTwo last delays:\n   No records.\n", maCont.getStatistics());
+		String stats = "";
+		stats += "Statistics of Assembly Line 1:\n";
+		stats += "Average number of cars produced: 0\n";
+		stats += "Mean number of cars produced: 0\n";
+		stats += "Exact numbers two last days:\n";
+		stats += "   No records.\n";
+		stats += "Average delay: 0 minutes\n";
+		stats += "Mean delay: 0 minutes\n";
+		stats += "Two last delays:\n";
+		stats += "   No records.\n";
+		stats += "\n";
+		stats += "Statistics of Assembly Line 2:\n";
+		stats += "Average number of cars produced: 0\n";
+		stats += "Mean number of cars produced: 0\n";
+		stats += "Exact numbers two last days:\n";
+		stats += "   No records.\n";
+		stats += "Average delay: 0 minutes\n";
+		stats += "Mean delay: 0 minutes\n";
+		stats += "Two last delays:\n";
+		stats += "   No records.\n";
+		stats += "\n";
+		stats += "Statistics of Assembly Line 3:\n";
+		stats += "Average number of cars produced: 0\n";
+		stats += "Mean number of cars produced: 0\n";
+		stats += "Exact numbers two last days:\n";
+		stats += "   No records.\n";
+		stats += "Average delay: 0 minutes\n";
+		stats += "Mean delay: 0 minutes\n";
+		stats += "Two last delays:\n";
+		stats += "   No records.\n";
+		stats += "\n";
+		stats += "Statistics of Generality:\n";
+		stats += "Average number of cars produced: 0\n";
+		stats += "Mean number of cars produced: 0\n";
+		stats += "Exact numbers two last days:\n";
+		stats += "   No records.\n";
+		stats += "Average delay: 0 minutes\n";
+		stats += "Mean delay: 0 minutes\n";
+		stats += "Two last delays:\n";
+		stats += "   No records.\n";
+		assertEquals(stats, maCont.getStatistics());
 		
 		//Change scheduling algorithm
+		maCont.setAssemblyLine(maCont.getAssemblyLines().get(0));
 		ArrayList<String> strats = new ArrayList<String>();
 		strats.add("FIFO");
 		strats.add("FIFO");
 		strats.add("Specification Batch");
-		assertEquals(strats,maCont.getStrategies());
+		assertEquals(strats,maCont.getStrategiesActiveLine());
 		ArrayList<String> batchList = new ArrayList<String>();
 		assertEquals(batchList,maCont.getBatchListActiveLine());
-		assertFalse(maCont.changeToFIFOOneLine());
+		assertFalse(maCont.changeToFIFOActiveLine());
 		maCont.changeStrategyToBatchProcessingActiveLine(0);
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,7 +108,7 @@ public class UseCaseCombinedTest {
 		MechanicController meCont = new MechanicController();
 		assertEquals(null,meCont.getUserName());
 		assertEquals(null,meCont.getTasksPerWorkstation());
-		assertEquals(null,meCont.getWorkStations());
+		assertEquals(null,meCont.getWorkStationsFromAssemblyLine());
 		assertEquals(null,meCont.getTasks());
 		assertEquals(null,meCont.getTaskInformation(""));
 		meCont.doTask("", 0); //should just return
@@ -76,6 +117,7 @@ public class UseCaseCombinedTest {
 		//Logs in the proper mechanic and asks for tasks.
 		meCont = (MechanicController) controller.logIn("mech");
 		assertEquals("mech", meCont.getUserName());
+		meCont.setAssemblyLine(meCont.getAssemblyLines().get(0));
 		ArrayList<String> tasks = new ArrayList<String>();
 		tasks.add("Car Body Post:\nInactive.\n");
 		tasks.add("Drive Train Post:\nInactive.\n");
@@ -87,7 +129,7 @@ public class UseCaseCombinedTest {
 		stations.add("Car Body Post: 1");
 		stations.add("Drive Train Post: 2");
 		stations.add("Accessories Post: 3");
-		assertEquals(stations, meCont.getWorkStations());
+		assertEquals(stations, meCont.getWorkStationsFromAssemblyLine());
 		meCont.setWorkStation("Car Body Post");
 		ArrayList<String> availableTasks = new ArrayList<String>();
 		assertEquals(availableTasks, meCont.getTasks());
@@ -208,16 +250,17 @@ public class UseCaseCombinedTest {
 		strats.add("FIFO");
 		strats.add("FIFO");
 		strats.add("Specification Batch");
-		assertEquals(strats,maCont.getStrategies());
+		maCont.setAssemblyLine(maCont.getAssemblyLines().get(0));
+		assertEquals(strats,maCont.getStrategiesActiveLine());
 		
 		//Asks for orders which can be selected for batch processing.
 		batchList = new ArrayList<String>();
 		batchList.add("   1: Option 1:\n      - Sedan\n      - Red\n      - Standard 2l v4\n      - 6 speed manual\n      - Leather black\n      - Manual\n      - Comfort\n      - No Spoiler\n\n");
 		
 		assertEquals(batchList,maCont.getBatchListActiveLine());
-		assertFalse(maCont.changeToFIFOOneLine());
+		assertFalse(maCont.changeToFIFOActiveLine());
 		maCont.changeStrategyToBatchProcessingActiveLine(0);
-		assertTrue(maCont.changeToFIFOOneLine());
+		assertTrue(maCont.changeToFIFOActiveLine());
 		
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
