@@ -433,19 +433,6 @@ public abstract class Workstation implements Printable<Workstation>{
 	}
 	
 	/**
-	 * Returns the order in the last workstation, if all tasks on the order are completed,
-	 * so that it can be given to the statistics.
-	 * @return	The order in the last workstation.
-	 */
-	public Order getLastOrder(){
-		if(nextWorkStation != null)
-			return nextWorkStation.getLastOrder();
-		if(this.done())
-			return this.currentOrder;
-		return null;
-	}
-	
-	/**
 	 * Checks if all workstations in the chain are idle.
 	 * @return	True	if all workstations in the chain are idle.
 	 * 			False	otherwise.

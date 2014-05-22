@@ -1,6 +1,9 @@
 package tests;
 
 import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+
 import logic.users.CarManufacturingCompany;
 
 import org.junit.Test;
@@ -18,7 +21,7 @@ public class UseCaseManagerTest {
 	 * 5.5 Use Case: Check Production Statistics
 	 */
 	@Test
-	public void mainSuccesTest() {
+	public void checkStatisticsTest() {
 		AssemAssistController controller = new AssemAssistController(new CarManufacturingCompany());
 		//Precondition: The manager is logged in
 		ManagerController maCont = (ManagerController) controller.logIn("Wander");
@@ -74,6 +77,33 @@ public class UseCaseManagerTest {
 	 */
 	
 	/**
-	 * The test for use-case 5.7: is covered in AssemblyLineSchedulerTest.java
+	 * 5.7 Use-Case: change the operational status of an assembly line.
 	 */
+	@Test
+	public void changeStatusTest(){
+		AssemAssistController controller = new AssemAssistController(new CarManufacturingCompany());
+		//Precondition: The manager is logged in
+		ManagerController maCont = (ManagerController) controller.logIn("Wander");
+		assertEquals("Wander", maCont.getUserName());
+		//1. The user wants to change the operational status of an assembly line.
+		ArrayList<String> lines = new ArrayList<>();
+		lines.add("Assembly Line 1: 1");
+		lines.add("Assembly Line 2: 2");
+		lines.add("Assembly Line 3: 3");
+		assertEquals(lines,maCont.getAssemblyLines()); 
+		maCont.setAssemblyLine("Assembly Line 1"); //the manager chooses which assembly line to change
+		//2. The system shows the available statuses (operational, maintenance, broken), as wel as the current operational status.
+		//2.a The user can cancel here, the use case then ends here
+		assertEquals("OPERATIONAL" ,maCont.getCurrentAssemblyLineStatus());
+		//3. The user selects the new operational status to be used.
+		maCont.changeAssemblyLineStatus("BROKEN");
+		//4.The system applies the new marks the new operational status of the assembly line.
+		assertEquals("BROKEN" ,maCont.getCurrentAssemblyLineStatus());
+		maCont.changeAssemblyLineStatus("OPERATIONAL");
+		assertEquals("OPERATIONAL" ,maCont.getCurrentAssemblyLineStatus());
+		maCont.changeAssemblyLineStatus("FOUT"); //changing the operational status to a non-existing status doesn't work
+		assertEquals("OPERATIONAL" ,maCont.getCurrentAssemblyLineStatus());
+		maCont.changeAssemblyLineStatus("MAINTENANCE");
+		assertEquals("MAINTENANCE" ,maCont.getCurrentAssemblyLineStatus());
+	}
 }

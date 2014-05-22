@@ -37,7 +37,7 @@ public class CustomUseCaseTest {
 		//6. System stores the order and updates the schedule.
 			String orderInfo = custCont.placeOrder();
 		//7. The system presents an estimated completion date
-			assertTrue(orderInfo.contains("01-01-2014 09:00"));
+			assertTrue(orderInfo.contains("01-01-2014 07:00"));
 			
 			
 		

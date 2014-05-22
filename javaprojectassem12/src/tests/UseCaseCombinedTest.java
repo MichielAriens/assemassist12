@@ -96,6 +96,23 @@ public class UseCaseCombinedTest {
 		assertFalse(maCont.changeToFIFOActiveLine());
 		maCont.changeStrategyToBatchProcessingActiveLine(0);
 		
+		//try to change the scheduling algorithm of all assembly lines
+		ArrayList<ArrayList<String>> allStrats = new ArrayList<>();
+		ArrayList<String> possibleStrats = new ArrayList<String>();
+		ArrayList<String> assemblyStrats = new ArrayList<String>();
+		assemblyStrats.add("Assembly Line 1: FIFO");
+		assemblyStrats.add("Assembly Line 2: FIFO");
+		assemblyStrats.add("Assembly Line 3: FIFO");
+		possibleStrats.add("FIFO");
+		possibleStrats.add("Specification Batch");
+		allStrats.add(assemblyStrats);
+		allStrats.add(possibleStrats);
+		assertEquals(allStrats,maCont.getStrategiesAllLines());
+		ArrayList<String> allBatchList = new ArrayList<String>();
+		assertEquals(allBatchList,maCont.getBatchListAllLines());
+		maCont.changeToFIFOAllLines();
+		maCont.changeStrategyToBatchProcessingAllLines(0);
+		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		///////////////////////////////END MANAGERTEST EMPTY ASSEMBLY LINE//////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -288,6 +305,26 @@ public class UseCaseCombinedTest {
 		maCont.changeStrategyToBatchProcessingActiveLine(0);
 		assertTrue(maCont.changeToFIFOActiveLine());
 		
+		//try to change the scheduling algorithm of all assembly lines
+		allStrats = new ArrayList<>();
+		possibleStrats = new ArrayList<String>();
+		assemblyStrats = new ArrayList<String>();
+		assemblyStrats.add("Assembly Line 1: FIFO");
+		assemblyStrats.add("Assembly Line 2: FIFO");
+		assemblyStrats.add("Assembly Line 3: FIFO");
+		possibleStrats.add("FIFO");
+		possibleStrats.add("Specification Batch");
+		allStrats.add(assemblyStrats);
+		allStrats.add(possibleStrats);
+		assertEquals(allStrats,maCont.getStrategiesAllLines());
+		allBatchList = new ArrayList<String>();
+		allBatchList.add("   1: Option 1:\n      - Sedan\n      - Red\n      - Standard 2l v4\n      - 6 speed manual\n      - Leather black\n      - Manual\n      - Comfort\n      - No Spoiler\n      - No Toolstorage\n      - No Cargo Protection\n      - No Certification\n\n");
+		allBatchList.add("   2: Option 2:\n      - Sedan\n      - Red\n      - Standard 2l v4\n      - 6 speed manual\n      - Leather black\n      - Manual\n      - Comfort\n      - No Spoiler\n      - No Toolstorage\n      - No Cargo Protection\n      - No Certification\n\n");
+		allBatchList.add("   3: Option 3:\n      - Sedan\n      - Red\n      - Standard 2l v4\n      - 6 speed manual\n      - Leather black\n      - Manual\n      - Comfort\n      - No Spoiler\n      - No Toolstorage\n      - No Cargo Protection\n      - No Certification\n\n");
+		System.out.println(maCont.getBatchListAllLines());
+		assertEquals(allBatchList,maCont.getBatchListAllLines());
+		maCont.changeToFIFOAllLines();
+		maCont.changeStrategyToBatchProcessingAllLines(0);
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////END MANAGERTEST CHANGE STRATEGY/////////////////////////////////
