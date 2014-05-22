@@ -207,16 +207,17 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 				changeStatus(OperationalStatus.OPERATIONAL);
 				cycleTime=0;
 			}
-			boolean done = schedule.moveAndReschedule(cycleTime);
+			schedule.moveAndReschedule(cycleTime);
 			cycleTime = 0;
 			if(newday==false)
 				cycleStartTime = realTime;
 			if(status==OperationalStatus.PREMAINTENANCE && firstWorkStation.allIdle())
 				changeStatus(OperationalStatus.MAINTENANCE);
-			return done;
+			return true;
 		}
-
-		return false;
+		else{
+			return false;
+		}
 	}
 	 
 	/**
@@ -488,10 +489,8 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 		 * Then checks if the strategy needs to change back to FIFO.
 		 * Reschedules all orders both in the queue and workstations.
 		 * @param phaseDuration	The amount which represents the longest time worked on a certain task.
-		 * @return	True if the workstation has been moved and rescheduled.	
-		 * 			False if the given phase duration is too big.
 		 */
-		private boolean moveAndReschedule(int phaseDuration) {
+		private void moveAndReschedule(int phaseDuration) {
 
 			firstWorkStation.adjustDelays(phaseDuration);
 			cycleStartTime = cycleStartTime.plusMinutes(phaseDuration);
@@ -509,7 +508,6 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			checkStrategy();
 
 			reschedule();
-			return true;
 		}
 		
 		/**
