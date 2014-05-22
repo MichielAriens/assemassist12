@@ -51,32 +51,6 @@ public class AssemblyLineTest{
 	}
 	
 	/**
-	 * Commits orders to the system so that lines 2 & 3 are each filled with a queue of 100 orders. 
-	 * Line 1 is still available and is empty. It accepts orders A & B.
-	 * @param cmc
-	 */
-	private void swampLine2n3(CarManufacturingCompany cmc){
-		//Swamp line 3.
-		for(int i = 0; i < 100 ; i++){
-			cmc.addOrder(buildStandardOrderX());
-		}
-		//swamp line 2.
-		for(int i = 0; i < 100 ; i++){
-			cmc.addOrder(buildStandardOrderC());
-		}
-	}
-	
-	private void completeFirstWS(AssemblyLine al){
-		barry.setActiveAssemblyLine(al);
-		barry.setActiveWorkstation(al.getWorkStations().get(0));
-		for(Printable<Task> ptask : barry.getAvailableTasks()){
-			Task task = (Task) ptask;
-			barry.doTask(task, task.getEstimatedPhaseDuration());
-		}
-		
-	}
-	
-	/**
 	 * A quick test to check whether the builders defined above work. (correct specification)
 	 */
 	@Test
