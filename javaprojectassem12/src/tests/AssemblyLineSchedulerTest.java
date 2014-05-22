@@ -309,10 +309,14 @@ public class AssemblyLineSchedulerTest {
 		assertTrue(lines.get(1).empty());
 		assertTrue(lines.get(2).empty());
 		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(0), OperationalStatus.OPERATIONAL);
-		performAllTasks(cmc);
-		performAllTasks(cmc);
-		performAllTasks(cmc);
-		assertTrue(lines.get(0).empty());//?? dafuq TODO: Michiel hier
+		for(Workstation ws : extractPrintables(lines.get(0).getWorkStations())){
+			for(Task task : extractPrintables(cmc.getRequiredTasks(ws, lines.get(0)))){
+				cmc.doTask(task, lines.get(0), task.getEstimatedPhaseDuration());
+			}
+		}
+		
+		
+		assertTrue(lines.get(0).empty());
 		assertTrue(lines.get(1).empty());
 		assertTrue(lines.get(2).empty());
 		
