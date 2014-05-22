@@ -309,12 +309,12 @@ public abstract class Workstation implements Printable<Workstation>{
 	 * 							in this workstation. 
 	 * @param NbOfWorkstations	The number of workstations in the chain.
 	 * @param currentTime		The current time.
-	 * @return 	The estimated completion time of the order in this workstation.
+	 * @return 	The estimated completion time of the order in this workstation. //TODO 
 	 */
-	public DateTime reschedule(List<List<Integer>> prePhaseDurations, int NbOfWorkstations, DateTime currentTime, boolean keepChanges){
+	public DateTime reschedule(List<List<Integer>> prePhaseDurations, int NbOfWorkstations, DateTime currentTime, boolean first, boolean keepChanges){
 		DateTime nextStationEET = currentTime;
 		ArrayList<Integer> phases = new ArrayList<>();
-		if(!(!keepChanges && this.currentOrder == null && prePhaseDurations.size() == 1)){
+		if(!(!keepChanges && this.currentOrder == null && first)){
 			this.buildEstimPhaseList(phases, this.currentOrder);
 			for(int i = phases.size(); i < NbOfWorkstations; i++){
 				phases.add(0,0);
@@ -322,7 +322,7 @@ public abstract class Workstation implements Printable<Workstation>{
 			prePhaseDurations.add(0,phases);
 		}
 		if(nextWorkStation != null)
-			nextStationEET = nextWorkStation.reschedule(prePhaseDurations, NbOfWorkstations, currentTime, keepChanges);
+			nextStationEET = nextWorkStation.reschedule(prePhaseDurations, NbOfWorkstations, currentTime, false, keepChanges);
 		int maxPre = 0;
 		int j = NbOfWorkstations-1;
 		for(int i = 0; i < prePhaseDurations.size(); i++){

@@ -565,7 +565,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			if(firstWorkStation.getCurrentOrder()==null && !queue.isEmpty()){
 				addOrderToFirstWorkstation();
 			}
-			DateTime workstationEET = firstWorkStation.reschedule(getPhaseDurations(), numberOfWorkStations, cycleStartTime);
+			DateTime workstationEET = firstWorkStation.reschedule(getPhaseDurations(), numberOfWorkStations, cycleStartTime, false, true);
 			rescheduleQueue(workstationEET);
 		}
 
@@ -825,6 +825,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			order.setStartTime(realTime);
 			if(firstWorkStation.getCurrentOrder()==null && queue.isEmpty()){
 				returnTime = firstOrderEstimate(order);
+				System.err.println(name + " : " + returnTime);
 				returnTime = getEstimatedTime(returnTime, order);
 				return returnTime;
 			}else{
@@ -850,7 +851,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 		 * @param order	The order for which we want an estimated end time.
 		 * @return	The estimated end time for the given order.
 		 */
-		private DateTime firstOrderEstimate(Order order){
+		private DateTime firstOrderEstimate2(Order order){
 			int assemblyTime = 0;
 			ArrayList<Integer> phases = new ArrayList<>();
 			firstWorkStation.buildEstimPhaseList(phases, order);
@@ -862,6 +863,18 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			}
 			DateTime estimatedEndTime = new DateTime(cycleStartTime);
 			return estimatedEndTime.plusMinutes(assemblyTime);
+		}
+		
+		private DateTime firstOrderEstimate(Order order){
+			ArrayList<List<Integer>> phaseList = new ArrayList<>();
+			ArrayList<Integer> orderPhases = new ArrayList<>();
+			firstWorkStation.buildEstimPhaseList(orderPhases, order);
+			phaseList.add(orderPhases);
+			DateTime scheduleTime = firstWorkStation.reschedule(phaseList, numberOfWorkStations, cycleStartTime, true, false);
+			if(firstWorkStation.idle()){
+				return scheduleTime;
+			}
+			return scheduleTime.plusMinutes(orderPhases.get(orderPhases.size()-1));
 		}
 		
 		/**
