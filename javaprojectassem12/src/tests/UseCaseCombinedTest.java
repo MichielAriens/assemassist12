@@ -85,7 +85,7 @@ public class UseCaseCombinedTest {
 		assertEquals(stats, maCont.getStatistics());
 		
 		//Change scheduling algorithm
-		maCont.setAssemblyLine(maCont.getAssemblyLines().get(0));
+		maCont.setAssemblyLine("Assembly Line 1");
 		ArrayList<String> strats = new ArrayList<String>();
 		strats.add("FIFO");
 		strats.add("FIFO");
@@ -119,9 +119,20 @@ public class UseCaseCombinedTest {
 		assertEquals("mech", meCont.getUserName());
 		meCont.setAssemblyLine(meCont.getAssemblyLines().get(0));
 		ArrayList<String> tasks = new ArrayList<String>();
-		tasks.add("Car Body Post:\nInactive.\n");
-		tasks.add("Drive Train Post:\nInactive.\n");
-		tasks.add("Accessories Post:\nInactive.\n");
+		tasks.add("= Assembly Line 1 [OPERATIONAL] =");
+		tasks.add(" Car Body Post:\n   Inactive.\n");
+		tasks.add(" Drive Train Post:\n   Inactive.\n");
+		tasks.add(" Accessories Post:\n   Inactive.\n");
+		tasks.add("= Assembly Line 2 [OPERATIONAL] =");
+		tasks.add(" Car Body Post:\n   Inactive.\n");
+		tasks.add(" Drive Train Post:\n   Inactive.\n");
+		tasks.add(" Accessories Post:\n   Inactive.\n");
+		tasks.add("= Assembly Line 3 [OPERATIONAL] =");
+		tasks.add(" Car Body Post:\n   Inactive.\n");
+		tasks.add(" Cargo Post:\n   Inactive.\n");
+		tasks.add(" Drive Train Post:\n   Inactive.\n");
+		tasks.add(" Accessories Post:\n   Inactive.\n");
+		tasks.add(" Certification Post:\n   Inactive.\n");
 		assertEquals(tasks, meCont.getTasksPerWorkstation());
 		
 		//Sets the active workstation of the logged in mechanic.
@@ -129,6 +140,7 @@ public class UseCaseCombinedTest {
 		stations.add("Car Body Post: 1");
 		stations.add("Drive Train Post: 2");
 		stations.add("Accessories Post: 3");
+		meCont.setAssemblyLine("Assembly Line 1");
 		assertEquals(stations, meCont.getWorkStationsFromAssemblyLine());
 		meCont.setWorkStation("Car Body Post");
 		ArrayList<String> availableTasks = new ArrayList<String>();
@@ -161,9 +173,11 @@ public class UseCaseCombinedTest {
 		
 		//Start building an order.
 		ArrayList<String> models = new ArrayList<String>();
-		models.add("Model A: 1");
-		models.add("Model B: 2");
-		models.add("Model C: 3");
+		models.add("Car Model A: 1");
+		models.add("Car Model B: 2");
+		models.add("Car Model C: 3");
+		models.add("Truck Model X: 4");
+		models.add("Truck Model Y: 5");
 		assertEquals(models, gaCont.getModels());
 		
 		gaCont.chooseModel(null); //should just return
@@ -184,6 +198,9 @@ public class UseCaseCombinedTest {
 		gaCont.addPart("Manual");
 		gaCont.addPart("Comfort");
 		gaCont.addPart("No Spoiler");
+		gaCont.addPart("No Toolstorage");
+		gaCont.addPart("No Cargo Protection");
+		gaCont.addPart("No Certification");
 		
 		gaCont.placeOrder();
 		ArrayList<String> pending = new ArrayList<String>();
@@ -194,10 +211,19 @@ public class UseCaseCombinedTest {
 		assertEquals(null, gaCont.getPendingInfo(-1));
 		assertEquals(null, gaCont.getCompletedInfo(2));
 		assertEquals(null, gaCont.getCompletedInfo(-1));
-		String info = "   Specifications:   Model A; (Sedan, Red, Standard 2l v4, 6 speed manual, Leather black, Manual, Comfort, No Spoiler)\n   Start Time:       01-01-2014 06:00\n   Est. End Time:    01-01-2014 08:30\n";
+		String info = "   Specifications:   Car Model A; (Sedan, Red, Standard 2l v4, 6 speed manual, Leather black, Manual, Comfort, No Spoiler, No Toolstorage, No Cargo Protection, No Certification)\n   Start Time:       01-01-2014 06:00\n   Est. End Time:    01-01-2014 08:30\n";
 		assertEquals(info, gaCont.getPendingInfo(0));
 		gaCont.placeOrder();
-		gaCont.placeOrder();	
+		gaCont.placeOrder();
+		gaCont.placeOrder();
+		gaCont.placeOrder();
+		gaCont.placeOrder();
+		gaCont.placeOrder();
+		gaCont.placeOrder();
+		gaCont.placeOrder();
+		gaCont.placeOrder();
+		gaCont.placeOrder();
+		gaCont.placeOrder();
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		///////////////////////////END GARAGEHOLDERTEST EMPTY ASSEMBLY LINE/////////////////////////////
@@ -233,7 +259,7 @@ public class UseCaseCombinedTest {
 		cuCont.choosePart("Red");
 		assertFalse(cuCont.chooseDeadLine("dur"));
 		assertTrue(cuCont.chooseDeadLine("02-02-2015 17:55"));
-		assertEquals("Estimated completion: 01-01-2014 09:50", cuCont.placeOrder());
+		assertEquals("Estimated completion: 01-01-2014 09:30", cuCont.placeOrder());
 		
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
@@ -250,12 +276,12 @@ public class UseCaseCombinedTest {
 		strats.add("FIFO");
 		strats.add("FIFO");
 		strats.add("Specification Batch");
-		maCont.setAssemblyLine(maCont.getAssemblyLines().get(0));
+		maCont.setAssemblyLine("Assembly Line 1");
 		assertEquals(strats,maCont.getStrategiesActiveLine());
 		
 		//Asks for orders which can be selected for batch processing.
 		batchList = new ArrayList<String>();
-		batchList.add("   1: Option 1:\n      - Sedan\n      - Red\n      - Standard 2l v4\n      - 6 speed manual\n      - Leather black\n      - Manual\n      - Comfort\n      - No Spoiler\n\n");
+		batchList.add("   1: Option 1:\n      - Sedan\n      - Red\n      - Standard 2l v4\n      - 6 speed manual\n      - Leather black\n      - Manual\n      - Comfort\n      - No Spoiler\n      - No Toolstorage\n      - No Cargo Protection\n      - No Certification\n\n");
 		
 		assertEquals(batchList,maCont.getBatchListActiveLine());
 		assertFalse(maCont.changeToFIFOActiveLine());
@@ -275,31 +301,63 @@ public class UseCaseCombinedTest {
 		meCont = (MechanicController) controller.logIn("mech");
 		assertEquals("mech", meCont.getUserName());
 		tasks = new ArrayList<String>();
-		tasks.add("Car Body Post:\n   -Install Body= Sedan: Pending\n   -Install Colour= Red: Pending\n");
-		tasks.add("Drive Train Post:\nInactive.\n");
-		tasks.add("Accessories Post:\nInactive.\n");
+		tasks.add("= Assembly Line 1 [OPERATIONAL] =");
+		tasks.add(" Car Body Post:\n   -Install Body= Sedan: Pending\n   -Install Colour= Red: Pending\n");
+		tasks.add(" Drive Train Post:\n   Inactive.\n");
+		tasks.add(" Accessories Post:\n   Inactive.\n");
+		tasks.add("= Assembly Line 2 [OPERATIONAL] =");
+		tasks.add(" Car Body Post:\n   -Install Body= Sedan: Pending\n   -Install Colour= Red: Pending\n");
+		tasks.add(" Drive Train Post:\n   Inactive.\n");
+		tasks.add(" Accessories Post:\n   Inactive.\n");
+		tasks.add("= Assembly Line 3 [OPERATIONAL] =");
+		tasks.add(" Car Body Post:\n   -Install Body= Sedan: Pending\n   -Install Colour= Red: Pending\n");
+		tasks.add(" Cargo Post:\n   Inactive.\n");
+		tasks.add(" Drive Train Post:\n   Inactive.\n");
+		tasks.add(" Accessories Post:\n   Inactive.\n");
+		tasks.add(" Certification Post:\n   Inactive.\n");
 		assertEquals(tasks, meCont.getTasksPerWorkstation());
 		
 		//Sets his active workstation to the car body post and then performs tasks.
+		meCont.setAssemblyLine("Assembly Line 1");
 		meCont.setWorkStation("Car Body Post");
 		availableTasks = new ArrayList<String>();
 		availableTasks.add("Install Body= Sedan: 1");
 		availableTasks.add("Install Colour= Red: 2");
 		assertEquals(availableTasks, meCont.getTasks());
 		assertEquals(null, meCont.getTaskInformation("fout"));
-		info = "Task description:\n   -Type of part needed: Body,\n   -Car Part: Sedan\n";
+		info = "Task description:\n   -Type of part needed: Body,\n   -Vehicle Part: Sedan\n";
 		assertEquals(info, meCont.getTaskInformation("Install Body= Sedan"));
 		meCont.doTask("Install Body= Sedan", 50);
+		meCont.doTask("Install Colour= Red", 50);
 		tasks = new ArrayList<String>();
-		tasks.add("Car Body Post:\n   -Install Body= Sedan: Completed\n   -Install Colour= Red: Pending\n");
-		tasks.add("Drive Train Post:\nInactive.\n");
-		tasks.add("Accessories Post:\nInactive.\n");
+		tasks.add("= Assembly Line 1 [OPERATIONAL] =");
+		tasks.add(" Car Body Post:\n   -Install Body= Sedan: Completed\n   -Install Colour= Red: Completed\n");
+		tasks.add(" Drive Train Post:\n   Inactive.\n");
+		tasks.add(" Accessories Post:\n   Inactive.\n");
+		tasks.add("= Assembly Line 2 [OPERATIONAL] =");
+		tasks.add(" Car Body Post:\n   -Install Body= Sedan: Pending\n   -Install Colour= Red: Pending\n");
+		tasks.add(" Drive Train Post:\n   Inactive.\n");
+		tasks.add(" Accessories Post:\n   Inactive.\n");
+		tasks.add("= Assembly Line 3 [OPERATIONAL] =");
+		tasks.add(" Car Body Post:\n   -Install Body= Sedan: Pending\n   -Install Colour= Red: Pending\n");
+		tasks.add(" Cargo Post:\n   Inactive.\n");
+		tasks.add(" Drive Train Post:\n   Inactive.\n");
+		tasks.add(" Accessories Post:\n   Inactive.\n");
+		tasks.add(" Certification Post:\n   Inactive.\n");
 		assertEquals(tasks, meCont.getTasksPerWorkstation());
-		meCont.doTask("Install Colour= Red", 50);
-		meCont.doTask("Install Body= Sedan", 50);
-		meCont.doTask("Install Colour= Red", 50);
+		//perform body tasks on other assemblylines
+		meCont.setAssemblyLine("Assembly Line 2");
+		meCont.setWorkStation("Car Body Post");
+		meCont.doTask("Install Body= Sedan", 55);
+		meCont.doTask("Install Colour= Red", 55);
+		meCont.setAssemblyLine("Assembly Line 3");
+		meCont.setWorkStation("Car Body Post");
+		meCont.doTask("Install Body= Sedan", 60);
+		meCont.doTask("Install Colour= Red", 60);
+		System.out.println(meCont.getTasksPerWorkstation());
 		
 		//Sets his active workstation and does the tasks.
+		meCont.setAssemblyLine("Assembly Line 1");
 		meCont.setWorkStation("Drive Train Post");
 		availableTasks = new ArrayList<String>();
 		availableTasks.add("Install Engine= Standard 2l v4: 1");
