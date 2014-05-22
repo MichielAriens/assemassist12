@@ -224,12 +224,12 @@ public class AssemblyLineTest{
 		assemblyLine.addOrder(simpleOrders.get(0));
 		
 		//complete the order: Do all the tasks over a period of 9 hours so that the total overtime becomes 5 hours. 
-				for(int i = 0; i < assemblyLine.getWorkStations().size(); i++){
-					for(Task task : extractPrintables(assemblyLine.getAllTasks(assemblyLine.getWorkStations().get(i)))){
-						assemblyLine.doTask(task, 180);
-						assemblyLine.moveAssemblyLine(assemblyLine.getCycleEnd());
-					}
-				}
+		for(int i = 0; i < assemblyLine.getWorkStations().size(); i++){
+			for(Task task : extractPrintables(assemblyLine.getAllTasks(assemblyLine.getWorkStations().get(i)))){
+				assemblyLine.doTask(task, 180);
+				assemblyLine.moveAssemblyLine(assemblyLine.getCycleEnd());
+			}
+		}
 		//A new day has started. The overtime is 5 hours. The work day stops on 17:00
 		//goto 13:59 like in the previous test. However this time the order can't be completed anymore.
 		assemblyLine.setNewDay();
@@ -252,6 +252,16 @@ public class AssemblyLineTest{
 	public void testNegativeOvertime(){
 		int day1 = assemblyLine.getcycleStartTime().getDayOfYear();
 		assemblyLine.moveAssemblyLine(assemblyLine.getcycleStartTime().plusMinutes(12 * 60 + 30)); //18:30
+		assemblyLine.addOrder(buildStandardOrderC());
+		
+		//complete the order: Do all the tasks over a period of 9 hours so that the total overtime becomes 5 hours. 
+		for(int i = 0; i < assemblyLine.getWorkStations().size(); i++){
+			for(Task task : extractPrintables(assemblyLine.getAllTasks(assemblyLine.getWorkStations().get(i)))){
+				assemblyLine.doTask(task, task.getEstimatedPhaseDuration());
+				assemblyLine.moveAssemblyLine(assemblyLine.getCycleEnd());
+			}
+		}
+		
 		assemblyLine.moveAssemblyLine(assemblyLine.getcycleStartTime().plusMinutes(180 + 60));//This will end the day and result in a theoretical overtime of -30. The overtime will be set to 0.
 		//We can't access the overtime directly, however progressing time to 21:59 should not result in a day switch.
 		assertTrue(assemblyLine.getcycleStartTime().getDayOfYear() == day1 + 1);
