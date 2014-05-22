@@ -296,7 +296,7 @@ public abstract class Workstation implements Printable<Workstation>{
 	 * the given list. Idle workstations don't add their (null) order.
 	 * @param orders	The list of orders, to which orders in the chain need to be added.
 	 */
-	public void buildOrderList(List<Order> orders){ //TODO printable of niet? (maybe batchlist needs le copy)
+	public void buildOrderList(List<Order> orders){
 		if(this.currentOrder != null)
 			orders.add(this.getCurrentOrder());
 		if(nextWorkStation != null)
@@ -311,16 +311,18 @@ public abstract class Workstation implements Printable<Workstation>{
 	 * @param currentTime		The current time.
 	 * @return 	The estimated completion time of the order in this workstation.
 	 */
-	public DateTime reschedule(List<List<Integer>> prePhaseDurations, int NbOfWorkstations, DateTime currentTime){
+	public DateTime reschedule(List<List<Integer>> prePhaseDurations, int NbOfWorkstations, DateTime currentTime, boolean keepChanges){
 		DateTime nextStationEET = currentTime;
 		ArrayList<Integer> phases = new ArrayList<>();
-		this.buildEstimPhaseList(phases, this.currentOrder);
-		for(int i = phases.size(); i < NbOfWorkstations; i++){
-			phases.add(0,0);
+		if(!(!keepChanges && this.currentOrder == null && prePhaseDurations.size() == 1)){
+			this.buildEstimPhaseList(phases, this.currentOrder);
+			for(int i = phases.size(); i < NbOfWorkstations; i++){
+				phases.add(0,0);
+			}
+			prePhaseDurations.add(0,phases);
 		}
-		prePhaseDurations.add(0,phases);
 		if(nextWorkStation != null)
-			nextStationEET = nextWorkStation.reschedule(prePhaseDurations, NbOfWorkstations, currentTime);
+			nextStationEET = nextWorkStation.reschedule(prePhaseDurations, NbOfWorkstations, currentTime, keepChanges);
 		int maxPre = 0;
 		int j = NbOfWorkstations-1;
 		for(int i = 0; i < prePhaseDurations.size(); i++){
@@ -332,8 +334,8 @@ public abstract class Workstation implements Printable<Workstation>{
 		}
 		if(prePhaseDurations.size()>0)
 			prePhaseDurations.remove(0);
-		if(currentOrder != null){
-			currentOrder.setEndTime(nextStationEET.plusMinutes(maxPre));
+		if(currentOrder != null && keepChanges){
+			currentOrder.setEstimatedEndTime(nextStationEET.plusMinutes(maxPre));
 			return currentOrder.getEstimatedEndTime();
 		}
 		return nextStationEET.plusMinutes(maxPre);
