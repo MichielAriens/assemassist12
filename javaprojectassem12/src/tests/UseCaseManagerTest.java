@@ -1,6 +1,7 @@
 package tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -84,7 +85,19 @@ public class UseCaseManagerTest {
 		//Precondition: The manager is logged in
 		ManagerController maCont = (ManagerController) controller.logIn("Wander");
 		assertEquals("Wander", maCont.getUserName());
-		//1. The user wants to change the operational status of an assembly line.
+		//1. The user wants to select an alternative scheduling algorithm.
+		maCont.setAssemblyLine("Assembly Line 1");
+		//2. The system shows the available algorithms, as well as the currently selected algorithm.
+		ArrayList<String> strats = new ArrayList<String>();
+		strats.add("FIFO");
+		strats.add("FIFO");
+		strats.add("Specification Batch");
+		assertEquals(strats,maCont.getStrategiesActiveLine());
+		//3. The user selects the new scheduling a
+		ArrayList<String> batchList = new ArrayList<String>();
+		assertEquals(batchList,maCont.getBatchListActiveLine());
+		assertFalse(maCont.changeToFIFOActiveLine());
+		maCont.changeStrategyToBatchProcessingActiveLine(0);
 	}
 	
 	/**
