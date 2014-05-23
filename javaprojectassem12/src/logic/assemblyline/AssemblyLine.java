@@ -154,7 +154,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	 * @return	An empty list if the given status equals operational or the queue of this assembly line is empty.
 	 * 			A copy of the queue of orders in this assembly line if the given status is not operational. 
 	 */
-	public List<Order> changeStatus(OperationalStatus status){
+	protected List<Order> changeStatus(OperationalStatus status){
 		this.status=status;
 		LinkedList<Order> returnList = new LinkedList<Order>();
 		if(status != OperationalStatus.OPERATIONAL){
@@ -179,6 +179,20 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			this.cycleStartTime =realTime;
 			this.changeStatus(OperationalStatus.OPERATIONAL);
 			schedule.reschedule();
+		}
+	}
+	
+	/**
+	 * If the manager decides that maintenance should not continue, then the assembly line scheduler will call this method.
+	 * This method should only be called to abort maintenance. The cycle start time is set to the given time of the system.
+	 * And the cycle time is set to 0.
+	 * @param realTime	The current time of the system.
+	 */
+	protected void abortMaintenance(DateTime realTime){
+		if(status== OperationalStatus.MAINTENANCE){
+			changeStatus(OperationalStatus.OPERATIONAL);
+			cycleStartTime = realTime;
+			cycleTime=0;
 		}
 	}
 	
