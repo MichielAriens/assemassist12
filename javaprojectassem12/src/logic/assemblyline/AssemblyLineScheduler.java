@@ -492,29 +492,34 @@ public class AssemblyLineScheduler {
 	 */
 	public boolean changeAssemblyLineStatus(Printable<AssemblyLine> activeAssemblyLine,
 			OperationalStatus newStatus) {
+		boolean retval = false;
 		AssemblyLine al = this.getLineFromPrintable(activeAssemblyLine);
 		if(al.getOperationalStatus() == OperationalStatus.OPERATIONAL){
 			if(newStatus == OperationalStatus.BROKEN){
 				this.breakAssemblyLine(activeAssemblyLine);
-				return true;
+				retval = true;
 			}else if(newStatus == OperationalStatus.PREMAINTENANCE || newStatus == OperationalStatus.MAINTENANCE){
 				this.startMaintenace(activeAssemblyLine);
-				return true;
-			}else{
-				//no effect
-				return false;
+				retval = true;
 			}
 		}else if(al.getOperationalStatus() == OperationalStatus.BROKEN){
 			if(newStatus == OperationalStatus.OPERATIONAL){
 				this.fixAssemAssemblyLine(activeAssemblyLine);
-				return true;
-			}else{
-				return false;
+				retval = true;
 			}
-		}else if(al.getOperationalStatus() == OperationalStatus.MAINTENANCE){
-			return false;
+		}else if(al.getOperationalStatus() == OperationalStatus.PREMAINTENANCE){
+			if(newStatus == OperationalStatus.OPERATIONAL){
+				al.changeStatus(OperationalStatus.OPERATIONAL);
+			}
 		}
-		return false;
+		else if(al.getOperationalStatus() == OperationalStatus.MAINTENANCE){
+			if(newStatus == OperationalStatus.OPERATIONAL){
+				al.abortMaintenance(this.getCurrentTime());
+				retval = true;
+			}
+		}
+		this.advance();
+		return retval;
 
 	}
 }
