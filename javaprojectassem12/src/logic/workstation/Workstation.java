@@ -60,12 +60,14 @@ public abstract class Workstation implements Printable<Workstation>{
 	 */
 	public void advanceOrders(Order order, DateTime endTime){
 		if(canMoveAssemblyLine()){
-			if(nextWorkStation!=null)
+			if(nextWorkStation!=null){
 				nextWorkStation.advanceOrders(currentOrder, endTime);
-			else
+			}
+			else{
 				if(currentOrder != null){
 					currentOrder.setEndTime(endTime);
 				}
+			}
 			this.setOrder(order);
 		}
 	}	

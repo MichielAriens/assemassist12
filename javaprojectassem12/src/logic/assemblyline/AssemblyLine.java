@@ -534,7 +534,6 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 			}
 
 			checkStrategy();
-
 			reschedule();
 		}
 		

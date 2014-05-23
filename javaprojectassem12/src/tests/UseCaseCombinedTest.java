@@ -455,6 +455,19 @@ public class UseCaseCombinedTest {
 		meCont.setWorkStation("Drive Train Post");
 		meCont.doTask("Install Engine= Standard 2l v4", 60);
 		meCont.doTask("Install Gearbox= 6 speed manual", 60);
+		//perform all tasks on the second assembly line
+		meCont.setAssemblyLine("Assembly Line 2");
+		meCont.setWorkStation("Drive Train Post");
+		meCont.doTask("Install Engine= Standard 2l v4", 55);
+		meCont.doTask("Install Gearbox= 6 speed manual", 55);
+		//perform all tasks on the third assembly line
+		meCont.setAssemblyLine("Assembly Line 3");
+		meCont.setWorkStation("Car Body Post");
+		meCont.doTask("Install Body= Sedan", 60);
+		meCont.doTask("Install Colour= Red", 60);
+		meCont.setWorkStation("Drive Train Post");
+		meCont.doTask("Install Engine= Standard 2l v4", 60);
+		meCont.doTask("Install Gearbox= 6 speed manual", 60);
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////END MECHANICTEST PERFORM TASKS///////////////////////////////
@@ -473,8 +486,7 @@ public class UseCaseCombinedTest {
 		assertEquals(completed, gaCont.getCompletedOrders());
 		
 		info = "   Specifications:   Car Model A; (Sedan, Red, Standard 2l v4, 6 speed manual, Leather black, Manual, Comfort, No Spoiler, No Toolstorage, No Cargo Protection, No Certification)\n   Start Time:       01-01-2014 06:00\n   End Time:         01-01-2014 08:30\n";
-		//TODO: Joren wij snappen dit niet ?? D:
-		//assertEquals(info, gaCont.getCompletedInfo(0));
+		assertEquals(info, gaCont.getCompletedInfo(0));
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////END GARAGEHOLDERTEST COMPLETED ORDER////////////////////////////////
