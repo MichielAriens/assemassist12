@@ -1,7 +1,7 @@
 package logic.users;
 
-import logic.car.TaskOrder;
-import logic.car.TaskOrderDetails;
+import logic.order.TaskOrder;
+import logic.order.TaskOrderDetails;
 
 /**
  * Class used to describe a customs shop manager who can place orders for single tasks.

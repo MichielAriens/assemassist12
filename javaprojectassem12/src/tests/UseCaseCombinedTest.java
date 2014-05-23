@@ -4,8 +4,8 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
-import logic.car.VehicleModel;
-import logic.car.VehiclePartType;
+import logic.order.VehicleModel;
+import logic.order.VehiclePartType;
 import logic.users.CarManufacturingCompany;
 
 import org.junit.Test;

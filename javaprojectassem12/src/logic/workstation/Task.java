@@ -1,7 +1,7 @@
 package logic.workstation;
 
 import interfaces.Printable;
-import logic.car.VehiclePart;
+import logic.order.VehiclePart;
 
 /**
  * Class used to describe a task that needs to be performed in order to complete a vehicle order.

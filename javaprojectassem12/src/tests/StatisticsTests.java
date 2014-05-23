@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import logic.assemblyline.AssemblyLine;
-import logic.car.VehicleModel;
-import logic.car.VehicleOrder;
-import logic.car.VehicleOrderDetailsMaker;
-import logic.car.VehiclePart;
-import logic.car.Order;
+import logic.order.Order;
+import logic.order.VehicleModel;
+import logic.order.VehicleOrder;
+import logic.order.VehicleOrderDetailsMaker;
+import logic.order.VehiclePart;
 import logic.users.CarManufacturingCompany;
 import logic.users.Mechanic;
 import logic.workstation.Task;

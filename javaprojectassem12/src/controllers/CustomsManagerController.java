@@ -6,9 +6,9 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import logic.car.VehiclePart;
-import logic.car.VehiclePartType;
-import logic.car.TaskOrderDetailsMaker;
+import logic.order.TaskOrderDetailsMaker;
+import logic.order.VehiclePart;
+import logic.order.VehiclePartType;
 import logic.users.CustomsManager;
 
 public class CustomsManagerController extends UserController{

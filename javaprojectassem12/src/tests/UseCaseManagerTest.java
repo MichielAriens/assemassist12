@@ -1,14 +1,17 @@
 package tests;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
+import logic.assemblyline.OperationalStatus;
 import logic.users.CarManufacturingCompany;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import controllers.AssemAssistController;
+import controllers.GarageHolderController;
 import controllers.ManagerController;
 
 /**
@@ -81,7 +84,8 @@ public class UseCaseManagerTest {
 	 */
 	@Test
 	public void changeStatusTest(){
-		AssemAssistController controller = new AssemAssistController(new CarManufacturingCompany());
+		CarManufacturingCompany cmc = new CarManufacturingCompany();
+		AssemAssistController controller = new AssemAssistController(cmc);
 		//Precondition: The manager is logged in
 		ManagerController maCont = (ManagerController) controller.logIn("Wander");
 		assertEquals("Wander", maCont.getUserName());
@@ -104,6 +108,9 @@ public class UseCaseManagerTest {
 		maCont.changeAssemblyLineStatus("FOUT"); //changing the operational status to a non-existing status doesn't work
 		assertEquals("OPERATIONAL" ,maCont.getCurrentAssemblyLineStatus());
 		maCont.changeAssemblyLineStatus("MAINTENANCE");
-		assertEquals("MAINTENANCE" ,maCont.getCurrentAssemblyLineStatus());
+		//Maintanace happens and the time is set forwards by four hours.
+		assertEquals("OPERATIONAL" ,maCont.getCurrentAssemblyLineStatus());
+		//quickly test the new time is correct.
+		assertTrue(AssemblyLineTest.eqiDateTime(cmc.getCurrentTime(),new DateTime(2014,1,1,10,0)));
 	}
 }

@@ -13,7 +13,7 @@ import logic.assemblyline.AssemblyLine;
 import logic.assemblyline.AssemblyLineScheduler;
 import logic.assemblyline.OperationalStatus;
 import logic.assemblyline.SchedulingStrategy;
-import logic.car.Order;
+import logic.order.Order;
 import logic.workstation.Task;
 import logic.workstation.Workstation;
 

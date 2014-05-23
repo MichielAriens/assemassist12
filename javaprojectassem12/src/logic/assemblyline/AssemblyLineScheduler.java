@@ -8,8 +8,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import logic.car.Order;
-import logic.car.VehicleModel;
+
+import logic.order.Order;
+import logic.order.VehicleModel;
 import logic.workstation.Task;
 import logic.workstation.Workstation;
 import logic.workstation.WorkstationChainBuilder;

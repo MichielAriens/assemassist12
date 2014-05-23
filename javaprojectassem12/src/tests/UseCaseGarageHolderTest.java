@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import logic.assemblyline.AssemblyLine;
-import logic.car.VehicleModel;
-import logic.car.VehiclePartType;
+import logic.order.VehicleModel;
+import logic.order.VehiclePartType;
 import logic.users.CarManufacturingCompany;
 import logic.users.Mechanic;
 import logic.workstation.Task;

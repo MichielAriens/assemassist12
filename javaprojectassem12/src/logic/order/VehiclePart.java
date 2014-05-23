@@ -1,4 +1,4 @@
-package logic.car;
+package logic.order;
 
 /**
  * An enum that represents the possible vehicle parts.

@@ -5,12 +5,12 @@ import interfaces.Printable;
 import org.joda.time.DateTime;
 
 import logic.assemblyline.AssemblyLine;
-import logic.car.VehicleOrderDetails;
-import logic.car.VehicleOrderDetailsMaker;
-import logic.car.TaskOrderDetails;
-import logic.car.TaskOrderDetailsMaker;
-import logic.car.VehicleModel;
-import logic.car.VehiclePart;
+import logic.order.TaskOrderDetails;
+import logic.order.TaskOrderDetailsMaker;
+import logic.order.VehicleModel;
+import logic.order.VehicleOrderDetails;
+import logic.order.VehicleOrderDetailsMaker;
+import logic.order.VehiclePart;
 import logic.users.CarManufacturingCompany;
 import logic.users.CustomsManager;
 import logic.users.GarageHolder;

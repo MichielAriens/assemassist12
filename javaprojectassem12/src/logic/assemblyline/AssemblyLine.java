@@ -6,11 +6,12 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import logic.car.Order;
-import logic.car.VehicleModel;
+import logic.order.Order;
+import logic.order.VehicleModel;
 import logic.workstation.Task;
 import logic.workstation.Workstation;
 import logic.workstation.WorkstationChainBuilder;
+
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 

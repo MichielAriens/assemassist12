@@ -5,9 +5,9 @@ import interfaces.Printable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import logic.car.Order;
-import logic.car.VehicleOrder;
-import logic.car.VehicleOrderDetails;
+import logic.order.Order;
+import logic.order.VehicleOrder;
+import logic.order.VehicleOrderDetails;
 
 /**
  * Class used to describe a garage holder who can order cars from a car manufacturing company.

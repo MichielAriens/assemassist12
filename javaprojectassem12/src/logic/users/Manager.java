@@ -8,7 +8,7 @@ import java.util.Map;
 import logic.assemblyline.AssemblyLine;
 import logic.assemblyline.OperationalStatus;
 import logic.assemblyline.SchedulingStrategy;
-import logic.car.Order;
+import logic.order.Order;
 
 /**
  * Class used to describe a manager working for a car manufacturing company.

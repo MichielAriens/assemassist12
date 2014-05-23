@@ -8,13 +8,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import logic.car.VehicleModel;
-import logic.car.VehiclePart;
-
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-import logic.car.*;
+import logic.order.*;
 import logic.workstation.Task;
 
 /**

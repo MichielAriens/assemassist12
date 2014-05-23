@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
-import logic.car.VehiclePartType;
-import logic.car.Order;
+import logic.order.Order;
+import logic.order.VehiclePartType;
 
 /**
  * Class used to describe a work station of an assembly line.
@@ -64,7 +64,7 @@ public abstract class Workstation implements Printable<Workstation>{
 				nextWorkStation.advanceOrders(currentOrder, endTime);
 			else
 				if(currentOrder != null){
-						currentOrder.setEndTime(endTime);
+					currentOrder.setEndTime(endTime);
 				}
 			this.setOrder(order);
 		}

@@ -4,7 +4,7 @@ import interfaces.Printable;
 
 import java.util.LinkedList;
 
-import logic.car.Order;
+import logic.order.Order;
 
 /**
  * A class which adds an order to a queue in a specific way and refactors queue in some way.

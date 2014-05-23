@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 import logic.assemblyline.AssemblyLine;
 import logic.assemblyline.OperationalStatus;
 import logic.assemblyline.SchedulingStrategy;
-import logic.car.Order;
+import logic.order.Order;
 import logic.users.Manager;
 import logic.workstation.Task;
 

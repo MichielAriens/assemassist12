@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import logic.car.VehicleModel;
-import logic.car.VehiclePartType;
+import logic.order.VehicleModel;
+import logic.order.VehiclePartType;
 import controllers.GarageHolderController;
 
 /**

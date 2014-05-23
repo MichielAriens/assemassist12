@@ -2,7 +2,7 @@ package logic.assemblyline;
 
 import java.util.LinkedList;
 
-import logic.car.Order;
+import logic.order.Order;
 
 /**
  * A class that uses batch processing to add orders and refactor queues.

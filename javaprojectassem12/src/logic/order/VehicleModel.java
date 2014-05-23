@@ -1,4 +1,4 @@
-package logic.car;
+package logic.order;
 
 /**
  * An enum used to represent the possible car models.

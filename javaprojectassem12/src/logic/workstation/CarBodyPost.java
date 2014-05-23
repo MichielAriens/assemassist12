@@ -3,7 +3,7 @@ package logic.workstation;
 import java.util.Arrays;
 import java.util.List;
 
-import logic.car.VehiclePartType;
+import logic.order.VehiclePartType;
 
 /**
  * Class used to describe a car body post of an assembly line.
