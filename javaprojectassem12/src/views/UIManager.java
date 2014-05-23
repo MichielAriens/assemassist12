@@ -142,7 +142,6 @@ public class UIManager {
 		
 		String assemblyLine = chooseAssemblyLine();
 		
-		//TODO nog is nakijken
 		ArrayList<String> strategies = maController.getStrategiesActiveLine();
 		writer.write("Current algorithm for "+ assemblyLine + ":\n   " + strategies.get(0) + "\n");
 		writer.flush();
