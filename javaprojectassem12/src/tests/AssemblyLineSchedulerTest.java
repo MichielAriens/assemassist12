@@ -50,34 +50,6 @@ public class AssemblyLineSchedulerTest {
 		}
 		return new VehicleOrder(maker.getDetails());
 	}
-	
-	
-	/**
-	 * Build a standard order: duration 70, 70, 0
-	 * @return	A standard order with a duration of 70 minutes.
-	 */
-	private VehicleOrder buildStandardOrderB(){
-		VehiclePart[] partsArray = {
-				VehiclePart.BODY_BREAK, 
-				VehiclePart.COLOUR_RED,
-				VehiclePart.ENGINE_4,
-				VehiclePart.GEARBOX_5AUTO,
-				VehiclePart.SEATS_LEATHER_WHITE,
-				VehiclePart.AIRCO_MANUAL,
-				VehiclePart.WHEELS_COMFORT,
-				VehiclePart.SPOILER_NONE,
-				VehiclePart.TOOLSTORAGE_NONE,
-				VehiclePart.CARGO_NONE,
-				VehiclePart.CERTIFICATION_NONE
-			};
-		
-		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELB);
-		for(VehiclePart part : partsArray){
-			maker.addPart(part);
-		}
-		return new VehicleOrder(maker.getDetails());
-	}
-
 
 	/**
 	 * Build a standard order: duration 60, 60, 0
@@ -220,9 +192,7 @@ public class AssemblyLineSchedulerTest {
 	@Test
 	public void testDoTask(){
 		CarManufacturingCompany cmc = new CarManufacturingCompany();
-		List<Order> orders = new ArrayList<Order>();
 		Order order = buildStandardOrderA();
-		
 		cmc.addOrder(order);
 		AssemblyLine line = null;
 		for(Printable<AssemblyLine> pr : cmc.getAssemblyLines()){
@@ -267,7 +237,7 @@ public class AssemblyLineSchedulerTest {
 		Order order = buildStandardOrderX();
 		cmc.addOrder(order);
 		
-		List<AssemblyLine> lines = this.extractPrintables(cmc.getAssemblyLines());
+		List<AssemblyLine> lines = extractPrintables(cmc.getAssemblyLines());
 		assertTrue(lines.get(0).empty());
 		assertTrue(lines.get(1).empty());
 		List<Workstation> stations = extractPrintables(lines.get(2).getWorkStations());

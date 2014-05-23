@@ -864,20 +864,6 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 		 * @param order	The order for which we want an estimated end time.
 		 * @return	The estimated end time for the given order.
 		 */
-		private DateTime firstOrderEstimate2(Order order){
-			int assemblyTime = 0;
-			ArrayList<Integer> phases = new ArrayList<>();
-			firstWorkStation.buildEstimPhaseList(phases, order);
-			assemblyTime += phases.get(numberOfWorkStations-1);
-			int maxPhaseWorkstations = phases.get(numberOfWorkStations-1);
-			for(int i = 1; i < numberOfWorkStations; i++){
-				maxPhaseWorkstations = Math.max(maxPhaseWorkstations, firstWorkStation.getPhaseDuration(i));
-				assemblyTime += maxPhaseWorkstations;
-			}
-			DateTime estimatedEndTime = new DateTime(cycleStartTime);
-			return estimatedEndTime.plusMinutes(assemblyTime);
-		}
-		
 		private DateTime firstOrderEstimate(Order order){
 			ArrayList<List<Integer>> phaseList = new ArrayList<>();
 			ArrayList<Integer> orderPhases = new ArrayList<>();

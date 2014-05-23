@@ -14,17 +14,13 @@ import logic.order.TaskOrder;
 import logic.order.TaskOrderDetailsMaker;
 import logic.order.VehicleModel;
 import logic.order.VehicleOrder;
-import logic.order.VehicleOrderDetails;
 import logic.order.VehicleOrderDetailsMaker;
 import logic.order.VehiclePart;
-import logic.users.CarManufacturingCompany;
-import logic.users.Mechanic;
 import logic.workstation.Task;
 import logic.workstation.Workstation;
 import logic.workstation.WorkstationChainBuilder;
 import logic.workstation.WorkstationDirector;
 import logic.workstation.WorkstationDirectorA;
-import logic.workstation.WorkstationDirectorB;
 
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
@@ -458,58 +454,6 @@ public class AssemblyLineTest{
 			};
 		
 		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.CARMODELC);
-		for(VehiclePart part : partsArray){
-			maker.addPart(part);
-		}
-		return new VehicleOrder(maker.getDetails());
-	}
-
-	/**
-	 * Build a standard truck order: duration 60, 90, 30
-	 * @return	A standard order with a duration of 60 minutes.
-	 */
-	private VehicleOrder buildStandardOrderX(){
-		VehiclePart[] partsArray = {
-				VehiclePart.BODY_PLATFORM, 
-				VehiclePart.COLOUR_GREEN,
-				VehiclePart.ENGINE_TRUCKSTANDARD,
-				VehiclePart.GEARBOX_8MANUAL,
-				VehiclePart.SEATS_VINYL_GRAY,
-				VehiclePart.AIRCO_MANUAL,
-				VehiclePart.WHEELS_HEAVY_DUTY,
-				VehiclePart.SPOILER_NONE,
-				VehiclePart.TOOLSTORAGE_STANDARD,
-				VehiclePart.CARGO_STANDARD,
-				VehiclePart.CERTIFICATION_STANDARD
-			};
-		
-		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.TRUCKMODELX);
-		for(VehiclePart part : partsArray){
-			maker.addPart(part);
-		}
-		return new VehicleOrder(maker.getDetails());
-	}
-
-	/**
-	 * Build a standard truck order: duration 60, 120, 45
-	 * @return	A standard order with a duration of 60 minutes.
-	 */
-	private VehicleOrder buildStandardOrderY(){
-		VehiclePart[] partsArray = {
-				VehiclePart.BODY_PLATFORM, 
-				VehiclePart.COLOUR_BLACK,
-				VehiclePart.ENGINE_TRUCKSTANDARD,
-				VehiclePart.GEARBOX_8MANUAL,
-				VehiclePart.SEATS_VINYL_GRAY,
-				VehiclePart.AIRCO_MANUAL,
-				VehiclePart.WHEELS_HEAVY_DUTY,
-				VehiclePart.SPOILER_NONE,
-				VehiclePart.TOOLSTORAGE_STANDARD,
-				VehiclePart.CARGO_STANDARD,
-				VehiclePart.CERTIFICATION_STANDARD
-			};
-		
-		VehicleOrderDetailsMaker maker = new VehicleOrderDetailsMaker(VehicleModel.TRUCKMODELY);
 		for(VehiclePart part : partsArray){
 			maker.addPart(part);
 		}

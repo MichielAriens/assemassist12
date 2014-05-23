@@ -1,17 +1,16 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
-import logic.assemblyline.OperationalStatus;
 import logic.users.CarManufacturingCompany;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
 
 import controllers.AssemAssistController;
-import controllers.GarageHolderController;
 import controllers.ManagerController;
 
 /**
