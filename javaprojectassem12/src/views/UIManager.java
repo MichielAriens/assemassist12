@@ -106,8 +106,8 @@ public class UIManager {
 		}
 		query += "   " + count + ": Cancel\nAnswer: ";
 		int statusIndex = chooseAction(query, count);
-		String chosenStatus = selectables.get(statusIndex-1).toString();
 		if(statusIndex != count){
+			String chosenStatus = selectables.get(statusIndex-1).toString();
 			maController.changeAssemblyLineStatus(chosenStatus);
 			waitForCompletion("Status has been changed. Press enter to continue.\n");
 		}

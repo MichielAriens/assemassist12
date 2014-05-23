@@ -57,8 +57,6 @@ public class GarageHolderController extends UserController{
 		return pendingOrderStrings;
 	}
 	
-	//TODO: make better use of the interface here
-	
 	/**
 	 * Returns the information for the pending order with the given index.
 	 * @param index	The index for the order in the list of pending orders.
