@@ -15,6 +15,10 @@ public class WorkstationChainBuilder extends WorkstationBuilder{
 	 */
 	private Workstation lastAdded;
 	
+	/**
+	 * Builds a workstation.
+	 * @param ws	The  last added workstation.
+	 */
 	private void build(Workstation ws){
 		Workstation temp = lastAdded;
 		this.lastAdded = ws;
