@@ -65,4 +65,23 @@ public abstract class SchedulingStrategy implements Printable<SchedulingStrategy
 	 * @return	A string which represents this scheduling strategy.
 	 */
 	public abstract String toString();
+	
+	
+	/**
+	 * Returns null: No extra info to print.
+	 */
+	@Override
+	public String getExtraInformation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/**
+	 * Returns null: No status available.
+	 */
+	@Override
+	public String getStatus() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -96,20 +96,11 @@ public class BatchSpecificationStrategy extends SchedulingStrategy{
 		}
 	}
 
+	/**
+	 * @return "Specification Batch"
+	 */
 	@Override
 	public String getStringRepresentation() {
 		return this.toString();
-	}
-
-	@Override
-	public String getExtraInformation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getStatus() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

@@ -516,6 +516,7 @@ public class AssemblyLineScheduler {
 		else if(al.getOperationalStatus() == OperationalStatus.MAINTENANCE){
 			if(newStatus == OperationalStatus.OPERATIONAL){
 				al.abortMaintenance(this.getCurrentTime());
+				this.scheduleOverflowQueue();
 				retval = true;
 			}
 		}

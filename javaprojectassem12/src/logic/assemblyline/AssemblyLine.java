@@ -63,14 +63,6 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	private StatisticsAssemblyLine stats;
 
 	/**
-	 * Returns the phase start time of this assembly line.
-	 * @return	The phase start time of this assembly line.
-	 */
-	public DateTime getcycleStartTime() {
-		return cycleStartTime;
-	}
-
-	/**
 	 * A variable containing this assembly line's schedule, which is used for scheduling orders.
 	 */
 	private Schedule schedule;
@@ -125,6 +117,14 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	}
 	
 	/**
+	 * Returns the phase start time of this assembly line.
+	 * @return	The phase start time of this assembly line.
+	 */
+	public DateTime getcycleStartTime() {
+		return cycleStartTime;
+	}
+
+	/**
 	 * If this assembly line is ready for the next day and the cycle start time is at the beginning of the shift, then sets the ready for next day to false.
 	 */
 	public void setNewDay(){
@@ -151,7 +151,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 	
 	/**
 	 * Change the status of this assembly line to the given status and returns the queue to be processed on another assembly line.
-	 * @param status	The new status of this assembly line.
+	 * @param 	status	The new status of this assembly line.
 	 * @return	An empty list if the given status equals operational or the queue of this assembly line is empty.
 	 * 			A copy of the queue of orders in this assembly line if the given status is not operational. 
 	 */
@@ -539,7 +539,7 @@ public class AssemblyLine implements Printable<AssemblyLine> {
 		
 		/**
 		 * Checks if the system can change to FIFO strategy if the current strategy is batch specification and
-		 * if there are no more orders which qualify for batch processing. 
+		 * if there are no more orders which qualify for batch processing. Sets the strategy as necessary.
 		 */
 		private void checkStrategy(){
 			LinkedList<Order> listo = new LinkedList<Order>();
