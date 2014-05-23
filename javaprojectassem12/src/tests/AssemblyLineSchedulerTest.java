@@ -402,13 +402,15 @@ public class AssemblyLineSchedulerTest {
 			cmc.doTask(task, cmc.getAssemblyLines().get(1), task.getEstimatedPhaseDuration());
 		}
 		
-		//Move line 1 & 2 from maintenance to operational
+		//Change all lines to operational
 		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(0), OperationalStatus.OPERATIONAL);
 		assertEquals(OperationalStatus.OPERATIONAL, cmc.getAssemblyLinesStatuses().get(cmc.getAssemblyLines().get(0)));
 		
 		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(1), OperationalStatus.OPERATIONAL);
 		assertEquals(OperationalStatus.OPERATIONAL, cmc.getAssemblyLinesStatuses().get(cmc.getAssemblyLines().get(1)));	
 		
+		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(2), OperationalStatus.OPERATIONAL);
+		assertEquals(OperationalStatus.OPERATIONAL, cmc.getAssemblyLinesStatuses().get(cmc.getAssemblyLines().get(2)));	
 	}
 	
 	/**

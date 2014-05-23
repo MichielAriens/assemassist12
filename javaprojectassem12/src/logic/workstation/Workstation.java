@@ -387,26 +387,6 @@ public abstract class Workstation implements Printable<Workstation>{
 	
 	
 	/**
-	 * Returns the phase duration of the order in the workstation specified by the workstationNumber.
-	 * @param workstationNumber	The workstation whose order has to be checked.
-	 * @return	0	if workstationNumber is smaller than 0 or greater than the amount of workstations.
-	 * 			0	if there is no order present in the specified workstation.
-	 * 			The phase duration of the order in the specified workstation otherwise.
-	 */
-	public int getPhaseDuration(int workstationNumber){
-		if(workstationNumber < 0)
-			return 0;
-		if(workstationNumber == 0){
-			if(this.currentOrder == null)
-				return 0;
-			return this.getEstimatedPhaseDuration();
-		}
-		if(this.nextWorkStation == null)
-			return 0;
-		return nextWorkStation.getPhaseDuration(workstationNumber-1);
-	}
-	
-	/**
 	 * Returns the estimated phase duration for this workstation, which is the 
 	 * maximum of the estimated phase durations of the tasks that have to be performed at this workstation.
 	 * @return	The estimated phases duration for this workstation.
