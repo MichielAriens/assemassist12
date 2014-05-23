@@ -13,7 +13,7 @@ import controllers.CustomsManagerController;
 public class CustomUseCaseTest {
 
 	/**
-	 * A test case that follows the use case of the custom shop manager. The custom shop manager receives a list of things he can order and then orders something and sets the deadline.
+	 * A test case that follows the use case (5.8) of the custom shop manager. The custom shop manager receives a list of things he can order and then orders something and sets the deadline.
 	 */
 	@Test
 	public void mainSuccessScenario() {

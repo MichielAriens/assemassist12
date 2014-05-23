@@ -92,12 +92,20 @@ public class UseCaseManagerTest {
 		strats.add("FIFO");
 		strats.add("FIFO");
 		strats.add("Specification Batch");
+		//2(a) alternate flow: The user indicates that he wants to cancel the order and the use case ends here.
 		assertEquals(strats,maCont.getStrategiesActiveLine());
-		//3. The user selects the new scheduling a
+		//3. The user selects the new scheduling algorithm to be used.
+		assertFalse(maCont.changeToFIFOActiveLine()); //the system is already using FIFO
+		//The system applies the new scheduling algorithm and updates its state accordingly.
+		
+		//3(a) alternate flow: The user indicates he wants to user the Specification Batch algorithm.
 		ArrayList<String> batchList = new ArrayList<String>();
-		assertEquals(batchList,maCont.getBatchListActiveLine());
-		assertFalse(maCont.changeToFIFOActiveLine());
+		//4. The system shows a list of the sets of vehicle options for which more than 3 orders are pending in the production queue.
+		assertEquals(batchList,maCont.getBatchListActiveLine()); //there are currently no orders in the queue.
+		//5. The user selects one of these sets for batch processing. (here empty)
 		maCont.changeStrategyToBatchProcessingActiveLine(0);
+		
+		//This use case is tested extensively in UseCaseCombinedTest.java
 	}
 	
 	/**
