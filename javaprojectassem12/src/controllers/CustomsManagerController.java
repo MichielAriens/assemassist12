@@ -11,6 +11,9 @@ import logic.order.VehiclePart;
 import logic.order.VehiclePartType;
 import logic.users.CustomsManager;
 
+/**
+ * Class used to form a link between the user interface and the CustomsManager class.
+ */
 public class CustomsManagerController extends UserController{
 	
 	/**
@@ -25,7 +28,7 @@ public class CustomsManagerController extends UserController{
 	
 	/**
 	 * Sets the current customs shop manager to the given customs shop manager.
-	 * @param customsMan	The new mechanic.
+	 * @param customsMan	The new customs shop manager.
 	 */
 	public void setCustomsManager(CustomsManager customsMan) {
 		this.currentCustomsManager = customsMan;
