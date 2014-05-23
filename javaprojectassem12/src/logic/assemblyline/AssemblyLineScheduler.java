@@ -509,13 +509,16 @@ public class AssemblyLineScheduler {
 			if(newStatus == OperationalStatus.OPERATIONAL){
 				this.fixAssemAssemblyLine(activeAssemblyLine);
 				retval = true;
+			}else if(newStatus == OperationalStatus.MAINTENANCE){
+				this.fixAssemAssemblyLine(activeAssemblyLine);
+				this.startMaintenace(activeAssemblyLine);
+				retval = true;
 			}
 		}else if(al.getOperationalStatus() == OperationalStatus.PREMAINTENANCE){
 			if(newStatus == OperationalStatus.OPERATIONAL){
 				al.changeStatus(OperationalStatus.OPERATIONAL);
 			}
-		}
-		else if(al.getOperationalStatus() == OperationalStatus.MAINTENANCE){
+		}else if(al.getOperationalStatus() == OperationalStatus.MAINTENANCE){
 			if(newStatus == OperationalStatus.OPERATIONAL){
 				al.abortMaintenance(this.getCurrentTime());
 				this.scheduleOverflowQueue();
