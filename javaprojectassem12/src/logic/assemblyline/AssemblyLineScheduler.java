@@ -109,7 +109,7 @@ public class AssemblyLineScheduler {
 		if(linesReadyToMove()){
 			AssemblyLine bestLine = null;
 			for(AssemblyLine al :  getNonBrokenLines()){
-				if(al.empty()){
+				if(al.empty() && al.getOperationalStatus() != OperationalStatus.MAINTENANCE){
 					emptyLines.add(al);
 				}
 				else{

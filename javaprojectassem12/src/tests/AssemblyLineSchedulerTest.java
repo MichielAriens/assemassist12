@@ -322,7 +322,9 @@ public class AssemblyLineSchedulerTest {
 	}
 	
 	/**
-	 * 
+	 * Tests the correct processing of maintenance on one assemblyline. Two lines are dissabled (by setting them to BROKEN).
+	 * The other line recieves an order and is set to maintence. That order is completed and we test than maintence completes with the right timing.
+	 * We also test the correct continuation of the system afterwards. 
 	 */
 	@Test
 	public void testMaintenace(){
@@ -342,10 +344,12 @@ public class AssemblyLineSchedulerTest {
 		
 		cmc.addOrder(buildStandardOrderA());
 		
+		assertTrue(AssemblyLineTest.eqiDateTime(now.plusMinutes(390), cmc.getCurrentTime()));
+		
 		performAllTasks(cmc);
 		
 		System.out.println(cmc.getCurrentTime());
-		//assertTrue(AssemblyLineTest.eqiDateTime(now.plusMinutes(150), b));
+		assertTrue(AssemblyLineTest.eqiDateTime(now.plusMinutes(390 + 150), cmc.getCurrentTime()));
 		
 	}
 	
@@ -391,5 +395,4 @@ public class AssemblyLineSchedulerTest {
 			}
 		}
 	}
-
 }
