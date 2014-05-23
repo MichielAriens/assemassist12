@@ -161,7 +161,6 @@ public class CarManufacturingCompany {
 	 * @return	True if the task is completed successfully
 	 * 			False the task could not be completed.
 	 */
-	//TODO nog iets met boolean van checkPhaseDuration doen??? 
 	public boolean doTask(Printable<Task> task, Printable<AssemblyLine> assemblyLine, int duration){
 		if(checkPhaseDuration(duration, assemblyLine))
 			return assemblyLineScheduler.doTask(task, assemblyLine, duration);
