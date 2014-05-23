@@ -158,8 +158,10 @@ public class AssemblyLineScheduler {
 	 * Will attempt to redistribute orders from the overflow queue to the assembly lines. 
 	 * If this fails the orders will remain in the overflow queue.
 	 */
-	private void scheduleOverflowQueue(){	
-		for(Order order : this.overflowQueue){
+	private void scheduleOverflowQueue(){
+		LinkedList<Order> toAdd = new LinkedList<>(this.overflowQueue);
+		this.overflowQueue = new LinkedList<>();	
+		for(Order order : toAdd){
 			this.addOrder(order);
 		}
 		this.overflowQueue = new LinkedList<>();
