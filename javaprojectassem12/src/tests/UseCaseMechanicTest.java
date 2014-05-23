@@ -15,13 +15,13 @@ import controllers.MechanicController;
  * A test case to test the use case of the mechanic. The other actors don't interact with the
  * system in this test case, but this is done in the UseCaseCombinedTest case.
  */
-public class UseCaseMechanic {
+public class UseCaseMechanicTest {
 
 	/**
-	 * The main test.
+	 * Use Case 5.3: Test performing assembly tasks.
 	 */
 	@Test
-	public void mainSuccesTest() {
+	public void performTaskTest() {
 		AssemAssistController controller = new AssemAssistController(new CarManufacturingCompany());
 
 		//The mechanic logs in.
@@ -50,5 +50,41 @@ public class UseCaseMechanic {
 		//The use case ends here.
 	}
 
-	//TODO assembly line status checking hier?
+	/**
+	 * Use case 5.4: Check Assembly Line Status.
+	 */
+	@Test
+	public void checkAssemblyLineTest(){
+		AssemAssistController controller = new AssemAssistController(new CarManufacturingCompany());
+
+		//The mechanic logs in.
+		MechanicController mCont = (MechanicController) controller.logIn("Joren");
+		assertEquals("Joren", mCont.getUserName());
+		//the system prints out a list of assembly lines that the mechanic can choose from
+		ArrayList<String> assemblyLines = new ArrayList<String>();
+		assemblyLines.add("Assembly Line 1: 1");
+		assemblyLines.add("Assembly Line 2: 2");
+		assemblyLines.add("Assembly Line 3: 3");
+		assertEquals(assemblyLines, mCont.getAssemblyLines());
+		//1. The user wants to check the current status of the assembly line.
+		mCont.setAssemblyLine("Assembly Line 1");
+		//2. The system presents an overview of the current assembly line status, including pending and finished
+		//	 tasks at each work post.
+		ArrayList<String> tasks = new ArrayList<String>();
+		tasks.add("= Assembly Line 1 [OPERATIONAL] =");
+		tasks.add(" Car Body Post:\n   Inactive.\n");
+		tasks.add(" Drive Train Post:\n   Inactive.\n");
+		tasks.add(" Accessories Post:\n   Inactive.\n");
+		tasks.add("= Assembly Line 2 [OPERATIONAL] =");
+		tasks.add(" Car Body Post:\n   Inactive.\n");
+		tasks.add(" Drive Train Post:\n   Inactive.\n");
+		tasks.add(" Accessories Post:\n   Inactive.\n");
+		tasks.add("= Assembly Line 3 [OPERATIONAL] =");
+		tasks.add(" Car Body Post:\n   Inactive.\n");
+		tasks.add(" Cargo Post:\n   Inactive.\n");
+		tasks.add(" Drive Train Post:\n   Inactive.\n");
+		tasks.add(" Accessories Post:\n   Inactive.\n");
+		tasks.add(" Certification Post:\n   Inactive.\n");
+		assertEquals(tasks, mCont.getTasksPerWorkstation());
+	}
 }

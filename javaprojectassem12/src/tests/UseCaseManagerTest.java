@@ -75,8 +75,17 @@ public class UseCaseManagerTest {
 	}
 	
 	/**
-	 * The test for use-case 5.6: Adapt Scheduling Algorithm is covered in UseCaseCombinedTest.java
+	 * 5.6 Use-Case: Adapt Scheduling Algorithm.
 	 */
+	@Test
+	public void adaptSchedulingTest(){
+		CarManufacturingCompany cmc = new CarManufacturingCompany();
+		AssemAssistController controller = new AssemAssistController(cmc);
+		//Precondition: The manager is logged in
+		ManagerController maCont = (ManagerController) controller.logIn("Wander");
+		assertEquals("Wander", maCont.getUserName());
+		//1. The user wants to change the operational status of an assembly line.
+	}
 	
 	/**
 	 * 5.7 Use-Case: change the operational status of an assembly line.
