@@ -311,7 +311,10 @@ public abstract class Workstation implements Printable<Workstation>{
 	 * 							in this workstation. 
 	 * @param NbOfWorkstations	The number of workstations in the chain.
 	 * @param currentTime		The current time.
-	 * @return 	The estimated completion time of the order in this workstation. //TODO 
+	 * @param first				A boolean representing whether this call is the first call or a recursive call of this method.
+	 * @param keepChanges		A boolean representing whether the estimated end times calculated by this method
+	 * 							should be stored in the orders, or just returned.
+	 * @return 	The estimated completion time of the order in this workstation.
 	 */
 	public DateTime reschedule(List<List<Integer>> prePhaseDurations, int NbOfWorkstations, DateTime currentTime, boolean first, boolean keepChanges){
 		DateTime nextStationEET = currentTime;
