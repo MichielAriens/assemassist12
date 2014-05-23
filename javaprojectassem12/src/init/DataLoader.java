@@ -18,19 +18,35 @@ import logic.users.Mechanic;
 import logic.workstation.Task;
 import logic.workstation.Workstation;
 
+/**
+ * Class responsible for the data that needs to be loaded initially. 
+ */
 public class DataLoader {
 	
+	/**
+	 * The car manufacturing company for which the data needs to be loaded.
+	 */
 	private CarManufacturingCompany company;
 	
+	/**
+	 * Initializes the data loader with the given car manufacturing company.
+	 * @param comp	The car manufacturing company for which the data needs to be loaded.
+	 */
 	public DataLoader(CarManufacturingCompany comp){
 		this.company = comp;
 	}
 	
+	/**
+	 * Loads the initial data.
+	 */
 	public void loadData(){
 		advanceDay();
 		fillAssemblyLinesAndQueue();
 	}
 	
+	/**
+	 * Places the orders that need to be placed after the first day has passed.
+	 */
 	private void fillAssemblyLinesAndQueue(){
 		GarageHolder holder = (GarageHolder) this.company.logIn("gar");
 		for(int i = 0; i < 3; i++){
@@ -48,6 +64,9 @@ public class DataLoader {
 		}
 	}
 	
+	/**
+	 * Places standard orders of type A until the day moves
+	 */
 	private void advanceDay(){
 		GarageHolder holder = (GarageHolder) this.company.logIn("gar");
 		for(int i = 0; i < 50; i++){
@@ -56,6 +75,9 @@ public class DataLoader {
 		performAllTasks();
 	}
 	
+	/**
+	 * Performs all tasks until there are no unfinished tasks left.
+	 */
 	private void performAllTasks(){
 		Mechanic mech = (Mechanic) this.company.logIn("mech");
 		boolean taskPerformed = true;
@@ -189,7 +211,4 @@ public class DataLoader {
 		maker.chooseDeadline(new DateTime(2014, 1, 2, 15, 0));
 		return maker.getDetails();
 	}
-	
-	
-	
 }
