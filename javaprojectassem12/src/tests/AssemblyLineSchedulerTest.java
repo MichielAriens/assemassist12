@@ -1,6 +1,6 @@
 package tests;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import init.DataLoader;
 import interfaces.Printable;
 
@@ -359,7 +359,7 @@ public class AssemblyLineSchedulerTest {
 	}
 	
 	/**
-	 * 
+	 * Tests that maintenace is postponed to the next day when end of day occurs at the point of the maintenance.
 	 */
 	@Test
 	public void testMaintenaceEndOfDay(){
@@ -376,6 +376,38 @@ public class AssemblyLineSchedulerTest {
 		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(0), OperationalStatus.MAINTENANCE);
 		
 		assertTrue(AssemblyLineTest.eqiDateTime(now.plusDays(1).plusHours(4), cmc.getCurrentTime()));
+	}
+	
+	@Test
+	public void testPreemtMaintenace(){
+		CarManufacturingCompany cmc = new CarManufacturingCompany();
+		//Place an order on any line 2.
+		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(2), OperationalStatus.BROKEN);
+		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(0), OperationalStatus.BROKEN);
+		cmc.addOrder(buildStandardOrderA());
+		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(0), OperationalStatus.OPERATIONAL);
+		
+		//Set line 1 to maintenance (maintenance)
+		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(0), OperationalStatus.MAINTENANCE);
+		//Set line 2 to maintenance (premaintenance)
+		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(1), OperationalStatus.MAINTENANCE);
+		
+		//Check
+		assertEquals(OperationalStatus.MAINTENANCE, cmc.getAssemblyLinesStatuses().get(cmc.getAssemblyLines().get(0)));
+		assertEquals(OperationalStatus.PREMAINTENANCE, cmc.getAssemblyLinesStatuses().get(cmc.getAssemblyLines().get(1)));
+		
+		//Do one workstation on line 2 to advance some time.
+		Workstation ws = extractPrintable(extractPrintable(cmc.getAssemblyLines().get(1)).getWorkStations().get(0));
+		for(Task task : extractPrintables(ws.getRequiredTasks(ws))){
+			cmc.doTask(task, cmc.getAssemblyLines().get(1), task.getEstimatedPhaseDuration());
+		}
+		
+		//Move line 1 & 2 from maintenance to operational
+		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(0), OperationalStatus.OPERATIONAL);
+		assertEquals(OperationalStatus.OPERATIONAL, cmc.getAssemblyLinesStatuses().get(cmc.getAssemblyLines().get(0)));
+		
+		cmc.changeAssemblyLineStatus(cmc.getAssemblyLines().get(1), OperationalStatus.OPERATIONAL);
+		assertEquals(OperationalStatus.OPERATIONAL, cmc.getAssemblyLinesStatuses().get(cmc.getAssemblyLines().get(1)));	
 		
 	}
 	
