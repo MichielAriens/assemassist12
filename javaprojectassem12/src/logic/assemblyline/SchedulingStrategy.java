@@ -72,7 +72,6 @@ public abstract class SchedulingStrategy implements Printable<SchedulingStrategy
 	 */
 	@Override
 	public String getExtraInformation() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -81,7 +80,6 @@ public abstract class SchedulingStrategy implements Printable<SchedulingStrategy
 	 */
 	@Override
 	public String getStatus() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

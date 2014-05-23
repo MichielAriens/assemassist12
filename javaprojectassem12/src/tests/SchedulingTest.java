@@ -173,6 +173,10 @@ public class SchedulingTest {
 		this.line = new AssemblyLine(Arrays.asList(models), builder, new DateTime(2014, 1, 1, 6, 0), "Assembly Line 3");
 	}
 
+	/**
+	 * Tests the correct calculation of estimated endtimes and by extension the correct scheduling on assemblylines. 
+	 * This test is for an assemblyline of configuration 2
+	 */
 	@Test
 	public void schedulingTest1() {
 		buildAssemblyLineA();
@@ -203,6 +207,10 @@ public class SchedulingTest {
 		}
 	}
 	
+	/**
+	 * Tests the correct calculation of estimated endtimes and by extension the correct scheduling on assemblylines. 
+	 * This test is for an assemblyline of configuration 3
+	 */
 	@Test
 	public void schedulingTest2() {
 		buildAssemblyLineB();
@@ -233,6 +241,10 @@ public class SchedulingTest {
 		}
 	}
 	
+	/**
+	 * Tests the correct calculation of estimated endtimes and by extension the correct scheduling on assemblylines. 
+	 * This test is for an assemblyline of configuration 3 with trucks.
+	 */
 	@Test
 	public void schedulingTest3() {
 		buildAssemblyLineB();
@@ -257,6 +269,10 @@ public class SchedulingTest {
 		}
 	}
 	
+	/**
+	 * Tests the correct calculation of estimated endtimes and by extension the correct scheduling on assemblylines. 
+	 * This test is for an assemblyline of configuration 3 with a single order.
+	 */
 	@Test
 	public void schedulingTest4() {
 		buildAssemblyLineB();
@@ -271,6 +287,10 @@ public class SchedulingTest {
 		}
 	}
 	
+	/**
+	 * Tests the correct calculation of estimated endtimes and by extension the correct scheduling on assemblylines. 
+	 * This test is for an assemblyline of configuration 3 with a single truck order.
+	 */
 	@Test
 	public void schedulingTest5() {
 		buildAssemblyLineB();
@@ -285,6 +305,10 @@ public class SchedulingTest {
 		}
 	}
 	
+	/**
+	 * Tests the correct calculation of estimated endtimes and by extension the correct scheduling on assemblylines. 
+	 * This test is for an assemblyline of configuration 3
+	 */
 	@Test
 	public void schedulingTest6() {
 		buildAssemblyLineB();
@@ -299,6 +323,10 @@ public class SchedulingTest {
 		}
 	}
 	
+	/**
+	 * Tests the correct calculation of estimated endtimes and by extension the correct scheduling on assemblylines. 
+	 * This test is for an assemblyline of configuration 3
+	 */
 	@Test
 	public void schedulingTest7() {
 		buildAssemblyLineB();
@@ -313,6 +341,10 @@ public class SchedulingTest {
 		}
 	}
 	
+	/**
+	 * Tests the correct calculation of estimated endtimes and by extension the correct scheduling on assemblylines. 
+	 * This test is for an assemblyline of configuration 3
+	 */
 	@Test
 	public void schedulingTest8() {
 		buildAssemblyLineB();

@@ -348,6 +348,10 @@ public class AssemblyLineSchedulerTest {
 		assertTrue(AssemblyLineTest.eqiDateTime(now.plusDays(1).plusHours(4), cmc.getCurrentTime()));
 	}
 	
+	/**
+	 * Test the correct opperation of the assemblylinecheduler when preempting maintenance.
+	 * This both in coming from the pre-maintenace pahse as the actual maintenace phase.
+	 */
 	@Test
 	public void testPreemtMaintenace(){
 		CarManufacturingCompany cmc = new CarManufacturingCompany();
@@ -407,6 +411,10 @@ public class AssemblyLineSchedulerTest {
 		return (T) printable;
 	}
 	
+	/**
+	 * Do all task on a carManufacturingCompany for testing purposes.
+	 * @param company
+	 */
 	private void performAllTasks(CarManufacturingCompany company){
 		Mechanic mech = (Mechanic) company.logIn("mech");
 		boolean taskPerformed = true;
