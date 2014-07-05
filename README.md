@@ -5,8 +5,11 @@ Repo for software-ontwerp KU Leuven (2014).
 
 By:
   Wander Bavin
+  
   Joren Van den Brande
+  
   Jeroen Compagnie
+  
   Michiel Ariens
 
 Average score for team members: 17/20
